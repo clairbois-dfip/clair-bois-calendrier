@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clair-Bois — Cas de figures &amp; Flux d'inscription</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; color: #333; padding: 40px 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        h1 { text-align: center; color: #1a365d; margin-bottom: 8px; font-size: 28px; }
+        h2 { color: #1a365d; margin-bottom: 16px; }
+        .subtitle { text-align: center; color: #718096; margin-bottom: 40px; font-size: 14px; }
+
+        .legend {
+            background: white; border-radius: 12px; padding: 20px 28px; margin-bottom: 36px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-left: 4px solid #667eea;
+        }
+        .legend h3 { color: #667eea; margin-bottom: 12px; font-size: 15px; }
+        .legend-grid { display: flex; flex-wrap: wrap; gap: 16px; }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+        .legend-icon { width: 32px; height: 24px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: white; font-weight: 600; }
+
+        .section-title {
+            font-size: 22px; font-weight: 800; color: #1a365d; margin: 48px 0 8px;
+            padding-bottom: 8px; border-bottom: 3px solid #667eea; display: inline-block;
+        }
+        .section-desc { color: #718096; font-size: 14px; margin-bottom: 24px; }
+
+        .cas {
+            background: white; border-radius: 16px; padding: 28px 32px; margin-bottom: 28px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06); page-break-inside: avoid;
+        }
+        .cas-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
+        .cas-num {
+            background: #667eea; color: white; width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0;
+        }
+        .cas-num-letter {
+            background: #2d3748; color: white; width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; flex-shrink: 0;
+        }
+        .cas-title { font-size: 18px; font-weight: 700; color: #2d3748; }
+        .cas-desc { color: #718096; font-size: 13px; margin-bottom: 20px; margin-left: 48px; }
+        .cas-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 11px;
+            font-weight: 600; margin-left: 8px; vertical-align: middle;
+        }
+        .tag-simple { background: #c6f6d5; color: #22543d; }
+        .tag-moyen { background: #fefcbf; color: #744210; }
+        .tag-complexe { background: #fed7d7; color: #822727; }
+        .tag-futur { background: #e9d8fd; color: #553c9a; }
+        .tag-tronc { background: #bee3f8; color: #2a4365; }
+
+        /* Flow */
+        .flow { display: flex; flex-direction: column; align-items: center; gap: 0; padding: 0 20px; }
+
+        .step {
+            width: 100%; max-width: 580px; padding: 12px 18px; border-radius: 8px;
+            text-align: center; font-size: 13px; line-height: 1.4; position: relative;
+        }
+        .step-action { background: #ebf4ff; border: 2px solid #90cdf4; color: #2b6cb0; }
+        .step-decision {
+            background: #fefcbf; border: 2px solid #ecc94b; color: #744210;
+            border-radius: 4px; transform: none; font-weight: 600;
+        }
+        .step-system { background: #f0fff4; border: 2px solid #9ae6b4; color: #276749; }
+        .step-user { background: #fff5f5; border: 2px solid #feb2b2; color: #822727; }
+        .step-email { background: #faf5ff; border: 2px solid #d6bcfa; color: #553c9a; }
+        .step-end { background: #e2e8f0; border: 2px solid #a0aec0; color: #4a5568; font-weight: 600; }
+        .step-start { background: #667eea; color: white; border: none; font-weight: 600; border-radius: 20px; }
+        .step-new { background: #fff; border: 2px dashed #667eea; color: #667eea; font-weight: 600; }
+        .step-question {
+            background: #2d3748; color: white; border: none; font-weight: 700;
+            font-size: 15px; padding: 16px 20px; border-radius: 12px;
+        }
+        .step-question small { font-weight: 400; font-size: 12px; opacity: 0.8; display: block; margin-top: 4px; }
+
+        .step .tool {
+            display: inline-block; background: rgba(0,0,0,0.08); padding: 1px 6px;
+            border-radius: 3px; font-size: 11px; margin-left: 4px; font-weight: 600;
+        }
+
+        .arrow {
+            width: 2px; height: 24px; background: #a0aec0; position: relative;
+        }
+        .arrow::after {
+            content: ''; position: absolute; bottom: -4px; left: -4px;
+            border-left: 5px solid transparent; border-right: 5px solid transparent;
+            border-top: 6px solid #a0aec0;
+        }
+        .arrow-label {
+            font-size: 11px; color: #718096; font-weight: 600; text-align: center; margin: -2px 0;
+        }
+        .arrow-big { width: 3px; height: 32px; background: #667eea; }
+        .arrow-big::after {
+            content: ''; position: absolute; bottom: -5px; left: -5px;
+            border-left: 6px solid transparent; border-right: 6px solid transparent;
+            border-top: 7px solid #667eea;
+        }
+
+        /* Branch */
+        .branch {
+            display: flex; gap: 20px; width: 100%; max-width: 640px; justify-content: center;
+        }
+        .branch-side {
+            flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0;
+            border: 2px dashed #cbd5e0; border-radius: 12px; padding: 14px 10px;
+        }
+        .branch-label {
+            font-size: 12px; font-weight: 700; color: #718096; margin-bottom: 8px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .branch-ref {
+            margin-top: 8px; font-size: 11px; color: #667eea; font-weight: 600;
+            background: #ebf4ff; padding: 4px 10px; border-radius: 6px;
+        }
+
+        /* Faisabilité */
+        .feasibility {
+            margin-top: 16px; padding: 14px 18px; border-radius: 8px; font-size: 13px;
+            line-height: 1.5;
+        }
+        .feasibility-ok { background: #f0fff4; border-left: 4px solid #48bb78; }
+        .feasibility-partial { background: #fffff0; border-left: 4px solid #ecc94b; }
+        .feasibility-todo { background: #fff5f5; border-left: 4px solid #fc8181; }
+        .feasibility strong { display: block; margin-bottom: 4px; }
+
+        /* Résumé */
+        .summary {
+            background: white; border-radius: 16px; padding: 28px 32px; margin-top: 36px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .summary table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .summary th { background: #edf2f7; padding: 10px 14px; text-align: left; font-weight: 600; }
+        .summary td { padding: 10px 14px; border-bottom: 1px solid #edf2f7; }
+        .summary tr:hover td { background: #f7fafc; }
+
+        .check { color: #48bb78; } .cross { color: #fc8181; } .partial { color: #ecc94b; }
+
+        /* Connector between sections */
+        .connector {
+            text-align: center; margin: 32px 0 8px; font-size: 13px; color: #667eea; font-weight: 700;
+        }
+        .connector span {
+            background: #ebf4ff; padding: 6px 16px; border-radius: 20px; border: 2px solid #667eea;
+        }
+
+        @media print {
+            body { padding: 20px; }
+            .cas { box-shadow: none; border: 1px solid #e2e8f0; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>Flux d'inscription — Cas de figures</h1>
+    <p class="subtitle">Fondation Clair-Bois &bull; Projet DFIP RH &bull; Mars 2026</p>
+
+    <!-- LÉGENDE -->
+    <div class="legend">
+        <h3>Légende des étapes</h3>
+        <div class="legend-grid">
+            <div class="legend-item"><div class="legend-icon" style="background:#667eea;">GO</div> Départ</div>
+            <div class="legend-item"><div class="legend-icon" style="background:#2d3748;">?</div> Question sur le site</div>
+            <div class="legend-item"><div class="legend-icon" style="background:#822727;">U</div> Action utilisateur</div>
+            <div class="legend-item"><div class="legend-icon" style="background:#744210;">D</div> Décision système (PA)</div>
+            <div class="legend-item"><div class="legend-icon" style="background:#276749;">S</div> Action système (PA / SP)</div>
+            <div class="legend-item"><div class="legend-icon" style="background:#553c9a;">E</div> Envoi email</div>
+            <div class="legend-item"><div class="legend-icon" style="background:#2b6cb0;">L</div> Redirection / Lien</div>
+            <div class="legend-item"><div class="legend-icon" style="background:white; color:#667eea; border:2px dashed #667eea;">+</div> À construire</div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!--           PARTIE 1 : TRONC COMMUN                 -->
+    <!-- ══════════════════════════════════════════════════ -->
+
+    <div class="section-title">Tronc commun — Parcours de tout utilisateur</div>
+    <p class="section-desc">Chaque personne qui arrive sur le site passe par ces étapes. Les 2 questions d'aiguillage déterminent dans quel cas de figure on tombe.</p>
+
+    <div class="cas" style="border: 3px solid #667eea;">
+        <div class="cas-header">
+            <div class="cas-num">0</div>
+            <div class="cas-title">Tronc commun — Les 2 questions d'aiguillage <span class="cas-tag tag-tronc">Toujours</span></div>
+        </div>
+        <div class="cas-desc">Ce parcours est IDENTIQUE pour tout le monde. C'est après les 2 questions que les chemins divergent.</div>
+
+        <div class="flow">
+            <div class="step step-start">L'utilisateur arrive sur le site Clair-Bois</div>
+            <div class="arrow"></div>
+            <div class="step step-user">Choisit son parcours : "Modules métiers" ou "Demande de stage" <span class="tool">Site React</span></div>
+            <div class="arrow"></div>
+            <div class="step step-user">Sélectionne son choix :<br>
+                <em>Modules</em> → choisit 1 à 3 modules + semaine pour chacun<br>
+                <em>Stage</em> → choisit secteur + plage de dates</div>
+            <div class="arrow-big"></div>
+
+            <!-- QUESTION 1 -->
+            <div class="step step-question">
+                Question 1 : "Je remplis ce formulaire pour..."
+                <small>Affiché sur le site avant de rediriger vers Forms</small>
+            </div>
+            <div class="arrow"></div>
+
+            <div class="branch">
+                <div class="branch-side" style="border-color: #e53e3e; background: #fff5f5;">
+                    <div class="branch-label" style="color: #e53e3e;">Moi-même (stagiaire)</div>
+                    <div style="font-size: 12px; color: #822727; text-align: center;">Le stagiaire s'inscrit<br>en son propre nom</div>
+                </div>
+                <div class="branch-side" style="border-color: #3182ce; background: #ebf4ff;">
+                    <div class="branch-label" style="color: #3182ce;">Quelqu'un d'autre (référent)</div>
+                    <div style="font-size: 12px; color: #2b6cb0; text-align: center;">Le référent social inscrit<br>un stagiaire à sa place</div>
+                </div>
+            </div>
+
+            <div class="arrow-big"></div>
+
+            <!-- QUESTION 2 -->
+            <div class="step step-question">
+                Question 2 : "Avez-vous déjà été inscrit(e) chez Clair-Bois ?"
+                <small>Permet de détecter les personnes connues pour simplifier le processus</small>
+            </div>
+            <div class="arrow"></div>
+
+            <div class="branch">
+                <div class="branch-side" style="border-color: #48bb78; background: #f0fff4;">
+                    <div class="branch-label" style="color: #276749;">OUI — Déjà inscrit</div>
+                    <div style="font-size: 12px; color: #276749; text-align: center;">Données peut-être déjà<br>dans SharePoint</div>
+                </div>
+                <div class="branch-side" style="border-color: #a0aec0; background: #f7fafc;">
+                    <div class="branch-label" style="color: #718096;">NON — Première fois</div>
+                    <div style="font-size: 12px; color: #718096; text-align: center;">Formulaire complet<br>(43 questions)</div>
+                </div>
+            </div>
+
+            <div class="arrow-big"></div>
+
+            <div class="step step-action" style="font-size: 14px; font-weight: 700; padding: 16px;">
+                Ces 2 réponses combinées donnent <strong>4 chemins possibles</strong> ↓
+            </div>
+        </div>
+
+        <div style="margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div style="background: #fff5f5; border: 2px solid #feb2b2; border-radius: 10px; padding: 14px; text-align: center;">
+                <div style="font-weight: 800; color: #822727; font-size: 18px;">Chemin A</div>
+                <div style="font-size: 12px; color: #822727; margin-top: 4px;">NON + Moi-même</div>
+                <div style="font-size: 11px; color: #718096; margin-top: 2px;">Nouveau stagiaire seul</div>
+            </div>
+            <div style="background: #ebf4ff; border: 2px solid #90cdf4; border-radius: 10px; padding: 14px; text-align: center;">
+                <div style="font-weight: 800; color: #2b6cb0; font-size: 18px;">Chemin B</div>
+                <div style="font-size: 12px; color: #2b6cb0; margin-top: 4px;">NON + Référent</div>
+                <div style="font-size: 11px; color: #718096; margin-top: 2px;">Nouveau stagiaire via référent</div>
+            </div>
+            <div style="background: #f0fff4; border: 2px solid #9ae6b4; border-radius: 10px; padding: 14px; text-align: center;">
+                <div style="font-weight: 800; color: #276749; font-size: 18px;">Chemin C</div>
+                <div style="font-size: 12px; color: #276749; margin-top: 4px;">OUI + Moi-même</div>
+                <div style="font-size: 11px; color: #718096; margin-top: 2px;">Stagiaire existant revient seul</div>
+            </div>
+            <div style="background: #faf5ff; border: 2px solid #d6bcfa; border-radius: 10px; padding: 14px; text-align: center;">
+                <div style="font-weight: 800; color: #553c9a; font-size: 18px;">Chemin D</div>
+                <div style="font-size: 12px; color: #553c9a; margin-top: 4px;">OUI + Référent</div>
+                <div style="font-size: 11px; color: #718096; margin-top: 2px;">Stagiaire existant via référent</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 16px; text-align: center; font-size: 13px; color: #718096; font-style: italic;">
+            + un 5e chemin ci-dessous pour l'accès direct sans passer par le site
+        </div>
+
+        <div class="feasibility feasibility-partial" style="margin-top: 20px;">
+            <strong>⚠ Faisabilité du tronc commun</strong>
+            <ul style="margin-top: 6px; padding-left: 20px;">
+                <li><strong>Question 1</strong> ("pour moi / pour quelqu'un") : à ajouter sur le site — écran simple avec 2 boutons</li>
+                <li><strong>Question 2</strong> ("déjà inscrit ?") : à ajouter sur le site — 2 boutons OUI/NON</li>
+                <li>Ces 2 questions s'affichent APRÈS le choix du parcours et AVANT la redirection vers Forms</li>
+                <li>Effort : faible (composant React avec 2 écrans de 2 boutons chacun)</li>
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!--         PARTIE 2 : LES 4 CHEMINS                 -->
+    <!-- ══════════════════════════════════════════════════ -->
+
+    <div class="section-title">Les 4 chemins après l'aiguillage</div>
+    <p class="section-desc">Chaque chemin décrit ce qui se passe après les 2 questions, jusqu'à la fin de l'inscription.</p>
+
+    <!-- ============================================ -->
+    <!-- CHEMIN A -->
+    <!-- ============================================ -->
+    <div class="cas" style="border-left: 5px solid #feb2b2;">
+        <div class="cas-header">
+            <div class="cas-num" style="background: #e53e3e;">A</div>
+            <div class="cas-title">NON + Moi-même → Nouveau stagiaire seul <span class="cas-tag tag-simple">Simple</span></div>
+        </div>
+        <div class="cas-desc">Première inscription. Le stagiaire vient seul, sans référent. Il ne connaît pas Clair-Bois.</div>
+
+        <div class="flow">
+            <div class="step step-start">Tronc commun terminé → réponses : NON + Moi-même</div>
+            <div class="arrow"></div>
+            <div class="step step-action">Redirigé vers Microsoft Forms <strong>COMPLET</strong> (43 questions)<br>Pré-rempli avec : secteur/modules + dates choisis sur le site <span class="tool">Forms</span></div>
+            <div class="arrow"></div>
+            <div class="step step-user">Le stagiaire remplit le formulaire entier :<br>Son AVS + son email + infos personnelles + curatelle, AI, etc.</div>
+            <div class="arrow"></div>
+            <div class="step step-system">Flux 1 déclenché <span class="tool">Power Automate</span></div>
+            <div class="arrow"></div>
+            <div class="step step-decision">❓ AVS existe dans SharePoint ?</div>
+            <div class="arrow"></div>
+            <div class="arrow-label">NON (première fois)</div>
+            <div class="step step-system">Créer fiche <strong>Stagiaire</strong> dans SharePoint <span class="tool">SharePoint</span></div>
+            <div class="arrow"></div>
+            <div class="step step-system">Créer <strong>Demande</strong> (Secteur, Dates, Statut: "Nouveau") <span class="tool">SharePoint</span></div>
+            <div class="arrow"></div>
+            <div class="step step-email">Email au stagiaire : "[AVS-756.XXXX.XX D°5] Documents requis"<br><em>Objet masqué pour le Flux 2 (réception pièces jointes)</em></div>
+            <div class="arrow"></div>
+            <div class="step step-system">Flux 3 recalcule planning.json → places mises à jour <span class="tool">GitHub</span></div>
+            <div class="arrow"></div>
+            <div class="step step-end">Inscription enregistrée</div>
+        </div>
+
+        <div class="feasibility feasibility-ok">
+            <strong>✅ Faisabilité : Déjà implémenté</strong>
+            Branche "Stagiaire seul" du Flux 1 actuel. Tout est opérationnel.
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHEMIN B -->
+    <!-- ============================================ -->
+    <div class="cas" style="border-left: 5px solid #90cdf4;">
+        <div class="cas-header">
+            <div class="cas-num" style="background: #3182ce;">B</div>
+            <div class="cas-title">NON + Référent → Nouveau stagiaire via référent <span class="cas-tag tag-simple">Simple</span></div>
+        </div>
+        <div class="cas-desc">Première inscription. Le référent social inscrit le stagiaire à sa place. Ni le stagiaire ni le référent n'existent dans SharePoint.</div>
+
+        <div class="flow">
+            <div class="step step-start">Tronc commun terminé → réponses : NON + Référent</div>
+            <div class="arrow"></div>
+            <div class="step step-action">Redirigé vers Microsoft Forms <strong>COMPLET</strong> (43 questions) <span class="tool">Forms</span></div>
+            <div class="arrow"></div>
+            <div class="step step-user">Le référent remplit le formulaire :<br>AVS du stagiaire + <strong>email du référent</strong> + infos du stagiaire</div>
+            <div class="arrow"></div>
+            <div class="step step-system">Flux 1 déclenché <span class="tool">Power Automate</span></div>
+            <div class="arrow"></div>
+            <div class="step step-decision">❓ AVS du stagiaire existe ?</div>
+            <div class="arrow"></div>
+            <div class="arrow-label">NON (première fois)</div>
+            <div class="step step-system">Créer fiche <strong>Stagiaire</strong> <span class="tool">SharePoint</span></div>
+            <div class="arrow"></div>
+
+            <div class="step step-decision">❓ Email du référent existe déjà ?</div>
+            <div class="arrow"></div>
+            <div class="branch">
+                <div class="branch-side">
+                    <div class="branch-label">NON — nouveau</div>
+                    <div class="step step-system" style="font-size:12px;">Créer fiche <strong>Référent</strong><br>(lié au Stagiaire)</div>
+                </div>
+                <div class="branch-side">
+                    <div class="branch-label">OUI — connu</div>
+                    <div class="step step-system" style="font-size:12px;">Réutiliser fiche Référent<br>(pas de doublon)</div>
+                </div>
+            </div>
+
+            <div class="arrow"></div>
+            <div class="step step-system">Créer <strong>Demande</strong> <span class="tool">SharePoint</span></div>
+            <div class="arrow"></div>
+            <div class="step step-email">Email au <strong>référent</strong> (pas au stagiaire) :<br>"Documents requis pour [Nom du stagiaire]"</div>
+            <div class="arrow"></div>
+            <div class="step step-system">Flux 3 recalcule planning.json <span class="tool">GitHub</span></div>
+            <div class="arrow"></div>
+            <div class="step step-end">Inscription enregistrée</div>
+        </div>
+
+        <div class="feasibility feasibility-partial">
+            <strong>⚠ Faisabilité : Presque prêt</strong>
+            <ul style="margin-top: 6px; padding-left: 20px;">
+                <li><strong>Déjà fait</strong> : Flux 1 branche Référent fonctionne</li>
+                <li><strong>À ajouter</strong> : vérification doublon Référent (query par email avant de créer) — 1 condition dans Flux 1</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHEMIN C -->
+    <!-- ============================================ -->
+    <div class="cas" style="border-left: 5px solid #9ae6b4;">
+        <div class="cas-header">
+            <div class="cas-num" style="background: #38a169;">C</div>
+            <div class="cas-title">OUI + Moi-même → Stagiaire existant revient seul <span class="cas-tag tag-complexe">Complexe</span> <span class="cas-tag tag-futur">Axe 2</span></div>
+        </div>
+        <div class="cas-desc">
+            Le stagiaire a déjà été inscrit chez Clair-Bois (ex : modules métiers il y a 2 ans). Il revient s'inscrire seul.
+            Ses données sont déjà dans SharePoint. <strong>C'est le cas mentionné par Mme Karavia.</strong>
+        </div>
+
+        <div class="flow">
+            <div class="step step-start">Tronc commun terminé → réponses : OUI + Moi-même</div>
+            <div class="arrow"></div>
+
+            <div class="step step-new">Écran d'identification <span class="tool">Site React — à construire</span><br>
+                "Veuillez saisir votre numéro AVS et votre email"</div>
+            <div class="arrow"></div>
+            <div class="step step-new">Appel au flux de vérification <span class="tool">Power Automate — à construire</span><br>
+                HTTP trigger → cherche AVS dans SharePoint</div>
+            <div class="arrow"></div>
+
+            <div class="step step-decision">❓ AVS trouvé ET email correspond ?</div>
+            <div class="arrow"></div>
+
+            <div class="branch">
+                <div class="branch-side" style="border-color: #48bb78; background: #f0fff4;">
+                    <div class="branch-label" style="color: #276749;">OUI — Connu !</div>
+                    <div class="step step-email" style="font-size:12px;">Email au stagiaire :<br>"Bonjour [Prénom], voici votre lien<br>d'inscription personnalisé"</div>
+                    <div class="arrow"></div>
+                    <div class="step step-action" style="font-size:12px;">Lien vers Forms <strong>RACCOURCI</strong><br>(non publié sur le site)<br>Pré-rempli avec ses données existantes<br>Ne demande que : secteur + dates + signature</div>
+                    <div class="arrow"></div>
+                    <div class="step step-system" style="font-size:12px;">Flux 1 → AVS trouvé → <strong>MAJ</strong> Stagiaire<br>+ nouvelle Demande</div>
+                    <div class="branch-ref">→ Forms raccourci par email = sécurité</div>
+                </div>
+                <div class="branch-side" style="border-color: #fc8181; background: #fff5f5;">
+                    <div class="branch-label" style="color: #822727;">NON — Pas trouvé</div>
+                    <div class="step step-user" style="font-size:12px;">Message : "Nous ne vous avons pas<br>trouvé dans notre base."</div>
+                    <div class="arrow"></div>
+                    <div class="step step-action" style="font-size:12px;">Redirigé vers Forms <strong>COMPLET</strong><br>(43 questions — parcours classique)</div>
+                    <div class="arrow"></div>
+                    <div class="step step-system" style="font-size:12px;">Flux 1 → Créer Stagiaire + Demande</div>
+                    <div class="branch-ref">→ Retombe sur le Chemin A</div>
+                </div>
+            </div>
+
+            <div class="arrow"></div>
+            <div class="step step-system">Flux 3 recalcule planning.json <span class="tool">GitHub</span></div>
+            <div class="arrow"></div>
+            <div class="step step-end">Inscription adaptée — données réutilisées si possible</div>
+        </div>
+
+        <div class="feasibility feasibility-todo">
+            <strong>🔧 Faisabilité : À construire (Axe 2)</strong>
+            <ul style="margin-top: 6px; padding-left: 20px;">
+                <li><strong>Déjà fait</strong> : Flux 1 sait déjà faire MAJ au lieu de Créer si AVS existe</li>
+                <li><strong>À construire — Site React</strong> : écran identification (AVS + email) — 1 composant simple</li>
+                <li><strong>À construire — Power Automate</strong> : flux "Vérification identité" (HTTP trigger → query SP → retourne JSON)</li>
+                <li><strong>À construire — Power Automate</strong> : flux "Envoi lien raccourci" (génère URL Forms pré-rempli → envoie par email)</li>
+                <li><strong>À construire — Microsoft Forms</strong> : version allégée (~10 questions au lieu de 43)</li>
+                <li><strong>Sécurité</strong> : le lien raccourci transite par email uniquement → non devinable depuis le site</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHEMIN D -->
+    <!-- ============================================ -->
+    <div class="cas" style="border-left: 5px solid #d6bcfa;">
+        <div class="cas-header">
+            <div class="cas-num" style="background: #805ad5;">D</div>
+            <div class="cas-title">OUI + Référent → Stagiaire existant via référent <span class="cas-tag tag-moyen">Moyen</span></div>
+        </div>
+        <div class="cas-desc">Le référent inscrit un stagiaire qui est déjà passé par Clair-Bois. Le référent peut être le même qu'avant ou un nouveau.</div>
+
+        <div class="flow">
+            <div class="step step-start">Tronc commun terminé → réponses : OUI + Référent</div>
+            <div class="arrow"></div>
+
+            <div class="step step-action">Redirigé vers Microsoft Forms <strong>COMPLET</strong> (43 questions) <span class="tool">Forms</span><br>
+                <em>Même si le stagiaire est "connu", le référent remplit tout — c'est PA qui gère les doublons</em></div>
+            <div class="arrow"></div>
+            <div class="step step-user">Le référent remplit le formulaire :<br>AVS du stagiaire (existant) + email du référent</div>
+            <div class="arrow"></div>
+            <div class="step step-system">Flux 1 déclenché <span class="tool">Power Automate</span></div>
+            <div class="arrow"></div>
+
+            <div class="step step-decision">❓ AVS du stagiaire existe ?</div>
+            <div class="arrow"></div>
+            <div class="arrow-label">OUI — stagiaire connu</div>
+            <div class="step step-system"><strong>MAJ</strong> fiche Stagiaire (adresse, téléphone... si changé) <span class="tool">SharePoint</span></div>
+            <div class="arrow"></div>
+
+            <div class="step step-decision">❓ Email du référent existe déjà ?</div>
+            <div class="arrow"></div>
+
+            <div class="branch">
+                <div class="branch-side">
+                    <div class="branch-label">OUI — même référent</div>
+                    <div class="step step-system" style="font-size:12px;">Réutiliser fiche Référent<br>(pas de doublon)</div>
+                </div>
+                <div class="branch-side">
+                    <div class="branch-label">NON — nouveau référent</div>
+                    <div class="step step-system" style="font-size:12px;">Créer nouvelle fiche Référent<br>(lié au Stagiaire existant)</div>
+                </div>
+            </div>
+
+            <div class="arrow"></div>
+            <div class="step step-system">Créer nouvelle <strong>Demande</strong> <span class="tool">SharePoint</span></div>
+            <div class="arrow"></div>
+            <div class="step step-email">Email au <strong>référent actuel</strong> (pas l'ancien)</div>
+            <div class="arrow"></div>
+            <div class="step step-end">Réinscription — stagiaire mis à jour, pas de doublon</div>
+        </div>
+
+        <div class="feasibility feasibility-partial">
+            <strong>⚠ Faisabilité : Petite modification</strong>
+            <ul style="margin-top: 6px; padding-left: 20px;">
+                <li><strong>Déjà fait</strong> : Flux 1 gère la MAJ stagiaire si AVS existe</li>
+                <li><strong>À ajouter</strong> : vérification doublon Référent par email — 1 condition dans Flux 1</li>
+                <li><strong>Point clé</strong> : l'email va au référent actuel, pas à l'ancien. Le stagiaire change de "contact principal".</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CHEMIN E -->
+    <!-- ============================================ -->
+    <div class="cas" style="border-left: 5px solid #ed8936;">
+        <div class="cas-header">
+            <div class="cas-num" style="background: #dd6b20;">E</div>
+            <div class="cas-title">Accès direct — Lien Forms donné par Karavia (hors site) <span class="cas-tag tag-simple">Simple</span></div>
+        </div>
+        <div class="cas-desc">
+            L'utilisateur ne passe PAS par le site. Mme Karavia (ou un collaborateur interne) fournit directement le lien du formulaire
+            par email, téléphone, en personne, etc. Le site n'intervient pas du tout.
+        </div>
+
+        <div class="flow">
+            <div class="step step-start" style="background: #dd6b20;">L'utilisateur reçoit un lien Forms directement de Karavia</div>
+            <div class="arrow"></div>
+
+            <div class="step step-decision">❓ Quel formulaire Karavia a-t-elle transmis ?</div>
+            <div class="arrow"></div>
+
+            <div class="branch">
+                <div class="branch-side" style="border-color: #ed8936; background: #fffaf0;">
+                    <div class="branch-label" style="color: #c05621;">Forms COMPLET</div>
+                    <div style="font-size: 12px; color: #7b341e; text-align: center; margin-bottom: 8px;">
+                        Pour un nouveau stagiaire<br>ou si Karavia n'a pas vérifié la BDD
+                    </div>
+                    <div class="step step-user" style="font-size:12px;">L'utilisateur (stagiaire ou référent)<br>remplit les 43 questions</div>
+                    <div class="arrow"></div>
+                    <div class="step step-system" style="font-size:12px;">Flux 1 → vérifie AVS<br>→ Créer ou MAJ Stagiaire<br>→ Créer Demande</div>
+                    <div class="branch-ref">Même traitement que Chemins A/B/D</div>
+                </div>
+                <div class="branch-side" style="border-color: #48bb78; background: #f0fff4;">
+                    <div class="branch-label" style="color: #276749;">Forms RACCOURCI</div>
+                    <div style="font-size: 12px; color: #276749; text-align: center; margin-bottom: 8px;">
+                        Pour un stagiaire connu que Karavia<br>a déjà identifié dans SharePoint
+                    </div>
+                    <div class="step step-email" style="font-size:12px;">Karavia envoie le lien raccourci<br>pré-rempli (nom, AVS, etc.)<br>directement par email</div>
+                    <div class="arrow"></div>
+                    <div class="step step-user" style="font-size:12px;">Le stagiaire ne remplit que<br>secteur + dates + signature</div>
+                    <div class="arrow"></div>
+                    <div class="step step-system" style="font-size:12px;">Flux 1 → AVS trouvé<br>→ MAJ Stagiaire + nouvelle Demande</div>
+                    <div class="branch-ref">Même traitement que Chemin C</div>
+                </div>
+            </div>
+
+            <div class="arrow"></div>
+            <div class="step step-email">Email de confirmation (au stagiaire ou au référent selon le cas)</div>
+            <div class="arrow"></div>
+            <div class="step step-system">Flux 3 recalcule planning.json <span class="tool">GitHub</span></div>
+            <div class="arrow"></div>
+            <div class="step step-end">Inscription enregistrée — même résultat que via le site</div>
+        </div>
+
+        <div class="feasibility feasibility-ok">
+            <strong>✅ Faisabilité : Déjà possible (Forms complet) / Axe 2 (Forms raccourci)</strong>
+            <ul style="margin-top: 6px; padding-left: 20px;">
+                <li><strong>Forms complet</strong> : Karavia peut déjà partager le lien Forms — aucun changement nécessaire. Le Flux 1 traite la soumission de la même manière, que l'utilisateur vienne du site ou non.</li>
+                <li><strong>Forms raccourci</strong> : disponible une fois l'Axe 2 construit. Karavia pourra générer un lien pré-rempli depuis SharePoint ou le faire envoyer par PA.</li>
+                <li><strong>Pas de pré-remplissage secteur/dates</strong> : contrairement au site, les champs ne seront pas pré-remplis (sauf si Karavia construit l'URL manuellement avec les paramètres). L'utilisateur les choisira dans le Forms.</li>
+                <li><strong>Point important</strong> : le backend (Power Automate) ne fait aucune différence entre une soumission venant du site et une soumission directe — le traitement est identique.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!--         PARTIE 3 : CAS SPÉCIAL KARAVIA            -->
+    <!-- ══════════════════════════════════════════════════ -->
+
+    <div class="section-title">Cas spécial — Le parcours mixte (Mme Karavia)</div>
+    <p class="section-desc">Un stagiaire fait des modules métiers, puis revient 2 ans après pour un stage dans un secteur qu'il avait aimé.</p>
+
+    <div class="cas" style="border: 3px solid #805ad5;">
+        <div class="cas-header">
+            <div class="cas-num" style="background: #805ad5; font-size: 13px;">SP</div>
+            <div class="cas-title">Modules métiers → puis Stage (2 ans après) <span class="cas-tag tag-complexe">Complexe</span></div>
+        </div>
+        <div class="cas-desc">Ce cas combine 2 inscriptions dans le temps. La 1ère via référent, la 2ème le stagiaire revient seul.</div>
+
+        <div class="flow">
+            <!-- PHASE 1 -->
+            <div class="step step-start" style="background: #805ad5;">Phase 1 — Inscription modules métiers (année 1)</div>
+            <div class="arrow"></div>
+            <div class="step step-user">Tronc commun → Modules métiers → NON + Référent</div>
+            <div class="arrow"></div>
+            <div class="step step-action" style="font-size: 12px;">Suit le <strong>Chemin B</strong> : Forms complet → Stagiaire + Référent + Demande créés</div>
+            <div class="arrow"></div>
+            <div class="step step-end" style="background: #e9d8fd; border-color: #d6bcfa; color: #553c9a;">
+                Modules terminés. En BDD : AVS, nom, prénom, email, historique des modules faits.
+            </div>
+
+            <div class="arrow" style="height: 40px;"></div>
+            <div class="arrow-label" style="font-size: 14px; color: #805ad5;">⏳ 2 ans plus tard...</div>
+            <div class="arrow" style="height: 20px;"></div>
+
+            <!-- PHASE 2 -->
+            <div class="step step-start" style="background: #805ad5;">Phase 2 — Le stagiaire revient pour un stage</div>
+            <div class="arrow"></div>
+            <div class="step step-user">Tronc commun → Stages → <strong>OUI</strong> + <strong>Moi-même</strong></div>
+            <div class="arrow"></div>
+            <div class="step step-action" style="font-size: 12px;">Suit le <strong>Chemin C</strong> : identification AVS + email</div>
+            <div class="arrow"></div>
+            <div class="step step-system">AVS trouvé ! PA récupère l'historique :<br>"Ce stagiaire a fait Cuisine et Pâtisserie en 2024" <span class="tool">SharePoint</span></div>
+            <div class="arrow"></div>
+            <div class="step step-email">Email au stagiaire (son mail à LUI, pas l'ancien référent) :<br>"Bonjour [Prénom], vous avez déjà fait Cuisine et Pâtisserie chez nous.<br>Voici votre lien personnalisé pour vous inscrire à un stage."</div>
+            <div class="arrow"></div>
+            <div class="step step-action">Lien Forms raccourci → pré-rempli avec données existantes</div>
+            <div class="arrow"></div>
+            <div class="step step-system">Flux 1 → AVS existe → MAJ Stagiaire + nouvelle Demande (type: Stage) <span class="tool">PA</span></div>
+            <div class="arrow"></div>
+            <div class="step step-end">Réinscription fluide — historique conservé — référé à lui-même cette fois</div>
+        </div>
+
+        <div class="feasibility feasibility-todo">
+            <strong>🔧 Ce cas est couvert par le Chemin C</strong>
+            <ul style="margin-top: 6px; padding-left: 20px;">
+                <li>Pas besoin de code supplémentaire : c'est un <strong>Chemin B</strong> suivi d'un <strong>Chemin C</strong></li>
+                <li>L'historique des Demandes passées est déjà dans SharePoint (requêtable)</li>
+                <li><strong>Bonus possible</strong> : mentionner dans l'email les modules déjà faits (query SP par StagiaireID)</li>
+                <li><strong>Point clé</strong> : l'email va au stagiaire, pas à l'ancien référent. Le référent de la Phase 1 reste dans SP mais n'est plus le contact.</li>
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!--         PARTIE 4 : RÉSUMÉS                        -->
+    <!-- ══════════════════════════════════════════════════ -->
+
+    <div class="summary">
+        <h2>Résumé des 5 chemins</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Chemin</th>
+                    <th>Entrée</th>
+                    <th>Déjà inscrit ?</th>
+                    <th>Pour qui ?</th>
+                    <th>Formulaire</th>
+                    <th>État</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong style="color:#e53e3e;">A</strong> — Nouveau seul</td>
+                    <td>Site</td>
+                    <td>NON</td>
+                    <td>Moi-même</td>
+                    <td>Complet (43 q.)</td>
+                    <td><span class="check">✅ Fait</span></td>
+                </tr>
+                <tr>
+                    <td><strong style="color:#3182ce;">B</strong> — Nouveau + référent</td>
+                    <td>Site</td>
+                    <td>NON</td>
+                    <td>Quelqu'un d'autre</td>
+                    <td>Complet (43 q.)</td>
+                    <td><span class="partial">⚠ Anti-doublon réf.</span></td>
+                </tr>
+                <tr>
+                    <td><strong style="color:#38a169;">C</strong> — Existant seul</td>
+                    <td>Site</td>
+                    <td>OUI</td>
+                    <td>Moi-même</td>
+                    <td>Raccourci (~10 q.) par email</td>
+                    <td><span class="cross">🔧 Axe 2</span></td>
+                </tr>
+                <tr>
+                    <td><strong style="color:#805ad5;">D</strong> — Existant + référent</td>
+                    <td>Site</td>
+                    <td>OUI</td>
+                    <td>Quelqu'un d'autre</td>
+                    <td>Complet (43 q.)</td>
+                    <td><span class="partial">⚠ Anti-doublon réf.</span></td>
+                </tr>
+                <tr>
+                    <td><strong style="color:#dd6b20;">E</strong> — Lien direct Karavia</td>
+                    <td>Hors site</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>Complet ou Raccourci</td>
+                    <td><span class="check">✅ / 🔧 Axe 2</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="summary" style="margin-top: 28px;">
+        <h2>Ce qu'il reste à construire</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Composant</th>
+                    <th>Outil</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2 questions d'aiguillage</td>
+                    <td>React (site)</td>
+                    <td>2 écrans simples avec 2 boutons chacun, avant la redirection Forms</td>
+                </tr>
+                <tr>
+                    <td>Écran identification (Chemin C)</td>
+                    <td>React (site)</td>
+                    <td>Mini-formulaire AVS + email avec bouton "Vérifier"</td>
+                </tr>
+                <tr>
+                    <td>Flux "Vérification identité"</td>
+                    <td>Power Automate</td>
+                    <td>HTTP trigger → query SP par AVS → retourne JSON {existe, prenom, historique}</td>
+                </tr>
+                <tr>
+                    <td>Flux "Envoi lien raccourci"</td>
+                    <td>Power Automate</td>
+                    <td>Génère URL Forms pré-rempli → envoie par email au stagiaire</td>
+                </tr>
+                <tr>
+                    <td>Forms raccourci</td>
+                    <td>Microsoft Forms</td>
+                    <td>Version allégée : seulement secteur, dates, signature, remarques (~10 q.)</td>
+                </tr>
+                <tr>
+                    <td>Anti-doublon référent</td>
+                    <td>Power Automate (Flux 1)</td>
+                    <td>Avant créer Référent : query par email. Si existe → réutiliser l'ID</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="legend" style="margin-top: 28px; border-left-color: #e53e3e;">
+        <h3 style="color: #e53e3e;">Point de sécurité important</h3>
+        <p style="font-size: 13px; line-height: 1.6;">
+            Le formulaire raccourci (Chemin C) <strong>n'est jamais visible sur le site</strong>. Son URL est envoyée uniquement par email après vérification AVS + email.
+            Même si le Forms reste techniquement "public" (pas de Azure AD), le lien n'est pas devinable et contient des paramètres pré-remplis uniques.
+            C'est un compromis réaliste : les stagiaires externes n'ont pas de compte Microsoft, mais le lien par email ajoute une couche de sécurité.
+        </p>
+    </div>
+
+    <p style="text-align: center; color: #a0aec0; margin-top: 40px; font-size: 12px;">
+        Document généré le 13 mars 2026 — Projet Clair-Bois DFIP RH
+    </p>
+
+</div>
+</body>
+</html>

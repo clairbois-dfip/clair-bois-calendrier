@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Architecture Frontend — Clair-Bois Calendrier</title>
+<style>
+  /* ============================================================
+     RESET & BASE
+     ============================================================ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cb-dark:   #092C6A;
+    --cb-blue:   #2EA3F2;
+    --cb-gray:   #434343;
+    --cb-bg:     #0d1117;
+    --cb-card:   #161b22;
+    --cb-border: #30363d;
+    --cb-text:   #e6edf3;
+    --cb-muted:  #8b949e;
+    --cb-green:  #3fb950;
+    --cb-orange: #d29922;
+    --cb-red:    #f85149;
+    --cb-purple: #bc8cff;
+    --sidebar-w: 260px;
+    --transition: .3s cubic-bezier(.4,0,.2,1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--cb-bg);
+    color: var(--cb-text);
+    line-height: 1.6;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ============================================================
+     SIDEBAR
+     ============================================================ */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--cb-card);
+    border-right: 1px solid var(--cb-border);
+    padding: 24px 16px;
+    overflow-y: auto;
+    z-index: 100;
+    transition: transform var(--transition);
+  }
+
+  .sidebar-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cb-blue);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 8px;
+  }
+
+  .sidebar-subtitle {
+    font-size: 11px;
+    color: var(--cb-muted);
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+
+  .sidebar nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: var(--cb-muted);
+    text-decoration: none;
+    font-size: 13px;
+    transition: all var(--transition);
+    margin-bottom: 2px;
+  }
+
+  .sidebar nav a:hover,
+  .sidebar nav a.active {
+    background: rgba(46,163,242,.1);
+    color: var(--cb-blue);
+  }
+
+  .sidebar nav a .nav-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--cb-border);
+    color: var(--cb-muted);
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+    transition: all var(--transition);
+  }
+
+  .sidebar nav a:hover .nav-num,
+  .sidebar nav a.active .nav-num {
+    background: var(--cb-blue);
+    color: #fff;
+  }
+
+  /* ============================================================
+     MAIN CONTENT
+     ============================================================ */
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    padding: 40px 48px 80px;
+    max-width: 960px;
+  }
+
+  .page-header {
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--cb-border);
+  }
+
+  .page-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--cb-blue), var(--cb-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+
+  .page-header p {
+    font-size: 14px;
+    color: var(--cb-muted);
+  }
+
+  /* ============================================================
+     SECTIONS
+     ============================================================ */
+  .section {
+    margin-bottom: 56px;
+  }
+
+  .section-anchor {
+    display: block;
+    position: relative;
+    top: -20px;
+    visibility: hidden;
+  }
+
+  .section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--cb-text);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section h2 .sec-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: var(--cb-dark);
+    color: var(--cb-blue);
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .section .section-desc {
+    color: var(--cb-muted);
+    font-size: 14px;
+    margin-bottom: 24px;
+    padding-left: 40px;
+  }
+
+  /* ============================================================
+     FLOW DIAGRAMS
+     ============================================================ */
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    margin: 20px 0;
+    justify-content: center;
+  }
+
+  .flow-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: 20px 0;
+  }
+
+  .box {
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    min-width: 120px;
+    border: 1px solid transparent;
+    position: relative;
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+
+  .box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0,0,0,.3);
+  }
+
+  .box-blue   { background: rgba(46,163,242,.15); color: var(--cb-blue); border-color: rgba(46,163,242,.3); }
+  .box-dark   { background: rgba(9,44,106,.3); color: #7eb8f0; border-color: rgba(9,44,106,.5); }
+  .box-green  { background: rgba(63,185,80,.12); color: var(--cb-green); border-color: rgba(63,185,80,.3); }
+  .box-orange { background: rgba(210,153,34,.12); color: var(--cb-orange); border-color: rgba(210,153,34,.3); }
+  .box-purple { background: rgba(188,140,255,.12); color: var(--cb-purple); border-color: rgba(188,140,255,.3); }
+  .box-red    { background: rgba(248,81,73,.12); color: var(--cb-red); border-color: rgba(248,81,73,.3); }
+  .box-gray   { background: rgba(139,148,158,.1); color: var(--cb-muted); border-color: rgba(139,148,158,.3); }
+
+  .box small {
+    display: block;
+    font-weight: 400;
+    font-size: 11px;
+    opacity: .7;
+    margin-top: 2px;
+  }
+
+  /* Arrows */
+  .arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cb-muted);
+    font-size: 20px;
+    padding: 0 6px;
+    flex-shrink: 0;
+    user-select: none;
+  }
+
+  .arrow-down {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cb-muted);
+    font-size: 20px;
+    padding: 4px 0;
+    user-select: none;
+  }
+
+  .arrow-label {
+    font-size: 10px;
+    color: var(--cb-muted);
+    text-align: center;
+    padding: 0 4px;
+  }
+
+  /* ============================================================
+     EXPANDABLE SECTIONS
+     ============================================================ */
+  .expandable {
+    background: var(--cb-card);
+    border: 1px solid var(--cb-border);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color var(--transition);
+  }
+
+  .expandable:hover {
+    border-color: rgba(46,163,242,.3);
+  }
+
+  .expandable-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+    transition: background var(--transition);
+  }
+
+  .expandable-header:hover {
+    background: rgba(46,163,242,.05);
+  }
+
+  .expandable-chevron {
+    width: 20px; height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cb-muted);
+    transition: transform var(--transition);
+    flex-shrink: 0;
+  }
+
+  .expandable.open .expandable-chevron {
+    transform: rotate(90deg);
+  }
+
+  .expandable-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--cb-text);
+    flex: 1;
+  }
+
+  .expandable-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+
+  .expandable-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .4s ease, padding .3s ease;
+  }
+
+  .expandable.open .expandable-body {
+    max-height: 2000px;
+    padding: 0 18px 18px;
+  }
+
+  .expandable-body p,
+  .expandable-body ul {
+    font-size: 13px;
+    color: var(--cb-muted);
+    line-height: 1.7;
+  }
+
+  .expandable-body ul {
+    padding-left: 20px;
+    margin-top: 8px;
+  }
+
+  .expandable-body ul li {
+    margin-bottom: 4px;
+  }
+
+  /* ============================================================
+     COMPONENT TREE
+     ============================================================ */
+  .tree {
+    padding-left: 0;
+    list-style: none;
+    font-size: 13px;
+  }
+
+  .tree li {
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 6px;
+  }
+
+  .tree li::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--cb-border);
+  }
+
+  .tree li::after {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 13px;
+    width: 12px;
+    height: 1px;
+    background: var(--cb-border);
+  }
+
+  .tree li:last-child::before {
+    bottom: calc(100% - 14px);
+  }
+
+  .tree > li::before { display: none; }
+  .tree > li::after { display: none; }
+  .tree > li { padding-left: 0; }
+
+  .tree .node {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-weight: 500;
+  }
+
+  .tree .subtree {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 6px;
+  }
+
+  /* ============================================================
+     INFO CARDS & CODE
+     ============================================================ */
+  .info-card {
+    background: var(--cb-card);
+    border: 1px solid var(--cb-border);
+    border-radius: 8px;
+    padding: 18px;
+    margin: 16px 0;
+  }
+
+  .info-card h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cb-blue);
+    margin-bottom: 8px;
+  }
+
+  .info-card p, .info-card li {
+    font-size: 13px;
+    color: var(--cb-muted);
+    line-height: 1.7;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 12px;
+    background: rgba(46,163,242,.1);
+    color: var(--cb-blue);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .code-block {
+    background: #0d1117;
+    border: 1px solid var(--cb-border);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    color: var(--cb-muted);
+    overflow-x: auto;
+    margin: 12px 0;
+    line-height: 1.8;
+    white-space: pre;
+  }
+
+  .code-block .kw  { color: var(--cb-purple); }
+  .code-block .fn  { color: var(--cb-blue); }
+  .code-block .str { color: var(--cb-green); }
+  .code-block .cmt { color: #484f58; font-style: italic; }
+  .code-block .var { color: var(--cb-orange); }
+
+  /* ============================================================
+     NAV FLOWCHART (section 4)
+     ============================================================ */
+  .nav-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin: 20px 0;
+    position: relative;
+  }
+
+  .nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+
+  /* ============================================================
+     TABLE
+     ============================================================ */
+  .doc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 16px 0;
+  }
+
+  .doc-table th {
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--cb-dark);
+    color: var(--cb-blue);
+    font-weight: 600;
+    border-bottom: 2px solid var(--cb-border);
+  }
+
+  .doc-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--cb-border);
+    color: var(--cb-muted);
+    vertical-align: top;
+  }
+
+  .doc-table tr:hover td {
+    background: rgba(46,163,242,.03);
+  }
+
+  /* ============================================================
+     STATE BADGE
+     ============================================================ */
+  .state-badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-family: monospace;
+  }
+
+  .sb-blue   { background: rgba(46,163,242,.15); color: var(--cb-blue); }
+  .sb-green  { background: rgba(63,185,80,.12); color: var(--cb-green); }
+  .sb-orange { background: rgba(210,153,34,.12); color: var(--cb-orange); }
+  .sb-purple { background: rgba(188,140,255,.12); color: var(--cb-purple); }
+  .sb-red    { background: rgba(248,81,73,.12); color: var(--cb-red); }
+
+  /* ============================================================
+     PIPELINE DIAGRAM (section 6)
+     ============================================================ */
+  .pipeline {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .pipeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 16px 14px;
+    background: var(--cb-card);
+    border: 1px solid var(--cb-border);
+    border-radius: 8px;
+    min-width: 110px;
+    text-align: center;
+    transition: transform var(--transition), border-color var(--transition);
+  }
+
+  .pipeline-step:hover {
+    transform: translateY(-2px);
+    border-color: var(--cb-blue);
+  }
+
+  .pipeline-step .ps-icon {
+    font-size: 24px;
+  }
+
+  .pipeline-step .ps-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--cb-text);
+  }
+
+  .pipeline-step .ps-detail {
+    font-size: 10px;
+    color: var(--cb-muted);
+  }
+
+  .pipeline-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--cb-muted);
+    padding: 0 4px;
+  }
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width: 900px) {
+    .sidebar {
+      transform: translateX(-100%);
+    }
+    .sidebar.mobile-open {
+      transform: translateX(0);
+    }
+    .main {
+      margin-left: 0;
+      padding: 24px 20px 60px;
+    }
+    .mobile-toggle {
+      display: flex !important;
+    }
+  }
+
+  .mobile-toggle {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 200;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--cb-blue);
+    color: #fff;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,.4);
+  }
+
+  /* ============================================================
+     ANIMATION
+     ============================================================ */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section {
+    animation: fadeInUp .5s ease both;
+  }
+
+  .section:nth-child(2) { animation-delay: .05s; }
+  .section:nth-child(3) { animation-delay: .1s; }
+  .section:nth-child(4) { animation-delay: .15s; }
+  .section:nth-child(5) { animation-delay: .2s; }
+  .section:nth-child(6) { animation-delay: .25s; }
+  .section:nth-child(7) { animation-delay: .3s; }
+
+  /* Tooltip on hover for boxes */
+  .box[data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) scale(.9);
+    background: var(--cb-gray);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 400;
+    padding: 6px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all var(--transition);
+    z-index: 10;
+  }
+
+  .box[data-tip]:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+
+  /* Highlight keyword */
+  .hl { color: var(--cb-blue); font-weight: 600; }
+  .hl-green { color: var(--cb-green); font-weight: 600; }
+  .hl-orange { color: var(--cb-orange); font-weight: 600; }
+  .hl-purple { color: var(--cb-purple); font-weight: 600; }
+
+  /* Divider */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--cb-border);
+    margin: 40px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     SIDEBAR
+     ============================================================ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-title">Architecture Frontend</div>
+  <div class="sidebar-subtitle">Clair-Bois Calendrier<br>Documentation technique</div>
+  <nav>
+    <a href="#s1"><span class="nav-num">1</span> Chargement initial</a>
+    <a href="#s2"><span class="nav-num">2</span> React et les composants</a>
+    <a href="#s3"><span class="nav-num">3</span> Flux de donnees</a>
+    <a href="#s4"><span class="nav-num">4</span> Navigation</a>
+    <a href="#s5"><span class="nav-num">5</span> Formulaire integre</a>
+    <a href="#s6"><span class="nav-num">6</span> Build et deploiement</a>
+  </nav>
+</aside>
+
+<!-- Mobile toggle -->
+<button class="mobile-toggle" id="mobileToggle" aria-label="Menu">&#9776;</button>
+
+<!-- ============================================================
+     MAIN
+     ============================================================ -->
+<div class="main">
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <h1>Architecture Frontend — Clair-Bois Calendrier</h1>
+    <p>Guide visuel a destination des developpeurs juniors. Stack : React 19 + Vite + Tailwind CSS v4. Heberge sur GitHub Pages.</p>
+  </header>
+
+  <!-- ============================================================
+       SECTION 1 — Chargement initial
+       ============================================================ -->
+  <div class="section">
+    <span class="section-anchor" id="s1"></span>
+    <h2><span class="sec-num">1</span> Que se passe-t-il quand on arrive sur le site ?</h2>
+    <p class="section-desc">La chaine de fichiers, du serveur jusqu'a l'affichage du premier ecran.</p>
+
+    <!-- File chain -->
+    <div class="flow">
+      <div class="box box-gray" data-tip="Serveur statique GitHub">GitHub Pages<small>/dist/</small></div>
+      <div class="arrow">&#10132;</div>
+      <div class="box box-blue" data-tip="Point d'entree HTML">index.html<small>&lt;div id=&quot;root&quot;&gt;</small></div>
+      <div class="arrow">&#10132;</div>
+      <div class="box box-purple" data-tip="Monte React dans le DOM">main.jsx<small>createRoot()</small></div>
+      <div class="arrow">&#10132;</div>
+      <div class="box box-green" data-tip="Composant racine">App.jsx<small>useEffect → fetch</small></div>
+    </div>
+
+    <!-- Expandable details -->
+    <div class="expandable" onclick="this.classList.toggle('open')">
+      <div class="expandable-header">
+        <div class="expandable-chevron">&#9654;</div>
+        <div class="expandable-title">index.html — Le squelette</div>
+        <span class="expandable-tag box-blue">HTML</span>
+      </div>
+      <div class="expandable-body">
+        <p>Fichier HTML minimal situe a la racine du projet <code>frontend/</code>. Il contient :</p>
+        <ul>
+          <li>Un <code>&lt;div id="root"&gt;</code> vide — c'est ici que React va injecter toute l'application</li>
+          <li>Un <code>&lt;script type="module" src="/src/main.jsx"&gt;</code> qui charge le point d'entree JavaScript</li>
+          <li>Les polices Google Fonts (Open Sans) en preconnect</li>
+          <li>Le <code>lang="fr"</code> pour l'accessibilite</li>
+        </ul>
+        <p style="margin-top:10px;">En production, Vite remplace ce fichier par une version optimisee avec les noms de fichiers hashes.</p>
+      </div>
+    </div>
+
+    <div class="expandable" onclick="this.classList.toggle('open')">
+      <div class="expandable-header">
+        <div class="expandable-chevron">&#9654;</div>
+        <div class="expandable-title">main.jsx — Le demarrage React</div>
+        <span class="expandable-tag box-purple">JSX</span>
+      </div>
+      <div class="expandable-body">
+        <p>Ce fichier fait exactement 3 choses :</p>
+        <ul>
+          <li>Importe <code>createRoot</code> depuis React 19 (nouvelle API de rendu)</li>
+          <li>Importe le fichier <code>index.css</code> (Tailwind + theme personnalise)</li>
+          <li>Monte <code>&lt;App /&gt;</code> dans <code>#root</code> avec <code>StrictMode</code> (verifications supplementaires en dev)</li>
+        </ul>
+        <div class="code-block"><span class="kw">import</span> { StrictMode } <span class="kw">from</span> <span class="str">'react'</span>
+<span class="kw">import</span> { createRoot } <span class="kw">from</span> <span class="str">'react-dom/client'</span>
+<span class="kw">import</span> App <span class="kw">from</span> <span class="str">'./App.jsx'</span>
+
+<span class="fn">createRoot</span>(document.<span class="fn">getElementById</span>(<span class="str">'root'</span>)).<span class="fn">render</span>(
+  &lt;<span class="var">StrictMode</span>&gt;&lt;<span class="var">App</span> /&gt;&lt;/<span class="var">StrictMode</span>&gt;
+)</div>
+      </div>
+    </div>
+
+    <div class="expandable" onclick="this.classList.toggle('open')">
+      <div class="expandable-header">
+        <div class="expandable-chevron">&#9654;</div>
+        <div class="expandable-title">App.jsx — Le composant racine</div>
+        <span class="expandable-tag box-green">JSX</span>
+      </div>
+      <div class="expandable-body">
+        <p>C'est le chef d'orchestre. Au montage, il :</p>
+        <ul>
+          <li>Lance un <code>fetch()</code> vers <code>planning.json</code> (via <code>useEffect</code>, une seule fois)</li>
+          <li>Transforme les donnees brutes avec <code>transformPlanningData()</code></li>
+          <li>Affiche un spinner pendant le chargement, un message si erreur</li>
+          <li>Gere toute la navigation via <code>useState('home')</code> — pas de React Router</li>
+          <li>Rend le composant correspondant a l'ecran actif (rendu conditionnel)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h4>Pourquoi pas de React Router ?</h4>
+      <p>L'application est un site statique heberge sur GitHub Pages. La navigation est geree entierement par l'etat React (<code>currentView</code>), ce qui evite la configuration de redirections serveur. C'est un choix de simplicite adapte a la taille du projet.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ============================================================
+       SECTION 2 — React
+       ============================================================ -->
+  <div class="section">
+    <span class="section-anchor" id="s2"></span>
+    <h2><span class="sec-num">2</span> React dans tout ca ?</h2>
+    <p class="section-desc">Le role de React, le Virtual DOM, et l'arbre des composants de l'application.</p>
+
+    <div class="expandable open" onclick="this.classList.toggle('open')">
+      <div class="expandable-header">
+        <div class="expandable-chevron">&#9654;</div>
+        <div class="expandable-title">React en 30 secondes</div>
+        <span class="expandable-tag box-blue">Concept</span>
+      </div>
+      <div class="expandable-body">
+        <p>React est une bibliotheque JavaScript pour construire des interfaces. Trois concepts cles :</p>
+        <ul>
+          <li><span class="hl">Composants</span> — Chaque ecran, chaque bout d'interface est un composant reutilisable (une fonction qui retourne du JSX).</li>
+          <li><span class="hl">Virtual DOM</span> — React maintient une copie virtuelle de la page. Quand l'etat change, il calcule le minimum de modifications a appliquer au vrai DOM. C'est ce qui rend les mises a jour rapides.</li>
+          <li><span class="hl">Single Page App (SPA)</span> — Le navigateur charge <code>index.html</code> une seule fois. Ensuite, la navigation se fait sans rechargement : React remplace les composants a l'ecran.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="expandable" onclick="this.classList.toggle('open')">
+      <div class="expandable-header">
+        <div class="expandable-chevron">&#9654;</div>
+        <div class="expandable-title">Arbre des composants</div>
+        <span class="expandable-tag box-green">Architecture</span>
+      </div>
+      <div class="expandable-body">
+        <p>Voici la hierarchie complete des composants. <code>App.jsx</code> est la racine, et chaque composant enfant correspond a un ecran ou un element d'interface.</p>
+
+        <ul class="tree">
+          <li>
+            <span class="node box-green">App.jsx</span> <small style="color:var(--cb-muted)">— racine, routeur, chargement donnees</small>
+            <ul class="subtree">
+              <li><span class="node box-dark">Header.jsx</span> <small style="color:var(--cb-muted)">— logo + nom fondation</small></li>
+              <li>
+                <span class="node box-blue">HomePage.jsx</span> <small style="color:var(--cb-muted)">— choix du parcours (modules/stages)</small>
+              </li>
+              <li>
+                <span class="node box-purple">Aiguillage.jsx</span> <small style="color:var(--cb-muted)">— 2 questions de tri</small>
+              </li>
+              <li>
+                <span class="node box-blue">EtablissementPage.jsx</span> <small style="color:var(--cb-muted)">— choix du secteur</small>
+              </li>
+              <li>
+                <span class="node box-blue">SecteurCalendar.jsx</span> <small style="color:var(--cb-muted)">— calendrier mensuel</small>
+              </li>
+              <li>
+                <span class="node box-blue">WeekDetail.jsx</span> <small style="color:var(--cb-muted)">— detail semaine + inscription</small>
+              </li>
+              <li>
+                <span class="node box-orange">ModulesMetiers.jsx</span> <small style="color:var(--cb-muted)">— grille semaine type</small>
+              </li>
+              <li>
+                <span class="node box-orange">StagesPage.jsx</span> <small style="color:var(--cb-muted)">— choix secteur + calendrier</small>
+              </li>
+              <li>
+                <span class="node box-red">FormulaireInscription.jsx</span> <small style="color:var(--cb-muted)">— orchestrateur multi-etapes</small>
+                <ul class="subtree">
+                  <li><span class="node box-gray">EtapeReferent.jsx</span></li>
+                  <li><span class="node box-gray">EtapeStagiaire.jsx</span></li>
+                  <li><span class="node box-gray">EtapeCuratelle.jsx</span></li>
+                  <li><span class="node box-gray">EtapeUrgence.jsx</span></li>
+                  <li><span class="node box-gray">EtapeAI.jsx</span></li>
+                  <li><span class="node box-gray">EtapeComplementaire.jsx</span></li>
+                  <li><span class="node box-gray">EtapeDeclaration.jsx</span></li>
+                  <li><span class="node box-gray">Recapitulatif.jsx</span></li>
+                  <li><span class="node box-gray">Confirmation.jsx</span></li>
+                </ul>
+              </li>
+              <li><span class="node box-dark">Footer.jsx</span></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h4>Structure des fichiers</h4>
+      <div class="code-block">src/
+  App.jsx                  <span class="cmt"># Racine + routeur + fetch</span>
+  main.jsx                 <span class="cmt"># Point d'entree React</span>
+  index.css                <span class="cmt"># Tailwind + theme Clair-Bois</span>
+  components/
+    Header.jsx             <span class="cmt"># En-tete</span>
+    Footer.jsx             <span class="cmt"># Pied de page</span>
+    Breadcrumb.jsx         <span class="cmt"># Fil d'Ariane</span>
+    InfoBulle.jsx          <span class="cmt"># Tooltip contextuel</span>
+    HomePage.jsx           <span class="cmt"># Ecran 1</span>
+    Aiguillage.jsx         <span class="cmt"># Questions de tri</span>
+    EtablissementPage.jsx  <span class="cmt"># Ecran 2</span>
+    SecteurCalendar.jsx    <span class="cmt"># Ecran 3</span>
+    WeekDetail.jsx         <span class="cmt"># Ecran 4</span>
+    ModulesMetiers.jsx     <span class="cmt"># Ecran 5</span>
+    StagesPage.jsx         <span class="cmt"># Ecran 6</span>
+    FormulaireInscription.jsx  <span class="cmt"># Ecran 7</span>
+    formulaire/            <span class="cmt"># Sous-composants du formulaire</span>
+      ChampFormulaire.jsx  <span class="cmt"># Input reutilisable</span>
+      EtapeStagiaire.jsx
+      EtapeCuratelle.jsx
+      EtapeUrgence.jsx
+      EtapeAI.jsx
+      EtapeReferent.jsx
+      EtapeComplementaire.jsx
+      EtapeDeclaration.jsx
+      Recapitulatif.jsx
+      Confirmation.jsx
+  utils/
+    helpers.js             <span class="cmt"># Logique metier (dates, statuts, etc.)</span>
+    formConfig.js          <span class="cmt"># Config declarative par chemin</span>
+    validation.js          <span class="cmt"># Validation AVS, tel, NPA, etc.</span></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ============================================================
+       SECTION 3 — Donnees
+       ============================================================ -->
+  <div class="section">
+    <span class="section-anchor" id="s3"></span>
+    <h2><span class="sec-num">3</span> D'ou viennent les donnees ?</h2>
+    <p class="section-desc">Le fichier <code>planning.json</code>, sa transformation, et le flux de donnees dans les composants.</p>
+
+    <!-- Data pipeline -->
+    <div class="flow-vertical">
+      <div class="box box-gray" data-tip="Genere par Power Automate (Flux 3)">planning.json<small>public/ — format plat</small></div>
+      <div class="arrow-down">&#9660;</div>
+      <div class="arrow-label">fetch() au demarrage (une seule fois, cache desactive)</div>
+      <div class="arrow-down">&#9660;</div>
+      <div class="box box-purple" data-tip="helpers.js">transformPlanningData()<small>Plat &#8594; Hierarchique</small></div>
+      <div class="arrow-down">&#9660;</div>
+      <div class="arrow-label">setData(resultat) dans App.jsx</div>
+      <div class="arrow-down">&#9660;</div>
+      <div class="box box-green" data-tip="Etat React dans App.jsx">data (state)<small>Transmis via props</small></div>
+      <div class="arrow-down">&#9660;</div>
+      <div class="flow" style="margin:0;">
+        <div class="box box-blue">HomePage</div>
+        <div class="box box-blue" style="margin-left:8px;">Secteur<br>Calendar</div>
+        <div class="box box-blue" style="margin-left:8px;">Week<br>Detail</div>
+        <div class="box box-orange" style="margin-left:8px;">Modules<br>Metiers</div>
+      </div>
+    </div>
+
+    <div class="expandable" onclick="this.classList.toggle('open')">
+      <div class="expandable-header">
+        <div class="expandable-chevron">&#9654;</div>
+        <div class="expandable-title">Format plat (Power Automate) vs hierarchique (React)</div>
+        <span class="expandable-tag box-orange">Donnees</span>
+      </div>
+      <div class="expandable-body">
+        <p><strong>En entree</strong> — Le JSON genere par Power Automate est un tableau plat de creneaux :</p>
+        <div class="code-block">{ <span class="str">"creneaux"</span>: [
+    { <span class="str">"etablissement"</span>: <span class="str">"Blanchisserie Tourbillon"</span>,
+      <span class="str">"secteur"</span>: <span class="str">"Lavage"</span>,
+      <span class="str">"dateDebut"</span>: <span class="str">"2026-03-01"</span>,
+      <span class="str">"dateFin"</span>: <span class="str">"2026-03-05"</span>,
+      <span class="str">"placesTotal"</span>: <span class="var">3</span>,
+      <span class="str">"placesUtilisees"</span>: <span class="var">0</span> },
+    ...
+  ],
+  <span class="str">"modulesMetiers"</span>: { ... }
+}</div>
+        <p style="margin-top:12px;"><strong>En sortie</strong> — <code>transformPlanningData()</code> produit une structure hierarchique :</p>
+        <div class="code-block">{
+  <span class="str">"etablissements"</span>: [
+    { <span class="str">"name"</span>: <span class="str">"Blanchisserie Tourbillon"</span>,
+      <span class="str">"secteurs"</span>: [
+        { <span class="str">"name"</span>: <span class="str">"Lavage"</span>,
+          <span class="str">"weeks"</span>: [
+            { <span class="str">"weekNumber"</span>: <span class="var">10</span>,
+              <span class="str">"status"</span>: <span class="str">"available"</span>,
+              <span class="str">"totalSlots"</span>: <span class="var">3</span>,
+              <span class="str">"usedSlots"</span>: <span class="var">0</span> }
+          ] }
+      ] }
+  ],
+  <span class="str">"modulesMetiers"</span>: { ... }
+}</div>
+        <p style="margin-top:12px;">Cela permet aux composants React de parcourir facilement : <code>data.etablissements.map(e =&gt; e.secteurs.map(...))</code></p>
+      </div>
+    </div>
+
+    <div class="expandable" onclick="this.classList.toggle('open')">
+      <div class="expandable-header">
+        <div class="expandable-chevron">&#9654;</div>
+        <div class="expandable-title">Fonctions utilitaires cles (helpers.js)</div>
+        <span class="expandable-tag box-purple">Utils</span>
+      </div>
+      <div class="expandable-body">
+        <table class="doc-table">
+          <tr><th>Fonction</th><th>Role</th></tr>
+          <tr><td><code>transformPlanningData()</code></td><td>Convertit le format plat Power Automate en hierarchie etablissements &gt; secteurs &gt; semaines</td></tr>
+          <tr><td><code>computeStatus(total, used)</code></td><td>Calcule le code couleur : &gt;50% = vert, 1-50% = orange, 0 = rouge</td></tr>
+          <tr><td><code>aggregateWeekCreneaux()</code></td><td>Regroupe les creneaux chevauchants d'une meme semaine ISO</td></tr>
+          <tr><td><code>getUniqueCreneaux()</code></td><td>Deduplique les creneaux par startDate+endDate pour le comptage</td></tr>
+          <tr><td><code>formatDate() / formatDateShort()</code></td><td>Formatage en francais ("1 mars 2026" / "1 mars")</td></tr>
+          <tr><td><code>getISOWeekNumber()</code></td><td>Numero de semaine ISO 8601</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h4>Statuts de disponibilite (code couleur)</h4>
+      <p style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;">
+        <span class="state-badge sb-green">available — &gt;50% libre</span>
+        <span class="state-badge sb-orange">almost_full — 1-50% libre</span>
+        <span class="state-badge sb-red">full — complet (0 place)</span>
+        <span class="state-badge" style="background:rgba(139,148,158,.1);color:var(--cb-muted);">gray — pas de donnees</span>
+      </p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ============================================================
+       SECTION 4 — Navigation
+       ============================================================ -->
+  <div class="section">
+    <span class="section-anchor" id="s4"></span>
+    <h2><span class="sec-num">4</span> Navigation entre les ecrans</h2>
+    <p class="section-desc">Comment on passe d'un ecran a l'autre, et quelles variables d'etat controlent la navigation.</p>
+
+    <!-- Navigation flowchart -->
+    <div class="flow-vertical">
+      <div class="box box-blue" data-tip="currentView === 'home'" style="min-width:200px;">
+        <strong>HomePage</strong><small>Choix du parcours</small>
+      </div>
+
+      <div class="arrow-down">&#9660;</div>
+      <div class="arrow-label">goToModules() ou goToStages()</div>
+      <div class="arrow-down">&#9660;</div>
+
+      <div class="box box-purple" data-tip="currentView === 'aiguillage'" style="min-width:200px;">
+        <strong>Aiguillage</strong><small>Pour qui ? Deja inscrit ?</small>
+      </div>
+
+      <div class="arrow-down">&#9660;</div>
+      <div class="arrow-label">handleAiguillageResult() → setChemin()</div>
+      <div class="arrow-down">&#9660;</div>
+
+      <div class="flow" style="margin:0;gap:16px;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+          <div class="box box-orange" data-tip="currentView === 'modules'" style="min-width:160px;">
+            <strong>ModulesMetiers</strong><small>Grille semaine type</small>
+          </div>
+          <div class="arrow-down">&#9660;</div>
+          <div class="box box-red" data-tip="currentView === 'formulaire'" style="min-width:160px;">
+            <strong>Formulaire</strong><small>Inscription integree</small>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+          <div class="box box-orange" data-tip="currentView === 'stages'" style="min-width:160px;">
+            <strong>StagesPage</strong><small>Secteurs + calendrier</small>
+          </div>
+          <div class="arrow-down">&#9660;</div>
+          <div class="box box-red" data-tip="currentView === 'formulaire'" style="min-width:160px;">
+            <strong>Formulaire</strong><small>Inscription integree</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="expandable" onclick="this.classList.toggle('open')">
+      <div class="expandable-header">
+        <div class="expandable-chevron">&#9654;</div>
+        <div class="expandable-title">Variables d'etat qui controlent la navigation</div>
+        <span class="expandable-tag box-blue">State</span>
+      </div>
+      <div class="expandable-body">
+        <table class="doc-table">
+          <tr><th>Variable</th><th>Type</th><th>Valeurs possibles</th><th>Role</th></tr>
+          <tr>
+            <td><code>currentView</code></td>
+            <td><span class="state-badge sb-blue">string</span></td>
+            <td><code>'home'</code> | <code>'aiguillage'</code> | <code>'etablissement'</code> | <code>'secteur'</code> | <code>'week'</code> | <code>'modules'</code> | <code>'stages'</code> | <code>'formulaire'</code></td>
+            <td>Determine quel composant est affiche</td>
+          </tr>
+          <tr>
+            <td><code>selectedEtablissement</code></td>
+            <td><span class="state-badge sb-green">object|null</span></td>
+            <td>Un objet etablissement ou <code>null</code></td>
+            <td>Etablissement actuellement selectionne</td>
+          </tr>
+          <tr>
+            <td><code>selectedSecteur</code></td>
+            <td><span class="state-badge sb-green">object|null</span></td>
+            <td>Un objet secteur ou <code>null</code></td>
+            <td>Secteur actuellement selectionne</td>
+          </tr>
+          <tr>
+            <td><code>selectedWeek</code></td>
+            <td><span class="state-badge sb-green">object|null</span></td>
+            <td>Un objet semaine ou <code>null</code></td>
+            <td>Semaine actuellement selectionnee</td>
+          </tr>
+          <tr>
+            <td><code>aiguillageParcours</code></td>
+            <td><span class="state-badge sb-purple">string|null</span></td>
+            <td><code>'stages'</code> | <code>'modules'</code> | <code>null</code></td>
+            <td>Parcours choisi (avant l'aiguillage)</td>
+          </tr>
+          <tr>
+            <td><code>chemin</code></td>
+            <td><span class="state-badge sb-orange">object|null</span></td>
+            <td><code>{ pourQui, dejaInscrit }</code></td>
+            <td>Reponses aux questions d'aiguillage</td>
+          </tr>
+          <tr>
+            <td><code>formulaireContext</code></td>
+            <td><span class="state-badge sb-red">object|null</span></td>
+            <td>Contexte (secteur+dates ou modules)</td>
+            <td>Donnees a pre-remplir dans le formulaire</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="expandable" onclick="this.classList.toggle('open')">
+      <div class="expandable-header">
+        <div class="expandable-chevron">&#9654;</div>
+        <div class="expandable-title">Fonctions de navigation</div>
+        <span class="expandable-tag box-green">Fonctions</span>
+      </div>
+      <div class="expandable-body">
+        <table class="doc-table">
+          <tr><th>Fonction</th><th>Transition</th><th>Reset</th></tr>
+          <tr><td><code>goToHome()</code></td><td>N'importe ou &#8594; home</td><td>Reinitialise toutes les selections</td></tr>
+          <tr><td><code>goToModules()</code></td><td>home &#8594; aiguillage</td><td>Definit <code>aiguillageParcours='modules'</code></td></tr>
+          <tr><td><code>goToStages()</code></td><td>home &#8594; aiguillage</td><td>Definit <code>aiguillageParcours='stages'</code></td></tr>
+          <tr><td><code>handleAiguillageResult()</code></td><td>aiguillage &#8594; modules ou stages</td><td>Stocke le chemin, navigue selon le parcours</td></tr>
+          <tr><td><code>goToFormulaire(ctx)</code></td><td>stages/modules &#8594; formulaire</td><td>Stocke le contexte (secteur, dates, etc.)</td></tr>
+          <tr><td><code>goBackFromFormulaire()</code></td><td>formulaire &#8594; stages ou modules</td><td>Retour intelligent selon <code>aiguillageParcours</code></td></tr>
+          <tr><td><code>goToEtablissement(e)</code></td><td>home &#8594; etablissement</td><td>Selectionne l'etablissement</td></tr>
+          <tr><td><code>goToSecteur(s)</code></td><td>etablissement &#8594; secteur</td><td>Selectionne le secteur</td></tr>
+          <tr><td><code>goToWeek(w)</code></td><td>secteur &#8594; week</td><td>Selectionne la semaine</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h4>Rendu conditionnel — Pas de React Router</h4>
+      <p>La navigation repose sur un simple <code>switch</code> implicite via des blocs <code>{currentView === 'xxx' && &lt;Composant /&gt;}</code>. Quand <code>currentView</code> change, React demonte l'ancien composant et monte le nouveau. Chaque composant recoit les donnees necessaires via ses <code>props</code> et les callbacks de navigation (<code>onBack</code>, <code>onGoHome</code>, etc.).</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ============================================================
+       SECTION 5 — Formulaire
+       ============================================================ -->
+  <div class="section">
+    <span class="section-anchor" id="s5"></span>
+    <h2><span class="sec-num">5</span> Le formulaire integre</h2>
+    <p class="section-desc">Un formulaire multi-etapes intelligent qui s'adapte selon le chemin d'aiguillage.</p>
+
+    <!-- Form flow -->
+    <div class="flow" style="flex-wrap:wrap;gap:8px;">
+      <div class="box box-purple" data-tip="Parcours + chemin → cheminKey">Aiguillage<small>pourQui + dejaInscrit</small></div>
+      <div class="arrow">&#10132;</div>
+      <div class="box box-blue" data-tip="Determine les sections visibles">formConfig.js<small>getFormConfig()</small></div>
+      <div class="arrow">&#10132;</div>
+      <div class="box box-red" data-tip="Orchestre les etapes">FormulaireInscription<small>Orchestrateur</small></div>
+      <div class="arrow">&#10132;</div>
+      <div class="box box-green" data-tip="Recapitulatif modifiable">Recap + envoi</div>
+    </div>
+
+    <div class="expandable" onclick="this.classList.toggle('open')">
+      <div class="expandable-header">
+        <div class="expandable-chevron">&#9654;</div>
+        <div class="expandable-title">Chemins d'aiguillage et sections</div>
+        <span class="expandable-tag box-purple">Config</span>
+      </div>
+      <div class="expandable-body">
+        <p>Le fichier <code>formConfig.js</code> definit de maniere declarative quelles etapes sont visibles pour chaque chemin. La cle est construite ainsi :</p>
+        <div class="code-block"><span class="cmt">// Exemples de cles :</span>
+<span class="str">'stages-moi-non'</span>    <span class="cmt">// Stage, pour moi, jamais inscrit</span>
+<span class="str">'stages-autre-oui'</span>  <span class="cmt">// Stage, par un referent, deja inscrit</span>
+<span class="str">'modules-moi'</span>       <span class="cmt">// Modules, pour moi-meme</span>
+<span class="str">'modules-autre'</span>     <span class="cmt">// Modules, par un referent</span></div>
+
+        <table class="doc-table" style="margin-top:12px;">
+          <tr><th>Chemin</th><th>Sections affichees</th></tr>
+          <tr><td><code>stages-moi-non</code></td><td>Stagiaire &#8594; Curatelle &#8594; Urgence &#8594; AI &#8594; Complements &#8594; Declaration</td></tr>
+          <tr><td><code>stages-autre-non</code></td><td><strong>Referent</strong> &#8594; Stagiaire &#8594; Curatelle &#8594; Urgence &#8594; AI &#8594; Complements &#8594; Declaration</td></tr>
+          <tr><td><code>stages-moi-oui</code></td><td>Stagiaire (retour simplifie)</td></tr>
+          <tr><td><code>stages-autre-oui</code></td><td><strong>Referent</strong> &#8594; Stagiaire &#8594; Curatelle &#8594; Urgence &#8594; AI &#8594; Complements &#8594; Declaration</td></tr>
+          <tr><td><code>modules-moi</code></td><td>Stagiaire &#8594; Curatelle &#8594; Urgence &#8594; AI &#8594; Complements &#8594; Declaration</td></tr>
+          <tr><td><code>modules-autre</code></td><td><strong>Referent</strong> &#8594; Stagiaire &#8594; Curatelle &#8594; Urgence &#8594; AI &#8594; Complements &#8594; Declaration</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="expandable" onclick="this.classList.toggle('open')">
+      <div class="expandable-header">
+        <div class="expandable-chevron">&#9654;</div>
+        <div class="expandable-title">Validation des champs (validation.js)</div>
+        <span class="expandable-tag box-red">Validation</span>
+      </div>
+      <div class="expandable-body">
+        <p>Chaque fonction retourne <code>{ valid: boolean, message: string }</code>. Les validations metier specifiques a la Suisse :</p>
+        <table class="doc-table">
+          <tr><th>Validateur</th><th>Regle</th></tr>
+          <tr><td><code>validateAVS()</code></td><td>Format 756.XXXX.XXXX.XX — 13 chiffres, commence par 756</td></tr>
+          <tr><td><code>validatePhone()</code></td><td>+41XXXXXXXXX (12 car.) ou 0XXXXXXXXX (10 car.)</td></tr>
+          <tr><td><code>validateNPA()</code></td><td>4 chiffres entre 1000 et 9999 (code postal suisse)</td></tr>
+          <tr><td><code>validateEmail()</code></td><td>Format email standard</td></tr>
+          <tr><td><code>validateDateNaissance()</code></td><td>Date valide, personne de 14 a 99 ans</td></tr>
+          <tr><td><code>validateRequired()</code></td><td>Champ non vide</td></tr>
+        </table>
+        <p style="margin-top:10px;">La validation est effectuee champ par champ avec retour visuel immediat, puis globalement avant le passage a l'etape suivante.</p>
+      </div>
+    </div>
+
+    <div class="expandable" onclick="this.classList.toggle('open')">
+      <div class="expandable-header">
+        <div class="expandable-chevron">&#9654;</div>
+        <div class="expandable-title">Flux de soumission (dev vs prod)</div>
+        <span class="expandable-tag box-green">Envoi</span>
+      </div>
+      <div class="expandable-body">
+        <p>Le formulaire collecte toutes les donnees, puis les envoie en POST au backend Power Automate.</p>
+
+        <div style="margin:16px 0;">
+          <p style="margin-bottom:8px;"><strong>En developpement :</strong></p>
+          <div class="flow">
+            <div class="box box-red">Formulaire React</div>
+            <div class="arrow">&#10132;</div>
+            <div class="box box-orange">fetch(VITE_PA_HTTP_URL)<small>.env.local</small></div>
+            <div class="arrow">&#10132;</div>
+            <div class="box box-blue">Flux 5 (PA HTTP)<small>Power Automate</small></div>
+            <div class="arrow">&#10132;</div>
+            <div class="box box-green">SharePoint</div>
+          </div>
+        </div>
+
+        <div style="margin:16px 0;">
+          <p style="margin-bottom:8px;"><strong>En production (cible Azure SWA) :</strong></p>
+          <div class="flow">
+            <div class="box box-red">Formulaire React</div>
+            <div class="arrow">&#10132;</div>
+            <div class="box box-purple">/api/inscription<small>Azure Function</small></div>
+            <div class="arrow">&#10132;</div>
+            <div class="box box-blue">Flux 5 (PA HTTP)<small>Power Automate</small></div>
+            <div class="arrow">&#10132;</div>
+            <div class="box box-green">SharePoint</div>
+          </div>
+        </div>
+
+        <p style="margin-top:12px;">Le payload JSON contient un champ <code>cheminKey</code> (ex: <code>"stages-moi-non"</code>) qui permet au flux Power Automate de router la logique backend selon le type d'inscription.</p>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h4>Pourquoi un formulaire integre plutot que Microsoft Forms ?</h4>
+      <p>Microsoft Forms ne permet pas : la validation du numero AVS, la logique conditionnelle avancee, le pre-remplissage de modules+semaines, ni la maintenance simple (8 formulaires distincts a synchroniser). Le formulaire React integre offre tout cela avec un seul composant et un seul flux backend.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ============================================================
+       SECTION 6 — Build et deploiement
+       ============================================================ -->
+  <div class="section">
+    <span class="section-anchor" id="s6"></span>
+    <h2><span class="sec-num">6</span> Build et deploiement</h2>
+    <p class="section-desc">De l'environnement de developpement jusqu'a la mise en production sur GitHub Pages.</p>
+
+    <!-- Build pipeline -->
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="ps-icon">&#128187;</div>
+        <div class="ps-name">Code source</div>
+        <div class="ps-detail">frontend/src/</div>
+      </div>
+      <div class="pipeline-arrow">&#10132;</div>
+      <div class="pipeline-step">
+        <div class="ps-icon">&#9889;</div>
+        <div class="ps-name">Vite</div>
+        <div class="ps-detail">npm run build</div>
+      </div>
+      <div class="pipeline-arrow">&#10132;</div>
+      <div class="pipeline-step">
+        <div class="ps-icon">&#128230;</div>
+        <div class="ps-name">/dist</div>
+        <div class="ps-detail">Bundle optimise</div>
+      </div>
+      <div class="pipeline-arrow">&#10132;</div>
+      <div class="pipeline-step">
+        <div class="ps-icon">&#128640;</div>
+        <div class="ps-name">GitHub Actions</div>
+        <div class="ps-detail">CI/CD automatique</div>
+      </div>
+      <div class="pipeline-arrow">&#10132;</div>
+      <div class="pipeline-step">
+        <div class="ps-icon">&#127760;</div>
+        <div class="ps-name">GitHub Pages</div>
+        <div class="ps-detail">/clair-bois-calendrier/</div>
+      </div>
+    </div>
+
+    <div class="expandable" onclick="this.classList.toggle('open')">
+      <div class="expandable-header">
+        <div class="expandable-chevron">&#9654;</div>
+        <div class="expandable-title">Vite — Le bundler</div>
+        <span class="expandable-tag box-orange">Build</span>
+      </div>
+      <div class="expandable-body">
+        <p>Vite est l'outil de build et de developpement. Voici sa configuration (<code>vite.config.js</code>) :</p>
+        <div class="code-block"><span class="kw">import</span> { defineConfig } <span class="kw">from</span> <span class="str">'vite'</span>
+<span class="kw">import</span> react <span class="kw">from</span> <span class="str">'@vitejs/plugin-react'</span>
+<span class="kw">import</span> tailwindcss <span class="kw">from</span> <span class="str">'@tailwindcss/vite'</span>
+
+<span class="kw">export default</span> <span class="fn">defineConfig</span>({
+  <span class="var">plugins</span>: [<span class="fn">react</span>(), <span class="fn">tailwindcss</span>()],
+  <span class="var">base</span>: <span class="str">'/clair-bois-calendrier/'</span>,
+})</div>
+        <p style="margin-top:12px;">Trois roles principaux :</p>
+        <ul>
+          <li><strong>Developpement</strong> — Serveur local avec HMR (Hot Module Replacement) : les modifications s'affichent instantanement sans rechargement</li>
+          <li><strong>Build</strong> — <code>npm run build</code> produit un dossier <code>/dist</code> avec les fichiers optimises (minifies, hashes, tree-shaken)</li>
+          <li><strong>Base path</strong> — <code>base: '/clair-bois-calendrier/'</code> est critique : il indique que le site n'est pas a la racine mais dans un sous-dossier de GitHub Pages. Sans cela, tous les imports seraient casses.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="expandable" onclick="this.classList.toggle('open')">
+      <div class="expandable-header">
+        <div class="expandable-chevron">&#9654;</div>
+        <div class="expandable-title">GitHub Actions — Le deploiement automatique</div>
+        <span class="expandable-tag box-blue">CI/CD</span>
+      </div>
+      <div class="expandable-body">
+        <p>A chaque <code>git push</code> sur la branche principale, GitHub Actions execute automatiquement :</p>
+        <ul>
+          <li>Installation des dependances (<code>npm ci</code>)</li>
+          <li>Build du projet (<code>npm run build</code>)</li>
+          <li>Deploiement du contenu de <code>/dist</code> sur GitHub Pages</li>
+        </ul>
+        <p style="margin-top:10px;">Le site est accessible a l'URL : <code>https://rochat-dev.github.io/clair-bois-calendrier/</code></p>
+      </div>
+    </div>
+
+    <div class="expandable" onclick="this.classList.toggle('open')">
+      <div class="expandable-header">
+        <div class="expandable-chevron">&#9654;</div>
+        <div class="expandable-title">Mise a jour automatique des donnees</div>
+        <span class="expandable-tag box-green">Pipeline</span>
+      </div>
+      <div class="expandable-body">
+        <p>Les donnees du calendrier sont mises a jour automatiquement sans intervention humaine :</p>
+        <div class="flow-vertical" style="margin:16px 0;">
+          <div class="box box-gray">SharePoint<small>Listes Creneaux + Stagiaires</small></div>
+          <div class="arrow-down">&#9660;</div>
+          <div class="arrow-label">Flux 3 Power Automate (polling toutes les 3 min)</div>
+          <div class="arrow-down">&#9660;</div>
+          <div class="box box-purple">planning.json<small>Genere et pousse via GitHub API</small></div>
+          <div class="arrow-down">&#9660;</div>
+          <div class="arrow-label">GitHub Actions → rebuild → deploy</div>
+          <div class="arrow-down">&#9660;</div>
+          <div class="box box-green">Site a jour<small>GitHub Pages</small></div>
+        </div>
+        <p>Le fichier <code>planning.json</code> est place dans <code>public/</code> afin d'etre copie tel quel dans <code>/dist</code> lors du build. Il est charge par <code>fetch()</code> avec <code>cache: 'no-cache'</code> pour toujours obtenir la derniere version.</p>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h4>Commandes essentielles</h4>
+      <div class="code-block"><span class="cmt"># Developpement local (HMR)</span>
+npm run dev
+
+<span class="cmt"># Build de production → /dist</span>
+npm run build
+
+<span class="cmt"># Preview du build localement</span>
+npm run preview
+
+<span class="cmt"># Tests unitaires</span>
+npm run test</div>
+    </div>
+
+    <div class="info-card">
+      <h4>Hebergement cible</h4>
+      <p>Le site est actuellement sur GitHub Pages. La cible finale est <strong>Azure Static Web Apps</strong> dans le tenant Microsoft de Clair-Bois (URL: <code>clairbois.ch</code>), ce qui permettra d'ajouter une Azure Function comme proxy securise pour masquer l'URL du trigger Power Automate.</p>
+    </div>
+  </div>
+
+</div><!-- /.main -->
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+// Sidebar active link tracking
+const sections = document.querySelectorAll('.section-anchor');
+const navLinks = document.querySelectorAll('.sidebar nav a');
+
+function updateActiveNav() {
+  let current = '';
+  sections.forEach(s => {
+    const rect = s.getBoundingClientRect();
+    if (rect.top <= 120) current = s.id;
+  });
+  navLinks.forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+  });
+}
+
+window.addEventListener('scroll', updateActiveNav, { passive: true });
+updateActiveNav();
+
+// Mobile toggle
+const sidebar = document.getElementById('sidebar');
+const mobileToggle = document.getElementById('mobileToggle');
+mobileToggle.addEventListener('click', () => {
+  sidebar.classList.toggle('mobile-open');
+});
+
+// Close sidebar on link click (mobile)
+navLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    sidebar.classList.remove('mobile-open');
+  });
+});
+</script>
+
+</body>
+</html>

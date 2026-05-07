@@ -1,0 +1,524 @@
+[0.0s - 9.0s] Et puis j'ai découvert qu'en fait ils ont mis eux en place un formulaire de demande,
+[9.0s - 19.0s] de mesure, que je vais t'envoyer sur un formulaire Word et du coup il y aura deux flux différents.
+[19.0s - 24.0s] On va dire que la plateforme d'inscription tout ce sur quoi on a travaillé malheureusement ce sera pas pour l'AI,
+[24.0s - 29.0s] mais ce sera pour tous les autres partenaires, enseignants, etc.
+[29.0s - 35.0s] Et puis l'AI, eux, ils nous enverront leur formulaire Word complété.
+[35.0s - 42.0s] Ah c'est bien ça, c'est très bien ça, on peut extraire le formulaire Word et puis tout réceptionner.
+[42.0s - 49.0s] Enfin ça dépend comment ils ont structuré les choses dans ce document Word, mais s'ils ont mis un tableau par exemple.
+[49.0s - 58.0s] Alors je vais te l'envoyer vendredi, je viens de voir le mail, je vais te l'envoyer le formulaire.
+[58.0s - 69.0s] Je vais demander qu'elle m'envoie justement le formulaire définitif pour que tu puisses voir toi si on arrive à extraire les infos quand même.
+[69.0s - 74.0s] Après c'est comment est-ce que tu souhaites extraire, est-ce que tu veux qu'elle les envoie dans un mail particulier
+[74.0s - 83.0s] qui va déclencher un flux qui va extraire et qui va classifier ou est-ce que c'est toi qui veut déclencher le Word,
+[83.0s - 89.0s] le drag and drop quelque part et puis ça se fait comme ça.
+[89.0s - 96.0s] Parce que si elles envoient un mail particulier, il faudrait créer un autre mail c'est ça ?
+[96.0s - 102.0s] Après c'est toi qui choisit la façon dont tu veux réceptionner les données.
+[102.0s - 108.0s] Si tu veux un drag and drop et puis mettre le Word qu'elle te donne dedans et puis appuie sur ok,
+[108.0s - 112.0s] et puis c'est à ce moment là que ça va extraire les données ou alors si tu préfères...
+[112.0s - 117.0s] Et créer le dossier et faire. Parce que c'est ça, on peut faire le même flux qu'avec Form,
+[117.0s - 122.0s] c'est-à-dire qu'à partir du moment où je le drag and drop, il extrait les données, il crée le fichier.
+[122.0s - 129.0s] Il y a cette option là où il y a l'option où tu reçois un mail avec le Word et si tu reçois un mail avec ce Word là,
+[129.0s - 131.0s] ça va le faire automatiquement.
+[131.0s - 135.0s] Moi je préfère la version où je reçois le mail et ça le fait automatiquement.
+[135.0s - 141.0s] Ok, alors il faudrait que ce soit tout le temps les mêmes personnes,
+[141.0s - 147.0s] enfin, ou soit tu attribues un mail qui va faire que ça, ça va être un mode derrière,
+[147.0s - 155.0s] et puis tu demandes à quiconque de t'envoyer le document Word dans ce mail là, avec ce mail là,
+[155.0s - 162.0s] et puis après ça le fait. En gros c'est eux qui font le drag and drop. Tu vois ?
+[162.0s - 166.0s] En gros en m'écrivant cette adresse ça fait un drag and drop automatique.
+[166.0s - 168.0s] Ouais.
+[168.0s - 170.0s] Ok.
+[170.0s - 173.0s] Et si on utilise mon adresse, c'est pas possible ?
+[173.0s - 176.0s] Oui avec ton adresse c'est aussi possible.
+[176.0s - 179.0s] Mais il faudrait le recevoir.
+[179.0s - 184.0s] Alors il faudrait voir exactement dans quelle boîte tu souhaites le recevoir.
+[184.0s - 189.0s] Je veux savoir, peut-être que tu... Dans Outlook c'est aussi possible de faire comme dans Google,
+[189.0s - 192.0s] dans Gmail où tu peux inventer des dossiers je pense.
+[192.0s - 200.0s] Tu inventes un dossier où tu reçois réception à A.I.
+[200.0s - 206.0s] Ouais, il y a des... Je peux définir des règles, je sais pas comment faire,
+[206.0s - 210.0s] mais je sais que tu peux... Là moi par exemple j'ai un dossier prioritaire et un dossier autre
+[210.0s - 214.0s] qui a été créé automatiquement par Outlook.
+[214.0s - 220.0s] Mais je peux effectivement créer... Alors attends je fais en étapes, je t'envoie le truc.
+[220.0s - 227.0s] Et puis dedans tu mets juste les personnes correspondantes.
+[227.0s - 233.0s] Ces personnes là, leurs mails viendront là et puis à ce moment là c'est le déclencheur.
+[233.0s - 237.0s] C'est le Power Automate.
+[240.0s - 247.0s] Je t'envoie le document Word.
+[247.0s - 253.0s] Et est-ce que du coup on peut avoir les deux ? Parce que si moi j'ai reçois des...
+[253.0s - 256.0s] Ouais on peut avoir les deux.
+[256.0s - 261.0s] Ça serait le même flux mais sauf que c'est toi qui actionne le bouton.
+[261.0s - 265.0s] Avec un drag and drop quelque part.
+[265.0s - 273.0s] Par contre il faudrait que je vois où est-ce que je peux mettre le drag and drop parce que c'est vrai que ça pourrait être...
+[273.0s - 280.0s] dans un environnement fermé plutôt le drag and drop vu que ça te concerne que toi.
+[280.0s - 282.0s] Oui.
+[282.0s - 287.0s] Un petit peu word apps, tu drag and drop dedans et puis voilà.
+[287.0s - 291.0s] C'est juste qu'il faudrait que ça puisse être accessible par les autres personnes.
+[291.0s - 294.0s] C'est possible comme ça quand je pars en vacances et tout ça je...
+[294.0s - 298.0s] Ouais tu pourras, tant qu'ils font partie de Clairebois, tu peux partager.
+[298.0s - 302.0s] Il n'y a pas de souci avec ça.
+[302.0s - 305.0s] Ou alors...
+[305.0s - 307.0s] Ou alors on crée une adresse spéciale.
+[307.0s - 314.0s] Ça je vais y réfléchir, auteur du message, organisation de messages.
+[314.0s - 317.0s] Composer, répondre...
+[317.0s - 320.0s] Je suis en train de voir...
+[320.0s - 330.0s] mode de réception prioritaire de Triva de courrier pour vous permettre de vous concentrer sur l'essentiel.
+[330.0s - 336.0s] Si vous voulez se lancer les gens, les infos conditionnelles, ranger, ranger, est-ce que c'est là dedans ?
+[336.0s - 341.0s] Ou bien alors, tu sais dans SharePoint ce qu'il y a, il y a des documents tout simplement.
+[341.0s - 349.0s] Et toi tu crées un fichier et tu mets juste... tu l'appelles réception word.ai.
+[349.0s - 360.0s] Et à chaque fois que tu vas mettre un truc dans ce fichier, dans ce document, ça va déclencher un flux.
+[360.0s - 362.0s] Dans un dossier ?
+[362.0s - 366.0s] Ouais, t'as juste à mettre quelque chose de nouveau et ça va déclencher un flux.
+[366.0s - 370.0s] Ça va venir de Décortique et c'est un Word.
+[371.0s - 373.0s] Mais c'est le drag'n'drop du coup ?
+[373.0s - 376.0s] En gros c'est le dossier.
+[376.0s - 385.0s] Donc c'est un dossier dans SharePoint, demande.ai et puis j'enregistre le fichier Word là-dedans et puis après ça déclenche le flux.
+[385.0s - 391.0s] Voilà, tu nomes juste un dossier, tu me dis où il est et puis je focus le flux là-dessus.
+[391.0s - 393.0s] Ok.
+[393.0s - 400.0s] Et puis par mail on peut pas... si on fait par mail le mieux ce serait qu'il y ait une adresse dédiée.
+[400.0s - 405.0s] Ouais, c'est ce à quoi je pensais.
+[405.0s - 412.0s] Et si c'est une adresse dédiée, moi je peux recevoir le mail...
+[412.0s - 416.0s] Je peux lier cette boîte à ma boîte mail.
+[416.0s - 421.0s] Comme ça je vois les mails qui arrivent, c'est peut-être mieux quand même si ça reste sur mon...
+[421.0s - 424.0s] Ça il faut... je vais en discuter avec François.
+[424.0s - 426.0s] Avec des petites alarmes.
+[426.0s - 435.0s] Avec mon responsable, je vais en discuter pour voir ce qui est mieux si on garde mon adresse ou si on crée une adresse générique pour les demandes de l'AI.
+[435.0s - 438.0s] Ça me semble quand même plutôt...
+[438.0s - 448.0s] Du coup si ce mail réceptionne le Word, tout ce qu'il va faire, le flux c'est déposer le Word dans le fichier qu'on avait dit que tu as éclairé.
+[448.0s - 452.0s] Et puis après ça actionne encore le flux de coup.
+[452.0s - 457.0s] Ah donc même si ça a été éclairé, ça ne fait pas de mal.
+[457.0s - 461.0s] Et puis après ça actionne encore le flux de coup.
+[461.0s - 469.0s] Ah donc même si ça arrive sur le mail spécial, il faut que je fasse le drag and drop.
+[469.0s - 471.0s] Non non non non justement.
+[471.0s - 481.0s] Si ça arrive sur le mail spécial, le flux 1 réceptionne le Word, il le dépose dans le dossier qui est justement drag and drop.
+[481.0s - 484.0s] Et puis après le flux 2 s'enclenche.
+[485.0s - 492.0s] Et est-ce qu'on peut dire parce que moi en fait je ne reçois aucune piège-vointe des conseillers AI.
+[492.0s - 495.0s] Elle n'envoie jamais de piège-vointe.
+[495.0s - 506.0s] Est-ce que sur mon adresse on pourrait dire que dès qu'il y a une piège-vointe Word sur une adresse arobase ocas.ch, ça la met automatiquement sur ce dossier ?
+[506.0s - 507.0s] Oui.
+[507.0s - 509.0s] C'est trop compliqué à faire ça.
+[509.0s - 511.0s] Oui c'est aussi.
+[512.0s - 517.0s] Mais ils font une pièce-vointe, ça dépend si tu veux une pièce-vointe ou pas.
+[517.0s - 519.0s] Là tu veux une pièce-vointe tu m'as dit ?
+[519.0s - 520.0s] Oui.
+[520.0s - 523.0s] En fait elles n'enverront que ça comme pièce-vointe.
+[523.0s - 531.0s] Quand tu reçois le mail, tu prends vraiment tout. L'objet et la pièce-vointe, tu prends vraiment tout.
+[531.0s - 536.0s] Et après tu décides de seulement garder la pièce-vointe ou non.
+[537.0s - 544.0s] Tu vois c'est par exemple un peu un trempe-l'œil dans le Gmail que j'envoie.
+[544.0s - 550.0s] J'envoie 756, c'est le numéro AVS, ça commence par 756 je crois.
+[550.0s - 555.0s] Et après j'envoie plein de X et ensuite j'envoie les deux derniers numéros.
+[555.0s - 562.0s] Mais derrière, juste après, je mets un N plus l'identifiant.
+[562.0s - 567.0s] Numéro 12 par exemple, et ça ça sera détecté que par nous.
+[567.0s - 573.0s] Parce que dans la SharePoint List, ce stagiaire là, il a l'ID numéro 12.
+[573.0s - 578.0s] Sauf que personne ne saura que c'est lui le numéro 12.
+[578.0s - 581.0s] C'est pour ça que j'ai pu mettre les X.
+[581.0s - 599.0s] Ok, je vais réfléchir. Je veux voir avec mon chef, ça peut être pas mal qu'on ait juste une adresse où tout est réceptionné.
+[599.0s - 608.0s] Surtout parce qu'on est en train de réfléchir à peut-être que ça passe plus que par mois à l'entrée, qu'on fusionne un peu tout.
+[608.0s - 612.0s] Je vais voir, je vais discuter avec...
+[612.0s - 621.0s] Demain j'ai une plénière.
+[621.0s - 624.0s] Donc demain, je peux poser la question à tout le groupe.
+[624.0s - 630.0s] Et comme ça je pourrais te dire si on fait une adresse spécialisée ou si on fait un dossier de Rock'n'Roll.
+[630.0s - 633.0s] Ok, pas de soucis.
+[633.0s - 639.0s] Et je t'ai envoyé le document Word.
+[639.0s - 648.0s] Comme ça tu peux voir que il est structuré sur l'adresse stagiaire à Teclerbois.
+[648.0s - 651.0s] Ah d'accord.
+[651.0s - 654.0s] Oui, Outlook pardon.
+[654.0s - 659.0s] Et du coup, moi je voulais aller voir après ce que tu m'a envoyé.
+[659.0s - 662.0s] Ok, ouais, c'est sous forme d'un tableau.
+[662.0s - 667.0s] On a le prestataire, on a tout qui est bien imposé.
+[667.0s - 673.0s] Donc là en plus en fait ça tu pourras...
+[673.0s - 676.0s] Par contre, date, c'est quoi ?
+[676.0s - 679.0s] Ah ouais, non c'est un exemple je pense.
+[679.0s - 682.0s] Oui, c'est le modèle générique.
+[682.0s - 684.0s] Attends, je vais le revoir.
+[684.0s - 688.0s] Et puis surtout ça veut dire que moi je dois re-changer le formulaire.
+[689.0s - 694.0s] Pour retirer l'ai de tout ce que j'ai mis.
+[694.0s - 697.0s] Ça pourra le simplifier.
+[702.0s - 705.0s] Ouais, mesure visite stage découverte, date, t'as dit ?
+[705.0s - 709.0s] C'est où que tu te posais la question ?
+[709.0s - 712.0s] Ah c'est juste des données fausses.
+[712.0s - 715.0s] Date, date, tier.
+[718.0s - 722.0s] Ça je crois que c'est des trucs aussi pour leur date A, c'est ça ?
+[722.0s - 725.0s] Le truc sur l'ignit en jaune.
+[725.0s - 728.0s] Ouais, de toute façon il y a aussi un OCR.
+[728.0s - 731.0s] C'est des codes pour leurs informaticiens.
+[731.0s - 733.0s] Ah ok.
+[733.0s - 737.0s] De ce que j'ai compris, tu vois, adresse 1, DE, adresse 2.
+[737.0s - 740.0s] Ouais, non mais ils font exprès pour les repérer derrière.
+[740.0s - 742.0s] J'ai fait exactement pareil avec le formulaire.
+[742.0s - 747.0s] Par exemple pour le nom, on ne sait pas vraiment si c'est le nom du curatel,
+[747.0s - 750.0s] le numéro d'urgence, du référent ou du stagiaire.
+[750.0s - 753.0s] Donc du coup je mets comme réponse, enfin au tout début,
+[753.0s - 757.0s] je mets nom stagiaire par exemple, nom curatel.
+[757.0s - 761.0s] Et là ils font exactement pareil pour repérer derrière
+[761.0s - 764.0s] quelle aïdit de chant a été attribué derrière en fait.
+[764.0s - 767.0s] A chaque truc.
+[769.0s - 772.0s] Du coup ils peuvent bien se repérer.
+[777.0s - 781.0s] Ok, donc tu arriverais à extraire les données de ce truc ?
+[781.0s - 787.0s] Oui, dans le flux automatique directement.
+[787.0s - 791.0s] Ça c'est une excellente nouvelle.
+[791.0s - 799.0s] Après, ouais, normalement ça devrait passer, c'est Word.
+[799.0s - 803.0s] A chaque fois je me dis, au pire si ça passe pas,
+[803.0s - 805.0s] c'est qu'on n'a pas les connecteurs Word.
+[805.0s - 808.0s] Et donc c'est vrai qu'il faut que je relance le service aïdit
+[808.0s - 814.0s] pour avoir la permission Power Automate Premium.
+[814.0s - 818.0s] Parce qu'il y a des connecteurs premium.
+[820.0s - 824.0s] Ouais, je vais les mettre en place.
+[824.0s - 828.0s] Je vais regarder déjà, ça fonctionne.
+[828.0s - 831.0s] Regarde avec eux.
+[831.0s - 835.0s] Sans premium et puis si ça passe sans bas, c'est tout mieux.
+[835.0s - 839.0s] Mais Word normalement c'est bon.
+[847.0s - 851.0s] Je suis en train de regarder conseiller à Aïe, non premium.
+[851.0s - 855.0s] Ok.
+[861.0s - 865.0s] Non, ça va, il n'y a pas tant de choses que ça a changé en fait.
+[865.0s - 868.0s] Le formulaire, je ne sais même pas si je vais le changer.
+[868.0s - 872.0s] Au pire, la case conseiller à Aïe, elle restera toujours vide.
+[873.0s - 877.0s] Dans le cas de Figurus, c'était une conseiller à Aïe
+[877.0s - 881.0s] qui remplissait le formulaire.
+[881.0s - 887.0s] C'est à 80% ou à combien de pourcent d'écart une conseiller à Aïe ?
+[894.0s - 898.0s] Je dirais la majorité, mais ce n'est pas forcément 80%.
+[898.0s - 900.0s] On a de tout en fait.
+[900.0s - 904.0s] Du coup, il y a la section 7 assurance invalidité,
+[904.0s - 908.0s] mais celle-là, elle avait été créée pour que ce soit les enseignants
+[908.0s - 912.0s] ou les parents qui remplissent avec les informations de la conseiller à Aïe.
+[912.0s - 916.0s] Donc en fait, le formulaire, ça va, il n'est pas du tout trop spécifique.
+[920.0s - 924.0s] Très bien, je pense que je vais le laisser comme ça.
+[924.0s - 928.0s] Mais c'est nouveau ça, le formulaire de demande ?
+[928.0s - 929.0s] Oui.
+[929.0s - 933.0s] Ok, ils ont agi en même temps que quand tu voulais faire un formulaire.
+[933.0s - 935.0s] Oui.
+[941.0s - 945.0s] C'est pas mal après, je trouve que leur formulaire,
+[945.0s - 949.0s] c'est combiné à un rapport de la question,
+[949.0s - 953.0s] c'est pas exceptionnel pour nous, mais ça fonctionne.
+[953.0s - 955.0s] C'est très bien comme ça.
+[955.0s - 959.0s] Comme ça, j'aurais pas besoin de me prendre la tête à les convaincre.
+[959.0s - 962.0s] Et au moins, ils ont leur formulaire.
+[962.0s - 966.0s] Comme ça, ils ont leur formulaire, texte, les données,
+[966.0s - 970.0s] et puis ça crée le tien au final avec les données que tu...
+[970.0s - 974.0s] Après, c'est vrai qu'il manque des questions un petit peu, mais bon.
+[974.0s - 978.0s] Oui, pour la taille, etc.
+[978.0s - 981.0s] De choses comme ça, mais ça...
+[981.0s - 985.0s] La taille des chaussures...
+[988.0s - 991.0s] Mais écoutons, enfin, ouais.
+[991.0s - 993.0s] C'est vrai que...
+[993.0s - 996.0s] Il manque la curatrice, oui, il manque pas mal de questions
+[996.0s - 999.0s] par rapport à ce que nous, on veut, mais c'est pas grave.
+[999.0s - 1003.0s] Il manque la gestion, il manque la gestion de la gestion de la gestion.
+[1003.0s - 1006.0s] On veut, mais c'est pas grave.
+[1006.0s - 1010.0s] Soit je repris, genre, enverra un formulaire Forms aux jeunes.
+[1012.0s - 1016.0s] Pour plus de précisions, ou pour compléter un peu.
+[1019.0s - 1022.0s] Parce que d'autre façon, ils sont identifiés par leur numéro AVS.
+[1022.0s - 1026.0s] Il va être renseigné ici, donc de notre côté, on peut laisser une trace.
+[1026.0s - 1030.0s] Puis après, si la personne veut compléter, on peut toujours lui envoyer le formulaire et complète.
+[1033.0s - 1036.0s] Parce que si j'envoie...
+[1042.0s - 1050.0s] Oui, parce que si le flux a créé déjà, en recevant la demande Word de la conseillère Aïe,
+[1050.0s - 1054.0s] il a créé un dossier dans lequel il y aura le numéro AVS.
+[1054.0s - 1058.0s] Donc si derrière, je renvoie moi à ce jeune-là en lui disant,
+[1059.0s - 1064.0s] je t'envoie un lien et il complète le formulaire Forms, le nôtre,
+[1064.0s - 1067.0s] en mettant bien son numéro AVS et toutes les infos,
+[1067.0s - 1071.0s] du coup, ça ne recréera pas un dossier, ça ira compléter le dossier existant.
+[1071.0s - 1078.0s] Exactement, il y a une distinction entre ce gars-là, il existe déjà ou non, il est nouveau.
+[1078.0s - 1083.0s] Et c'est justement, c'est le numéro d'AVS qui fait vraiment foi de vérité.
+[1083.0s - 1091.0s] Mais du coup, si le flux a créé un truc à partir du document Word,
+[1091.0s - 1097.0s] il va créer une ligne dans les listes SharePoint, il va créer une ligne pour ce jeune.
+[1100.0s - 1103.0s] Mais toutes les colonnes ne seront pas remplies,
+[1103.0s - 1106.0s] parce qu'il manque des infos dans le formulaire des conseillères Aïe.
+[1106.0s - 1109.0s] Oui, il manquera des informations.
+[1109.0s - 1112.0s] Et donc ces informations-là, après, si elles sont remplies,
+[1112.0s - 1120.0s] s'il y a un formulaire Forms qui revient, il va ignorer les informations qui sont en doublons
+[1120.0s - 1123.0s] et prendre que les informations qui manquent ?
+[1123.0s - 1125.0s] Exactement, oui.
+[1129.0s - 1132.0s] Du moins, c'est nous qui décidons après.
+[1132.0s - 1135.0s] Mais on était parti sur ça.
+[1135.0s - 1141.0s] S'il veut modifier, ça vient écraser au pire les anciennes données
+[1141.0s - 1143.0s] et les remplacer par des nouveaux.
+[1143.0s - 1148.0s] Peut-être qu'il a mis un nouveau mail, peut-être qu'il a nouvé une nouvelle adresse.
+[1151.0s - 1153.0s] En tout cas, ça va écraser.
+[1153.0s - 1155.0s] Soit ça écrase les données, soit ça complète celles qui ne sont pas,
+[1155.0s - 1160.0s] mais celles qui y sont et que le gène n'a pas modifié ou changé, elles resteront.
+[1160.0s - 1162.0s] Oui, exactement.
+[1163.0s - 1170.0s] Mais par contre, s'il a changé l'adresse et qu'il y avait déjà une adresse,
+[1170.0s - 1174.0s] ça va l'écraser et ça va mettre la nouvelle adresse.
+[1175.0s - 1180.0s] À moins que tu veuilles que ça n'écrase pas l'adresse ancienne
+[1180.0s - 1187.0s] et que ça la conserve, ça c'est aussi possible.
+[1187.0s - 1189.0s] Et que ça en crée deux.
+[1190.0s - 1194.0s] Par contre, ça ne peut pas en créer deux sur la même ligne,
+[1194.0s - 1201.0s] mais spécifiquement on peut mettre adresse 1, adresse 2, adresse 3 comme colonne
+[1201.0s - 1206.0s] et puis si on voit qu'il y a déjà une adresse 1, on la met sous adresse 2 par exemple.
+[1210.0s - 1212.0s] Peut-être que l'adresse n'est pas un bon exemple.
+[1212.0s - 1216.0s] Non mais je ne pense pas que les conseillères à AY ont des données à jour.
+[1217.0s - 1223.0s] Ok, de toute façon tu permets que ça écrase alors. Par exemple le mail change.
+[1232.0s - 1238.0s] Après tu peux toujours garder un historique de ce qui avait été écrasé.
+[1238.0s - 1243.0s] Je vais voir à laquelle elle met.
+[1243.0s - 1249.0s] Ça c'est vraiment si tu veux vraiment avoir un historique et puis faire des stats.
+[1249.0s - 1251.0s] C'est plus des trucs.
+[1251.0s - 1253.0s] Oui, c'est normal.
+[1253.0s - 1255.0s] Tu vas leur donner du mandant.
+[1255.0s - 1257.0s] Oui, date, nom, prénom.
+[1264.0s - 1269.0s] Oui, tu vois parce que pareil, dans le formulaire il n'y aura pas tout.
+[1269.0s - 1272.0s] Tu vois le prestataire, on s'en fout en fait.
+[1272.0s - 1275.0s] Ouais, il y a des trucs qu'on pourrait ignorer.
+[1275.0s - 1278.0s] Prestataire c'est nous, il y aura juste les coordonnées du mandant.
+[1278.0s - 1281.0s] Oui, date, machin, information, AVS.
+[1282.0s - 1288.0s] Date de naissance, numéro AVS, prénom, genre, adresse, téléphone et mail.
+[1288.0s - 1292.0s] représentant légal, ça c'est bien si c'est complété.
+[1292.0s - 1297.0s] Niveau scolaire, ça c'est pas mal.
+[1297.0s - 1299.0s] Est-elle toujours sous contrat ?
+[1299.0s - 1304.0s] Est-ce qu'on pourra faire que quand le mail est reçu ou si moi je le drag and drop ?
+[1304.0s - 1307.0s] Tu veux dire que tu le mets dans un fichier ?
+[1307.0s - 1313.0s] Est-ce que c'est possible que quand il crée le dossier,
+[1313.0s - 1317.0s] qu'il enregistre le document Word aussi dans le dossier qu'il a créé ?
+[1317.0s - 1319.0s] Oui, c'est possible.
+[1319.0s - 1324.0s] Est-ce que c'est possible que quand il crée le dossier,
+[1324.0s - 1329.0s] qu'il enregistre le document Word aussi dans le dossier qu'il a créé ?
+[1329.0s - 1332.0s] On parle du drag and drop ?
+[1332.0s - 1340.0s] Ou on parle du document qui va être classé, qui se fait déjà dans un des flux ?
+[1340.0s - 1344.0s] Le document Word qu'on va recevoir de l'AI.
+[1344.0s - 1346.0s] Ok, oui.
+[1346.0s - 1350.0s] Du coup, si on part sur la mesure drag and drop,
+[1350.0s - 1354.0s] je te crée un fichier SharePoint, tu me fais tout le flux,
+[1354.0s - 1356.0s] je l'enregistre dans ce fichier,
+[1356.0s - 1362.0s] du coup lui il va scanner les données et créer un dossier dans SharePoint
+[1362.0s - 1366.0s] avec le prénom de la personne, créer tous les sous-dossiers, etc.
+[1366.0s - 1368.0s] Comme on a fait jusque là.
+[1368.0s - 1371.0s] Exactement, oui.
+[1371.0s - 1376.0s] Et donc est-ce que c'est possible qu'en plus d'avoir fait tout ça,
+[1376.0s - 1382.0s] il enregistre une copie de ce document Word dans le dossier ?
+[1382.0s - 1387.0s] Une copie, mais dans quel dossier ? Oui, c'est toujours possible, mais dans quel dossier ?
+[1387.0s - 1389.0s] Dans le dossier qu'il va créer.
+[1389.0s - 1391.0s] En gros, regarde, on reçoit une demande pour...
+[1391.0s - 1394.0s] Ah, mais oui, mais ça il le fait déjà, ça il le fait déjà, non ?
+[1394.0s - 1400.0s] Parce que tu ne te rappelles pas quand on avait le flux là, il existe toujours en plus, il fonctionnait.
+[1400.0s - 1405.0s] C'était, tu reçois la charte et puis la pièce d'identité,
+[1405.0s - 1412.0s] et il crée en fait ce dossier, et à l'intérieur il met sous administration,
+[1412.0s - 1421.0s] je crois que c'est administratif le fichier, il met ce qui a été réceptionné,
+[1421.0s - 1426.0s] et puis si c'est une création il en profite aussi pour prendre tes fichiers,
+[1426.0s - 1431.0s] et puis là où il écrit nom prénom, il remplace par son nom et son prénom à lui,
+[1431.0s - 1436.0s] et aussi le fichier racine, il y a nom prénom, il remplace aussi son nom prénom à lui.
+[1436.0s - 1441.0s] Et il y a juste un fichier où il ne le fait pas, parce que tu avais dit qu'il était en travaux, je crois,
+[1441.0s - 1445.0s] enfin c'est écrit ça sur le fichier, ne pas toucher.
+[1445.0s - 1453.0s] Un truc au OneNote, oui, c'est très bien, ça c'est un autre projet, mais que je pense qu'on n'aura pas le temps de faire ensemble.
+[1453.0s - 1463.0s] Oui, sauf que là en fait, le truc c'est que quand il reçoit le formulaire Forms,
+[1463.0s - 1471.0s] lui il crée un fichier, il crée toutes les données, et ensuite il reçoit des pièces d'identité,
+[1471.0s - 1474.0s] la déclaration d'engagement, et là il peut les classer dans le dossier,
+[1474.0s - 1481.0s] mais là je te pose la question parce qu'en fait la source de la création du dossier,
+[1481.0s - 1488.0s] ça va être ce document Word, et moi je voudrais qu'après, une fois la source,
+[1488.0s - 1498.0s] il l'utilise pour créer le dossier, Racine, et qu'ensuite il prenne la source et qu'il l'enregistre dans le dossier administratif.
+[1498.0s - 1501.0s] Ouais, il pourra faire ça.
+[1501.0s - 1503.0s] Ok.
+[1503.0s - 1510.0s] Et pour toi, c'est quoi exactement la source pour le mettre dans le dossier, c'est le fichier Word ?
+[1510.0s - 1516.0s] Oui, quand la demande viendra de là-haut, ce sera le fichier Word, puisque c'est ce fichier qui va lire,
+[1516.0s - 1524.0s] et il va dire ok, numéro AVS, c'est ça, le nom, prénom, c'est ça, de l'assurer, et donc je crée un dossier Nicolas Simon.
+[1524.0s - 1533.0s] Ah mais tu veux qu'il y ait un petit document qui soit créé qui s'appelle source, et puis que dedans il y ait source avec la date si tu veux.
+[1534.0s - 1542.0s] Non, non, non, je veux que ce soit le même document, enfin je veux que ce soit exactement le même fonctionnement qu'avec le document, avec le forms.
+[1542.0s - 1544.0s] Ok, ouais, bah oui, oui, j'avais compris.
+[1544.0s - 1549.0s] Je veux que ce soit exactement le même fonctionnement, mais je me demandais juste comme, parce que forms en fait,
+[1549.0s - 1559.0s] c'était juste un outil qui permettait de créer le dossier, et après on recevait des fichiers qui étaient enregistrés,
+[1559.0s - 1565.0s] et je me demandais là si ça pouvait poser problème, parce qu'en fait à la place du form c'est un document Word,
+[1565.0s - 1572.0s] et du coup comme il utilise ce document pour créer quelque chose, est-ce qu'après il peut se dire ok, maintenant que j'ai extrait toutes les informations,
+[1572.0s - 1576.0s] ce document je l'enregistre dans le dossier que j'ai créé à partir de ce document.
+[1576.0s - 1584.0s] Ah ouais, c'est un flux, j'ai tout compris ce que tu viens de dire, c'est un flux d'action, et puis une fois qu'il a fini une tâche, il passe à l'autre.
+[1585.0s - 1588.0s] J'ai fait ça, après je fais ça, après je fais ça.
+[1589.0s - 1593.0s] Et puis voilà, et puis si il y a une erreur, bah il vient et il dit oh non, il y a eu une erreur.
+[1593.0s - 1596.0s] Attention, j'envoie un mail, il y a eu une erreur.
+[1597.0s - 1598.0s] Ça c'est pas passé.
+[1598.0s - 1599.0s] Ça c'est génial.
+[1600.0s - 1604.0s] Ça c'est génial, et du coup il faudra juste que je trouve un moyen...
+[1608.0s - 1612.0s] Ouais, le flux après il sera différent.
+[1614.0s - 1628.0s] C'est juste qu'après, tu vois, non parce que nous on envoyait après le mail avec la charte et la déclaration d'engagement et la demande de la pièce d'identité
+[1628.0s - 1634.0s] à des personnes qui généralement s'en sortent assez bien avec internet.
+[1635.0s - 1637.0s] Mais on verra peut-être qu'on...
+[1637.0s - 1639.0s] Ok, bah c'est cool.
+[1639.0s - 1650.0s] Parce que du coup, ouais mais là en fait, la conseillère AI, je vais pas lui renvoyer la demande de déclaration d'engagement et de...
+[1652.0s - 1655.0s] Parce qu'en fait, tu vois, les enseignants eux, ils peuvent...
+[1656.0s - 1663.0s] Moi ça, les enseignants eux, ils peuvent voir l'élève, demander la pièce d'identité, faire une copie, un scan, etc.
+[1663.0s - 1665.0s] et nous le renvoyer avec le mail.
+[1665.0s - 1670.0s] Moi je savais que s'il y avait un point où ça bloquerait avec les conseillères AI, ce serait ça.
+[1670.0s - 1676.0s] Ce serait la charte et la pièce d'identité parce qu'elle les voit les jeunes mais une fois qu'elles l'ont vu,
+[1676.0s - 1679.0s] enfin, ça aurait pu bloquer, ça aurait pu ne pas bloquer.
+[1679.0s - 1681.0s] Mais je pense pas que...
+[1684.0s - 1687.0s] Je pense pas qu'elles nous enverront la pièce d'identité.
+[1687.0s - 1692.0s] Et ce qui veut dire qu'il faudrait que le flux, si on arrivait à faire un flux...
+[1692.0s - 1694.0s] Après c'est l'AVS qui fait foire, non ?
+[1695.0s - 1702.0s] Oui, mais du coup, parce que nous là, en fait, avec le Forms, le mail, on a bien reçu votre demande,
+[1702.0s - 1708.0s] merci de nous envoyer la charte signée, enfin la déclaration d'engagement signée et la pièce d'identité.
+[1708.0s - 1712.0s] Il est envoyé à l'e-mail de la personne qui a complété le formulaire Forms.
+[1712.0s - 1720.0s] Exactement, et ça c'est un flux qui peut-être est trop lent pour les conseillères AI.
+[1721.0s - 1728.0s] En fait, les conseillères AI, du coup, là ce sera, si on arrive à le faire, c'est que le formulaire,
+[1728.0s - 1732.0s] on reçoit le formulaire Word, il crée le dossier, etc.
+[1732.0s - 1737.0s] Et puis il renvoie un mail à l'adresse mail de l'assuré.
+[1740.0s - 1744.0s] Et puis après c'est lui qui envoie la pièce d'identité, etc.
+[1744.0s - 1746.0s] Et du coup il a double...
+[1746.0s - 1749.0s] C'est lui qui envoie la pièce d'identité et complète le Forms.
+[1749.0s - 1752.0s] Avec les informations qu'il manque.
+[1752.0s - 1754.0s] Ouais, ouais, bah exactement, bah c'est parfait.
+[1756.0s - 1757.0s] Mais là, on en...
+[1757.0s - 1763.0s] Du coup, il faudrait faire un flux, en fait, parce que t'as le flux Forms qui renvoie à la personne qui a complété le Forms
+[1763.0s - 1771.0s] et le flux AI qui renvoie un mail à la personne qui est concernée par la demande, mais pas à la conseillère AI.
+[1772.0s - 1773.0s] Ok.
+[1773.0s - 1777.0s] C'est bon pour toi ça ou tu veux que je te remets par écrit ?
+[1777.0s - 1779.0s] Non, non, c'est bon, c'est tout bon.
+[1779.0s - 1781.0s] Ok, nickel.
+[1782.0s - 1787.0s] Ok, est-ce qu'on regarde un peu le magnifique boulot que t'as fait sur le calendrier ?
+[1787.0s - 1789.0s] Ouais, c'est...
+[1792.0s - 1796.0s] Le calendrier où tu veux regarder les quatre figures pour les...
+[1796.0s - 1797.0s] Les plus, ouais.
+[1797.0s - 1799.0s] Alors je regarde les deux comme tu voulais.
+[1799.0s - 1801.0s] Les deux comme tu voulais.
+[1802.0s - 1804.0s] Je les mets les quatre figures, ils sont là.
+[1804.0s - 1805.0s] Ok.
+[1805.0s - 1806.0s] Quatre figures.
+[1806.0s - 1808.0s] Question sur le site.
+[1808.0s - 1811.0s] Est-ce que je regarde la légende ou je regarde juste le...
+[1812.0s - 1819.0s] Bah en fait, c'est les quatre figures principaux.
+[1821.0s - 1828.0s] Mais du coup, bah là, il y aura un autre quatre figures qui va s'ajouter au lot, c'est celui dont on vient de parler.
+[1828.0s - 1829.0s] Ouais.
+[1829.0s - 1838.0s] Mais ces quatre figures-là, il faut juste qu'on les consulte et puis on les valide ou on les jette.
+[1840.0s - 1844.0s] Choisis ton parcours, module métier ou demande de stage.
+[1844.0s - 1851.0s] Sélectionne son choix, module choisi, un, trois modules plus semaine pour chacun, stage, choisi secteur plus plage de date.
+[1851.0s - 1863.0s] En parallèle, il faudrait que tu ailles sur le site et puis que tu ailles sur module métier.
+[1863.0s - 1870.0s] Tu cliques sur module métier et puis tu vois un petit peu ce que tu peux faire pour l'instant.
+[1870.0s - 1871.0s] Ok.
+[1871.0s - 1873.0s] Donc module métier.
+[1873.0s - 1875.0s] Peut-être ça te parlera plus.
+[1875.0s - 1878.0s] Donc je choisis lingerie.
+[1878.0s - 1879.0s] Lingerie.
+[1886.0s - 1887.0s] Audiovisuel.
+[1889.0s - 1891.0s] Restauration.
+[1893.0s - 1897.0s] J'ai tout choisi en semaine 11 et après... Ah et après je dois faire s'inscrire.
+[1898.0s - 1899.0s] Voilà.
+[1904.0s - 1907.0s] Au final, c'est juste pour pré-remplir le formulaire.
+[1909.0s - 1911.0s] Ok, donc ça concerne...
+[1912.0s - 1916.0s] Ouais, du coup ça joue pas.
+[1920.0s - 1922.0s] Il faudrait qu'on mette une question encore en plus.
+[1924.0s - 1926.0s] Ouais, c'est justement ce que j'avais.
+[1926.0s - 1928.0s] Ou alors on refait ce formulaire.
+[1930.0s - 1937.0s] Parce qu'il faudrait une question encore plus préliminaire, c'est je complète ce formulaire pour des modules métier ou pour une demande de stage.
+[1937.0s - 1939.0s] Oui, c'est ce que j'avais mis dans...
+[1940.0s - 1942.0s] Dans tes commentaires.
+[1943.0s - 1944.0s] Si, ouais.
+[1944.0s - 1947.0s] J'en avais mis une en plus mais après je l'ai enlevé.
+[1947.0s - 1950.0s] Ou alors on refait un deuxième formulaire.
+[1952.0s - 1953.0s] Ouais, il n'y a pas de...
+[1953.0s - 1955.0s] On fait un formulaire adapté au module métier.
+[1956.0s - 1957.0s] Qu'est-ce qui est mieux tu penses?
+[1958.0s - 1962.0s] Parce que le module métier il a des questions, enfin il a un peu moins de questions, c'est ça?
+[1962.0s - 1965.0s] Ouais, il n'y aura pas le secteur puisqu'ils ont déjà choisi.
+[1968.0s - 1970.0s] Déjà, j'ai fait un stage à Clairbois.
+[1971.0s - 1973.0s] A priori pas.
+[1981.0s - 1984.0s] Et oui, après je remplis ce formulaire pour quelqu'un d'autre.
+[1984.0s - 1986.0s] Ouais, il y aura quelques questions qui apparaissent.
+[1986.0s - 1988.0s] Est-ce que c'est plus simple de faire un...
+[1988.0s - 1992.0s] Soit je refais une question préliminaire et ça fait un embranchement.
+[1993.0s - 1995.0s] Soit on crée un autre formulaire.
+[1997.0s - 1998.0s] C'est quoi qui est plus simple?
+[1998.0s - 2000.0s] La question je peux aussi la mettre sur le site.
+[2001.0s - 2003.0s] Je remplis sur le formulaire pour moi-même.
+[2003.0s - 2006.0s] En fait, il y a deux questions, c'est justement ce que j'ai mis dans le flux là.
+[2007.0s - 2014.0s] Il y a la question 1, donc quand tu regardes dans le tronc 0, tu regardes la question 1, je remplis ce formulaire.
+[2014.0s - 2017.0s] Et la question 2, c'est avez-vous déjà été inscrit chez Clairbois?
+[2018.0s - 2026.0s] Ces deux-là, je peux les mettre sur le site pour que ce soit plus tard pré-rempli ou alors pour rediriger vers un certain formulaire.
+[2027.0s - 2028.0s] En fait, vu qu'il y en a plusieurs.
+[2030.0s - 2034.0s] Parce que s'il est rempli et il est déjà inscrit, ça ne sera pas le même formulaire.
+[2035.0s - 2038.0s] Ou alors ce sera le même mais au moins pré-rempli.
+[2038.0s - 2039.0s] Enfin, il faut le dire.
+[2040.0s - 2043.0s] Ou alors ce sera le même mais au moins pré-rempli.
+[2043.0s - 2052.0s] Enfin, il faudrait que s'il est déjà inscrit, comme on avait dit, il met son mail, son nom, son prénom et puis ça fait foi.
+[2053.0s - 2054.0s] Il reçoit le mail.
+[2055.0s - 2061.0s] Et en réponse à ce mail, il va recevoir un formulaire avec ses informations.
+[2062.0s - 2067.0s] Et en plus dans le mail, il y aura les informations manquantes pour qu'il en profite pour remplir.
+[2070.0s - 2080.0s] Oui, sauf que normalement pour les stages découverts, les modules métiers, normalement je pense que ce ne sera pas des sages-herbes qui sont déjà revenus mais peut-être.
+[2081.0s - 2094.0s] Mais parce que toi, du coup, tu peux sectionner en fait, tu peux sectionner le formulaire FORMS et l'envoyer directement à partir de la question 25 par exemple, à partir de la question 3.
+[2095.0s - 2098.0s] Non, malheureusement il faut inventer plusieurs formulaires.
+[2099.0s - 2100.0s] Il faut créer plusieurs formulaires, ok.
+[2101.0s - 2102.0s] Ouais.
+[2102.0s - 2106.0s] Je peux les faire vite faire, c'est des formulaires, c'est fait en deux secondes.
+[2109.0s - 2111.0s] Ça, j'adapte de toute façon.
+[2113.0s - 2114.0s] Ok.
+[2114.0s - 2116.0s] Je peux te les faire moi les formulaires.
+[2118.0s - 2119.0s] Attends un instant.
+[2120.0s - 2124.0s] Oui, vous êtes un petit peu, juste un tout petit peu en avant, je finis et puis je viens.
+[2124.0s - 2129.0s] Oui, pas de soucis, vous pouvez attendre à la salle d'attente, j'arrive tout de suite, je vais vous chercher, merci.
+[2134.0s - 2136.0s] Alors on va le faire un petit peu plus vite.
+[2136.0s - 2140.0s] Là il y a le tronc commun, parcours de tous les utilisateurs.
+[2141.0s - 2147.0s] En fait quand on parlait du tronc commun, c'était vraiment identique pour tout le monde.
+[2147.0s - 2151.0s] C'est juste qu'il y a des chemins différents à chaque fois, bon là on vient d'inventer un nouveau chemin.
+[2152.0s - 2158.0s] Mais voilà, là pour l'instant moi je vois trois formulaires avec quatre chemins.
+[2159.0s - 2167.0s] Il y a le chemin, parce que en fait ce qu'on a fait c'est que dans le formulaire on a mis directement, je remplis, soit pour moi, soit pour quelqu'un d'autre.
+[2167.0s - 2173.0s] Alors qu'il pourrait y avoir un formulaire pour le stagiaire, un formulaire pour autrui etc.
+[2175.0s - 2177.0s] Et on posait la question déjà sur le site.
+[2177.0s - 2186.0s] Voilà exactement, donc le chemin A c'est nom plus moi-même, chemin C oui plus moi-même et chemin D oui plus référent.
+[2189.0s - 2193.0s] Et après bon, de toute façon c'est vrai que c'est un long document avec des flux.
+[2194.0s - 2204.0s] Mais bon après ça me permet d'un petit peu me repérer dans tous les petits chemins, parce que c'est vrai qu'il y a beaucoup de chemins.
+[2207.0s - 2211.0s] Bon, chaque chemin n'est pas si compliqué que ça.
+[2212.0s - 2217.0s] Est-ce que c'est plus simple pour toi du coup si moi je te fais les formulaires ?
+[2218.0s - 2233.0s] Bah quand tu as le temps, après si tu vois quelque chose que tu n'es vraiment pas d'accord avec ce HTML, avec ces flux, parce qu'en fait j'ai fait exprès de faire un document pour HTML comme ça je peux constamment le modifier.
+[2233.0s - 2237.0s] Et puis après je peux t'en renvoyer un autre modifier par exemple.
+[2238.0s - 2243.0s] Et puis toi je te réjouirais juste à ouvrir et à regarder si il y a un truc que tu te dis « ah ».
+[2244.0s - 2252.0s] Parce que c'est vrai que quand on regarde un petit peu les chemins et on se dit « ah tiens, il va faire ça, ça, ça, ça, ça », après on s'imagine dans la réalité.
+[2253.0s - 2257.0s] Et moi j'ai pas la même perspection que toi.
+[2257.0s - 2264.0s] Alors, je te propose, c'est que moi je regarde tout ça de très près tout à l'heure dès que j'ai fini mon rendez-vous.
+[2265.0s - 2272.0s] Et j'adapte les formulaires sur les différents chemins.
+[2273.0s - 2279.0s] Et comme ça sur le site internet, toi tu pourras déjà mettre la question « je remplis ce formulaire pour moi-même ».
+[2279.0s - 2284.0s] Mais sur la liste SharePoint ça sera toujours la même ligne pour tout le monde en fait.
+[2285.0s - 2290.0s] Oui il faudra que ce soit unique à chacun. Un AVS, ils ne bougent pas.
+[2291.0s - 2293.0s] Ça ce serait le top.
+[2294.0s - 2299.0s] Après moi ce qui ne m'intéresse pas trop chez Forms c'est comment est-ce qu'ils vont mettre le numéro AVS.
+[2299.0s - 2304.0s] Alors que si c'était sur un site qu'on avait pu construire de A à Z, je veux dire au niveau du formulaire,
+[2305.0s - 2312.0s] moi j'aurais pu mettre des contraintes dans le sens « ça ne va pas envoyer le formulaire tant que tu n'as pas mis un format AVS qui convient ».
+[2313.0s - 2317.0s] Des trucs comme ça mais normalement les gens y mettent le bon.
+[2318.0s - 2321.0s] Et puis là, on a un autre point de vue.
+[2321.0s - 2325.0s] Oui mais ça effectivement on n'a pas d'autre moyen de...
+[2326.0s - 2331.0s] Oui mais c'est pas grave. Ça c'est toujours quelque chose que tu peux revenir corriger.
+[2332.0s - 2335.0s] Oui, mais ça c'est pas grave.
+[2336.0s - 2339.0s] Et puis là, on a un autre point de vue.
+[2340.0s - 2343.0s] Et puis là, on a un autre point de vue.
+[2344.0s - 2347.0s] Et puis là, on a un autre point de vue.
+[2347.0s - 2351.0s] C'est quelque chose que tu peux revenir corriger.
+[2352.0s - 2355.0s] Au cas où.
+[2356.0s - 2358.0s] Mais oui voilà il y a plein de cas spéciaux.
+[2359.0s - 2362.0s] Le cas... il y a un des cas spéciaux qu'il va y avoir
+[2363.0s - 2364.0s] Ce qui s'appelle,... comme t'avais dit la dernière fois,
+[2365.0s - 2367.9s] le stage guère qui... enfin la personne qui est venue en mode humidité...
+[2368.9s - 2373.0s] il pique deux ans avant mais plus tard qu'elle revient.
+[2373.0s - 2374.0s] Ok.
+[2374.0s - 2376.0s] Karim, je regarde tout ça.
+[2376.0s - 2379.0s] Ouais, il n'y a pas de souci.
+[2379.0s - 2381.0s] Tu peux tout regarder.
+[2381.0s - 2387.0s] Ah oui, dis-moi aussi, si je retire la section sur le site demande de stage.
+[2387.0s - 2390.0s] Parce que c'est vrai que ce n'était pas clair demande de stage.
+[2390.0s - 2398.0s] Après ils vont dans les secteurs et ensuite tu avais dit qu'ils ne peuvent pas prendre à partir de 14 jours.
+[2398.0s - 2400.0s] Je ne voulais pas qu'ils choisissent les dates.
+[2400.0s - 2405.0s] Donc c'est à partir de la date du jour réel jusqu'à 14 jours.
+[2405.0s - 2406.0s] Oui, deux semaines après.
+[2406.0s - 2407.0s] Il ne peut pas.
+[2407.0s - 2408.0s] Actuellement il ne peut pas.
+[2408.0s - 2412.0s] Mais c'est lui qui choisit ses créneaux au final.
+[2412.0s - 2414.0s] C'est le stagiaire qui choisit ses créneaux.
+[2414.0s - 2416.0s] Et après le formulaire est pré-rempli derrière.
+[2417.0s - 2420.0s] Ouais, ça peut être une demande on va dire.
+[2420.0s - 2422.0s] Ouais, une demande pour que tu aies le choix.
+[2422.0s - 2426.0s] Une date qu'ils préfèrent et puis nous après on leur dit si c'est possible ou pas.
+[2426.0s - 2427.0s] Ok, ouais.
+[2427.0s - 2429.0s] Ouais, parfait.
+[2429.0s - 2430.0s] C'est comme ça que je...
+[2430.0s - 2433.0s] Je regarde tout ça et je te redis.
+[2433.0s - 2434.0s] Il n'y a pas de souci.
+[2435.0s - 2440.0s] En attendant je vais faire les flux pour le word que tu viens de me donner.
+[2440.0s - 2441.0s] Pour ce cas là.
+[2442.0s - 2443.0s] Et puis voilà.
+[2443.0s - 2445.0s] Après je vais tout adapter derrière.
+[2446.0s - 2447.0s] Et puis voilà.
+[2447.0s - 2449.0s] Je pense que c'est bon.
+[2450.0s - 2457.0s] Ok, je regarde tout ça et peut-être qu'on aurait même le temps de faire un autre truc que je voulais.
+[2457.0s - 2458.0s] C'est trop bien.
+[2458.0s - 2459.0s] Merci beaucoup Karim, c'est génial.
+[2459.0s - 2463.0s] Je suis désolée avec tous ces problèmes et tout, ça fait bugger mon rendez-vous d'après.
+[2463.0s - 2466.0s] Mais je regarde après et je te redonne tous les trucs.
+[2466.0s - 2467.0s] Merci beaucoup, c'est vraiment génial.
+[2467.0s - 2470.0s] Et puis ensuite je voudrais qu'on parle de la suite pour toi aussi.
+[2470.0s - 2472.0s] Ok, c'est pour ce soir-là.
+[2472.0s - 2475.0s] Pour rencontrer Fidesz et tout ça, je m'en occupe.
+[2475.0s - 2476.0s] Ok, super.
+[2476.0s - 2477.0s] Merci beaucoup.
+[2477.0s - 2479.0s] Merci beaucoup, bonne journée et puis à tout à l'heure.
+[2479.0s - 2481.0s] Bonne journée à toi, à toutes.
+[2481.0s - 2482.0s] Ciao à toutes.
+[2482.0s - 2483.0s] Merci.
+[2488.0s - 2489.0s] Merci.

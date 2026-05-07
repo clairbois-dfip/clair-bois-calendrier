@@ -1,0 +1,106 @@
+═══════════════════════════════════════════════════════
+TEST 1 — Branche "Moi-même" (stagiaire remplit pour lui-même)
+═══════════════════════════════════════════════════════
+
+Q1  - Je remplis pour :                Moi-même
+Q2  - Secteur :                        Cuisine
+Q3  - Nom :                            Dupont
+Q4  - Prénom :                         Marie
+Q5  - Sexe :                           Féminin
+Q6  - Date de naissance :              15.06.2000
+Q7  - Numéro AVS :                     756.9999.9999.99
+Q8  - Téléphone :                      +41799999999
+Q9  - Email :                          rochat.vdge@gmail.com
+Q10 - Adresse :                        1 Rue du Test
+Q11 - NPA/Localité :                   1200 Genève
+Q12 - Lien (urgence) :                 Mère
+Q13 - Nom (urgence) :                  ContactNom
+Q14 - Prénom (urgence) :               ContactPrenom
+Q15 - Téléphone (urgence) :            +41781111111
+Q16 - Assurance Invalidité :           Non
+Q17 - Sous curatelle :                 Non
+Q18 - Déjà stagié :                    Non
+Q19 - Objectif du stage :              Découvrir le métier de cuisinier
+Q20 - Limitations :                    n/a
+Q21 - Parcours scolaire :              Ecole obligatoire terminée
+Q22 - Tests :                          (choisir une option radio)
+Q23 - Réseau :                         (cocher une ou plusieurs cases)
+Q24 - Taille t-shirt :                 M
+Q25 - Taille pantalon :                40
+Q26 - Pointure :                       42
+Q27 - Charte :                         (accepter)
+Q28 - Déclaration sur l'honneur :      (accepter)
+
+
+═══════════════════════════════════════════════════════
+TEST 2 — Branche "Quelqu'un d'autre" (référent inscrit un stagiaire)
+═══════════════════════════════════════════════════════
+
+--- Section Référent ---
+Q1  - Je remplis pour :                Quelqu'un d'autre (élève, assuré.e, bénéficiaire, etc.)
+Q2  - Secteur :                        Restauration
+Q3  - Partenaire :                     OCAS
+Q4  - Fonction :                       Conseiller.ère en Insertion
+Q5  - Nom (référent) :                 Martin
+Q6  - Prénom (référent) :              Jean
+Q7  - Téléphone (référent) :           +41788888888
+Q8  - Email (référent) :               rochat.vdge@gmail.com
+
+--- Section Stagiaire ---
+Q9  - Nom :                            Favre
+Q10 - Prénom :                         Lucas
+Q11 - Sexe :                           Masculin
+Q12 - Date de naissance :              22.03.2001
+Q13 - Numéro AVS :                     756.8888.8888.88
+Q14 - Téléphone :                      +41777777777
+Q15 - Email (stagiaire) :              lucas.favre@test.ch
+Q16 - Adresse :                        5 Avenue du Lac
+Q17 - NPA/Localité :                   1201 Genève
+
+--- Section Urgence ---
+Q18 - Lien :                           Père
+Q19 - Nom (urgence) :                  Favre
+Q20 - Prénom (urgence) :               Pierre
+Q21 - Téléphone (urgence) :            +41762222222
+
+--- Section Assurance Invalidité ---
+Q22 - Inscrit AI :                     Oui
+Q23 - Nom conseiller AI :              Rossi
+Q24 - Prénom conseiller AI :           Anna
+Q25 - Téléphone conseiller AI :        +41763333333
+Q26 - Email conseiller AI :            anna.rossi@ai.ch
+
+--- Section Curatelle ---
+Q27 - Sous curatelle :                 Oui
+Q28 - Type curateur :                  OPAD
+Q29 - Nom curateur :                   Muller
+Q30 - Prénom curateur :                Sophie
+Q31 - Téléphone curateur :             +41764444444
+Q32 - Email curateur :                 sophie.muller@opad.ch
+
+--- Section Stage ---
+Q33 - Déjà stagié :                    Non
+Q34 - Objectif du stage :              Insertion professionnelle en restauration
+Q35 - Limitations :                    Mobilité réduite membre gauche
+Q36 - Parcours scolaire :              SGIPA puis CO Budé
+Q37 - Tests :                          (choisir une option radio)
+Q38 - Réseau :                         (cocher une ou plusieurs cases)
+
+--- Section Uniforme ---
+Q39 - Taille t-shirt :                 L
+Q40 - Taille pantalon :                42
+Q41 - Pointure :                       44
+
+--- Section Admin ---
+Q42 - Charte :                         (accepter)
+Q43 - Déclaration sur l'honneur :      (accepter)
+
+
+═══════════════════════════════════════════════════════
+NOTES
+═══════════════════════════════════════════════════════
+- Les emails doivent contenir "@clair-bois.ch" OU "rochat.vdge" pour passer le filtre
+- Le Test 1 utilise rochat.vdge@gmail.com en email stagiaire (passe le filtre)
+- Le Test 2 utilise rochat.vdge@gmail.com en email référent (passe le filtre)
+- Le Test 2 couvre toutes les sections (AI = Oui, Curatelle = Oui) pour tester le maximum de champs
+- Vérifier dans SharePoint : liste Stagiaire (les 2 tests) + liste Referent (Test 2 uniquement)

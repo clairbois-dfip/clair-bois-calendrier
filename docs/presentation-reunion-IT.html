@@ -1,0 +1,1937 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clair-Bois — Réunion IT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --cb-blue: #1e3a5f;
+            --cb-green: #16a34a;
+            --cb-red: #dc2626;
+            --cb-orange: #f59e0b;
+            --accent: #3b82f6;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .slide {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
+            padding: 40px 80px 80px;
+            opacity: 0; transform: translateX(60px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            pointer-events: none;
+            overflow-y: auto; overflow-x: hidden;
+        }
+        .slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+        /* Center content vertically only when it fits */
+        .slide-inner { display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; min-height: 100%; }
+
+        h1 { font-size: 2.8rem; font-weight: 800; line-height: 1.15; }
+        h2 { font-size: 2rem; font-weight: 700; margin-bottom: 12px; text-align: center; }
+        .subtitle { font-size: 1.15rem; color: var(--muted); margin-top: 10px; font-weight: 400; text-align: center; }
+        .tag {
+            display: inline-block; padding: 4px 14px; border-radius: 50px;
+            font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .tag-green { background: rgba(22,163,74,0.15); color: #4ade80; }
+        .tag-red { background: rgba(220,38,38,0.15); color: #f87171; }
+        .tag-blue { background: rgba(59,130,246,0.15); color: #60a5fa; }
+        .tag-orange { background: rgba(245,158,11,0.15); color: #fbbf24; }
+
+        .flow-row { display: flex; align-items: center; gap: 0; width: 100%; justify-content: center; }
+        .flow-box {
+            padding: 16px 22px; border-radius: 16px; text-align: center; min-width: 130px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .flow-box:hover {
+            transform: translateY(-5px) scale(1.04);
+            box-shadow: 0 8px 25px rgba(59,130,246,0.2);
+            z-index: 2;
+        }
+        .flow-box .icon {
+            font-size: 2rem; margin-bottom: 6px;
+            animation: breathe 3.5s ease-in-out infinite;
+        }
+        .flow-box:nth-child(1) .icon { animation-delay: 0s; }
+        .flow-box:nth-child(3) .icon { animation-delay: 0.5s; }
+        .flow-box:nth-child(5) .icon { animation-delay: 1s; }
+        .flow-box:nth-child(7) .icon { animation-delay: 1.5s; }
+        .flow-box:nth-child(9) .icon { animation-delay: 2s; }
+        .flow-box:nth-child(11) .icon { animation-delay: 2.5s; }
+        .flow-box:nth-child(13) .icon { animation-delay: 3s; }
+        .flow-box .label { font-size: 0.85rem; font-weight: 600; }
+        .flow-box .detail { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+        .flow-arrow {
+            font-size: 1.8rem; color: var(--muted); margin: 0 8px; flex-shrink: 0;
+            animation: pulse-arrow 2s ease-in-out infinite;
+        }
+        .flow-arrow.green { color: #4ade80; }
+
+        .mini-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .mini-card:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 18px rgba(59,130,246,0.15);
+            z-index: 2;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+        @keyframes pulse-arrow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; width: 100%; max-width: 1100px; }
+        .compare-col {
+            background: var(--card); border-radius: 20px; padding: 32px;
+            border: 2px solid transparent; overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .compare-col:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+        .compare-col.forms { border-color: rgba(245,158,11,0.3); }
+        .compare-col.integrated { border-color: rgba(22,163,74,0.4); }
+        .compare-col h3 { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 1.15rem; }
+        .compare-item {
+            display: flex; align-items: flex-start; gap: 12px;
+            padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .compare-item:last-child { border-bottom: none; }
+        .compare-item .status { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+        .compare-item .text { font-size: 0.88rem; line-height: 1.5; }
+        .compare-item .text strong { color: #fff; }
+
+        .hosting-compare { display: grid; grid-template-columns: 1fr 60px 1fr; gap: 0; align-items: start; width: 100%; max-width: 1100px; }
+        .hosting-box {
+            background: var(--card); border-radius: 20px; padding: 28px; border: 2px solid transparent;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hosting-box:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+        .hosting-box.current { border-color: rgba(148,163,184,0.3); }
+        .hosting-box.proposed { border-color: rgba(22,163,74,0.4); }
+        .hosting-vs { display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 800; color: var(--muted); align-self: center; }
+        .hosting-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 0.88rem; }
+        .hosting-item .icon { font-size: 1.3rem; flex-shrink: 0; }
+
+        .data-flow-container { width: 100%; max-width: 1000px; }
+        .data-flow-label {
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.1em; color: var(--muted); margin-bottom: 14px; padding-left: 4px;
+        }
+        .data-flow-row {
+            background: var(--card); border-radius: 16px; padding: 20px 28px;
+            margin-bottom: 16px; border-left: 4px solid;
+        }
+        .data-flow-row.current { border-color: var(--muted); }
+        .data-flow-row.proposed { border-color: var(--cb-green); }
+
+        .cost-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 100%; max-width: 900px; }
+        .cost-card { background: var(--card); border-radius: 16px; padding: 28px; text-align: center; }
+        .cost-card .price { font-size: 2.5rem; font-weight: 800; color: var(--cb-green); }
+        .cost-card .unit { font-size: 0.85rem; color: var(--muted); }
+        .cost-card .name { font-size: 1rem; font-weight: 600; margin-top: 12px; }
+        .cost-card .desc { font-size: 0.78rem; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+
+        .key-points { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 1000px; }
+        .key-point {
+            background: var(--card); border-radius: 16px; padding: 24px; display: flex; gap: 16px; align-items: flex-start;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .key-point:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+        .key-point .kp-icon { font-size: 2rem; flex-shrink: 0; animation: breathe 3.5s ease-in-out infinite; }
+        .key-point .kp-title { font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
+        .key-point .kp-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+
+        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; width: 100%; max-width: 1000px; }
+        .summary-card {
+            background: var(--card); border-radius: 16px; padding: 28px; border-left: 4px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+        .summary-card.security { border-color: #3b82f6; }
+        .summary-card.ux { border-color: #a855f7; }
+        .summary-card.maintenance { border-color: #f59e0b; }
+        .summary-card.cost { border-color: #16a34a; }
+        .summary-card h3 { font-size: 1rem; margin-bottom: 10px; }
+        .summary-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+        .section-number { display: none; }
+        .title-bg { display: none; }
+
+        /* Question highlight */
+        .question-banner {
+            background: rgba(59,130,246,0.08);
+            border: 1px solid rgba(59,130,246,0.2); border-radius: 16px;
+            padding: 32px 40px; text-align: center; max-width: 800px; margin: 0 auto 30px;
+        }
+        .question-banner .q-number {
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.15em; color: var(--accent); margin-bottom: 10px;
+        }
+        .question-banner .q-text { font-size: 1.5rem; font-weight: 700; }
+
+        /* Transition arrow between decisions */
+        .decision-arrow {
+            background: var(--card); border-radius: 14px; padding: 20px 30px;
+            display: flex; align-items: center; gap: 16px; max-width: 700px; margin: 0 auto;
+        }
+        .decision-arrow .da-icon { font-size: 2rem; flex-shrink: 0; }
+        .decision-arrow .da-text { font-size: 0.95rem; line-height: 1.6; }
+
+        .nav-bar {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 40px; background: #0c1524;
+            z-index: 100;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .nav-info { font-size: 0.8rem; color: var(--muted); }
+        .nav-dots { display: flex; gap: 8px; }
+        .nav-dot {
+            width: 10px; height: 10px; border-radius: 50%;
+            background: rgba(255,255,255,0.15); cursor: pointer; transition: all 0.3s;
+        }
+        .nav-dot.active { background: var(--accent); transform: scale(1.3); }
+        .nav-btn {
+            background: rgba(255,255,255,0.08); border: none; color: var(--text);
+            padding: 8px 16px; border-radius: 8px; cursor: pointer;
+            font-size: 0.85rem; font-family: inherit; transition: background 0.2s;
+        }
+        .nav-btn:hover { background: rgba(255,255,255,0.15); }
+
+        /* =================== MODAL POPUP =================== */
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 1000;
+            background: rgba(0,0,0,0.7);
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.open { opacity: 1; pointer-events: all; }
+        .modal-box {
+            background: #1a2332; border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px; padding: 32px; max-width: 700px; width: 90%;
+            max-height: 80vh; overflow-y: auto; position: relative;
+            transform: scale(0.9); transition: transform 0.3s ease;
+        }
+        .modal-overlay.open .modal-box { transform: scale(1); }
+        .modal-close {
+            position: absolute; top: 16px; right: 16px;
+            background: rgba(255,255,255,0.08); border: none; color: var(--muted);
+            width: 32px; height: 32px; border-radius: 8px; cursor: pointer;
+            font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+        .modal-close:hover { background: rgba(255,255,255,0.15); color: var(--text); }
+        .modal-box h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .modal-box .modal-section { margin-bottom: 18px; }
+        .modal-box .modal-section-title {
+            font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.1em; color: var(--accent); margin-bottom: 8px;
+        }
+        .modal-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+        .modal-table th {
+            text-align: left; padding: 6px 10px; background: rgba(255,255,255,0.04);
+            font-weight: 600; color: var(--muted); border-bottom: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .modal-table td {
+            padding: 5px 10px; border-bottom: 1px solid rgba(255,255,255,0.04);
+            color: var(--muted);
+        }
+        .modal-table td:first-child { color: var(--text); font-weight: 500; }
+        .modal-table code {
+            background: rgba(59,130,246,0.1); color: #60a5fa; padding: 1px 6px;
+            border-radius: 4px; font-size: 0.7rem; font-family: 'Courier New', monospace;
+        }
+        .modal-tree { font-size: 0.78rem; color: var(--muted); line-height: 1.8; font-family: 'Courier New', monospace; }
+        .modal-tree .folder { color: #fbbf24; }
+        .modal-tree .file { color: #60a5fa; }
+
+        /* Info button */
+        .info-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 20px; height: 20px; border-radius: 50%;
+            background: rgba(59,130,246,0.25); color: #60a5fa;
+            font-size: 0.65rem; font-weight: 800; cursor: pointer;
+            border: 1px solid rgba(59,130,246,0.3);
+            transition: all 0.2s; position: relative; flex-shrink: 0;
+            font-family: inherit;
+        }
+        .info-btn:hover { background: rgba(59,130,246,0.45); transform: scale(1.15); }
+        .info-btn.green { background: rgba(22,163,74,0.25); color: #4ade80; border-color: rgba(22,163,74,0.3); }
+        .info-btn.green:hover { background: rgba(22,163,74,0.45); }
+        .info-btn.purple { background: rgba(168,85,247,0.25); color: #c084fc; border-color: rgba(168,85,247,0.3); }
+        .info-btn.purple:hover { background: rgba(168,85,247,0.45); }
+        .info-btn.orange { background: rgba(245,158,11,0.25); color: #fbbf24; border-color: rgba(245,158,11,0.3); }
+        .info-btn.orange:hover { background: rgba(245,158,11,0.45); }
+
+        /* =================== STATS ANIMATION =================== */
+        .stat-number {
+            font-size: 3.2rem; font-weight: 700; line-height: 1;
+        }
+        .stat-label { font-size: 0.82rem; color: var(--muted); margin-top: 6px; }
+        .stat-card {
+            background: var(--card); border-radius: 16px; padding: 28px 24px; text-align: center;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .process-step {
+            display: flex; align-items: center; gap: 14px; padding: 12px 16px;
+            border-radius: 12px; font-size: 0.88rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .process-step:hover {
+            transform: translateX(4px);
+            box-shadow: -3px 0 10px rgba(0,0,0,0.15);
+        }
+        .process-step .step-icon { font-size: 1.4rem; flex-shrink: 0; }
+        .process-step .step-time {
+            margin-left: auto; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; white-space: nowrap;
+        }
+        .process-step.manual { background: rgba(220,38,38,0.06); }
+        .process-step.manual .step-time { color: #f87171; }
+        .process-step.auto { background: rgba(22,163,74,0.06); }
+        .process-step.auto .step-time { color: #4ade80; }
+
+        .bar-compare { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        .bar-label { font-size: 0.78rem; width: 60px; text-align: right; flex-shrink: 0; }
+        .bar-track { flex: 1; height: 28px; background: rgba(255,255,255,0.04); border-radius: 8px; overflow: hidden; position: relative; }
+        .bar-fill { height: 100%; border-radius: 8px; display: flex; align-items: center; padding-left: 12px; font-size: 0.75rem; font-weight: 600; transition: width 1.5s ease-out; }
+        .bar-fill.before { background: rgba(220,38,38,0.25); color: #f87171; width: 0; }
+        .bar-fill.after { background: rgba(22,163,74,0.25); color: #4ade80; width: 0; }
+        .slide.active .bar-fill.before { width: 100%; }
+        .slide.active .bar-fill.after { width: 9%; }
+
+        .error-item {
+            display: flex; align-items: center; gap: 10px; padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.88rem;
+        }
+        .error-item:last-child { border-bottom: none; }
+        .error-item .err-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+        /* Continuité */
+        .cont-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; width: 100%; max-width: 1000px; }
+        .cont-card {
+            background: var(--card); border-radius: 16px; padding: 24px;
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .cont-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+        .cont-card h3 { font-size: 0.95rem; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+        .cont-item { display: flex; align-items: flex-start; gap: 10px; padding: 7px 0; font-size: 0.88rem; color: var(--muted); }
+        .cont-item .ci-icon { flex-shrink: 0; font-size: 1rem; }
+
+        /* =================== LASER POINTER =================== */
+        body { cursor: none; }
+        a, button, .nav-btn, .nav-dot, .info-btn, .modal-close { cursor: none; }
+        #laserDot {
+            position: fixed; z-index: 9999; pointer-events: none;
+            width: 16px; height: 16px; border-radius: 50%;
+            background: rgba(239, 68, 68, 0.9);
+            box-shadow: 0 0 12px 4px rgba(239, 68, 68, 0.5), 0 0 30px 8px rgba(239, 68, 68, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.15s, height 0.15s, box-shadow 0.15s;
+        }
+        #laserDot.clicking {
+            width: 24px; height: 24px;
+            background: rgba(251, 191, 36, 0.95);
+            box-shadow: 0 0 20px 8px rgba(251, 191, 36, 0.5), 0 0 50px 16px rgba(251, 191, 36, 0.15);
+        }
+        #laserTrail {
+            position: fixed; z-index: 9998; pointer-events: none;
+            width: 40px; height: 40px; border-radius: 50%;
+            border: 2px solid rgba(239, 68, 68, 0.25);
+            transform: translate(-50%, -50%);
+            transition: left 0.08s ease-out, top 0.08s ease-out, opacity 0.3s;
+            opacity: 0;
+        }
+        #laserTrail.visible { opacity: 1; }
+
+        @media print { .nav-bar { display: none; } .slide { position: relative; page-break-after: always; opacity: 1 !important; transform: none !important; pointer-events: all !important; } #laserDot, #laserTrail { display: none; } }
+    </style>
+</head>
+<body>
+
+<!-- ========================================== -->
+<!-- SLIDE 0 : TITRE                            -->
+<!-- ========================================== -->
+<div class="slide active" data-slide="0">
+    <div class="title-bg"></div>
+    <div style="text-align:center; max-width: 800px;">
+        <div style="margin-bottom: 30px;"><span style="font-size: 3.5rem;">🏛️</span></div>
+        <h1 style="font-size: 2.6rem;">Plateforme de gestion<br>des stages & modules</h1>
+        <p class="subtitle" style="font-size: 1.1rem; margin-top: 20px;">Fondation Clair-Bois &mdash; Service DFIP RH</p>
+        <div style="margin-top: 30px;">
+            <div style="font-size: 0.85rem; color: var(--muted); line-height: 1.8;">
+                <strong style="color:var(--text);">Participants :</strong><br>
+                MATTHEY Benoît &bull; BARRASO José &bull; KARAVIA Rosina &bull; ROCHAT Karim
+            </div>
+            <div style="font-size: 0.8rem; color: var(--muted); margin-top: 8px;">24 mars 2026</div>
+        </div>
+        <div style="margin-top: 35px; background: var(--card); border-radius: 14px; padding: 20px 28px; display: inline-block;">
+            <p style="font-size: 0.9rem; color: var(--muted); line-height: 1.6;">
+                <strong style="color: var(--text);">Ordre du jour :</strong> deux décisions à prendre ensemble
+            </p>
+            <div style="display:flex; gap: 16px; margin-top: 12px; justify-content:center;">
+                <span class="tag tag-green" style="font-size: 0.8rem; padding: 6px 16px;">1. Hébergement du site</span>
+                <span class="tag tag-blue" style="font-size: 0.8rem; padding: 6px 16px;">2. Microsoft Forms ou formulaire intégré ?</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- SLIDE 1 : SOMMAIRE                          -->
+<!-- ========================================== -->
+<div class="slide" data-slide="1">
+    <div class="slide-inner">
+        <h2>Sommaire</h2>
+
+        <div style="display:flex; flex-direction:column; gap: 14px; max-width: 650px; width:100%;">
+            <div class="summary-card" style="display:flex; align-items:center; gap:16px; padding:18px 24px; background:var(--card); border-radius:14px; border-left:4px solid var(--accent); cursor:default; transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseenter="this.style.transform='translateX(6px)';this.style.boxShadow='0 4px 20px rgba(59,130,246,0.15)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+                <span style="font-size:1.4rem; animation: breathe 3.5s ease-in-out infinite; display:inline-block;">🔄</span>
+                <div><strong style="color:var(--text);">Ce qui fonctionne aujourd'hui</strong><br><span style="font-size:0.8rem; color:var(--muted);">Le pipeline en production</span></div>
+            </div>
+            <div class="summary-card" style="display:flex; align-items:center; gap:16px; padding:18px 24px; background:var(--card); border-radius:14px; border-left:4px solid var(--cb-green); cursor:default; transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseenter="this.style.transform='translateX(6px)';this.style.boxShadow='0 4px 20px rgba(22,163,74,0.15)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+                <span style="font-size:1.4rem; animation: breathe 3.5s ease-in-out infinite 0.3s; display:inline-block;">🏠</span>
+                <div><strong style="color:var(--text);">Décision 1 — Hébergement</strong><br><span style="font-size:0.8rem; color:var(--muted);">GitHub Pages vs Azure Static Web Apps</span></div>
+            </div>
+            <div class="summary-card" style="display:flex; align-items:center; gap:16px; padding:18px 24px; background:var(--card); border-radius:14px; border-left:4px solid var(--accent); cursor:default; transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseenter="this.style.transform='translateX(6px)';this.style.boxShadow='0 4px 20px rgba(59,130,246,0.15)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+                <span style="font-size:1.4rem; animation: breathe 3.5s ease-in-out infinite 0.6s; display:inline-block;">📋</span>
+                <div><strong style="color:var(--text);">Décision 2 — Formulaire</strong><br><span style="font-size:0.8rem; color:var(--muted);">Microsoft Forms ou formulaire intégré ?</span></div>
+            </div>
+            <div class="summary-card" style="display:flex; align-items:center; gap:16px; padding:18px 24px; background:var(--card); border-radius:14px; border-left:4px solid var(--cb-orange); cursor:default; transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseenter="this.style.transform='translateX(6px)';this.style.boxShadow='0 4px 20px rgba(245,158,11,0.15)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+                <span style="font-size:1.4rem; animation: breathe 3.5s ease-in-out infinite 0.9s; display:inline-block;">🔧</span>
+                <div><strong style="color:var(--text);">Maintenance & Sécurité</strong><br><span style="font-size:0.8rem; color:var(--muted);">Impact concret, données, conformité</span></div>
+            </div>
+            <div class="summary-card" style="display:flex; align-items:center; gap:16px; padding:18px 24px; background:var(--card); border-radius:14px; border-left:4px solid var(--cb-green); cursor:default; transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseenter="this.style.transform='translateX(6px)';this.style.boxShadow='0 4px 20px rgba(22,163,74,0.15)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+                <span style="font-size:1.4rem; animation: breathe 3.5s ease-in-out infinite 1.2s; display:inline-block;">📊</span>
+                <div><strong style="color:var(--text);">Gains concrets</strong><br><span style="font-size:0.8rem; color:var(--muted);">Temps, erreurs, statistiques avant/après</span></div>
+            </div>
+            <div class="summary-card" style="display:flex; align-items:center; gap:16px; padding:18px 24px; background:var(--card); border-radius:14px; border-left:4px solid var(--muted); cursor:default; transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseenter="this.style.transform='translateX(6px)';this.style.boxShadow='0 4px 20px rgba(148,163,184,0.1)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+                <span style="font-size:1.4rem; animation: breathe 3.5s ease-in-out infinite 1.5s; display:inline-block;">❓</span>
+                <div><strong style="color:var(--text);">Questions & discussion</strong></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- SLIDE 2 : CE QUI EXISTE DÉJÀ               -->
+<!-- ========================================== -->
+<div class="slide" data-slide="2">
+    <div class="section-number">01</div>
+    <div style="width: 100%; max-width: 1050px;">
+        <h2>Ce qui fonctionne aujourd'hui</h2>
+        <p class="subtitle" style="margin-bottom: 35px;">Le pipeline complet est opérationnel et testé</p>
+
+        <div class="data-flow-container">
+            <div class="data-flow-label">Pipeline d'inscription (en production)</div>
+            <div class="data-flow-row current" style="border-color: var(--accent);">
+                <div class="flow-row">
+                    <div class="flow-box">
+                        <div class="icon">🌐</div>
+                        <div class="label">Site React</div>
+                        <div class="detail">Calendrier interactif</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box" style="background:rgba(245,158,11,0.1); border-radius:14px;">
+                        <div class="icon">📋</div>
+                        <div class="label">Microsoft Forms</div>
+                        <div class="detail">Redirection externe</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box" style="background:rgba(59,130,246,0.1); border-radius:14px;">
+                        <div class="icon">⚡</div>
+                        <div class="label">Power Automate</div>
+                        <div class="detail">4 flux actifs</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box" style="background:rgba(22,163,74,0.1); border-radius:14px;">
+                        <div class="icon">☁️</div>
+                        <div class="label">SharePoint</div>
+                        <div class="detail">Tenant Clair-Bois</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-flow-label" style="margin-top: 24px;">Mise à jour automatique du calendrier</div>
+            <div class="data-flow-row current" style="border-color: #a855f7;">
+                <div class="flow-row">
+                    <div class="flow-box" style="background:rgba(22,163,74,0.1); border-radius:14px;">
+                        <div class="icon">☁️</div>
+                        <div class="label">SharePoint</div>
+                        <div class="detail">Nouvelles données</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box" style="background:rgba(59,130,246,0.1); border-radius:14px;">
+                        <div class="icon">⚡</div>
+                        <div class="label">Power Automate</div>
+                        <div class="detail">Polling 3 min</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">
+                        <div class="icon">📄</div>
+                        <div class="label">planning.json</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">
+                        <div class="icon">🌐</div>
+                        <div class="label">Site mis à jour</div>
+                        <div class="detail">Automatiquement</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 24px; display:flex; gap:16px; flex-wrap:wrap;">
+            <span class="tag tag-green">4 flux Power Automate actifs</span>
+            <span class="tag tag-blue">17 secteurs réels</span>
+            <span class="tag tag-orange">En production</span>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- SLIDE 6 : COMPARAISON HÉBERGEMENT          -->
+<!-- ========================================== -->
+<div class="slide" data-slide="3">
+    <div class="section-number">06</div>
+    <div style="width: 100%; max-width: 1100px;">
+        <div style="text-align:center; margin-bottom: 30px;">
+            <div class="question-banner" style="margin: 0 auto 24px;">
+                <div class="q-number">Décision n°1</div>
+                <div class="q-text">Où héberger le site ?</div>
+            </div>
+            <p class="subtitle">GitHub Pages <span style="color:var(--muted);">vs</span> Azure Static Web Apps (tenant Clair-Bois)</p>
+        </div>
+
+        <div class="hosting-compare">
+            <div class="hosting-box current">
+                <h3 style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+                    <span style="font-size:1.5rem;">🐙</span> GitHub Pages
+                    <span class="tag tag-orange" style="margin-left:auto;">Actuel</span>
+                </h3>
+                <div class="hosting-item"><span class="icon">🌍</span><div>URL : <strong>rochat-dev.github.io/...</strong> <button class="info-btn orange" onclick="openModal('domaine')">i</button></div></div>
+                <div class="hosting-item"><span class="icon">🔓</span><div>HTTPS natif + certificat auto <button class="info-btn" onclick="openModal('certauto')">i</button></div></div>
+                <div class="hosting-item"><span class="icon">💰</span><div>Gratuit</div></div>
+                <div class="hosting-item"><span class="icon">⚠️</span><div>URL <strong>externe</strong> à la fondation</div></div>
+                <div class="hosting-item"><span class="icon">⚠️</span><div>Pas de domaine <strong>clairbois.ch</strong></div></div>
+            </div>
+
+            <div class="hosting-vs">VS</div>
+
+            <div class="hosting-box proposed">
+                <h3 style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+                    <span style="font-size:1.5rem;">☁️</span> Azure Static Web Apps
+                    <span class="tag tag-green" style="margin-left:auto;">Proposé</span>
+                </h3>
+                <div class="hosting-item"><span class="icon">🌍</span><div>URL : <strong>clairbois.ch</strong></div></div>
+                <div class="hosting-item"><span class="icon">🔓</span><div>HTTPS natif + certificat auto <button class="info-btn green" onclick="openModal('certauto')">i</button></div></div>
+                <div class="hosting-item"><span class="icon">💰</span><div>Gratuit (plan Free suffisant)</div></div>
+                <div class="hosting-item"><span class="icon">✅</span><div>Dans le <strong>tenant Microsoft</strong> Clair-Bois <button class="info-btn green" onclick="openModal('tenant')">i</button></div></div>
+                <div class="hosting-item"><span class="icon">✅</span><div>Monitoring &amp; logs dans le <strong>portail Azure</strong> <button class="info-btn green" onclick="openModal('monitoring')">i</button></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 2 : LA QUESTION 1                    -->
+<!-- ========================================== -->
+<div class="slide" data-slide="4">
+    <div class="section-number">02</div>
+    <div style="width: 100%; max-width: 1100px;">
+        <div style="text-align:center; margin-bottom: 30px;">
+            <div class="question-banner">
+                <div class="q-number">Décision n°2</div>
+                <div class="q-text">Garder Microsoft Forms<br>ou passer à un formulaire intégré au site ?</div>
+            </div>
+            <p style="font-size: 0.9rem; color: var(--muted); max-width: 650px; margin: 0 auto; line-height: 1.6;">
+                Voici les deux options possibles.
+            </p>
+        </div>
+
+        <div class="compare-grid">
+            <!-- OPTION A : FORMS -->
+            <div class="compare-col forms">
+                <h3>
+                    <span style="font-size:1.6rem;">📋</span>
+                    <span>Option A — Microsoft Forms</span>
+                </h3>
+                <div class="compare-item"><span class="status">✅</span><div class="text">Solution <strong>connue</strong>, déjà en place</div></div>
+                <div class="compare-item"><span class="status">✅</span><div class="text">Géré directement dans <strong>l'écosystème Microsoft</strong></div></div>
+                <div class="compare-item"><span class="status">⚠️</span><div class="text"><strong>8 formulaires séparés</strong> à maintenir en parallèle</div></div>
+                <div class="compare-item"><span class="status">⚠️</span><div class="text">Nécessite <strong>8 flux Power Automate</strong> distincts</div></div>
+                <div class="compare-item"><span class="status">❌</span><div class="text">Pas de <strong>validation AVS</strong> ni format téléphone suisse</div></div>
+                <div class="compare-item"><span class="status">❌</span><div class="text"><strong>Redirection</strong> vers microsoft.com — perte de contexte</div></div>
+                <div class="compare-item"><span class="status">❌</span><div class="text">Design Microsoft, pas aux <strong>couleurs Clair-Bois</strong></div></div>
+            </div>
+
+            <!-- OPTION B : INTÉGRÉ -->
+            <div class="compare-col integrated">
+                <h3>
+                    <span style="font-size:1.6rem;">🌐</span>
+                    <span>Option B — Formulaire intégré</span>
+                </h3>
+                <div class="compare-item"><span class="status">✅</span><div class="text"><strong>1 seul formulaire intelligent</strong> qui s'adapte au parcours</div></div>
+                <div class="compare-item"><span class="status">✅</span><div class="text"><strong>1 seul flux</strong> Power Automate (HTTP trigger) <button class="info-btn green" onclick="openModal('httptrigger')">i</button></div></div>
+                <div class="compare-item"><span class="status">✅</span><div class="text">Validation <strong>AVS, tél suisse, NPA, email</strong> en temps réel <button class="info-btn green" onclick="openModal('validations')">i</button></div></div>
+                <div class="compare-item"><span class="status">✅</span><div class="text">Navigation <strong>fluide</strong> — reste sur le site Clair-Bois</div></div>
+                <div class="compare-item"><span class="status">✅</span><div class="text"><strong>Identité visuelle</strong> Clair-Bois, mobile-first, accessible</div></div>
+                <div class="compare-item"><span class="status">✅</span><div class="text">Logique conditionnelle : <strong>curatelle, AI, référent</strong></div></div>
+                <div class="compare-item"><span class="status">ℹ️</span><div class="text">Fonctionne sur <strong>les deux hébergements</strong> (GitHub Pages ou Azure)</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- SLIDE 3 : IMPACT MAINTENANCE               -->
+<!-- ========================================== -->
+<div class="slide" data-slide="5">
+    <div class="section-number">03</div>
+    <div style="width: 100%; max-width: 1000px;">
+        <div style="text-align:center; margin-bottom: 35px;">
+            <h2>Impact concret sur la maintenance</h2>
+            <p class="subtitle">Ce qu'il faut créer et maintenir dans chaque option</p>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 80px 1fr; gap: 0; align-items:center; margin-bottom: 30px;">
+            <!-- Left: 8 forms -->
+            <div style="background: var(--card); border-radius: 20px; padding: 28px; text-align:center;">
+                <div style="font-size: 0.8rem; color: var(--muted); margin-bottom: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Option A — Microsoft Forms</div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px;">
+                    <div class="mini-card" style="background:rgba(245,158,11,0.15); border-radius:10px; padding: 12px 6px; font-size:0.7rem; text-align:center;"><span style="animation: breathe 3.5s ease-in-out infinite; display:inline-block;">📋</span><br>Form 1</div>
+                    <div class="mini-card" style="background:rgba(245,158,11,0.15); border-radius:10px; padding: 12px 6px; font-size:0.7rem; text-align:center;"><span style="animation: breathe 3.5s ease-in-out infinite 0.3s; display:inline-block;">📋</span><br>Form 2</div>
+                    <div class="mini-card" style="background:rgba(220,38,38,0.15); border-radius:10px; padding: 12px 6px; font-size:0.7rem; text-align:center; color:#f87171;"><span style="animation: breathe 3.5s ease-in-out infinite 0.6s; display:inline-block;">📋</span><br>Form 3<br><span style="font-size:0.6rem;">IDs diff.</span></div>
+                    <div class="mini-card" style="background:rgba(245,158,11,0.15); border-radius:10px; padding: 12px 6px; font-size:0.7rem; text-align:center;"><span style="animation: breathe 3.5s ease-in-out infinite 0.9s; display:inline-block;">📋</span><br>Form 4</div>
+                    <div class="mini-card" style="background:rgba(245,158,11,0.15); border-radius:10px; padding: 12px 6px; font-size:0.7rem; text-align:center;"><span style="animation: breathe 3.5s ease-in-out infinite 1.2s; display:inline-block;">📋</span><br>Form 5</div>
+                    <div class="mini-card" style="background:rgba(245,158,11,0.15); border-radius:10px; padding: 12px 6px; font-size:0.7rem; text-align:center;"><span style="animation: breathe 3.5s ease-in-out infinite 1.5s; display:inline-block;">📋</span><br>Form 6</div>
+                    <div class="mini-card" style="background:rgba(245,158,11,0.15); border-radius:10px; padding: 12px 6px; font-size:0.7rem; text-align:center;"><span style="animation: breathe 3.5s ease-in-out infinite 1.8s; display:inline-block;">📋</span><br>Form 7</div>
+                    <div class="mini-card" style="background:rgba(148,163,184,0.15); border-radius:10px; padding: 12px 6px; font-size:0.7rem; text-align:center;"><span style="animation: breathe 3.5s ease-in-out infinite 2.1s; display:inline-block;">📋</span><br>Form 8</div>
+                </div>
+                <div style="font-size:0.7rem; color:var(--muted);">+ 8 flux Power Automate associés</div>
+                <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 10px;">
+                    <div class="mini-card" style="background:rgba(59,130,246,0.12); border-radius:8px; padding:6px; font-size:0.6rem;"><span style="animation: breathe 3.5s ease-in-out infinite; display:inline-block;">⚡</span> Flux</div>
+                    <div class="mini-card" style="background:rgba(59,130,246,0.12); border-radius:8px; padding:6px; font-size:0.6rem;"><span style="animation: breathe 3.5s ease-in-out infinite 0.4s; display:inline-block;">⚡</span> Flux</div>
+                    <div class="mini-card" style="background:rgba(59,130,246,0.12); border-radius:8px; padding:6px; font-size:0.6rem;"><span style="animation: breathe 3.5s ease-in-out infinite 0.8s; display:inline-block;">⚡</span> Flux</div>
+                    <div class="mini-card" style="background:rgba(59,130,246,0.12); border-radius:8px; padding:6px; font-size:0.6rem;"><span style="animation: breathe 3.5s ease-in-out infinite 1.2s; display:inline-block;">⚡</span> Flux</div>
+                    <div class="mini-card" style="background:rgba(59,130,246,0.12); border-radius:8px; padding:6px; font-size:0.6rem;"><span style="animation: breathe 3.5s ease-in-out infinite 1.6s; display:inline-block;">⚡</span> Flux</div>
+                    <div class="mini-card" style="background:rgba(59,130,246,0.12); border-radius:8px; padding:6px; font-size:0.6rem;"><span style="animation: breathe 3.5s ease-in-out infinite 2s; display:inline-block;">⚡</span> Flux</div>
+                    <div class="mini-card" style="background:rgba(59,130,246,0.12); border-radius:8px; padding:6px; font-size:0.6rem;"><span style="animation: breathe 3.5s ease-in-out infinite 2.4s; display:inline-block;">⚡</span> Flux</div>
+                    <div class="mini-card" style="background:rgba(59,130,246,0.12); border-radius:8px; padding:6px; font-size:0.6rem;"><span style="animation: breathe 3.5s ease-in-out infinite 2.8s; display:inline-block;">⚡</span> Flux</div>
+                </div>
+                <div style="margin-top:16px; font-size: 1.5rem; font-weight: 800; color: #f87171;">16 éléments</div>
+                <div style="font-size:0.78rem; color:var(--muted); margin-top:4px;">Modifier 1 champ = le faire <strong style="color:#f87171;">8 fois</strong></div>
+            </div>
+
+            <div style="text-align:center; font-weight:800; font-size:1.2rem; color:var(--muted);">VS</div>
+
+            <!-- Right: 1 form -->
+            <div style="background: var(--card); border-radius: 20px; padding: 28px; text-align:center; border: 2px solid rgba(22,163,74,0.3);">
+                <div style="font-size: 0.8rem; color: var(--muted); margin-bottom: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Option B — Formulaire intégré</div>
+                <div style="display:flex; justify-content:center; gap: 20px; margin-bottom: 16px;">
+                    <div style="background:rgba(22,163,74,0.15); border-radius:16px; padding: 24px 32px; text-align:center; transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseenter="this.style.transform='translateY(-5px) scale(1.04)';this.style.boxShadow='0 8px 25px rgba(22,163,74,0.2)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+                        <div style="font-size: 2.5rem; animation: breathe 3.5s ease-in-out infinite;">🌐</div>
+                        <div style="font-size:0.85rem; font-weight:600; margin-top:8px;">1 formulaire<br>intelligent</div>
+                    </div>
+                    <div style="background:rgba(59,130,246,0.12); border-radius:16px; padding: 24px 32px; text-align:center; transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseenter="this.style.transform='translateY(-5px) scale(1.04)';this.style.boxShadow='0 8px 25px rgba(59,130,246,0.2)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+                        <div style="font-size: 2.5rem; animation: breathe 3.5s ease-in-out infinite;">⚡</div>
+                        <div style="font-size:0.85rem; font-weight:600; margin-top:8px;">1 flux<br>HTTP</div>
+                    </div>
+                </div>
+                <div style="font-size:0.75rem; color:var(--muted); margin-bottom:8px;">S'adapte automatiquement selon le parcours</div>
+                <div style="margin-top:16px; font-size: 1.5rem; font-weight: 800; color: #4ade80;">2 éléments</div>
+                <div style="font-size:0.78rem; color:var(--muted); margin-top:4px;">Modifier 1 champ = le faire <strong style="color:#4ade80;">1 seule fois</strong></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- SLIDE 4 : SÉCURITÉ — IDENTIQUE             -->
+<!-- ========================================== -->
+<div class="slide" data-slide="6">
+    <div class="section-number">04</div>
+    <div style="width: 100%; max-width: 1050px;">
+        <div style="text-align:center; margin-bottom: 35px;">
+            <h2>Sécurité des données</h2>
+            <p class="subtitle">Dans les deux options, le chemin des données est le même</p>
+        </div>
+
+        <div class="data-flow-container">
+            <div class="data-flow-label">Option A — Microsoft Forms</div>
+            <div class="data-flow-row current">
+                <div class="flow-row">
+                    <div class="flow-box"><div class="icon">🖥️</div><div class="label">Navigateur</div></div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box" style="background:rgba(245,158,11,0.1); border-radius:12px;">
+                        <div class="icon">📋</div><div class="label">Microsoft Forms</div><div class="detail">HTTPS</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box" style="background:rgba(59,130,246,0.1); border-radius:12px;">
+                        <div class="icon">⚡</div><div class="label">Power Automate</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box" style="background:rgba(22,163,74,0.1); border-radius:12px;">
+                        <div class="icon">☁️</div><div class="label">SharePoint CB</div><div class="detail">Tenant Clair-Bois</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-flow-label" style="margin-top: 20px;">Option B — Formulaire intégré</div>
+            <div class="data-flow-row proposed">
+                <div class="flow-row">
+                    <div class="flow-box"><div class="icon">🖥️</div><div class="label">Navigateur</div></div>
+                    <div class="flow-arrow green">→</div>
+                    <div class="flow-box" style="background:rgba(22,163,74,0.1); border-radius:12px;">
+                        <div class="icon">🌐</div><div class="label">Site Clair-Bois</div><div class="detail">HTTPS</div>
+                    </div>
+                    <div class="flow-arrow green">→</div>
+                    <div class="flow-box" style="background:rgba(59,130,246,0.1); border-radius:12px;">
+                        <div class="icon">⚡</div><div class="label">Power Automate</div>
+                    </div>
+                    <div class="flow-arrow green">→</div>
+                    <div class="flow-box" style="background:rgba(22,163,74,0.1); border-radius:12px;">
+                        <div class="icon">☁️</div><div class="label">SharePoint CB</div><div class="detail">Tenant Clair-Bois</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="key-points" style="margin-top: 30px;">
+            <div class="key-point">
+                <div class="kp-icon">🔐</div>
+                <div><div class="kp-title">Même destination</div><div class="kp-desc">Les données arrivent dans le <strong>même SharePoint</strong> du tenant Clair-Bois. Rien ne change côté stockage.</div></div>
+            </div>
+            <div class="key-point">
+                <div class="kp-icon">🛡️</div>
+                <div><div class="kp-title">HTTPS identique <button class="info-btn" onclick="openModal('tls')" style="vertical-align:middle;">i</button></div><div class="kp-desc">Même chiffrement TLS. Le site utilise le <strong>même protocole sécurisé</strong> que Forms.</div></div>
+            </div>
+            <div class="key-point">
+                <div class="kp-icon">🚫</div>
+                <div><div class="kp-title">Zéro stockage local</div><div class="kp-desc">Le site ne garde <strong>aucune donnée</strong>. C'est une interface de saisie pure, pas une base de données.</div></div>
+            </div>
+            <div class="key-point">
+                <div class="kp-icon">🏢</div>
+                <div><div class="kp-title">Conformité LPD / RGPD <button class="info-btn purple" onclick="openModal('lpd')" style="vertical-align:middle;">i</button></div><div class="kp-desc">Identique dans les deux cas. Données dans le <strong>tenant M365 suisse</strong> de Clair-Bois.</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- SLIDE 8 : RÉSUMÉ                           -->
+<!-- ========================================== -->
+<div class="slide" data-slide="7">
+    <div class="section-number">08</div>
+    <div style="width: 100%; max-width: 1000px;">
+        <div style="text-align:center; margin-bottom: 35px;">
+            <h2>En résumé</h2>
+        </div>
+
+        <div class="summary-grid">
+            <div class="summary-card maintenance">
+                <h3 style="display:flex; align-items:center; gap:8px;">
+                    <span>🏠</span> Décision n°1 — Hébergement
+                </h3>
+                <p><strong>Azure SWA</strong> dans le tenant : URL clairbois.ch, CHF 0/mois.<br>Sinon GitHub Pages reste fonctionnel.</p>
+            </div>
+            <div class="summary-card ux">
+                <h3 style="display:flex; align-items:center; gap:8px;">
+                    <span>📋</span> Décision n°2 — Formulaires
+                </h3>
+                <p><strong>Forms</strong> : 16 éléments, pas de validation métier.<br><strong>Intégré</strong> : 2 éléments, validation AVS, design Clair-Bois.</p>
+            </div>
+            <div class="summary-card security">
+                <h3 style="display:flex; align-items:center; gap:8px;">
+                    <span>🔒</span> Sécurité
+                </h3>
+                <p><strong>Identique dans les deux cas.</strong> Même HTTPS, même SharePoint, même conformité LPD/RGPD.</p>
+            </div>
+            <div class="summary-card cost">
+                <h3 style="display:flex; align-items:center; gap:8px;">
+                    <span>💰</span> Coût
+                </h3>
+                <p><strong>CHF 0 / mois</strong> dans les deux cas. Azure SWA + Functions = gratuit pour notre volume.</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <p style="text-align:center; font-size:0.95rem; font-weight:600; margin-bottom:16px;">Les combinaisons possibles :</p>
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px;">
+                <div class="summary-card" style="background:var(--card); border-radius:14px; padding:20px; text-align:center; border-top:3px solid var(--muted); transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseenter="this.style.transform='translateY(-4px)';this.style.boxShadow='0 6px 20px rgba(148,163,184,0.1)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+                    <div style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted); margin-bottom:10px;">Option A</div>
+                    <div style="font-size:1.5rem; margin-bottom:8px;"><span style="animation: breathe 3.5s ease-in-out infinite; display:inline-block;">🐙</span> + <span style="animation: breathe 3.5s ease-in-out infinite 0.5s; display:inline-block;">📋</span></div>
+                    <div style="font-weight:700; font-size:0.85rem;">GitHub Pages<br>+ Microsoft Forms</div>
+                    <div style="font-size:0.75rem; color:var(--muted); margin-top:8px; line-height:1.5;">Statu quo<br>8 forms + 8 flux<br>URL externe</div>
+                </div>
+                <div class="summary-card" style="background:var(--card); border-radius:14px; padding:20px; text-align:center; border-top:3px solid var(--accent); transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseenter="this.style.transform='translateY(-4px)';this.style.boxShadow='0 6px 20px rgba(59,130,246,0.15)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+                    <div style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--accent); margin-bottom:10px;">Option B</div>
+                    <div style="font-size:1.5rem; margin-bottom:8px;"><span style="animation: breathe 3.5s ease-in-out infinite; display:inline-block;">🐙</span> + <span style="animation: breathe 3.5s ease-in-out infinite 0.5s; display:inline-block;">🌐</span></div>
+                    <div style="font-weight:700; font-size:0.85rem;">GitHub Pages<br>+ Formulaire intégré</div>
+                    <div style="font-size:0.75rem; color:var(--muted); margin-top:8px; line-height:1.5;">1 form + 1 flux<br>Validations AVS, tél<br>URL externe</div>
+                </div>
+                <div class="summary-card" style="background:var(--card); border-radius:14px; padding:20px; text-align:center; border-top:3px solid var(--cb-green); transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseenter="this.style.transform='translateY(-4px)';this.style.boxShadow='0 6px 20px rgba(22,163,74,0.15)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+                    <div style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--cb-green); margin-bottom:10px;">Option C</div>
+                    <div style="font-size:1.5rem; margin-bottom:8px;"><span style="animation: breathe 3.5s ease-in-out infinite; display:inline-block;">☁️</span> + <span style="animation: breathe 3.5s ease-in-out infinite 0.5s; display:inline-block;">🌐</span></div>
+                    <div style="font-weight:700; font-size:0.85rem;">Azure SWA (tenant)<br>+ Formulaire intégré</div>
+                    <div style="font-size:0.75rem; color:var(--muted); margin-top:8px; line-height:1.5;">1 form + 1 flux<br>URL clairbois.ch<br>Trigger caché</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- SLIDE 7 : GAIN DE TEMPS & ERREURS          -->
+<!-- ========================================== -->
+<div class="slide" data-slide="8">
+    <div style="width: 100%; max-width: 1100px;">
+        <div style="text-align:center; margin-bottom: 28px;">
+            <h2>Ce que ça change concrètement</h2>
+            <p class="subtitle">Comparaison du processus d'inscription — avant et après</p>
+        </div>
+
+        <!-- Barres + stats -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-bottom: 28px;">
+            <!-- Barre de temps -->
+            <div style="background: var(--card); border-radius: 16px; padding: 24px;">
+                <h3 style="font-size: 0.85rem; margin-bottom: 16px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em;">Temps par inscription</h3>
+                <div class="bar-compare">
+                    <div class="bar-label" style="color:#f87171;">Avant</div>
+                    <div class="bar-track">
+                        <div class="bar-fill before">~55 min</div>
+                    </div>
+                </div>
+                <div class="bar-compare">
+                    <div class="bar-label" style="color:#4ade80;">Après</div>
+                    <div class="bar-track">
+                        <div class="bar-fill after">5 min</div>
+                    </div>
+                </div>
+                <div style="text-align:center; margin-top: 16px;">
+                    <span style="font-size: 1.6rem; font-weight: 700; color: var(--cb-green);">~90%</span>
+                    <span style="font-size: 0.85rem; color: var(--muted); margin-left: 8px;">de temps gagné</span>
+                </div>
+                <div style="text-align:center; margin-top: 6px; font-size: 0.78rem; color: var(--muted);">
+                    Sur ~100-150 inscriptions/an : <strong style="color:var(--text);">~80-140 heures économisées</strong>
+                </div>
+            </div>
+
+            <!-- Erreurs éliminées -->
+            <div style="background: var(--card); border-radius: 16px; padding: 24px;">
+                <h3 style="font-size: 0.85rem; margin-bottom: 16px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em;">Problèmes éliminés</h3>
+                <div class="error-item">
+                    <span class="err-icon">✅</span>
+                    <span><strong style="color:var(--text);">Fin de la saisie manuelle dans Excel</strong> — les données arrivent directement</span>
+                </div>
+                <div class="error-item">
+                    <span class="err-icon">✅</span>
+                    <span><strong style="color:var(--text);">Fin des rappels téléphoniques</strong> — formulaire complet dès le départ</span>
+                </div>
+                <div class="error-item">
+                    <span class="err-icon">✅</span>
+                    <span><strong style="color:var(--text);">Fin des erreurs de saisie AVS</strong> — validation automatique</span>
+                </div>
+                <div class="error-item">
+                    <span class="err-icon">✅</span>
+                    <span><strong style="color:var(--text);">Fin des doublons</strong> — clé AVS unique, vérifiée</span>
+                </div>
+                <div class="error-item">
+                    <span class="err-icon">✅</span>
+                    <span><strong style="color:var(--text);">Fin des emails oubliés</strong> — envoi automatique</span>
+                </div>
+                <div class="error-item">
+                    <span class="err-icon">✅</span>
+                    <span><strong style="color:var(--text);">Fin du planning décalé</strong> — mise à jour toutes les 3 min</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px;">
+            <!-- AVANT -->
+            <div style="background: var(--card); border-radius: 16px; padding: 24px; border-top: 3px solid #f87171;">
+                <h3 style="font-size: 0.95rem; margin-bottom: 16px; display:flex; align-items:center; gap: 8px;">
+                    <span style="font-size:1.2rem;">🕐</span> Avant — Tout manuel
+                </h3>
+                <div class="process-step manual">
+                    <span class="step-icon">📧</span>
+                    <span>Recevoir la demande (email, téléphone, réunion)</span>
+                    <span class="step-time">~5-15 min</span>
+                </div>
+                <div class="process-step manual" style="margin-top:6px;">
+                    <span class="step-icon">📞</span>
+                    <span>Rappeler pour les infos manquantes</span>
+                    <span class="step-time">~10 min</span>
+                </div>
+                <div class="process-step manual" style="margin-top:6px;">
+                    <span class="step-icon">📗</span>
+                    <span>Saisir les données dans un fichier Excel</span>
+                    <span class="step-time">~15 min</span>
+                </div>
+                <div class="process-step manual" style="margin-top:6px;">
+                    <span class="step-icon">🔍</span>
+                    <span>Chercher manuellement si le stagiaire existe déjà</span>
+                    <span class="step-time">~5 min</span>
+                </div>
+                <div class="process-step manual" style="margin-top:6px;">
+                    <span class="step-icon">📁</span>
+                    <span>Créer le dossier manuellement, copier, renommer</span>
+                    <span class="step-time">~10 min</span>
+                </div>
+                <div class="process-step manual" style="margin-top:6px;">
+                    <span class="step-icon">✉️</span>
+                    <span>Rédiger et envoyer l'email de confirmation</span>
+                    <span class="step-time">~5 min</span>
+                </div>
+                <div class="process-step manual" style="margin-top:6px;">
+                    <span class="step-icon">📊</span>
+                    <span>Mettre à jour le planning (Excel / à la main)</span>
+                    <span class="step-time">~5 min</span>
+                </div>
+                <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); text-align:center;">
+                    <div style="font-size: 1.8rem; font-weight: 700; color: #f87171;">~55 min</div>
+                    <div style="font-size: 0.78rem; color: var(--muted);">par inscription (si tout va bien)</div>
+                </div>
+            </div>
+
+            <!-- APRÈS -->
+            <div style="background: var(--card); border-radius: 16px; padding: 24px; border-top: 3px solid #4ade80;">
+                <h3 style="font-size: 0.95rem; margin-bottom: 16px; display:flex; align-items:center; gap: 8px;">
+                    <span style="font-size:1.2rem;">⚡</span> Après — Automatisé
+                </h3>
+                <div class="process-step auto">
+                    <span class="step-icon">🌐</span>
+                    <span>Le stagiaire remplit le formulaire</span>
+                    <span class="step-time">automatique</span>
+                </div>
+                <div class="process-step auto" style="margin-top:6px;">
+                    <span class="step-icon">☁️</span>
+                    <span>Création dans SharePoint</span>
+                    <span class="step-time">automatique</span>
+                </div>
+                <div class="process-step auto" style="margin-top:6px;">
+                    <span class="step-icon">🔐</span>
+                    <span>Vérification doublon (clé AVS)</span>
+                    <span class="step-time">automatique</span>
+                </div>
+                <div class="process-step auto" style="margin-top:6px;">
+                    <span class="step-icon">📁</span>
+                    <span>Dossier créé au retour des pièces jointes</span>
+                    <span class="step-time">automatique</span>
+                </div>
+                <div class="process-step auto" style="margin-top:6px;">
+                    <span class="step-icon">✉️</span>
+                    <span>Email de confirmation envoyé</span>
+                    <span class="step-time">automatique</span>
+                </div>
+                <div class="process-step auto" style="margin-top:6px;">
+                    <span class="step-icon">📊</span>
+                    <span>Calendrier mis à jour (polling 3 min)</span>
+                    <span class="step-time">automatique</span>
+                </div>
+                <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); text-align:center;">
+                    <div style="font-size: 1.8rem; font-weight: 700; color: #4ade80;">~5 min</div>
+                    <div style="font-size: 0.78rem; color: var(--muted);">relecture et validation uniquement</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- SLIDE 9 : STACK — FRONTEND                 -->
+<!-- ========================================== -->
+<div class="slide" data-slide="9">
+    <div class="section-number" style="color: rgba(168,85,247,0.15);">annexe</div>
+    <div style="width: 100%; max-width: 1100px;">
+        <div style="text-align:center; margin-bottom: 30px;">
+            <span class="tag tag-blue" style="margin-bottom: 10px;">Annexe technique</span>
+            <h2>Stack technologique — Vue d'ensemble</h2>
+            <p class="subtitle">Cliquez sur les bulles <button class="info-btn" style="cursor:default; transform:none;">i</button> pour voir les détails techniques</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px;">
+
+            <!-- FRONTEND -->
+            <div style="background: var(--card); border-radius: 20px; padding: 28px; border-top: 3px solid #60a5fa;">
+                <h3 style="display:flex; align-items:center; gap:10px; margin-bottom: 20px; font-size: 1.1rem;">
+                    <span style="background:rgba(59,130,246,0.15); width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center;">🌐</span>
+                    Frontend (site web)
+                </h3>
+
+                <div style="display:flex; align-items:center; gap:12px; padding: 10px 14px; background:rgba(97,218,251,0.08); border-radius:12px; margin-bottom:10px;">
+                    <div style="font-size:1.5rem;">⚛️</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:700; font-size:0.9rem;">React 19</div>
+                        <div style="font-size:0.75rem; color:var(--muted);">Bibliothèque UI (Meta) &mdash; composants réutilisables</div>
+                    </div>
+                    <button class="info-btn" onclick="openModal('react')">i</button>
+                </div>
+
+                <div style="display:flex; align-items:center; gap:12px; padding: 10px 14px; background:rgba(168,85,247,0.08); border-radius:12px; margin-bottom:10px;">
+                    <div style="font-size:1.5rem;">⚡</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:700; font-size:0.9rem;">Vite</div>
+                        <div style="font-size:0.75rem; color:var(--muted);">Build tool ultra-rapide &mdash; compile le site en fichiers statiques</div>
+                    </div>
+                    <button class="info-btn purple" onclick="openModal('vite')">i</button>
+                </div>
+
+                <div style="display:flex; align-items:center; gap:12px; padding: 10px 14px; background:rgba(56,189,248,0.08); border-radius:12px; margin-bottom:10px;">
+                    <div style="font-size:1.5rem;">🎨</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:700; font-size:0.9rem;">Tailwind CSS v4</div>
+                        <div style="font-size:0.75rem; color:var(--muted);">Framework CSS utilitaire &mdash; design responsive et cohérent</div>
+                    </div>
+                    <button class="info-btn" onclick="openModal('tailwind')">i</button>
+                </div>
+
+                <div style="display:flex; align-items:center; gap:12px; padding: 10px 14px; background:rgba(22,163,74,0.08); border-radius:12px;">
+                    <div style="font-size:1.5rem;">☁️</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:700; font-size:0.9rem;">GitHub Pages / Azure SWA</div>
+                        <div style="font-size:0.75rem; color:var(--muted);">Hébergement statique &mdash; déploiement automatique</div>
+                    </div>
+                    <button class="info-btn green" onclick="openModal('hosting')">i</button>
+                </div>
+
+                <div style="margin-top: 16px; padding: 12px 14px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
+                    <div style="font-size: 0.72rem; color: var(--muted); line-height: 1.6;">
+                        <strong style="color:var(--text);">Résultat final :</strong> des fichiers HTML/CSS/JS statiques. Aucune dépendance serveur, aucune base de données.
+                    </div>
+                </div>
+            </div>
+
+            <!-- BACKEND -->
+            <div style="background: var(--card); border-radius: 20px; padding: 28px; border-top: 3px solid #4ade80;">
+                <h3 style="display:flex; align-items:center; gap:10px; margin-bottom: 20px; font-size: 1.1rem;">
+                    <span style="background:rgba(22,163,74,0.15); width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center;">⚙️</span>
+                    Backend (automatisation)
+                </h3>
+
+                <div style="display:flex; align-items:center; gap:12px; padding: 10px 14px; background:rgba(59,130,246,0.08); border-radius:12px; margin-bottom:10px;">
+                    <div style="font-size:1.5rem;">⚡</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:700; font-size:0.9rem;">Power Automate</div>
+                        <div style="font-size:0.75rem; color:var(--muted);">Microsoft 365 &mdash; orchestration des flux</div>
+                    </div>
+                    <button class="info-btn" onclick="openModal('pa')">i</button>
+                </div>
+
+                <div style="display:flex; align-items:center; gap:12px; padding: 10px 14px; background:rgba(22,163,74,0.08); border-radius:12px; margin-bottom:10px;">
+                    <div style="font-size:1.5rem;">☁️</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:700; font-size:0.9rem;">SharePoint Online</div>
+                        <div style="font-size:0.75rem; color:var(--muted);">Stockage des données (listes) &mdash; tenant Clair-Bois</div>
+                    </div>
+                    <button class="info-btn green" onclick="openModal('sharepoint')">i</button>
+                </div>
+
+                <div style="display:flex; align-items:center; gap:12px; padding: 10px 14px; background:rgba(168,85,247,0.08); border-radius:12px; margin-bottom:10px;">
+                    <div style="font-size:1.5rem;">🔒</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:700; font-size:0.9rem;">Azure Function <span class="tag tag-orange" style="font-size:0.6rem; padding:2px 8px; vertical-align:middle;">si Option C</span></div>
+                        <div style="font-size:0.75rem; color:var(--muted);">Proxy sécurisé &mdash; cache l'URL Power Automate</div>
+                    </div>
+                    <button class="info-btn purple" onclick="openModal('azfunc')">i</button>
+                </div>
+
+                <div style="display:flex; align-items:center; gap:12px; padding: 10px 14px; background:rgba(255,255,255,0.04); border-radius:12px;">
+                    <div style="font-size:1.5rem;">🐙</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:700; font-size:0.9rem;">GitHub API</div>
+                        <div style="font-size:0.75rem; color:var(--muted);">Push planning.json &mdash; mise à jour auto du site</div>
+                    </div>
+                    <button class="info-btn" onclick="openModal('github')">i</button>
+                </div>
+
+                <div style="margin-top: 16px; padding: 12px 14px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
+                    <div style="font-size: 0.72rem; color: var(--muted); line-height: 1.6;">
+                        <strong style="color:var(--text);">100% Microsoft :</strong> Power Automate, SharePoint, Azure &mdash; licences M365 existantes.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- SLIDE 10 : STACK — FLUX DE DONNÉES         -->
+<!-- ========================================== -->
+<div class="slide" data-slide="10">
+    <div class="section-number" style="color: rgba(168,85,247,0.15);">annexe</div>
+    <div style="width: 100%; max-width: 1050px;">
+        <div style="text-align:center; margin-bottom: 30px;">
+            <span class="tag tag-blue" style="margin-bottom: 10px;">Annexe technique</span>
+            <h2>Flux de données détaillé</h2>
+            <p class="subtitle">Cliquez sur les bulles pour voir la logique interne de chaque flux</p>
+        </div>
+
+        <!-- Flux inscription -->
+        <div style="background: var(--card); border-radius: 18px; padding: 24px 28px; margin-bottom: 18px; border-left: 4px solid #60a5fa;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 14px;">
+                <div style="font-size: 0.75rem; font-weight:700; color: #60a5fa; text-transform:uppercase; letter-spacing:0.08em;">
+                    Flux &mdash; Inscription d'un stagiaire
+                </div>
+                <button class="info-btn" onclick="openModal('flux5')">i</button>
+            </div>
+            <div class="flow-row" style="flex-wrap: wrap; gap: 6px;">
+                <div class="flow-box" style="background:rgba(97,218,251,0.08); border-radius:12px; padding:12px 16px; min-width:auto;">
+                    <div style="font-size:0.7rem; font-weight:700;">React</div>
+                    <div style="font-size:0.6rem; color:var(--muted);">Formulaire</div>
+                </div>
+                <div class="flow-arrow" style="font-size:1.2rem;">→</div>
+                <div class="flow-box" style="background:rgba(97,218,251,0.08); border-radius:12px; padding:12px 16px; min-width:auto;">
+                    <div style="font-size:0.7rem; font-weight:700;">Validation JS</div>
+                    <div style="font-size:0.6rem; color:var(--muted);">AVS, tél, NPA</div>
+                </div>
+                <div class="flow-arrow" style="font-size:1.2rem;">→</div>
+                <div class="flow-box" style="background:rgba(59,130,246,0.1); border-radius:12px; padding:12px 16px; min-width:auto;">
+                    <div style="font-size:0.7rem; font-weight:700;">HTTP POST</div>
+                    <div style="font-size:0.6rem; color:var(--muted);">JSON / HTTPS</div>
+                </div>
+                <div class="flow-arrow" style="font-size:1.2rem;">→</div>
+                <div class="flow-box" style="background:rgba(168,85,247,0.1); border-radius:12px; padding:12px 16px; min-width:auto;">
+                    <div style="font-size:0.7rem; font-weight:700;">Azure Function</div>
+                    <div style="font-size:0.6rem; color:var(--muted);">Proxy</div>
+                </div>
+                <div class="flow-arrow" style="font-size:1.2rem;">→</div>
+                <div class="flow-box" style="background:rgba(59,130,246,0.1); border-radius:12px; padding:12px 16px; min-width:auto;">
+                    <div style="font-size:0.7rem; font-weight:700;">Power Automate</div>
+                    <div style="font-size:0.6rem; color:var(--muted);">HTTP trigger</div>
+                </div>
+                <div class="flow-arrow" style="font-size:1.2rem;">→</div>
+                <div class="flow-box" style="background:rgba(22,163,74,0.1); border-radius:12px; padding:12px 16px; min-width:auto; cursor:pointer;" onclick="openModal('sharepoint')">
+                    <div style="font-size:0.7rem; font-weight:700;">SharePoint</div>
+                    <div style="font-size:0.6rem; color:var(--muted);">3 listes</div>
+                </div>
+                <div class="flow-arrow" style="font-size:1.2rem;">→</div>
+                <div class="flow-box" style="background:rgba(245,158,11,0.1); border-radius:12px; padding:12px 16px; min-width:auto;">
+                    <div style="font-size:0.7rem; font-weight:700;">Email auto</div>
+                    <div style="font-size:0.6rem; color:var(--muted);">Outlook</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flux calendrier -->
+        <div style="background: var(--card); border-radius: 18px; padding: 24px 28px; margin-bottom: 18px; border-left: 4px solid #a855f7;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 14px;">
+                <div style="font-size: 0.75rem; font-weight:700; color: #a855f7; text-transform:uppercase; letter-spacing:0.08em;">
+                    Flux &mdash; Mise à jour du calendrier (automatique)
+                </div>
+                <button class="info-btn purple" onclick="openModal('flux3')">i</button>
+            </div>
+            <div class="flow-row" style="flex-wrap: wrap; gap: 6px;">
+                <div class="flow-box" style="background:rgba(22,163,74,0.1); border-radius:12px; padding:12px 16px; min-width:auto;">
+                    <div style="font-size:0.7rem; font-weight:700;">SharePoint</div>
+                    <div style="font-size:0.6rem; color:var(--muted);">Données modifiées</div>
+                </div>
+                <div class="flow-arrow" style="font-size:1.2rem;">→</div>
+                <div class="flow-box" style="background:rgba(59,130,246,0.1); border-radius:12px; padding:12px 16px; min-width:auto;">
+                    <div style="font-size:0.7rem; font-weight:700;">Power Automate</div>
+                    <div style="font-size:0.6rem; color:var(--muted);">Polling 3min</div>
+                </div>
+                <div class="flow-arrow" style="font-size:1.2rem;">→</div>
+                <div class="flow-box" style="background:rgba(255,255,255,0.05); border-radius:12px; padding:12px 16px; min-width:auto;">
+                    <div style="font-size:0.7rem; font-weight:700;">planning.json</div>
+                    <div style="font-size:0.6rem; color:var(--muted);">Agrégation</div>
+                </div>
+                <div class="flow-arrow" style="font-size:1.2rem;">→</div>
+                <div class="flow-box" style="background:rgba(255,255,255,0.05); border-radius:12px; padding:12px 16px; min-width:auto;">
+                    <div style="font-size:0.7rem; font-weight:700;">GitHub API</div>
+                    <div style="font-size:0.6rem; color:var(--muted);">Push fichier</div>
+                </div>
+                <div class="flow-arrow" style="font-size:1.2rem;">→</div>
+                <div class="flow-box" style="background:rgba(22,163,74,0.1); border-radius:12px; padding:12px 16px; min-width:auto;">
+                    <div style="font-size:0.7rem; font-weight:700;">Build auto</div>
+                    <div style="font-size:0.6rem; color:var(--muted);">GitHub Actions</div>
+                </div>
+                <div class="flow-arrow" style="font-size:1.2rem;">→</div>
+                <div class="flow-box" style="background:rgba(97,218,251,0.08); border-radius:12px; padding:12px 16px; min-width:auto;">
+                    <div style="font-size:0.7rem; font-weight:700;">Site à jour</div>
+                    <div style="font-size:0.6rem; color:var(--muted);">Automatique</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flux documents -->
+        <div style="background: var(--card); border-radius: 18px; padding: 24px 28px; border-left: 4px solid #fbbf24;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 14px;">
+                <div style="font-size: 0.75rem; font-weight:700; color: #fbbf24; text-transform:uppercase; letter-spacing:0.08em;">
+                    Flux &mdash; Réception des pièces jointes
+                </div>
+                <button class="info-btn orange" onclick="openModal('flux2')">i</button>
+            </div>
+            <div class="flow-row" style="flex-wrap: wrap; gap: 6px;">
+                <div class="flow-box" style="background:rgba(245,158,11,0.08); border-radius:12px; padding:12px 16px; min-width:auto;">
+                    <div style="font-size:0.7rem; font-weight:700;">Email entrant</div>
+                    <div style="font-size:0.6rem; color:var(--muted);">stagiaire.dfip@</div>
+                </div>
+                <div class="flow-arrow" style="font-size:1.2rem;">→</div>
+                <div class="flow-box" style="background:rgba(59,130,246,0.1); border-radius:12px; padding:12px 16px; min-width:auto;">
+                    <div style="font-size:0.7rem; font-weight:700;">Power Automate</div>
+                    <div style="font-size:0.6rem; color:var(--muted);">Email trigger</div>
+                </div>
+                <div class="flow-arrow" style="font-size:1.2rem;">→</div>
+                <div class="flow-box" style="background:rgba(22,163,74,0.1); border-radius:12px; padding:12px 16px; min-width:auto; cursor:pointer;" onclick="openModal('dossier')">
+                    <div style="font-size:0.7rem; font-weight:700;">SharePoint</div>
+                    <div style="font-size:0.6rem; color:var(--muted);">Dossier stagiaire</div>
+                </div>
+                <div class="flow-arrow" style="font-size:1.2rem;">→</div>
+                <div class="flow-box" style="background:rgba(22,163,74,0.1); border-radius:12px; padding:12px 16px; min-width:auto;">
+                    <div style="font-size:0.7rem; font-weight:700;">MAJ statut</div>
+                    <div style="font-size:0.6rem; color:var(--muted);">"Documents reçus"</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center; margin-top: 22px;">
+            <p style="font-size: 0.82rem; color: var(--muted); line-height: 1.6;">
+                Tous les flux sont <strong style="color:var(--text);">automatiques</strong> et ne nécessitent <strong style="color:var(--text);">aucune intervention manuelle</strong> une fois configurés.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- SLIDE 11 : CONTINUITÉ                      -->
+<!-- ========================================== -->
+<div class="slide" data-slide="11">
+    <div style="width: 100%; max-width: 1050px;">
+        <div style="text-align:center; margin-bottom: 30px;">
+            <h2>Continuité & maintenance</h2>
+            <p class="subtitle">Le système est en production — mon stage se termine fin mars</p>
+        </div>
+
+        <div class="cont-grid">
+            <!-- Ce qui tourne tout seul -->
+            <div class="cont-card" style="border-top: 3px solid #4ade80;">
+                <h3><span style="color:#4ade80;">✅</span> Ce qui tourne tout seul</h3>
+                <div class="cont-item">
+                    <span class="ci-icon">⚡</span>
+                    <span>Les 4 flux Power Automate tournent <strong style="color:var(--text);">24/7</strong> sans intervention</span>
+                </div>
+                <div class="cont-item">
+                    <span class="ci-icon">📊</span>
+                    <span>Le calendrier se met à jour <strong style="color:var(--text);">automatiquement</strong> toutes les 3 minutes</span>
+                </div>
+                <div class="cont-item">
+                    <span class="ci-icon">📁</span>
+                    <span>Les dossiers stagiaires se créent <strong style="color:var(--text);">automatiquement</strong> à la réception des PJ</span>
+                </div>
+                <div class="cont-item">
+                    <span class="ci-icon">✉️</span>
+                    <span>Les emails de confirmation partent <strong style="color:var(--text);">sans action manuelle</strong></span>
+                </div>
+                <div class="cont-item">
+                    <span class="ci-icon">🌐</span>
+                    <span>Le site est <strong style="color:var(--text);">statique</strong> — pas de serveur à surveiller</span>
+                </div>
+            </div>
+
+            <!-- Ce qui nécessite un suivi -->
+            <div class="cont-card" style="border-top: 3px solid #f59e0b;">
+                <h3><span style="color:#fbbf24;">🔧</span> Ce qui nécessite un suivi</h3>
+                <div class="cont-item">
+                    <span class="ci-icon">📋</span>
+                    <span>Ajout ou modification de <strong style="color:var(--text);">champs dans les formulaires</strong> si les besoins évoluent</span>
+                </div>
+                <div class="cont-item">
+                    <span class="ci-icon">⚡</span>
+                    <span>Ajustement des <strong style="color:var(--text);">flux Power Automate</strong> si la logique métier change</span>
+                </div>
+                <div class="cont-item">
+                    <span class="ci-icon">🔒</span>
+                    <span>Mises à jour de <strong style="color:var(--text);">sécurité</strong> des dépendances (React, etc.)</span>
+                </div>
+                <div class="cont-item">
+                    <span class="ci-icon">🗺️</span>
+                    <span>Nouvelles fonctionnalités demandées (<strong style="color:var(--text);">cartographie</strong>, modules, etc.)</span>
+                </div>
+                <div class="cont-item">
+                    <span class="ci-icon">🆘</span>
+                    <span><strong style="color:var(--text);">Support</strong> en cas de blocage ou de question technique</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center; margin-top: 30px;">
+            <div style="background: var(--card); border-radius: 16px; padding: 24px 36px; display: inline-block; border: 1px solid rgba(255,255,255,0.08);">
+                <p style="font-size: 0.95rem; line-height: 1.7; color: var(--muted);">
+                    Quel que soit le chemin choisi, le système a besoin d'un <strong style="color:var(--text);">suivi régulier</strong>.<br>
+                    Je suis disponible pour <strong style="color:var(--text);">assurer cette continuité</strong> après mon stage.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- SLIDE 12 : Questions                       -->
+<!-- ========================================== -->
+<div class="slide" data-slide="12">
+    <div class="title-bg"></div>
+    <div style="text-align:center; max-width: 700px;">
+        <div style="font-size: 4rem; margin-bottom: 24px;">💬</div>
+        <h1 style="font-size: 2.4rem;">Questions ?</h1>
+        <p class="subtitle" style="font-size: 1.05rem; margin-top: 16px; line-height: 1.7;">
+            Le site est fonctionnel et peut être démontré en live.
+        </p>
+        <div style="margin-top: 40px; display:flex; gap: 16px; justify-content:center; flex-wrap: wrap;">
+            <span class="tag tag-blue" style="font-size: 0.85rem; padding: 8px 20px;">Démo live disponible</span>
+        </div>
+        <div style="margin-top: 50px; color: var(--muted); font-size: 0.85rem;">
+            Karim Rochat &mdash; Fondation Clair-Bois &mdash; Mars 2026
+        </div>
+    </div>
+</div>
+<!-- =================== NAV BAR =================== -->
+<div class="nav-bar">
+    <div class="nav-info">
+        <span id="slideCounter">1 / 13</span>
+    </div>
+    <div class="nav-dots" id="navDots"></div>
+    <div style="display: flex; gap: 8px;">
+        <button class="nav-btn" onclick="prevSlide()">&#8592; Précédent</button>
+        <button class="nav-btn" onclick="nextSlide()">Suivant &#8594;</button>
+    </div>
+</div>
+
+<!-- =================== LASER POINTER =================== -->
+<div id="laserDot"></div>
+<div id="laserTrail"></div>
+
+<!-- =================== MODAL =================== -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <div id="modalContent"></div>
+    </div>
+</div>
+
+<script>
+    // =================== MODAL DATA ===================
+    const modalData = {
+        react: {
+            title: '⚛️ React 19 &mdash; Composants',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">Architecture des composants</div>
+                    <div class="modal-tree">
+                        <span class="folder">src/</span><br>
+                        ├── <span class="file">App.jsx</span> &mdash; Router + chargement planning.json<br>
+                        ├── <span class="folder">components/</span><br>
+                        │&nbsp;&nbsp; ├── <span class="file">Header.jsx</span> &mdash; Logo + nom fondation<br>
+                        │&nbsp;&nbsp; ├── <span class="file">Breadcrumb.jsx</span> &mdash; Fil d'Ariane<br>
+                        │&nbsp;&nbsp; ├── <span class="file">HomePage.jsx</span> &mdash; Choix établissement<br>
+                        │&nbsp;&nbsp; ├── <span class="file">EtablissementPage.jsx</span> &mdash; Choix secteur<br>
+                        │&nbsp;&nbsp; ├── <span class="file">SecteurCalendar.jsx</span> &mdash; Calendrier mensuel<br>
+                        │&nbsp;&nbsp; ├── <span class="file">WeekDetail.jsx</span> &mdash; Détail semaine<br>
+                        │&nbsp;&nbsp; ├── <span class="file">Aiguillage.jsx</span> &mdash; Questions moi/autre + déjà inscrit<br>
+                        │&nbsp;&nbsp; ├── <span class="file">FormulaireInscription.jsx</span> &mdash; Orchestrateur multi-étapes<br>
+                        │&nbsp;&nbsp; └── <span class="folder">formulaire/</span><br>
+                        │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ├── <span class="file">EtapeStagiaire.jsx</span> &mdash; Identité + coordonnées<br>
+                        │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ├── <span class="file">EtapeCuratelle.jsx</span> &mdash; Conditionnel oui/non<br>
+                        │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ├── <span class="file">EtapeUrgence.jsx</span> &mdash; Contact d'urgence<br>
+                        │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ├── <span class="file">EtapeAI.jsx</span> &mdash; Assurance invalidité<br>
+                        │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ├── <span class="file">EtapeReferent.jsx</span> &mdash; Si partenaire<br>
+                        │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ├── <span class="file">Recapitulatif.jsx</span> &mdash; Relecture avant envoi<br>
+                        │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; └── <span class="file">Confirmation.jsx</span> &mdash; Succès / erreur<br>
+                        └── <span class="folder">utils/</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp; ├── <span class="file">helpers.js</span> &mdash; transformPlanningData, agrégation<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp; ├── <span class="file">validation.js</span> &mdash; AVS, tél, NPA, email<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp; └── <span class="file">formConfig.js</span> &mdash; Sections par chemin
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Validations côté client</div>
+                    <table class="modal-table">
+                        <tr><th>Champ</th><th>Règle</th></tr>
+                        <tr><td>AVS</td><td><code>756.XXXX.XXXX.XX</code> + chiffre de contrôle</td></tr>
+                        <tr><td>Téléphone</td><td>Format suisse <code>0XX XXX XX XX</code></td></tr>
+                        <tr><td>NPA</td><td>4 chiffres suisses</td></tr>
+                        <tr><td>Email</td><td>Format standard</td></tr>
+                        <tr><td>Date naissance</td><td>Cohérence d'âge</td></tr>
+                    </table>
+                </div>`
+        },
+        vite: {
+            title: '⚡ Vite &mdash; Build Tool',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">Rôle</div>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.7;">
+                        Vite compile le code React (JSX) et Tailwind CSS en fichiers <strong style="color:var(--text);">HTML, CSS et JS statiques</strong> prêts à être déployés. Aucun serveur nécessaire à l'exécution.
+                    </p>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Configuration</div>
+                    <table class="modal-table">
+                        <tr><th>Paramètre</th><th>Valeur</th></tr>
+                        <tr><td>Framework</td><td>React (plugin @vitejs/plugin-react)</td></tr>
+                        <tr><td>CSS</td><td>Tailwind v4 (plugin @tailwindcss/vite)</td></tr>
+                        <tr><td>Base URL</td><td><code>/clair-bois-calendrier/</code> (GitHub Pages)</td></tr>
+                        <tr><td>Output</td><td><code>dist/</code> &rarr; fichiers statiques</td></tr>
+                        <tr><td>Variables d'env</td><td><code>.env.local</code> (VITE_PA_HTTP_URL)</td></tr>
+                    </table>
+                </div>`
+        },
+        tailwind: {
+            title: '🎨 Tailwind CSS v4',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">Palette Clair-Bois</div>
+                    <table class="modal-table">
+                        <tr><th>Couleur</th><th>Usage</th><th>Code</th></tr>
+                        <tr><td style="color:#16a34a;">&#9632; Vert</td><td>>50% places dispo</td><td><code>cb-green</code></td></tr>
+                        <tr><td style="color:#f59e0b;">&#9632; Orange</td><td>1-50% places</td><td><code>cb-orange</code></td></tr>
+                        <tr><td style="color:#dc2626;">&#9632; Rouge</td><td>Complet (0 place)</td><td><code>cb-red</code></td></tr>
+                        <tr><td style="color:#94a3b8;">&#9632; Gris</td><td>Pas de données</td><td><code>cb-gray</code></td></tr>
+                    </table>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Approche</div>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.7;">
+                        Classes utilitaires directement dans le HTML. Responsive mobile-first. Le CSS final ne contient que les classes utilisées (tree-shaking automatique).
+                    </p>
+                </div>`
+        },
+        hosting: {
+            title: '☁️ Hébergement',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">Pipeline de déploiement</div>
+                    <table class="modal-table">
+                        <tr><th>Étape</th><th>Action</th></tr>
+                        <tr><td>1. Code modifié</td><td>Push sur GitHub (branche main)</td></tr>
+                        <tr><td>2. GitHub Actions</td><td>Build automatique (<code>npm run build</code>)</td></tr>
+                        <tr><td>3. Déploiement</td><td>Fichiers <code>dist/</code> publiés</td></tr>
+                        <tr><td>4. CDN</td><td>Distribué globalement (HTTPS)</td></tr>
+                    </table>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Contenu déployé</div>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.7;">
+                        Un dossier avec : <code>index.html</code>, quelques fichiers <code>.js</code> et <code>.css</code>, et <code>planning.json</code> (mis à jour automatiquement par Power Automate). Total : &lt; 500 Ko.
+                    </p>
+                </div>`
+        },
+        pa: {
+            title: '⚡ Power Automate &mdash; Flux',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">Flux actifs (4)</div>
+                    <table class="modal-table">
+                        <tr><th>Flux</th><th>Trigger</th><th>Rôle</th><th>Connecteurs</th></tr>
+                        <tr><td><strong>Flux 5</strong></td><td>HTTP POST</td><td>Inscription React &rarr; SP</td><td>SharePoint, Outlook</td></tr>
+                        <tr><td><strong>Flux 2</strong></td><td>Email entrant</td><td>Réception PJ &rarr; dossier SP</td><td>SharePoint, Outlook</td></tr>
+                        <tr><td><strong>Flux 3</strong></td><td>Polling SP (3min)</td><td>planning.json &rarr; GitHub</td><td>SharePoint, HTTP</td></tr>
+                        <tr><td><strong>Flux 4</strong></td><td>Forms webhook</td><td>Gestion créneaux</td><td>Forms, SharePoint</td></tr>
+                    </table>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Connecteurs utilisés</div>
+                    <table class="modal-table">
+                        <tr><th>Connecteur</th><th>Type</th><th>Licence</th></tr>
+                        <tr><td>SharePoint Online</td><td>Standard</td><td>Inclus M365</td></tr>
+                        <tr><td>Office 365 Outlook</td><td>Standard</td><td>Inclus M365</td></tr>
+                        <tr><td>Microsoft Forms</td><td>Standard</td><td>Inclus M365</td></tr>
+                        <tr><td>HTTP</td><td>Standard</td><td>Inclus M365</td></tr>
+                    </table>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Compte de service</div>
+                    <p style="font-size:0.85rem; color:var(--muted);"><code>stagiaire.dfip@clairbois.ch</code> &mdash; propriétaire de tous les flux et connexions.</p>
+                </div>`
+        },
+        sharepoint: {
+            title: '☁️ SharePoint &mdash; Listes de données',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">Site</div>
+                    <p style="font-size:0.85rem; color:var(--muted); margin-bottom:12px;"><code>fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe</code></p>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Liste "Stagiaire" &mdash; ~30 colonnes</div>
+                    <table class="modal-table">
+                        <tr><th>Colonne</th><th>Type</th></tr>
+                        <tr><td>Nom, Prenom</td><td>Texte</td></tr>
+                        <tr><td>Sexe</td><td>Choix</td></tr>
+                        <tr><td>DateNaissance</td><td>Date</td></tr>
+                        <tr><td>AVS</td><td>Texte (clé unique)</td></tr>
+                        <tr><td>NumTel, Mail, Adresse, NpaLocalite</td><td>Texte</td></tr>
+                        <tr><td>Curatelle</td><td>Oui/Non</td></tr>
+                        <tr><td>CuratelleType</td><td>Choix (Privé, OPAD, Autre)</td></tr>
+                        <tr><td>CuratelleNom/Prenom/Tel/Mail</td><td>Texte</td></tr>
+                        <tr><td>AssuranceInvalidite</td><td>Choix (4 options)</td></tr>
+                        <tr><td>AIConseillerNom/Prenom/Tel/Mail</td><td>Texte</td></tr>
+                        <tr><td>UrgenceNom/Prenom/Tel/Lien</td><td>Texte</td></tr>
+                        <tr><td>Tailles (tshirt, pantalon, pointure)</td><td>Texte</td></tr>
+                    </table>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Liste "Demande" &mdash; 1:N avec Stagiaire</div>
+                    <table class="modal-table">
+                        <tr><th>Colonne</th><th>Type</th></tr>
+                        <tr><td>StagiaireID</td><td>Lookup &rarr; Stagiaire</td></tr>
+                        <tr><td>ReferentID</td><td>Lookup &rarr; Referent</td></tr>
+                        <tr><td>Secteur, Etablissement</td><td>Texte</td></tr>
+                        <tr><td>DateDebutSouhaitee</td><td>Date</td></tr>
+                        <tr><td>ObjectifStage, Limitations, ParcoursScolaire</td><td>Texte multiligne</td></tr>
+                        <tr><td>DejaStage</td><td>Oui/Non</td></tr>
+                        <tr><td>Statut</td><td>Choix (En attente / Documents reçus / Validé / Annulé)</td></tr>
+                    </table>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Liste "Referent"</div>
+                    <table class="modal-table">
+                        <tr><th>Colonne</th><th>Type</th></tr>
+                        <tr><td>Partenaire, Nom, Prenom, NumTel, Mail</td><td>Texte</td></tr>
+                        <tr><td>Fonction</td><td>Choix</td></tr>
+                        <tr><td>StagiaireID</td><td>Lookup &rarr; Stagiaire</td></tr>
+                    </table>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Liste "Creneaux"</div>
+                    <table class="modal-table">
+                        <tr><th>Colonne</th><th>Type</th></tr>
+                        <tr><td>Etablissement, Secteur</td><td>Texte</td></tr>
+                        <tr><td>DateDebut, DateFin</td><td>Date</td></tr>
+                        <tr><td>PlacesTotal</td><td>Nombre</td></tr>
+                        <tr><td>TypeCreneau</td><td>Choix (Stage / Module métier)</td></tr>
+                        <tr><td>NomModule</td><td>Texte (si module)</td></tr>
+                    </table>
+                </div>`
+        },
+        azfunc: {
+            title: '🔒 Azure Function &mdash; Proxy',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">Rôle</div>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.7;">
+                        L'Azure Function agit comme <strong style="color:var(--text);">intermédiaire</strong> entre le site et Power Automate. Le navigateur appelle <code>/api/inscription</code> &mdash; la fonction relaye vers le vrai endpoint PA dont l'URL reste secrète.
+                    </p>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Flux de la requête</div>
+                    <table class="modal-table">
+                        <tr><th>Étape</th><th>Détail</th></tr>
+                        <tr><td>1. Navigateur</td><td><code>POST /api/inscription</code> (JSON)</td></tr>
+                        <tr><td>2. Azure Function</td><td>Lit le body, ajoute les headers</td></tr>
+                        <tr><td>3. PA HTTP trigger</td><td>Reçoit le JSON, crée dans SP</td></tr>
+                        <tr><td>4. Réponse</td><td>HTTP 200 &rarr; confirmation au stagiaire</td></tr>
+                    </table>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">En développement (actuel)</div>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.7;">
+                        Pas d'Azure Function : le front appelle directement l'URL PA via <code>import.meta.env.VITE_PA_HTTP_URL</code> (stockée dans <code>.env.local</code>, non committée).
+                    </p>
+                </div>`
+        },
+        github: {
+            title: '🐙 GitHub API &mdash; planning.json',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">Mécanisme</div>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.7;">
+                        Le Flux 3 (Power Automate) utilise l'<strong style="color:var(--text);">API GitHub Contents</strong> pour mettre à jour le fichier <code>public/planning.json</code> dans le repo. Cela déclenche automatiquement un rebuild du site.
+                    </p>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Détail technique</div>
+                    <table class="modal-table">
+                        <tr><th>Paramètre</th><th>Valeur</th></tr>
+                        <tr><td>Repo</td><td><code>rochat-dev/clair-bois-calendrier</code></td></tr>
+                        <tr><td>Fichier</td><td><code>public/planning.json</code></td></tr>
+                        <tr><td>Méthode</td><td>PUT (API Contents) avec SHA du fichier existant</td></tr>
+                        <tr><td>Auth</td><td>Personal Access Token (dans le flux PA)</td></tr>
+                        <tr><td>Trigger rebuild</td><td>Chaque push &rarr; GitHub Actions &rarr; deploy</td></tr>
+                    </table>
+                </div>`
+        },
+        flux5: {
+            title: '⚡ Flux &mdash; Inscription stagiaire (détail)',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">Logique interne du flux</div>
+                    <div class="modal-tree">
+                        HTTP POST reçu (JSON)<br>
+                        &nbsp;&nbsp;├── Vérifier créneau existant<br>
+                        &nbsp;&nbsp;├── Vérifier AVS dans SharePoint<br>
+                        &nbsp;&nbsp;│&nbsp;&nbsp; ├── <span style="color:#4ade80;">Existe</span> &rarr; Mettre à jour Stagiaire<br>
+                        &nbsp;&nbsp;│&nbsp;&nbsp; └── <span style="color:#60a5fa;">N'existe pas</span> &rarr; Créer Stagiaire<br>
+                        &nbsp;&nbsp;├── Créer Demande (lien Stagiaire)<br>
+                        &nbsp;&nbsp;├── Si pourQui = "autre"<br>
+                        &nbsp;&nbsp;│&nbsp;&nbsp; └── Créer Referent (lien Stagiaire)<br>
+                        &nbsp;&nbsp;├── Envoyer email (demande documents)<br>
+                        &nbsp;&nbsp;└── HTTP 200 (confirmation)
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Payload JSON reçu (extrait)</div>
+                    <table class="modal-table">
+                        <tr><th>Champ</th><th>Usage</th></tr>
+                        <tr><td><code>cheminKey</code></td><td>Route la logique (A/B/C/D)</td></tr>
+                        <tr><td><code>pourQui</code></td><td>"moi" ou "autre"</td></tr>
+                        <tr><td><code>nom, prenom, avs, ...</code></td><td>Données stagiaire (~30 champs)</td></tr>
+                        <tr><td><code>referent.*</code></td><td>Données référent (si "autre")</td></tr>
+                        <tr><td><code>secteur, dateDebut</code></td><td>Données de la demande</td></tr>
+                    </table>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Listes SharePoint touchées</div>
+                    <table class="modal-table">
+                        <tr><th>Liste</th><th>Action</th></tr>
+                        <tr><td>Stagiaire</td><td>Create ou Update (clé: AVS)</td></tr>
+                        <tr><td>Demande</td><td>Create (lookup Stagiaire + Referent)</td></tr>
+                        <tr><td>Referent</td><td>Create (si pourQui = "autre")</td></tr>
+                    </table>
+                </div>`
+        },
+        flux3: {
+            title: '⚡ Flux &mdash; Génération planning.json (détail)',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">Logique interne</div>
+                    <div class="modal-tree">
+                        Polling SharePoint (toutes les 3 min)<br>
+                        &nbsp;&nbsp;├── GET tous les Créneaux<br>
+                        &nbsp;&nbsp;├── GET toutes les Demandes<br>
+                        &nbsp;&nbsp;├── Pour chaque Créneau :<br>
+                        &nbsp;&nbsp;│&nbsp;&nbsp; ├── Filtrer Demandes liées (Statut ≠ Annulé)<br>
+                        &nbsp;&nbsp;│&nbsp;&nbsp; └── Calculer placesUtilisees<br>
+                        &nbsp;&nbsp;├── Composer le JSON<br>
+                        &nbsp;&nbsp;├── GET SHA actuel sur GitHub<br>
+                        &nbsp;&nbsp;└── PUT planning.json via GitHub API
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Format planning.json (extrait)</div>
+                    <table class="modal-table">
+                        <tr><th>Champ</th><th>Contenu</th></tr>
+                        <tr><td><code>lastUpdated</code></td><td>Date de dernière génération</td></tr>
+                        <tr><td><code>creneaux[]</code></td><td>Tableau des créneaux avec places calculées</td></tr>
+                        <tr><td><code>creneaux[].etablissement</code></td><td>Nom de l'établissement</td></tr>
+                        <tr><td><code>creneaux[].secteur</code></td><td>Nom du secteur</td></tr>
+                        <tr><td><code>creneaux[].placesTotal</code></td><td>Capacité</td></tr>
+                        <tr><td><code>creneaux[].placesUtilisees</code></td><td>Comptage dynamique</td></tr>
+                    </table>
+                </div>`
+        },
+        flux2: {
+            title: '⚡ Flux &mdash; Réception pièces jointes (détail)',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">Logique interne</div>
+                    <div class="modal-tree">
+                        Email reçu (objet contient "AVS-")<br>
+                        &nbsp;&nbsp;├── Parser D°{ID} depuis l'objet du mail<br>
+                        &nbsp;&nbsp;├── GET Demande par ID &rarr; StagiaireID<br>
+                        &nbsp;&nbsp;├── GET Stagiaire &rarr; Nom, Prénom, AVS<br>
+                        &nbsp;&nbsp;├── Vérifier si dossier AVS existe<br>
+                        &nbsp;&nbsp;│&nbsp;&nbsp; └── <span style="color:#60a5fa;">Non</span> &rarr; Créer dossier + copier modèle + renommer<br>
+                        &nbsp;&nbsp;├── Pour chaque pièce jointe :<br>
+                        &nbsp;&nbsp;│&nbsp;&nbsp; └── Upload dans /1. Administratif/<br>
+                        &nbsp;&nbsp;└── MAJ Demande : Statut &rarr; "Documents réceptionnés"
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Boîte email</div>
+                    <p style="font-size:0.85rem; color:var(--muted);"><code>stagiaire.dfip@clairbois.ch</code> &mdash; filtre sur l'objet contenant <code>AVS-</code></p>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Format de l'objet du mail</div>
+                    <p style="font-size:0.85rem; color:var(--muted);"><code>[AVS-756.XXXX.XXXX.67 D°3] Documents requis pour Dupont Jean</code></p>
+                    <p style="font-size:0.78rem; color:var(--muted); margin-top:4px;">L'AVS est masqué (seuls les 2 derniers chiffres visibles). Le D° identifie la Demande.</p>
+                </div>`
+        },
+        dossier: {
+            title: '📁 SharePoint &mdash; Structure dossier stagiaire',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">Bibliothèque "Stagiaires Doc"</div>
+                    <div class="modal-tree">
+                        <span class="folder">Stagiaires Doc/</span><br>
+                        └── <span class="folder">756.1234.5678.90/</span> &laquo; dossier par AVS<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp; └── <span class="folder">8. Modèle dossier_DUPONT Jean/</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ├── <span class="folder">1. Administratif/</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; │&nbsp;&nbsp; ├── <span class="file">Charte.pdf</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; │&nbsp;&nbsp; ├── <span class="file">Déclaration engagement.pdf</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; │&nbsp;&nbsp; ├── <span class="file">DUPONT Jean - Suivi.docx</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; │&nbsp;&nbsp; ├── <span class="file">DUPONT Jean - Demande uniforme.docx</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; │&nbsp;&nbsp; ├── <span class="file">[PJ reçues par email]</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; │&nbsp;&nbsp; └── <span class="folder">Recrutement/</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ├── <span class="folder">2. Contrat - Résiliation - Courriers RH/</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ├── <span class="folder">3. Mesures - Salaires - IJ/</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ├── <span class="folder">4. Médical/</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ├── <span class="folder">5. Evaluation/</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ├── <span class="folder">6. Ecole professionnelle/</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; └── <span class="folder">7. Stages - Travail externe/</span>
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Création automatique</div>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.7;">
+                        Le Flux 2 copie un <strong style="color:var(--text);">dossier modèle</strong> depuis "Documents partagés", renomme les fichiers avec le nom du stagiaire, puis y dépose les pièces jointes reçues par email.
+                    </p>
+                </div>`
+        },
+        certauto: {
+            title: '🔓 Certificat auto — Connexion sécurisée',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">En termes simples</div>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.8;">
+                        Le <strong style="color:var(--text);">cadenas</strong> dans la barre d'adresse signifie que la connexion est <strong style="color:var(--text);">chiffrée</strong> — personne ne peut intercepter les données envoyées (noms, AVS, etc.). C'est le même niveau de sécurité que votre e-banking.<br><br>
+                        Pour que ce cadenas fonctionne, il faut un <strong style="color:var(--text);">certificat SSL/TLS</strong> — une sorte de carte d'identité numérique du site.<br><br>
+                        <strong style="color:var(--text);">Bonne nouvelle :</strong> les deux options (GitHub Pages et Azure) gèrent ce certificat <strong style="color:var(--text);">automatiquement</strong> via Let's Encrypt. Il se crée et se renouvelle tout seul — aucune intervention manuelle nécessaire.<br><br>
+                        Sur ce point, <strong style="color:var(--cb-green);">pas de différence</strong> entre les deux hébergements.
+                    </p>
+                </div>`
+        },
+        triggervisible: {
+            title: '⚠️ URL trigger visible — Le risque',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">En termes simples</div>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.8;">
+                        Quand le formulaire envoie des données, il appelle une <strong style="color:var(--text);">URL Power Automate</strong> (le "trigger"). Sur GitHub Pages, cette URL est <strong style="color:var(--text);">visible dans le code source</strong> du site — n'importe qui peut la lire avec F12 (outils développeur).<br><br>
+                        <strong style="color:var(--text);">Le risque :</strong> quelqu'un pourrait envoyer de fausses données directement à cette URL, sans passer par le formulaire.<br><br>
+                        <strong style="color:var(--text);">Avec Azure Function :</strong> l'URL Power Automate est cachée côté serveur. Le navigateur n'appelle que <code>/api/inscription</code> — l'URL réelle n'est jamais exposée.
+                    </p>
+                </div>`
+        },
+        tenant: {
+            title: '☁️ Tenant Microsoft — Votre espace cloud',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">En termes simples</div>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.8;">
+                        Le <strong style="color:var(--text);">tenant</strong> c'est l'espace Microsoft 365 propre à Clair-Bois. C'est là où se trouvent vos emails, SharePoint, Teams, etc.<br><br>
+                        Héberger le site dans le tenant signifie qu'il est <strong style="color:var(--text);">dans votre environnement</strong>, géré par votre service IT, avec les mêmes règles de sécurité que le reste de vos outils Microsoft.<br><br>
+                        Aujourd'hui le site est hébergé sur GitHub (externe). Le déplacer dans le tenant = le ramener <strong style="color:var(--text);">"à la maison"</strong>.
+                    </p>
+                </div>`
+        },
+        triggercache: {
+            title: '✅ URL trigger cachée — Azure Function',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">En termes simples</div>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.8;">
+                        L'<strong style="color:var(--text);">Azure Function</strong> agit comme un <strong style="color:var(--text);">intermédiaire sécurisé</strong>. Au lieu que le navigateur appelle directement Power Automate, il passe par une porte d'entrée contrôlée :<br>
+                    </p>
+                    <table class="modal-table" style="margin-top:12px;">
+                        <tr><th>Sans Azure Function</th><th>Avec Azure Function</th></tr>
+                        <tr><td>Navigateur → <code style="color:#f87171;">URL PA visible</code></td><td>Navigateur → <code>/api/inscription</code> → PA</td></tr>
+                        <tr><td>URL exposée dans le code</td><td>URL cachée côté serveur</td></tr>
+                    </table>
+                </div>`
+        },
+        monitoring: {
+            title: '📊 Monitoring & logs — Portail Azure',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">En termes simples</div>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.8;">
+                        Avec Azure, le service IT peut voir dans le <strong style="color:var(--text);">portail Azure</strong> :<br><br>
+                        • Combien de personnes visitent le site<br>
+                        • Si des erreurs se produisent<br>
+                        • Les temps de réponse<br>
+                        • L'historique des déploiements<br><br>
+                        Sur GitHub Pages, ces informations ne sont <strong style="color:var(--text);">pas accessibles</strong> au service IT.
+                    </p>
+                </div>`
+        },
+        httptrigger: {
+            title: '⚡ HTTP trigger — Comment ça communique',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">En termes simples</div>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.8;">
+                        Un <strong style="color:var(--text);">HTTP trigger</strong> c'est une "adresse" que Power Automate met à disposition. Quand le formulaire est rempli, le site envoie les données à cette adresse, et le flux se déclenche automatiquement.<br><br>
+                        C'est le même principe qu'un email : vous envoyez à une adresse, et quelque chose se passe de l'autre côté. Sauf qu'ici c'est <strong style="color:var(--text);">instantané et automatique</strong>.<br><br>
+                        Avec 8 formulaires Forms, il faut <strong style="color:var(--text);">8 flux</strong> séparés. Avec le formulaire intégré, <strong style="color:var(--text);">1 seul flux</strong> suffit car le site envoie un code (<code>cheminKey</code>) qui dit quel parcours a été suivi.
+                    </p>
+                </div>`
+        },
+        validations: {
+            title: '✅ Validations — Contrôle en temps réel',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">En termes simples</div>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.8;">
+                        Avant de soumettre le formulaire, le site vérifie <strong style="color:var(--text);">automatiquement</strong> que les données sont correctes. Si une erreur est détectée, le champ s'affiche en rouge avec un message explicatif.
+                    </p>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Exemples de contrôles</div>
+                    <table class="modal-table">
+                        <tr><th>Champ</th><th>Contrôle</th><th>Exemple rejeté</th></tr>
+                        <tr><td>AVS</td><td>Format <code>756.XXXX.XXXX.XX</code> + chiffre de contrôle</td><td><code>756.1234</code></td></tr>
+                        <tr><td>Téléphone</td><td>Format suisse 10 chiffres</td><td><code>123</code></td></tr>
+                        <tr><td>NPA</td><td>4 chiffres suisses</td><td><code>ABC</code></td></tr>
+                        <tr><td>Email</td><td>Format valide avec @</td><td><code>jean.dupont</code></td></tr>
+                    </table>
+                    <p style="font-size:0.82rem; color:var(--muted); margin-top:10px; line-height:1.6;">
+                        Microsoft Forms ne propose <strong style="color:var(--text);">aucune</strong> de ces validations — tout est accepté, même des données erronées.
+                    </p>
+                </div>`
+        },
+        tls: {
+            title: '🛡️ TLS — Le chiffrement expliqué',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">En termes simples</div>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.8;">
+                        <strong style="color:var(--text);">TLS</strong> (Transport Layer Security) c'est la technologie derrière le cadenas HTTPS. Elle chiffre les données entre le navigateur et le serveur.<br><br>
+                        Imaginez une <strong style="color:var(--text);">enveloppe scellée</strong> : même si quelqu'un intercepte le courrier, il ne peut pas lire le contenu.<br><br>
+                        Microsoft Forms utilise TLS. Notre site aussi. <strong style="color:var(--text);">Exactement le même niveau de protection.</strong>
+                    </p>
+                </div>`
+        },
+        domaine: {
+            title: '🌍 Nom de domaine — URL personnalisée',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">En termes simples</div>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.8;">
+                        Actuellement le site est accessible via <strong style="color:var(--text);">rochat-dev.github.io</strong> — c'est le sous-domaine gratuit fourni par GitHub.<br><br>
+                        Pour avoir un <strong style="color:var(--text);">nom de domaine personnalisé</strong> (ex: <code>clairbois.ch</code> ou <code>stages.clairbois.ch</code>), il faut :
+                    </p>
+                    <table class="modal-table" style="margin-top:12px;">
+                        <tr><th>Option</th><th>Coût</th><th>Remarque</th></tr>
+                        <tr><td>Domaine <code>.ch</code></td><td>~10-15 CHF/an</td><td>Chez un registrar (Infomaniak, Swizzonic, etc.)</td></tr>
+                        <tr><td>Config DNS</td><td>Inclus</td><td>Pointer le domaine vers GitHub Pages (CNAME)</td></tr>
+                        <tr><td>HTTPS</td><td>Gratuit</td><td>GitHub génère automatiquement le certificat SSL</td></tr>
+                    </table>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.8; margin-top:12px;">
+                        <strong style="color:var(--text);">En résumé :</strong> environ <strong style="color:var(--cb-green);">10-15 CHF/an</strong> pour le domaine, le reste est gratuit. La configuration prend quelques minutes : ajouter un enregistrement CNAME chez le registrar + un fichier <code>CNAME</code> dans le repo GitHub.<br><br>
+                        <strong style="color:var(--text);">Si Azure SWA est choisi :</strong> même principe, le domaine personnalisé se configure dans le portail Azure (gratuit avec le plan Free).
+                    </p>
+                </div>`
+        },
+        lpd: {
+            title: '📜 LPD / RGPD — Protection des données',
+            html: `
+                <div class="modal-section">
+                    <div class="modal-section-title">En termes simples</div>
+                    <p style="font-size:0.85rem; color:var(--muted); line-height:1.8;">
+                        <strong style="color:var(--text);">LPD</strong> = Loi fédérale sur la Protection des Données (loi suisse, révisée en 2023).<br>
+                        <strong style="color:var(--text);">RGPD</strong> = Règlement Général sur la Protection des Données (loi européenne).<br><br>
+                        Ces lois exigent que les données personnelles soient <strong style="color:var(--text);">stockées de manière sécurisée</strong> et <strong style="color:var(--text);">dans un lieu identifié</strong>.<br><br>
+                        Dans les deux options (Forms ou intégré), les données finissent au <strong style="color:var(--text);">même endroit</strong> : le SharePoint du tenant Microsoft 365 de Clair-Bois, hébergé en Suisse. Rien ne change.
+                    </p>
+                </div>`
+        }
+    };
+
+    function openModal(key) {
+        const data = modalData[key];
+        if (!data) return;
+        document.getElementById('modalContent').innerHTML = '<h3>' + data.title + '</h3>' + data.html;
+        document.getElementById('modalOverlay').classList.add('open');
+    }
+    function closeModal() {
+        document.getElementById('modalOverlay').classList.remove('open');
+    }
+
+    // =================== LASER POINTER ===================
+    const laserDot = document.getElementById('laserDot');
+    const laserTrail = document.getElementById('laserTrail');
+
+    document.addEventListener('mousemove', (e) => {
+        laserDot.style.left = e.clientX + 'px';
+        laserDot.style.top = e.clientY + 'px';
+        laserTrail.style.left = e.clientX + 'px';
+        laserTrail.style.top = e.clientY + 'px';
+        laserTrail.classList.add('visible');
+    });
+
+    document.addEventListener('mousedown', () => laserDot.classList.add('clicking'));
+    document.addEventListener('mouseup', () => laserDot.classList.remove('clicking'));
+
+    document.addEventListener('mouseleave', () => {
+        laserDot.style.opacity = '0';
+        laserTrail.classList.remove('visible');
+    });
+    document.addEventListener('mouseenter', () => {
+        laserDot.style.opacity = '1';
+    });
+
+    // =================== SLIDES ===================
+    const slides = document.querySelectorAll('.slide');
+    let current = 0;
+
+    const dotsContainer = document.getElementById('navDots');
+    slides.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => goToSlide(i);
+        dotsContainer.appendChild(dot);
+    });
+
+    function updateSlide(prev, next) {
+        if (prev === next) return;
+        slides.forEach(s => s.classList.remove('active'));
+        slides[next].classList.add('active');
+        current = next;
+        document.querySelectorAll('.nav-dot').forEach((d, i) => d.classList.toggle('active', i === next));
+        document.getElementById('slideCounter').textContent = `${next + 1} / ${slides.length}`;
+    }
+
+    function nextSlide() { if (current < slides.length - 1) updateSlide(current, current + 1); }
+    function prevSlide() { if (current > 0) updateSlide(current, current - 1); }
+    function goToSlide(n) { updateSlide(current, n); }
+
+    document.addEventListener('keydown', (e) => {
+        // Close modal on Escape
+        if (e.key === 'Escape') { closeModal(); return; }
+        // Don't navigate slides when modal is open
+        if (document.getElementById('modalOverlay').classList.contains('open')) return;
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+        if (e.key === 'Home') { e.preventDefault(); goToSlide(0); }
+        if (e.key === 'End') { e.preventDefault(); goToSlide(slides.length - 1); }
+    });
+</script>
+
+</body>
+</html>

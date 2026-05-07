@@ -1,0 +1,5882 @@
+[
+  {
+    "start": 0.0,
+    "end": 1.46,
+    "text": "Voilà, c'est bon, tu peux recommencer."
+  },
+  {
+    "start": 2.56,
+    "end": 2.78,
+    "text": "Ok."
+  },
+  {
+    "start": 3.6,
+    "end": 4.54,
+    "text": "Alors, dans l'idéal…"
+  },
+  {
+    "start": 4.54,
+    "end": 8.16,
+    "text": "Dans l'idéal, plan de table de mariage."
+  },
+  {
+    "start": 8.3,
+    "end": 10.24,
+    "text": "Après, ça n'a pas besoin d'être le même format."
+  },
+  {
+    "start": 10.86,
+    "end": 13.1,
+    "text": "Enfin, je veux dire, ça n'a pas besoin d'être des cercles ou des trucs comme ça."
+  },
+  {
+    "start": 13.3,
+    "end": 15.28,
+    "text": "Ça, tu fais ce qui est le plus pratique."
+  },
+  {
+    "start": 15.84,
+    "end": 18.58,
+    "text": "Mais, donc, plan de table de mariage, ça serait par exemple,"
+  },
+  {
+    "start": 18.98,
+    "end": 23.44,
+    "text": "plan des places de stage ou cartographie des places de stage en restauration."
+  },
+  {
+    "start": 23.9,
+    "end": 26.46,
+    "text": "La table 1, ça serait Clairbois Minoterie."
+  },
+  {
+    "start": 26.64,
+    "end": 28.38,
+    "text": "La table 2, ça serait Clairbois Penchat."
+  },
+  {
+    "start": 28.38,
+    "end": 31.44,
+    "text": "Les places A, B, C, D, E, F, G, H."
+  },
+  {
+    "start": 32.06,
+    "end": 35.4,
+    "text": "A, B, par exemple, ça serait des places de formation pratique."
+  },
+  {
+    "start": 36.1,
+    "end": 38.62,
+    "text": "C, ça serait une place AFP, CFC."
+  },
+  {
+    "start": 39.24,
+    "end": 43.8,
+    "text": "Et puis, D, E, F, G, H, ça serait des places de stage."
+  },
+  {
+    "start": 44.91,
+    "end": 45.11,
+    "text": "Ok."
+  },
+  {
+    "start": 46.05,
+    "end": 48.37,
+    "text": "Sachant qu'il y aura beaucoup moins que ça, à mon avis."
+  },
+  {
+    "start": 48.53,
+    "end": 51.89,
+    "text": "En restauration, il doit y avoir peut-être une place d'apprenti"
+  },
+  {
+    "start": 51.89,
+    "end": 57.86,
+    "text": "ou deux places d'apprenti et trois places de stagiaire."
+  },
+  {
+    "start": 58.44,
+    "end": 58.74,
+    "text": "Ok."
+  },
+  {
+    "start": 58.74,
+    "end": 59.32,
+    "text": "Est-ce que…"
+  },
+  {
+    "start": 59.32,
+    "end": 62.82,
+    "text": "C'est un board qui prend en contexte le tout, je veux dire,"
+  },
+  {
+    "start": 62.96,
+    "end": 65.92,
+    "text": "et les modules métiers et les stages normaux ?"
+  },
+  {
+    "start": 65.92,
+    "end": 67.1,
+    "text": "Non, c'est que les stages normaux."
+  },
+  {
+    "start": 67.34,
+    "end": 68.36,
+    "text": "C'est que les stages normaux."
+  },
+  {
+    "start": 68.44,
+    "end": 68.54,
+    "text": "Ok."
+  },
+  {
+    "start": 68.76,
+    "end": 69.7,
+    "text": "C'est que les stages normaux."
+  },
+  {
+    "start": 70.32,
+    "end": 72.76,
+    "text": "Et peut-être ajouter aussi une place CEA."
+  },
+  {
+    "start": 73.14,
+    "end": 76.42,
+    "text": "Ça, je ne l'avais pas mis dans la liste, dans le document Word."
+  },
+  {
+    "start": 78.4,
+    "end": 78.72,
+    "text": "Avoir."
+  },
+  {
+    "start": 78.9,
+    "end": 81.24,
+    "text": "Ça, peut-être qu'on ne le mettrait pas."
+  },
+  {
+    "start": 81.6,
+    "end": 83.78,
+    "text": "Et puis, du coup, dans l'idéal, c'est que ces places,"
+  },
+  {
+    "start": 84.18,
+    "end": 87.44,
+    "text": "elles soient, par exemple, la B, elle est rouge parce qu'elle est occupée."
+  },
+  {
+    "start": 88.34,
+    "end": 89.52,
+    "text": "Et puis, C, D."
+  },
+  {
+    "start": 89.54,
+    "end": 91.28,
+    "text": "Et E, elles sont vertes parce qu'elles sont libres."
+  },
+  {
+    "start": 91.66,
+    "end": 93.54,
+    "text": "Et que quand on passe la souris dessus,"
+  },
+  {
+    "start": 94.62,
+    "end": 96.78,
+    "text": "eh bien, on puisse avoir une petite fenêtre qui s'ouvre"
+  },
+  {
+    "start": 96.78,
+    "end": 101.16,
+    "text": "et dire qu'elle est rouge parce que c'est Sam Nicolas qui est en stage"
+  },
+  {
+    "start": 101.16,
+    "end": 104.56,
+    "text": "et puis il est en stage du 20 au 24 avril."
+  },
+  {
+    "start": 104.98,
+    "end": 105.3,
+    "text": "Ok."
+  },
+  {
+    "start": 108.4,
+    "end": 111.36,
+    "text": "Ou alors, il est en…"
+  },
+  {
+    "start": 111.36,
+    "end": 113.18,
+    "text": "Oui, non."
+  },
+  {
+    "start": 113.4,
+    "end": 114.92,
+    "text": "Mais que ces catégories, je puisse…"
+  },
+  {
+    "start": 115.56,
+    "end": 117.88,
+    "text": "Pardon, qu'on puisse aussi mettre la typologie du stage."
+  },
+  {
+    "start": 118.22,
+    "end": 119.88,
+    "text": "Donc, Sam Nicolas…"
+  },
+  {
+    "start": 121.43,
+    "end": 125.57,
+    "text": "Voilà, en mesure d'orientation du 20 au 30 mai, par exemple."
+  },
+  {
+    "start": 125.83,
+    "end": 127.67,
+    "text": "Ou alors, en stage du…"
+  },
+  {
+    "start": 127.67,
+    "end": 127.83,
+    "text": "Enfin, voilà."
+  },
+  {
+    "start": 128.49,
+    "end": 130.41,
+    "text": "On est d'accord que ce board, il sera privé."
+  },
+  {
+    "start": 130.51,
+    "end": 131.43,
+    "text": "Ça sera juste pour toi."
+  },
+  {
+    "start": 132.3,
+    "end": 133.36,
+    "text": "Ça sera juste pour moi."
+  },
+  {
+    "start": 133.46,
+    "end": 134.56,
+    "text": "Ça sera juste en interne."
+  },
+  {
+    "start": 134.96,
+    "end": 135.8,
+    "text": "En interne, parfait."
+  },
+  {
+    "start": 136.64,
+    "end": 142.22,
+    "text": "Idéalement, ça serait bien que ça puisse être partagé par d'autres."
+  },
+  {
+    "start": 142.48,
+    "end": 143.78,
+    "text": "Parce que je vais t'expliquer pourquoi."
+  },
+  {
+    "start": 144.0,
+    "end": 144.86,
+    "text": "C'est que sur la partie…"
+  },
+  {
+    "start": 145.56,
+    "end": 150.28,
+    "text": "Donc, restauration, ça sera que moi et mes collègues qui vont nous en occuper."
+  },
+  {
+    "start": 151.16,
+    "end": 151.66,
+    "text": "Technique, etc."
+  },
+  {
+    "start": 151.68,
+    "end": 152.4,
+    "text": "Etc. aussi."
+  },
+  {
+    "start": 152.86,
+    "end": 157.8,
+    "text": "Par contre, la partie éducative, pour l'instant, je ne sais pas si tout va venir, va migrer chez nous ou pas."
+  },
+  {
+    "start": 158.18,
+    "end": 162.28,
+    "text": "Mais pour l'instant, il y a d'autres personnes qui prennent d'autres types de stages."
+  },
+  {
+    "start": 162.82,
+    "end": 163.28,
+    "text": "Ok, ok."
+  },
+  {
+    "start": 164.31,
+    "end": 164.67,
+    "text": "Parfait."
+  },
+  {
+    "start": 165.61,
+    "end": 167.19,
+    "text": "Et donc, l'idée, ce serait…"
+  },
+  {
+    "start": 167.19,
+    "end": 170.31,
+    "text": "Mais tu pourrais le partager via un mot de passe."
+  },
+  {
+    "start": 170.53,
+    "end": 171.75,
+    "text": "Moi, je le fais très bien pour…"
+  },
+  {
+    "start": 173.28,
+    "end": 178.2,
+    "text": "J'ai une application qui m'aide tous les jours."
+  },
+  {
+    "start": 178.2,
+    "end": 179.48,
+    "text": "En fait, je l'ai appelée Mental."
+  },
+  {
+    "start": 180.14,
+    "end": 183.22,
+    "text": "Et tous les jours, ça m'aide à commencer à bosser."
+  },
+  {
+    "start": 183.32,
+    "end": 184.9,
+    "text": "À faire mes tâches, à l'e-valider, etc."
+  },
+  {
+    "start": 186.24,
+    "end": 188.38,
+    "text": "Et puis, j'ai une connexion, en fait."
+  },
+  {
+    "start": 188.56,
+    "end": 192.48,
+    "text": "Donc, tu peux avoir une page de connexion."
+  },
+  {
+    "start": 194.04,
+    "end": 194.36,
+    "text": "Ok."
+  },
+  {
+    "start": 194.6,
+    "end": 197.78,
+    "text": "Ou après, tu peux transférer le mot de passe à plusieurs personnes."
+  },
+  {
+    "start": 198.46,
+    "end": 201.2,
+    "text": "Ou tu peux avoir plusieurs mots de passe dédiés pour cette même page."
+  },
+  {
+    "start": 202.98,
+    "end": 207.58,
+    "text": "Mais ce serait juste un code à taper, appuyer Enter et puis accès au board."
+  },
+  {
+    "start": 208.8,
+    "end": 209.06,
+    "text": "Ok."
+  },
+  {
+    "start": 209.54,
+    "end": 211.36,
+    "text": "Et ça, on ne pourrait pas l'avoir…"
+  },
+  {
+    "start": 211.36,
+    "end": 214.87,
+    "text": "Ça ne peut pas être un environnement clair-bois."
+  },
+  {
+    "start": 214.87,
+    "end": 214.93,
+    "text": "Non."
+  },
+  {
+    "start": 216.93,
+    "end": 223.41,
+    "text": "Ça va devenir l'environnement clair-bois du moment que ça sera hébergé chez Infomaniac"
+  },
+  {
+    "start": 223.41,
+    "end": 227.25,
+    "text": "avec le site officiel."
+  },
+  {
+    "start": 228.92,
+    "end": 229.2,
+    "text": "Ok."
+  },
+  {
+    "start": 231.17,
+    "end": 232.13,
+    "text": "Mais ça pourrait…"
+  },
+  {
+    "start": 232.13,
+    "end": 234.73,
+    "text": "Donc, sur un site officiel, ça pourrait être visible que par nous."
+  },
+  {
+    "start": 235.09,
+    "end": 236.45,
+    "text": "Oui, elle peut être privée, la page."
+  },
+  {
+    "start": 236.77,
+    "end": 239.03,
+    "text": "Elle peut être privée et puis elle peut être visible que par vous."
+  },
+  {
+    "start": 240.22,
+    "end": 240.58,
+    "text": "Ok."
+  },
+  {
+    "start": 241.34,
+    "end": 242.76,
+    "text": "Et puis, ça serait une page de connexion."
+  },
+  {
+    "start": 242.88,
+    "end": 244.62,
+    "text": "Tu mets un mot de passe et puis…"
+  },
+  {
+    "start": 244.62,
+    "end": 244.92,
+    "text": "Ok."
+  },
+  {
+    "start": 245.18,
+    "end": 245.38,
+    "text": "Voilà."
+  },
+  {
+    "start": 245.68,
+    "end": 245.92,
+    "text": "Super."
+  },
+  {
+    "start": 246.1,
+    "end": 246.62,
+    "text": "Ça, c'est top."
+  },
+  {
+    "start": 247.2,
+    "end": 247.86,
+    "text": "Ça, c'est top."
+  },
+  {
+    "start": 248.6,
+    "end": 248.92,
+    "text": "Et…"
+  },
+  {
+    "start": 249.14,
+    "end": 256.82,
+    "text": "Est-ce que ça serait possible que ce soit nourri par le flux…"
+  },
+  {
+    "start": 256.82,
+    "end": 259.28,
+    "text": "Le flux Power Automate ?"
+  },
+  {
+    "start": 259.28,
+    "end": 259.84,
+    "text": "Oui, bien sûr."
+  },
+  {
+    "start": 261.44,
+    "end": 261.7,
+    "text": "Ok."
+  },
+  {
+    "start": 263.53,
+    "end": 266.2,
+    "text": "Tu voulais parler de quel flux ?"
+  },
+  {
+    "start": 266.2,
+    "end": 266.96,
+    "text": "Celui-là."
+  },
+  {
+    "start": 267.12,
+    "end": 267.98,
+    "text": "Enfin, le flux des stages."
+  },
+  {
+    "start": 270.04,
+    "end": 270.6,
+    "text": "Ah oui, oui."
+  },
+  {
+    "start": 270.72,
+    "end": 275.32,
+    "text": "Après, c'est bien sûr, ça va être connecté au SharePoint de clair-bois."
+  },
+  {
+    "start": 275.84,
+    "end": 283.53,
+    "text": "Et puis, ça va être directement connecté à toutes les lignes de stage, de stagiaire"
+  },
+  {
+    "start": 283.53,
+    "end": 283.83,
+    "text": "au final."
+  },
+  {
+    "start": 285.03,
+    "end": 285.51,
+    "text": "Ok."
+  },
+  {
+    "start": 285.83,
+    "end": 285.95,
+    "text": "Oui."
+  },
+  {
+    "start": 286.41,
+    "end": 293.93,
+    "text": "Ou alors, tu trouves un moyen que quand je valide un stage, par exemple, si ça peut"
+  },
+  {
+    "start": 293.93,
+    "end": 296.37,
+    "text": "envoyer un mail à…"
+  },
+  {
+    "start": 296.37,
+    "end": 296.59,
+    "text": "Oui."
+  },
+  {
+    "start": 297.39,
+    "end": 297.65,
+    "text": "Ok."
+  },
+  {
+    "start": 298.37,
+    "end": 300.05,
+    "text": "Il faudra juste voir comment c'est parce qu'en fait, si c'est…"
+  },
+  {
+    "start": 300.05,
+    "end": 300.87,
+    "text": "Oui, ça va être ça."
+  },
+  {
+    "start": 300.93,
+    "end": 301.29,
+    "text": "Ça va être ça."
+  },
+  {
+    "start": 301.39,
+    "end": 301.89,
+    "text": "Ça va être…"
+  },
+  {
+    "start": 301.89,
+    "end": 303.45,
+    "text": "Tu vas valider un stage."
+  },
+  {
+    "start": 304.46,
+    "end": 304.66,
+    "text": "Oui."
+  },
+  {
+    "start": 305.64,
+    "end": 309.16,
+    "text": "Si tu le confirmes, ça peut entrer dans le board."
+  },
+  {
+    "start": 309.48,
+    "end": 313.0,
+    "text": "Ou après, c'est comme tu veux, avec ou sans confirmation."
+  },
+  {
+    "start": 314.16,
+    "end": 315.18,
+    "text": "Ça peut rentrer en…"
+  },
+  {
+    "start": 315.18,
+    "end": 316.88,
+    "text": "Le board peut le prendre en compte après."
+  },
+  {
+    "start": 318.2,
+    "end": 319.06,
+    "text": "Se mettre à jour."
+  },
+  {
+    "start": 320.14,
+    "end": 320.38,
+    "text": "Oui."
+  },
+  {
+    "start": 320.62,
+    "end": 322.28,
+    "text": "Avec confirmation, ça serait top."
+  },
+  {
+    "start": 324.52,
+    "end": 327.86,
+    "text": "Et puis, si pas confirmé, dans SharePoint, c'est très visuel."
+  },
+  {
+    "start": 327.94,
+    "end": 329.06,
+    "text": "Tu peux mettre en rouge."
+  },
+  {
+    "start": 329.92,
+    "end": 330.86,
+    "text": "Tu peux mettre en rouge."
+  },
+  {
+    "start": 331.64,
+    "end": 349.83,
+    "text": "Et après, tu peux, dans la SharePoint, si je vais là, SharePoint, tous les stagiaires,"
+  },
+  {
+    "start": 349.83,
+    "end": 354.62,
+    "text": "mais tu peux choisir les couleurs."
+  },
+  {
+    "start": 355.1,
+    "end": 358.46,
+    "text": "Enfin, si c'est un choix, tu peux filtrer."
+  },
+  {
+    "start": 358.54,
+    "end": 360.88,
+    "text": "Ce que je voulais te montrer, c'est que tu pouvais de toute façon filtrer, mais là,"
+  },
+  {
+    "start": 360.94,
+    "end": 361.26,
+    "text": "je n'ai plus."
+  },
+  {
+    "start": 361.26,
+    "end": 364.86,
+    "text": "J'ai mis tout à jour, à zéro."
+  },
+  {
+    "start": 365.76,
+    "end": 369.34,
+    "text": "Mais tu peux filtrer par non traité, par exemple."
+  },
+  {
+    "start": 370.36,
+    "end": 372.22,
+    "text": "Et il y a tous les non traités qui apparaissent."
+  },
+  {
+    "start": 372.72,
+    "end": 373.18,
+    "text": "Il n'y a que eux."
+  },
+  {
+    "start": 374.2,
+    "end": 375.12,
+    "text": "Et c'est à toi de les confirmer."
+  },
+  {
+    "start": 375.12,
+    "end": 378.06,
+    "text": "Et donc là, on pourrait avoir une case aussi."
+  },
+  {
+    "start": 378.16,
+    "end": 378.96,
+    "text": "Je fais confirmer."
+  },
+  {
+    "start": 379.6,
+    "end": 380.78,
+    "text": "Tu écris confirmer."
+  },
+  {
+    "start": 382.25,
+    "end": 384.83,
+    "text": "Non, même pas besoin d'écrire confirmer."
+  },
+  {
+    "start": 384.93,
+    "end": 385.57,
+    "text": "Ce serait un choix."
+  },
+  {
+    "start": 386.37,
+    "end": 388.11,
+    "text": "Il serait en rouge, non confirmé."
+  },
+  {
+    "start": 388.67,
+    "end": 391.09,
+    "text": "Et toi, tu le mets en vert, confirmé."
+  },
+  {
+    "start": 391.98,
+    "end": 392.52,
+    "text": "Je voulais te montrer le choix."
+  },
+  {
+    "start": 392.52,
+    "end": 398.47,
+    "text": "Et du coup, à partir du moment où je le mets en vert,"
+  },
+  {
+    "start": 398.59,
+    "end": 401.63,
+    "text": "ça pourrait faire partir un mail automatiquement qui confirme le stage."
+  },
+  {
+    "start": 402.59,
+    "end": 402.95,
+    "text": "Exactement."
+  },
+  {
+    "start": 403.43,
+    "end": 404.01,
+    "text": "Dès que c'est en vert,"
+  },
+  {
+    "start": 404.01,
+    "end": 407.95,
+    "text": "dans les deux minutes qui suivent."
+  },
+  {
+    "start": 409.98,
+    "end": 410.8,
+    "text": "J'adore."
+  },
+  {
+    "start": 411.22,
+    "end": 411.62,
+    "text": "C'est trop bien."
+  },
+  {
+    "start": 412.52,
+    "end": 412.76,
+    "text": "OK."
+  },
+  {
+    "start": 413.78,
+    "end": 414.14,
+    "text": "Super."
+  },
+  {
+    "start": 414.36,
+    "end": 415.8,
+    "text": "Du coup, si tu reviens sur la carte O."
+  },
+  {
+    "start": 417.32,
+    "end": 417.68,
+    "text": "Oui."
+  },
+  {
+    "start": 418.32,
+    "end": 419.38,
+    "text": "Bon, là, elle n'est pas encore faite."
+  },
+  {
+    "start": 420.51,
+    "end": 423.47,
+    "text": "Non, mais sur le Word que je te montrais."
+  },
+  {
+    "start": 423.47,
+    "end": 424.41,
+    "text": "Par où ?"
+  },
+  {
+    "start": 424.41,
+    "end": 425.75,
+    "text": "Donc, on parlait comme ça."
+  },
+  {
+    "start": 426.25,
+    "end": 434.13,
+    "text": "Parce que l'idée, du coup, ça serait d'avoir un plan restauration, un plan lingerie, un plan cuisine, un plan technique, un plan éducatif."
+  },
+  {
+    "start": 434.65,
+    "end": 434.87,
+    "text": "OK."
+  },
+  {
+    "start": 434.95,
+    "end": 439.83,
+    "text": "Est-ce que tu veux que ça soit sous forme de bloc ou est-ce que..."
+  },
+  {
+    "start": 439.83,
+    "end": 443.01,
+    "text": "Là, par exemple, je vais prendre exemple sur ici."
+  },
+  {
+    "start": 443.51,
+    "end": 449.73,
+    "text": "Est-ce que tu veux que ça soit comme ça ou toi, avec une barre de recherche ou autre, ou toi, au final..."
+  },
+  {
+    "start": 451.98,
+    "end": 453.12,
+    "text": "Les plans ?"
+  },
+  {
+    "start": 453.12,
+    "end": 453.36,
+    "text": "Ouais."
+  },
+  {
+    "start": 453.36,
+    "end": 455.22,
+    "text": "Ouais, ouais, ouais, carrément."
+  },
+  {
+    "start": 455.22,
+    "end": 456.42,
+    "text": "Comme ça, OK."
+  },
+  {
+    "start": 456.6,
+    "end": 457.22,
+    "text": "Et après, toi, tu ouvres..."
+  },
+  {
+    "start": 457.88,
+    "end": 462.09,
+    "text": "Après, celui-là, est-ce que tu veux qu'il s'ouvre et qu'il prenne tout l'écran ?"
+  },
+  {
+    "start": 462.09,
+    "end": 466.81,
+    "text": "Par exemple, si tu cliques dessus, puis qu'il y ait un petit retour pour revenir au général ?"
+  },
+  {
+    "start": 466.81,
+    "end": 468.09,
+    "text": "Oui, volontiers."
+  },
+  {
+    "start": 468.89,
+    "end": 476.47,
+    "text": "Et par contre, ne commence pas par ASA et ASE et ASSC, parce que ces trois-là, ils sont..."
+  },
+  {
+    "start": 477.39,
+    "end": 480.47,
+    "text": "Il faut qu'on réfléchisse, il faut que je réfléchisse, voir si c'est..."
+  },
+  {
+    "start": 483.23,
+    "end": 485.93,
+    "text": "Je crois que ça va être les trois ensemble."
+  },
+  {
+    "start": 486.67,
+    "end": 486.95,
+    "text": "OK."
+  },
+  {
+    "start": 486.95,
+    "end": 488.07,
+    "text": "Ça sera éducatif."
+  },
+  {
+    "start": 488.89,
+    "end": 489.57,
+    "text": "Éducatif, OK."
+  },
+  {
+    "start": 493.08,
+    "end": 497.98,
+    "text": "Mais par contre, ce sera éducatif pôle adulte, éducatif pôle enfance-adolescence."
+  },
+  {
+    "start": 498.5,
+    "end": 498.76,
+    "text": "OK."
+  },
+  {
+    "start": 499.94,
+    "end": 500.38,
+    "text": "Attends."
+  },
+  {
+    "start": 502.02,
+    "end": 505.34,
+    "text": "Tu peux revenir sur le Word, pardon, que je regarde visuellement ?"
+  },
+  {
+    "start": 517.09,
+    "end": 519.51,
+    "text": "Parce qu'en fait, du coup, ce qui serait bien..."
+  },
+  {
+    "start": 521.65,
+    "end": 522.94,
+    "text": "Alors, pour..."
+  },
+  {
+    "start": 522.94,
+    "end": 523.62,
+    "text": "Voilà."
+  },
+  {
+    "start": 524.18,
+    "end": 528.2,
+    "text": "Pour l'éducatif, ce qui serait bien, c'est d'avoir plan, place de stage, éducatif,"
+  },
+  {
+    "start": 528.2,
+    "end": 532.54,
+    "text": "et d'avoir une catégorie sur la même page, en fait,"
+  },
+  {
+    "start": 532.54,
+    "end": 536.78,
+    "text": "de voir tous les appartements ou les classes, pardon, c'est plutôt les classes"
+  },
+  {
+    "start": 536.78,
+    "end": 546.97,
+    "text": "pour le pôle enfance-adolescence, et les appartements et les centres de jour pour le pôle adulte."
+  },
+  {
+    "start": 547.05,
+    "end": 548.79,
+    "text": "Mais ça risque de faire beaucoup d'infos, peut-être."
+  },
+  {
+    "start": 549.45,
+    "end": 549.67,
+    "text": "OK."
+  },
+  {
+    "start": 550.69,
+    "end": 553.27,
+    "text": "Si ça rentre visuellement sur une seule page, c'est top,"
+  },
+  {
+    "start": 553.35,
+    "end": 556.17,
+    "text": "parce que ça me permet vraiment d'avoir une vision d'ensemble."
+  },
+  {
+    "start": 556.69,
+    "end": 558.53,
+    "text": "Si ça ne rentre pas sur une page, ce n'est pas grave."
+  },
+  {
+    "start": 558.61,
+    "end": 561.53,
+    "text": "C'est mieux que ce soit plus lisible et de devoir aller sur deux pages."
+  },
+  {
+    "start": 562.21,
+    "end": 563.15,
+    "text": "Ça, c'est une chose."
+  },
+  {
+    "start": 563.15,
+    "end": 564.65,
+    "text": "Et l'autre chose, est-ce que..."
+  },
+  {
+    "start": 564.81,
+    "end": 574.6,
+    "text": "Est-ce que ça sera possible aussi d'avoir un résumé, tu vois, de pouvoir, en bas de page"
+  },
+  {
+    "start": 574.6,
+    "end": 579.21,
+    "text": "ou sur les blocs là où tu me montrais ?"
+  },
+  {
+    "start": 579.21,
+    "end": 581.85,
+    "text": "Ouais, en bas de page, tu veux dire..."
+  },
+  {
+    "start": 583.36,
+    "end": 584.62,
+    "text": "Non, sur la plateforme."
+  },
+  {
+    "start": 584.92,
+    "end": 589.78,
+    "text": "Là, tu vois, par exemple, ouais, là, sur confection, est-ce que ça serait possible"
+  },
+  {
+    "start": 589.78,
+    "end": 595.8,
+    "text": "qu'il y ait genre trois places de stage libres ou places de stage libres, places apprenties,"
+  },
+  {
+    "start": 596.48,
+    "end": 599.54,
+    "text": "libres 2, places de stage libres 0 ?"
+  },
+  {
+    "start": 599.54,
+    "end": 602.02,
+    "text": "Ça, c'est possible d'avoir un décompte là-dessus ou pas ?"
+  },
+  {
+    "start": 602.02,
+    "end": 603.82,
+    "text": "Sous confection, je n'ai pas trop bien compris là."
+  },
+  {
+    "start": 604.78,
+    "end": 611.4,
+    "text": "Dans ce petit bloc, qu'il y ait un résumé avant que je clique pour rentrer dedans,"
+  },
+  {
+    "start": 611.52,
+    "end": 615.48,
+    "text": "tu vois que ça me dise 0 places libres, 0 places d'apprentissage libres."
+  },
+  {
+    "start": 615.58,
+    "end": 618.8,
+    "text": "Comme ça, je n'ai même pas besoin de rentrer dans le truc et de regarder."
+  },
+  {
+    "start": 619.28,
+    "end": 620.44,
+    "text": "Ah oui, oui, oui, tout à fait."
+  },
+  {
+    "start": 620.56,
+    "end": 623.98,
+    "text": "Il peut même être tout rouge, tu vois, par exemple, ou alors orange."
+  },
+  {
+    "start": 624.8,
+    "end": 625.98,
+    "text": "Ça peut être très..."
+  },
+  {
+    "start": 626.92,
+    "end": 630.92,
+    "text": "Toi, tu aimes les couleurs, donc ça peut être comme ça."
+  },
+  {
+    "start": 632.71,
+    "end": 633.35,
+    "text": "Visuellement, ouais."
+  },
+  {
+    "start": 633.43,
+    "end": 636.07,
+    "text": "Visuellement, ça s'appelle les codes couleurs."
+  },
+  {
+    "start": 636.29,
+    "end": 639.24,
+    "text": "Les codes couleurs rouges, codes couleurs rouges, codes couleurs..."
+  },
+  {
+    "start": 639.24,
+    "end": 641.96,
+    "text": "Mais d'avoir aussi le décompte en nombre de places."
+  },
+  {
+    "start": 642.78,
+    "end": 643.16,
+    "text": "Ouais, voilà."
+  },
+  {
+    "start": 643.2,
+    "end": 646.56,
+    "text": "Parce qu'en confection, tu vois, par exemple, confection, je sais qu'il n'y a qu'une place."
+  },
+  {
+    "start": 647.14,
+    "end": 650.82,
+    "text": "Oui, c'est en fait les nombres de places prises officiellement."
+  },
+  {
+    "start": 651.04,
+    "end": 653.72,
+    "text": "Mais après, au niveau de la temporalité, tu veux que ça soit comment ?"
+  },
+  {
+    "start": 653.72,
+    "end": 657.38,
+    "text": "Est-ce que tu veux que ça soit cadré sur les jours d'aujourd'hui, en fait,"
+  },
+  {
+    "start": 657.6,
+    "end": 659.2,
+    "text": "au final ?"
+  },
+  {
+    "start": 659.2,
+    "end": 663.6,
+    "text": "Que ce soit en temps réel, en fait, actuellement, il n'y a pas de place actuellement pour aujourd'hui."
+  },
+  {
+    "start": 664.34,
+    "end": 666.14,
+    "text": "Mais peut-être qu'il y en aura dans deux semaines."
+  },
+  {
+    "start": 666.8,
+    "end": 668.0,
+    "text": "Enfin, après, je ne sais pas."
+  },
+  {
+    "start": 670.63,
+    "end": 672.21,
+    "text": "Mais ça indiquera de toute façon..."
+  },
+  {
+    "start": 672.21,
+    "end": 672.83,
+    "text": "Oui, ou sur la semaine."
+  },
+  {
+    "start": 673.98,
+    "end": 674.22,
+    "text": "Ouais."
+  },
+  {
+    "start": 674.82,
+    "end": 677.04,
+    "text": "Ou alors la prochaine fois qu'il y aura une place."
+  },
+  {
+    "start": 680.89,
+    "end": 682.01,
+    "text": "En plus de ça, tu vois."
+  },
+  {
+    "start": 683.36,
+    "end": 685.52,
+    "text": "Bon, après, à voir pour les améliorations, peut-être."
+  },
+  {
+    "start": 687.38,
+    "end": 689.26,
+    "text": "Ouais, non, la prochaine place, je ne pense pas."
+  },
+  {
+    "start": 689.26,
+    "end": 693.26,
+    "text": "Je pense que si c'est tout rouge, au moins, pour la semaine actuelle..."
+  },
+  {
+    "start": 693.26,
+    "end": 696.44,
+    "text": "En fait, là où ça va me servir beaucoup, c'est l'éducatif."
+  },
+  {
+    "start": 697.16,
+    "end": 697.44,
+    "text": "OK."
+  },
+  {
+    "start": 698.48,
+    "end": 699.92,
+    "text": "Mais oui, on verra ça."
+  },
+  {
+    "start": 700.38,
+    "end": 701.62,
+    "text": "Effectivement, il faudrait qu'il y ait un décompte."
+  },
+  {
+    "start": 701.94,
+    "end": 703.66,
+    "text": "Et j'en profite, vu que ma voix est enregistrée."
+  },
+  {
+    "start": 706.2,
+    "end": 708.04,
+    "text": "Donc, juste pour que..."
+  },
+  {
+    "start": 708.04,
+    "end": 710.9,
+    "text": "Peut-être que ça peut t'aider pour la configuration."
+  },
+  {
+    "start": 711.62,
+    "end": 717.9,
+    "text": "C'est que, donc, sur un secteur, on peut placer..."
+  },
+  {
+    "start": 717.9,
+    "end": 719.72,
+    "text": "Par exemple, à l'heure actuelle, en pâtisserie,"
+  },
+  {
+    "start": 721.14,
+    "end": 722.72,
+    "text": "il y a un contrat..."
+  },
+  {
+    "start": 722.72,
+    "end": 726.06,
+    "text": "Il y a trois personnes qui sont en contrat en emploi adapté."
+  },
+  {
+    "start": 726.94,
+    "end": 731.1,
+    "text": "Eux, ils ont besoin d'un encadrement, mais c'est un encadrement léger."
+  },
+  {
+    "start": 731.82,
+    "end": 737.72,
+    "text": "Il n'y a pas d'obligation de formation ou de..."
+  },
+  {
+    "start": 739.33,
+    "end": 740.29,
+    "text": "Il y a juste..."
+  },
+  {
+    "start": 740.29,
+    "end": 742.47,
+    "text": "C'est juste des personnes qui ont besoin d'un certain soutien."
+  },
+  {
+    "start": 743.4,
+    "end": 744.98,
+    "text": "Ensuite, il y a les apprentis."
+  },
+  {
+    "start": 745.54,
+    "end": 750.03,
+    "text": "Et les apprentis, on peut avoir deux types d'apprentis."
+  },
+  {
+    "start": 750.15,
+    "end": 752.09,
+    "text": "C'est soit les apprentis formation pratique,"
+  },
+  {
+    "start": 752.09,
+    "end": 753.86,
+    "text": "ou là..."
+  },
+  {
+    "start": 754.9,
+    "end": 759.1,
+    "text": "Il n'y a pas besoin d'un formateur professionnel validé par l'OFPC."
+  },
+  {
+    "start": 761.5,
+    "end": 763.82,
+    "text": "Donc, il y a besoin d'un formateur."
+  },
+  {
+    "start": 763.96,
+    "end": 766.58,
+    "text": "Il y a besoin d'une personne, parce que là, il va falloir..."
+  },
+  {
+    "start": 766.58,
+    "end": 768.4,
+    "text": "Il y a de la pratique."
+  },
+  {
+    "start": 768.56,
+    "end": 770.26,
+    "text": "Il y a tout un programme de formation à suivre."
+  },
+  {
+    "start": 770.38,
+    "end": 771.6,
+    "text": "Donc, il y a besoin d'un formateur."
+  },
+  {
+    "start": 772.0,
+    "end": 777.84,
+    "text": "Mais il n'y a pas besoin d'un formateur qui puisse encadrer des apprentis selon l'OFPC."
+  },
+  {
+    "start": 778.46,
+    "end": 780.52,
+    "text": "Et puis ensuite, on a les AFP et les CFC."
+  },
+  {
+    "start": 780.68,
+    "end": 782.08,
+    "text": "C'est pour ça qu'eux, ils sont ensemble."
+  },
+  {
+    "start": 782.08,
+    "end": 785.78,
+    "text": "C'est deux formations différentes."
+  },
+  {
+    "start": 785.78,
+    "end": 787.92,
+    "text": "C'est deux niveaux de formation différentes."
+  },
+  {
+    "start": 788.4,
+    "end": 795.58,
+    "text": "Mais les deux exigent un formateur professionnel reconnu par l'OFPC."
+  },
+  {
+    "start": 796.35,
+    "end": 799.47,
+    "text": "Et donc, c'est pour ça que les places..."
+  },
+  {
+    "start": 799.47,
+    "end": 800.57,
+    "text": "Et puis après, il y a les stagiaires."
+  },
+  {
+    "start": 800.69,
+    "end": 803.69,
+    "text": "Et eux, pareil, ils ont besoin d'un encadrement, mais pas de formateur."
+  },
+  {
+    "start": 804.53,
+    "end": 806.73,
+    "text": "Mais moi, par exemple, dans l'éducatif,"
+  },
+  {
+    "start": 807.11,
+    "end": 809.35,
+    "text": "si je place une stagiaire dans un appartement,"
+  },
+  {
+    "start": 809.83,
+    "end": 809.91,
+    "text": "je vais..."
+  },
+  {
+    "start": 810.63,
+    "end": 812.91,
+    "text": "Selon que, tu vois, si c'est juste un..."
+  },
+  {
+    "start": 812.91,
+    "end": 815.45,
+    "text": "Une personne qui veut..."
+  },
+  {
+    "start": 816.45,
+    "end": 819.39,
+    "text": "Choisir entre deux métiers et qu'elle hésite,"
+  },
+  {
+    "start": 821.71,
+    "end": 824.07,
+    "text": "je vais juste chercher une place de stage."
+  },
+  {
+    "start": 824.65,
+    "end": 828.33,
+    "text": "Si c'est l'assurance en validité qui me demande une mesure d'orientation"
+  },
+  {
+    "start": 828.33,
+    "end": 830.11,
+    "text": "pour ensuite une formation pratique,"
+  },
+  {
+    "start": 830.63,
+    "end": 833.88,
+    "text": "une formation AFP ou CFC,"
+  },
+  {
+    "start": 835.05,
+    "end": 836.11,
+    "text": "je vais devoir regarder."
+  },
+  {
+    "start": 836.23,
+    "end": 837.83,
+    "text": "Je vais dire, j'ai une place de stage,"
+  },
+  {
+    "start": 837.89,
+    "end": 840.37,
+    "text": "mais je n'ai pas d'apprentissage avant 2029."
+  },
+  {
+    "start": 841.29,
+    "end": 843.51,
+    "text": "Donc, je vais devoir dire à la..."
+  },
+  {
+    "start": 843.51,
+    "end": 845.47,
+    "text": "Tu vois, ça me permettra de dire à la conseillère AI"
+  },
+  {
+    "start": 845.47,
+    "end": 846.81,
+    "text": "que je peux la prendre en stage,"
+  },
+  {
+    "start": 846.85,
+    "end": 846.87,
+    "text": "mais je ne peux pas la prendre en stage."
+  },
+  {
+    "start": 846.87,
+    "end": 847.17,
+    "text": "Donc, je vais devoir dire à la conseillère AI"
+  },
+  {
+    "start": 847.17,
+    "end": 849.65,
+    "text": "que je ne peux pas la mettre en apprentissage avant 2029."
+  },
+  {
+    "start": 851.81,
+    "end": 851.83,
+    "text": "OK."
+  },
+  {
+    "start": 852.67,
+    "end": 853.03,
+    "text": "Voilà."
+  },
+  {
+    "start": 853.27,
+    "end": 855.25,
+    "text": "C'est pour ça, c'est un peu ces trois nuances."
+  },
+  {
+    "start": 855.81,
+    "end": 857.43,
+    "text": "Et donc, en fait, parce que potentiellement,"
+  },
+  {
+    "start": 857.51,
+    "end": 859.23,
+    "text": "j'ai des places de stage libres,"
+  },
+  {
+    "start": 859.43,
+    "end": 862.57,
+    "text": "mais le formateur est pris jusqu'en 2029."
+  },
+  {
+    "start": 862.79,
+    "end": 863.79,
+    "text": "Et c'est ça qui..."
+  },
+  {
+    "start": 863.79,
+    "end": 865.63,
+    "text": "C'est dans ça que cette cartographie,"
+  },
+  {
+    "start": 865.67,
+    "end": 866.53,
+    "text": "elle va m'aider, en fait."
+  },
+  {
+    "start": 867.03,
+    "end": 867.33,
+    "text": "OK."
+  },
+  {
+    "start": 868.62,
+    "end": 868.88,
+    "text": "Voilà."
+  },
+  {
+    "start": 871.53,
+    "end": 872.07,
+    "text": "Voilà, voilà."
+  },
+  {
+    "start": 873.49,
+    "end": 875.25,
+    "text": "Est-ce que c'est clair pour toi ?"
+  },
+  {
+    "start": 875.25,
+    "end": 876.01,
+    "text": "Pour moi, c'est clair, oui."
+  },
+  {
+    "start": 877.16,
+    "end": 877.52,
+    "text": "OK."
+  },
+  {
+    "start": 880.69,
+    "end": 883.82,
+    "text": "Maintenant, il y avait un autre truc,"
+  },
+  {
+    "start": 883.82,
+    "end": 885.36,
+    "text": "la semaine dernière, que tu m'avais envoyé."
+  },
+  {
+    "start": 885.98,
+    "end": 888.68,
+    "text": "C'était un nouvel procédure de demande d'uniforme."
+  },
+  {
+    "start": 889.52,
+    "end": 889.84,
+    "text": "Oui."
+  },
+  {
+    "start": 891.15,
+    "end": 893.69,
+    "text": "Alors, peut-être que là, c'est moi qui vais partager mon écran."
+  },
+  {
+    "start": 894.7,
+    "end": 895.02,
+    "text": "OK."
+  },
+  {
+    "start": 895.48,
+    "end": 909.86,
+    "text": "Il faut que je retrouve."
+  },
+  {
+    "start": 912.41,
+    "end": 919.32,
+    "text": "Tu vois là, mon écran ?"
+  },
+  {
+    "start": 919.32,
+    "end": 920.26,
+    "text": "Je crois que c'est là."
+  },
+  {
+    "start": 928.61,
+    "end": 931.17,
+    "text": "Parce que, du coup, nous, on avait intégré un peu ça dans le flux."
+  },
+  {
+    "start": 931.33,
+    "end": 932.77,
+    "text": "On faisait les demandes d'uniforme"
+  },
+  {
+    "start": 932.77,
+    "end": 938.54,
+    "text": "avec un formulaire Word que je t'avais envoyé."
+  },
+  {
+    "start": 942.33,
+    "end": 946.07,
+    "text": "Et puis, je ne sais pas si tu vois là."
+  },
+  {
+    "start": 946.07,
+    "end": 948.46,
+    "text": "Oui, je vois, oui."
+  },
+  {
+    "start": 948.58,
+    "end": 950.54,
+    "text": "Ils ont mis une nouvelle procédure."
+  },
+  {
+    "start": 951.66,
+    "end": 952.28,
+    "text": "Ils m'ont dit uniforme."
+  },
+  {
+    "start": 953.78,
+    "end": 954.74,
+    "text": "Et c'est avec Forms."
+  },
+  {
+    "start": 955.68,
+    "end": 956.0,
+    "text": "OK."
+  },
+  {
+    "start": 957.64,
+    "end": 968.83,
+    "text": "Et je me demandais, est-ce qu'on arrive soit à lier les deux avec notre flux,"
+  },
+  {
+    "start": 972.3,
+    "end": 978.42,
+    "text": "soit à pouvoir leur transmettre, nous, quand je confirme un stage avec les dates,"
+  },
+  {
+    "start": 979.0,
+    "end": 987.21,
+    "text": "que je leur demande la version finale, en fait,"
+  },
+  {
+    "start": 987.21,
+    "end": 987.25,
+    "text": "et que je leur donne la version finale."
+  },
+  {
+    "start": 987.27,
+    "end": 993.4,
+    "text": "Et qu'on puisse leur transmettre une information qui soit la même que eux."
+  },
+  {
+    "start": 996.16,
+    "end": 998.78,
+    "text": "Parce qu'ils reçoivent, pardon, c'était pas très français."
+  },
+  {
+    "start": 999.12,
+    "end": 1007.11,
+    "text": "Qu'ils reçoivent la même information que si j'avais complété le Forms en ligne là."
+  },
+  {
+    "start": 1007.23,
+    "end": 1008.31,
+    "text": "Tu vois ce que je veux dire ?"
+  },
+  {
+    "start": 1008.31,
+    "end": 1012.88,
+    "text": "Est-ce que c'est eux qui vont compléter ça et qui vont t'envoyer ?"
+  },
+  {
+    "start": 1012.88,
+    "end": 1015.72,
+    "text": "Non, ça, c'est justement, c'est n'importe quel service."
+  },
+  {
+    "start": 1016.92,
+    "end": 1019.78,
+    "text": "C'est moi qui, normalement, c'est, tu vois, moi, mon stagiaire."
+  },
+  {
+    "start": 1019.92,
+    "end": 1024.56,
+    "text": "Avec la taille des stagiaires que je demande, je devrais compléter ça et leur envoyer."
+  },
+  {
+    "start": 1025.02,
+    "end": 1025.48,
+    "text": "OK, ouais."
+  },
+  {
+    "start": 1026.32,
+    "end": 1034.67,
+    "text": "Et ma question, c'est, est-ce qu'avec Power Automate, on arrive à faire qu'ils viennent nourrir les informations là-dedans ?"
+  },
+  {
+    "start": 1034.67,
+    "end": 1035.43,
+    "text": "Nourrir, ouais."
+  },
+  {
+    "start": 1037.31,
+    "end": 1042.05,
+    "text": "C'est-à-dire que dès que je fais, je complète, et bien, il remplit automatiquement,"
+  },
+  {
+    "start": 1042.65,
+    "end": 1049.68,
+    "text": "dès que je fais confirmer, par exemple, le stage, il remplit automatiquement ce formulaire-là."
+  },
+  {
+    "start": 1050.76,
+    "end": 1051.24,
+    "text": "Ou alors..."
+  },
+  {
+    "start": 1051.24,
+    "end": 1052.78,
+    "text": "Ah, là, j'ai pas compris."
+  },
+  {
+    "start": 1054.1,
+    "end": 1054.6,
+    "text": "Alors que..."
+  },
+  {
+    "start": 1054.6,
+    "end": 1058.34,
+    "text": "Donc, par exemple, moi, je vais sur ma SharePoint liste, je confirme mon stage."
+  },
+  {
+    "start": 1060.12,
+    "end": 1063.78,
+    "text": "OK, ça met à jour ma cartographie, ça envoie le mail de confirmation aux jeunes,"
+  },
+  {
+    "start": 1064.32,
+    "end": 1071.19,
+    "text": "et, en parallèle, ça vient nourrir ce formulaire Forms du service Intendance."
+  },
+  {
+    "start": 1071.61,
+    "end": 1072.09,
+    "text": "OK, ouais."
+  },
+  {
+    "start": 1072.97,
+    "end": 1076.61,
+    "text": "Ah, parce qu'ils ont besoin de ça aussi, le service Intendance, OK."
+  },
+  {
+    "start": 1077.39,
+    "end": 1079.93,
+    "text": "Ah, oui, ah, OK, c'est à eux qu'il faut envoyer la demande, OK."
+  },
+  {
+    "start": 1080.19,
+    "end": 1081.35,
+    "text": "C'est ça que je comprenais pas, en fait."
+  },
+  {
+    "start": 1081.35,
+    "end": 1084.82,
+    "text": "C'est qui, en fait, qui a inventé ce..."
+  },
+  {
+    "start": 1084.82,
+    "end": 1085.28,
+    "text": "Intendance."
+  },
+  {
+    "start": 1085.5,
+    "end": 1087.7,
+    "text": "C'est le service de la lingerie, en fait."
+  },
+  {
+    "start": 1087.96,
+    "end": 1088.44,
+    "text": "OK, ouais."
+  },
+  {
+    "start": 1088.5,
+    "end": 1093.3,
+    "text": "Donc, mon option, c'est soit ça nourrit directement le formulaire et ça l'envoie,"
+  },
+  {
+    "start": 1094.04,
+    "end": 1105.17,
+    "text": "soit on crée un résultat identique à ce qu'ils reçoivent."
+  },
+  {
+    "start": 1106.08,
+    "end": 1106.82,
+    "text": "Tu vois ce que je veux dire ?"
+  },
+  {
+    "start": 1106.82,
+    "end": 1110.32,
+    "text": "C'est-à-dire que ça le nourrit pas, mais nous, on crée le même formulaire Forms"
+  },
+  {
+    "start": 1110.32,
+    "end": 1112.96,
+    "text": "et ça leur envoie au même endroit où..."
+  },
+  {
+    "start": 1114.26,
+    "end": 1118.32,
+    "text": "Parce que eux, eux, eux, eux, ils vont recevoir, en fait,"
+  },
+  {
+    "start": 1118.5,
+    "end": 1122.56,
+    "text": "les intendants, hein, ils vont recevoir ce formulaire au final"
+  },
+  {
+    "start": 1122.56,
+    "end": 1125.26,
+    "text": "et puis ils vont exactement faire la même chose,"
+  },
+  {
+    "start": 1125.36,
+    "end": 1128.2,
+    "text": "ils vont prendre Power Automate et puis ils vont nourrir peut-être leurs chers potelés."
+  },
+  {
+    "start": 1128.5,
+    "end": 1131.72,
+    "text": "Ou même pas, en fait, ils ont juste besoin de ça pour imprimer au final"
+  },
+  {
+    "start": 1131.72,
+    "end": 1134.24,
+    "text": "et puis pour faire la commande, ou alors ils vont classer ça quelque part."
+  },
+  {
+    "start": 1134.24,
+    "end": 1135.18,
+    "text": "Oui, c'est ça."
+  },
+  {
+    "start": 1136.68,
+    "end": 1138.16,
+    "text": "Faut bien comprendre ce qu'ils font."
+  },
+  {
+    "start": 1138.16,
+    "end": 1142.26,
+    "text": "Oui, parce que eux, ils ont pas de Power Automate, ça, je peux te le garantir."
+  },
+  {
+    "start": 1142.66,
+    "end": 1146.3,
+    "text": "Je sais pas comment ils ont fait ça, mais je pense que c'est soit des informatiens,"
+  },
+  {
+    "start": 1146.3,
+    "end": 1147.3,
+    "text": "soit..."
+  },
+  {
+    "start": 1148.12,
+    "end": 1148.58,
+    "text": "Euh..."
+  },
+  {
+    "start": 1148.58,
+    "end": 1149.08,
+    "text": "Ah, mais eux..."
+  },
+  {
+    "start": 1149.08,
+    "end": 1152.32,
+    "text": "Eux, je pense qu'ils ont juste, bah, ils ont juste créé un formulaire, c'est tout."
+  },
+  {
+    "start": 1152.32,
+    "end": 1153.82,
+    "text": "Oui, ouais, ouais, c'est ça."
+  },
+  {
+    "start": 1153.82,
+    "end": 1157.5,
+    "text": "Et donc, ils reçoivent un mail ou alors peut-être qu'ils consultent un tableau."
+  },
+  {
+    "start": 1157.5,
+    "end": 1158.5,
+    "text": "Mais moi, ce que je voulais..."
+  },
+  {
+    "start": 1158.5,
+    "end": 1159.5,
+    "text": "Je veux voir avec eux..."
+  },
+  {
+    "start": 1159.5,
+    "end": 1164.2,
+    "text": "Enfin, si toi, tu me dis que Power Automate, il arrive, du coup, une fois que moi, j'ai"
+  },
+  {
+    "start": 1164.2,
+    "end": 1172.81,
+    "text": "confirmé le stage, à venir compléter tout ce qu'il y a ici, tu vois, date de la demande,"
+  },
+  {
+    "start": 1172.81,
+    "end": 1178.69,
+    "text": "blablabla, et à l'envoyer, dans ce cas, bah, on fait comme ça, soit tu me dis..."
+  },
+  {
+    "start": 1178.69,
+    "end": 1180.19,
+    "text": "Ça, c'est possible, oui."
+  },
+  {
+    "start": 1180.19,
+    "end": 1181.22,
+    "text": "Ça, c'est possible."
+  },
+  {
+    "start": 1181.22,
+    "end": 1182.22,
+    "text": "Ok."
+  },
+  {
+    "start": 1182.22,
+    "end": 1183.22,
+    "text": "Du coup, est-ce que..."
+  },
+  {
+    "start": 1183.22,
+    "end": 1184.22,
+    "text": "Je dois te..."
+  },
+  {
+    "start": 1184.22,
+    "end": 1185.22,
+    "text": "Je te partage le lien du formulaire ?"
+  },
+  {
+    "start": 1185.22,
+    "end": 1186.74,
+    "text": "Euh..."
+  },
+  {
+    "start": 1186.74,
+    "end": 1187.74,
+    "text": "Volontiers."
+  },
+  {
+    "start": 1187.74,
+    "end": 1188.74,
+    "text": "Euh..."
+  },
+  {
+    "start": 1188.74,
+    "end": 1189.74,
+    "text": "Il est dans le site Intent."
+  },
+  {
+    "start": 1189.74,
+    "end": 1190.74,
+    "text": "Enfin, c'est..."
+  },
+  {
+    "start": 1190.74,
+    "end": 1191.74,
+    "text": "Au pire, je peux..."
+  },
+  {
+    "start": 1191.74,
+    "end": 1192.9,
+    "text": "Je peux aller le consulter."
+  },
+  {
+    "start": 1192.9,
+    "end": 1193.9,
+    "text": "Si c'est dans un site de Clairbois, je peux..."
+  },
+  {
+    "start": 1193.9,
+    "end": 1195.06,
+    "text": "Alors..."
+  },
+  {
+    "start": 1195.06,
+    "end": 1197.06,
+    "text": "Je te le partage, juste comme ça, tu..."
+  },
+  {
+    "start": 1197.06,
+    "end": 1198.06,
+    "text": "T'as..."
+  },
+  {
+    "start": 1198.06,
+    "end": 1199.89,
+    "text": "Si tu..."
+  },
+  {
+    "start": 1199.89,
+    "end": 1200.89,
+    "text": "Euh..."
+  },
+  {
+    "start": 1200.89,
+    "end": 1203.1,
+    "text": "Comment je..."
+  },
+  {
+    "start": 1203.1,
+    "end": 1206.26,
+    "text": "Je ne sais plus où je vais, là, pour partager, pour écrire ce message, conversation."
+  },
+  {
+    "start": 1206.26,
+    "end": 1207.26,
+    "text": "Hop."
+  },
+  {
+    "start": 1207.26,
+    "end": 1208.26,
+    "text": "Alors, je t'ai partagé le..."
+  },
+  {
+    "start": 1208.26,
+    "end": 1209.26,
+    "text": "Je t'ai partagé le lien."
+  },
+  {
+    "start": 1209.26,
+    "end": 1210.26,
+    "text": "Et..."
+  },
+  {
+    "start": 1210.26,
+    "end": 1212.13,
+    "text": "Et..."
+  },
+  {
+    "start": 1212.13,
+    "end": 1216.01,
+    "text": "Et..."
+  },
+  {
+    "start": 1216.01,
+    "end": 1217.01,
+    "text": "Et..."
+  },
+  {
+    "start": 1217.01,
+    "end": 1218.01,
+    "text": "Et..."
+  },
+  {
+    "start": 1218.01,
+    "end": 1219.01,
+    "text": "Et..."
+  },
+  {
+    "start": 1219.01,
+    "end": 1220.01,
+    "text": "Et puis, si jamais je te..."
+  },
+  {
+    "start": 1220.01,
+    "end": 1221.01,
+    "text": "Je te remontre comment y arriver."
+  },
+  {
+    "start": 1221.01,
+    "end": 1222.01,
+    "text": "Ouais."
+  },
+  {
+    "start": 1222.01,
+    "end": 1223.01,
+    "text": "C'est sur le SharePoint principal, en fait."
+  },
+  {
+    "start": 1223.01,
+    "end": 1224.01,
+    "text": "Depuis l'accueil."
+  },
+  {
+    "start": 1224.01,
+    "end": 1227.63,
+    "text": "Voilà."
+  },
+  {
+    "start": 1227.63,
+    "end": 1228.63,
+    "text": "Depuis l'accueil sur Intendance."
+  },
+  {
+    "start": 1228.63,
+    "end": 1229.95,
+    "text": "Ok."
+  },
+  {
+    "start": 1229.95,
+    "end": 1230.95,
+    "text": "Et juste là."
+  },
+  {
+    "start": 1230.95,
+    "end": 1231.95,
+    "text": "Demande d'uniforme."
+  },
+  {
+    "start": 1231.95,
+    "end": 1235.1,
+    "text": "Ok."
+  },
+  {
+    "start": 1235.1,
+    "end": 1236.64,
+    "text": "Et du coup, si t'arrives à voir sur l'uniforme, sur la demande, ils ont rajouté des trucs"
+  },
+  {
+    "start": 1236.64,
+    "end": 1237.64,
+    "text": "qu'il n'y avait pas avant."
+  },
+  {
+    "start": 1237.64,
+    "end": 1238.64,
+    "text": "Euh..."
+  },
+  {
+    "start": 1238.64,
+    "end": 1240.76,
+    "text": "Je sais pas si tu..."
+  },
+  {
+    "start": 1240.76,
+    "end": 1242.08,
+    "text": "Bon, la date, ok."
+  },
+  {
+    "start": 1242.08,
+    "end": 1243.4,
+    "text": "Date pour vos délais."
+  },
+  {
+    "start": 1243.4,
+    "end": 1244.4,
+    "text": "Et..."
+  },
+  {
+    "start": 1244.4,
+    "end": 1247.48,
+    "text": "Et..."
+  },
+  {
+    "start": 1247.48,
+    "end": 1248.61,
+    "text": "Et..."
+  },
+  {
+    "start": 1248.61,
+    "end": 1249.8,
+    "text": "Et..."
+  },
+  {
+    "start": 1249.8,
+    "end": 1250.8,
+    "text": "Et..."
+  },
+  {
+    "start": 1250.8,
+    "end": 1251.8,
+    "text": "Et..."
+  },
+  {
+    "start": 1251.8,
+    "end": 1252.8,
+    "text": "Et..."
+  },
+  {
+    "start": 1252.8,
+    "end": 1253.8,
+    "text": "Et..."
+  },
+  {
+    "start": 1253.8,
+    "end": 1254.8,
+    "text": "Et..."
+  },
+  {
+    "start": 1254.8,
+    "end": 1256.44,
+    "text": "Et..."
+  },
+  {
+    "start": 1256.44,
+    "end": 1257.44,
+    "text": "Et..."
+  },
+  {
+    "start": 1257.44,
+    "end": 1258.44,
+    "text": "Et..."
+  },
+  {
+    "start": 1258.44,
+    "end": 1260.43,
+    "text": "Et..."
+  },
+  {
+    "start": 1260.43,
+    "end": 1272.96,
+    "text": ".."
+  },
+  {
+    "start": 1272.96,
+    "end": 1273.96,
+    "text": "Oui..."
+  },
+  {
+    "start": 1273.96,
+    "end": 1276.05,
+    "text": "Après, faut juste faire gaffe le jour où ils changent de formulaire, où ils rajoutent"
+  },
+  {
+    "start": 1276.05,
+    "end": 1277.05,
+    "text": "ou ils enlèvent quelque chose."
+  },
+  {
+    "start": 1277.05,
+    "end": 1278.05,
+    "text": "Ouais."
+  },
+  {
+    "start": 1278.05,
+    "end": 1279.05,
+    "text": "Non mais surtout sa, moi je..."
+  },
+  {
+    "start": 1279.05,
+    "end": 1280.05,
+    "text": "..."
+  },
+  {
+    "start": 1280.05,
+    "end": 1281.29,
+    "text": "Il faut que, il faut que ça puisse être non applicable, pour le DFIP moi."
+  },
+  {
+    "start": 1281.29,
+    "end": 1283.05,
+    "text": "J'ai, j'ai pas le temps de leur faire essayer les tenues, quoi."
+  },
+  {
+    "start": 1283.05,
+    "end": 1284.82,
+    "text": "Date pour vos неп duraives ?"
+  },
+  {
+    "start": 1284.82,
+    "end": 1285.82,
+    "text": "Non mais après, non ça c'est le stagiaire."
+  },
+  {
+    "start": 1285.82,
+    "end": 1286.82,
+    "text": "Ah ouais, c'est compliqué ça."
+  },
+  {
+    "start": 1286.82,
+    "end": 1287.91,
+    "text": "Paul-"
+  },
+  {
+    "start": 1287.91,
+    "end": 1291.79,
+    "text": "Ah ok."
+  },
+  {
+    "start": 1291.79,
+    "end": 1293.72,
+    "text": "Ouais."
+  },
+  {
+    "start": 1293.72,
+    "end": 1294.72,
+    "text": "Ouais."
+  },
+  {
+    "start": 1294.72,
+    "end": 1295.72,
+    "text": "Mais c'est pour ça, peut être qu'on fera."
+  },
+  {
+    "start": 1295.72,
+    "end": 1296.72,
+    "text": "Peut être que...."
+  },
+  {
+    "start": 1296.72,
+    "end": 1298.52,
+    "text": "Je vais..."
+  },
+  {
+    "start": 1298.52,
+    "end": 1299.92,
+    "text": "pour les dates, pour l'essayage et tout."
+  },
+  {
+    "start": 1301.44,
+    "end": 1303.04,
+    "text": "Oui, mais ça, c'est parce qu'en fait,"
+  },
+  {
+    "start": 1303.18,
+    "end": 1305.04,
+    "text": "tu vois, c'est quand il y a des apprentis,"
+  },
+  {
+    "start": 1305.16,
+    "end": 1306.68,
+    "text": "quand il y a des nouveaux collaborateurs et tout,"
+  },
+  {
+    "start": 1307.04,
+    "end": 1310.14,
+    "text": "ils ont le temps dans le processus de faire ça."
+  },
+  {
+    "start": 1310.6,
+    "end": 1313.18,
+    "text": "Moi, avec la quantité de stages que j'ai, etc.,"
+  },
+  {
+    "start": 1313.18,
+    "end": 1317.16,
+    "text": "je ne peux pas faire des rendez-vous d'essayage en plus."
+  },
+  {
+    "start": 1317.88,
+    "end": 1323.73,
+    "text": "Mais par contre, du coup, mon prénom pour la tenue,"
+  },
+  {
+    "start": 1324.45,
+    "end": 1325.03,
+    "text": "ça, c'est OK."
+  },
+  {
+    "start": 1325.25,
+    "end": 1327.43,
+    "text": "Paul, ça, ça va changer en plus de ça,"
+  },
+  {
+    "start": 1327.43,
+    "end": 1334.26,
+    "text": "mais ça, ça va changer."
+  },
+  {
+    "start": 1335.78,
+    "end": 1337.38,
+    "text": "Le site de travail, ça ne changera pas."
+  },
+  {
+    "start": 1340.19,
+    "end": 1341.59,
+    "text": "Je vais leur demander, tu sais quoi,"
+  },
+  {
+    "start": 1341.65,
+    "end": 1346.37,
+    "text": "je vais leur demander d'ajouter un nom applicable pour moi,"
+  },
+  {
+    "start": 1346.99,
+    "end": 1347.57,
+    "text": "s'ils peuvent."
+  },
+  {
+    "start": 1349.96,
+    "end": 1350.2,
+    "text": "OK."
+  },
+  {
+    "start": 1351.66,
+    "end": 1353.2,
+    "text": "Comme ça, pour nous, automatiquement,"
+  },
+  {
+    "start": 1353.32,
+    "end": 1355.06,
+    "text": "tu vois, la date pour venir essayer les tenues,"
+  },
+  {
+    "start": 1355.16,
+    "end": 1356.34,
+    "text": "ça sera un nom applicable."
+  },
+  {
+    "start": 1357.22,
+    "end": 1357.76,
+    "text": "Oui, Anna."
+  },
+  {
+    "start": 1361.23,
+    "end": 1362.43,
+    "text": "Le site de travail, ça, c'est bon,"
+  },
+  {
+    "start": 1362.45,
+    "end": 1363.81,
+    "text": "parce que les polis vont changer, en fait."
+  },
+  {
+    "start": 1363.87,
+    "end": 1366.23,
+    "text": "On est en train de restructurer, donc..."
+  },
+  {
+    "start": 1366.23,
+    "end": 1367.67,
+    "text": "OK."
+  },
+  {
+    "start": 1368.91,
+    "end": 1370.85,
+    "text": "Le PA et le PEA, ça va rester."
+  },
+  {
+    "start": 1372.0,
+    "end": 1373.24,
+    "text": "Celui-là, sûrement, il va rester,"
+  },
+  {
+    "start": 1373.34,
+    "end": 1374.04,
+    "text": "mais ces deux-là, ils vont..."
+  },
+  {
+    "start": 1374.36,
+    "end": 1376.1,
+    "text": "Ils vont changer quoi ?"
+  },
+  {
+    "start": 1376.1,
+    "end": 1392.48,
+    "text": "En tant que stagiaires, peut-être du premier jour."
+  },
+  {
+    "start": 1397.98,
+    "end": 1399.06,
+    "text": "Ouais, tu vois, il y a la coupe."
+  },
+  {
+    "start": 1399.22,
+    "end": 1400.28,
+    "text": "Les noms d'articles, pareil."
+  },
+  {
+    "start": 1403.07,
+    "end": 1404.73,
+    "text": "Je vais voir, tu sais quoi ?"
+  },
+  {
+    "start": 1404.73,
+    "end": 1406.85,
+    "text": "Je vais ça, je vais voir avec eux."
+  },
+  {
+    "start": 1406.91,
+    "end": 1409.29,
+    "text": "Je pense que le mieux pour moi, pour nous,"
+  },
+  {
+    "start": 1410.17,
+    "end": 1417.34,
+    "text": "ça serait qu'on puisse leur donner..."
+  },
+  {
+    "start": 1417.34,
+    "end": 1421.1,
+    "text": "Ouais, tu vois, il m'a dit excess."
+  },
+  {
+    "start": 1422.91,
+    "end": 1425.15,
+    "text": "Ça serait qu'on puisse leur donner,"
+  },
+  {
+    "start": 1428.27,
+    "end": 1429.57,
+    "text": "leur faire arriver leur formation"
+  },
+  {
+    "start": 1429.57,
+    "end": 1432.13,
+    "text": "de la même manière qu'arrive ce formulaire, en fait."
+  },
+  {
+    "start": 1432.17,
+    "end": 1435.38,
+    "text": "Ça serait plus simple comme ça,"
+  },
+  {
+    "start": 1435.44,
+    "end": 1437.06,
+    "text": "même si le formulaire, il change et tout ça."
+  },
+  {
+    "start": 1438.58,
+    "end": 1439.06,
+    "text": "On n'a pas..."
+  },
+  {
+    "start": 1439.06,
+    "end": 1439.86,
+    "text": "Donc, moi, ce que je vais faire,"
+  },
+  {
+    "start": 1439.94,
+    "end": 1441.52,
+    "text": "c'est que je vais leur demander ce qui se passe"
+  },
+  {
+    "start": 1441.52,
+    "end": 1443.36,
+    "text": "quand tu complètes ce formulaire."
+  },
+  {
+    "start": 1444.35,
+    "end": 1444.67,
+    "text": "Ouais."
+  },
+  {
+    "start": 1445.69,
+    "end": 1447.03,
+    "text": "Comme ça, on pourra leur envoyer..."
+  },
+  {
+    "start": 1447.03,
+    "end": 1448.89,
+    "text": "Tu vois, si c'est un mail avec une forme particulière,"
+  },
+  {
+    "start": 1450.01,
+    "end": 1452.95,
+    "text": "eh bien, qu'on puisse leur envoyer le même format, finalement."
+  },
+  {
+    "start": 1453.51,
+    "end": 1453.81,
+    "text": "OK."
+  },
+  {
+    "start": 1455.15,
+    "end": 1455.79,
+    "text": "OK ?"
+  },
+  {
+    "start": 1455.79,
+    "end": 1457.03,
+    "text": "Ça, je me renseigne."
+  },
+  {
+    "start": 1459.12,
+    "end": 1460.12,
+    "text": "Dans tous les cas, ouais."
+  },
+  {
+    "start": 1463.43,
+    "end": 1463.79,
+    "text": "OK."
+  },
+  {
+    "start": 1464.79,
+    "end": 1466.11,
+    "text": "Et puis, ensuite..."
+  },
+  {
+    "start": 1466.11,
+    "end": 1467.11,
+    "text": "Ensuite..."
+  },
+  {
+    "start": 1467.11,
+    "end": 1479.14,
+    "text": "T'arrives, Karim, à me renvoyer le lien vers la plateforme."
+  },
+  {
+    "start": 1479.92,
+    "end": 1483.1,
+    "text": "Je ne sais pas si je peux le retrouver, mais..."
+  },
+  {
+    "start": 1483.1,
+    "end": 1483.24,
+    "text": "Oui."
+  },
+  {
+    "start": 1499.57,
+    "end": 1499.93,
+    "text": "Nickel."
+  },
+  {
+    "start": 1500.81,
+    "end": 1502.73,
+    "text": "Ah, mais attends, je vais te le mettre là-dessus, moi, aussi."
+  },
+  {
+    "start": 1505.18,
+    "end": 1507.06,
+    "text": "Tu vois, je ne comprends pas pourquoi il..."
+  },
+  {
+    "start": 1507.06,
+    "end": 1509.08,
+    "text": "Ah, mais parce que là, je l'ai mis dans la conversation."
+  },
+  {
+    "start": 1520.4,
+    "end": 1522.52,
+    "text": "Attends, je te mets là le lien vers le formulaire."
+  },
+  {
+    "start": 1525.62,
+    "end": 1526.1,
+    "text": "Ah, ouais."
+  },
+  {
+    "start": 1527.22,
+    "end": 1530.81,
+    "text": "Ça me l'a ouvert et j'épingle."
+  },
+  {
+    "start": 1530.81,
+    "end": 1532.83,
+    "text": "C'est trop bien."
+  },
+  {
+    "start": 1533.41,
+    "end": 1533.99,
+    "text": "C'est trop bien."
+  },
+  {
+    "start": 1534.07,
+    "end": 1534.21,
+    "text": "C'est trop bien."
+  },
+  {
+    "start": 1534.21,
+    "end": 1534.23,
+    "text": "C'est trop bien."
+  },
+  {
+    "start": 1534.23,
+    "end": 1534.53,
+    "text": "C'est tout à fait."
+  },
+  {
+    "start": 1537.19,
+    "end": 1539.17,
+    "text": "Donc, moi, je dois regarder..."
+  },
+  {
+    "start": 1539.17,
+    "end": 1539.51,
+    "text": "Merci."
+  },
+  {
+    "start": 1540.47,
+    "end": 1542.09,
+    "text": "N'hésite pas, si tu..."
+  },
+  {
+    "start": 1542.09,
+    "end": 1544.48,
+    "text": "Au niveau du design, tu veux changer ou quoi, tu me dis."
+  },
+  {
+    "start": 1544.74,
+    "end": 1546.6,
+    "text": "Si t'as une..."
+  },
+  {
+    "start": 1546.6,
+    "end": 1547.36,
+    "text": "Ben, quelque chose en vue."
+  },
+  {
+    "start": 1549.82,
+    "end": 1550.64,
+    "text": "Une préférence."
+  },
+  {
+    "start": 1551.63,
+    "end": 1552.01,
+    "text": "Ça dépend."
+  },
+  {
+    "start": 1552.93,
+    "end": 1553.87,
+    "text": "Je te dirais, ouais."
+  },
+  {
+    "start": 1554.19,
+    "end": 1558.41,
+    "text": "Ou alors, à l'avantage des utilisateurs."
+  },
+  {
+    "start": 1558.89,
+    "end": 1575.88,
+    "text": "Ah, c'est trop bien."
+  },
+  {
+    "start": 1584.34,
+    "end": 1584.46,
+    "text": "OK."
+  },
+  {
+    "start": 1587.03,
+    "end": 1589.67,
+    "text": "Après, est-ce que c'est trop zoomé, trop dézoomé ?"
+  },
+  {
+    "start": 1589.67,
+    "end": 1590.39,
+    "text": "Ça, je ne sais pas."
+  },
+  {
+    "start": 1590.53,
+    "end": 1590.93,
+    "text": "C'est..."
+  },
+  {
+    "start": 1590.93,
+    "end": 1592.53,
+    "text": "Non, écoute, là, sur mon petit écran, c'est..."
+  },
+  {
+    "start": 1592.53,
+    "end": 1592.99,
+    "text": "C'est nickel."
+  },
+  {
+    "start": 1593.83,
+    "end": 1594.03,
+    "text": "OK."
+  },
+  {
+    "start": 1596.31,
+    "end": 1597.83,
+    "text": "Sur mon petit écran, c'est nickel."
+  },
+  {
+    "start": 1601.78,
+    "end": 1603.3,
+    "text": "Ça, Karim, quand..."
+  },
+  {
+    "start": 1603.3,
+    "end": 1604.72,
+    "text": "Parce que le site, il va être refait,"
+  },
+  {
+    "start": 1604.78,
+    "end": 1607.36,
+    "text": "parce qu'on est en train de changer le logo, machin, je ne sais pas quoi, etc."
+  },
+  {
+    "start": 1608.64,
+    "end": 1612.33,
+    "text": "Tout ce que t'as créé, là, le..."
+  },
+  {
+    "start": 1612.33,
+    "end": 1614.37,
+    "text": "Infomaniac, quand ils changeront le site,"
+  },
+  {
+    "start": 1614.43,
+    "end": 1616.61,
+    "text": "ils pourront le changer aussi, la mise en forme,"
+  },
+  {
+    "start": 1616.79,
+    "end": 1618.47,
+    "text": "juste les couleurs, le logo et tout ça."
+  },
+  {
+    "start": 1618.93,
+    "end": 1619.61,
+    "text": "Oui, oui, bien sûr."
+  },
+  {
+    "start": 1619.75,
+    "end": 1621.99,
+    "text": "Enfin, le logo, on s'en fout parce que ça sera sur le site."
+  },
+  {
+    "start": 1621.99,
+    "end": 1624.15,
+    "text": "C'est pas Infomaniac qui va le changer,"
+  },
+  {
+    "start": 1624.15,
+    "end": 1626.15,
+    "text": "mais c'est la personne qui héberge..."
+  },
+  {
+    "start": 1626.15,
+    "end": 1627.87,
+    "text": "Qui héberge le site chez eux."
+  },
+  {
+    "start": 1628.81,
+    "end": 1631.65,
+    "text": "Et oui, il fait probablement partie de Clairbois"
+  },
+  {
+    "start": 1631.65,
+    "end": 1633.27,
+    "text": "et puis il sait déjà comment le faire."
+  },
+  {
+    "start": 1633.39,
+    "end": 1635.39,
+    "text": "Lui, j'ai regardé son site, ses technologies,"
+  },
+  {
+    "start": 1635.55,
+    "end": 1637.91,
+    "text": "ce qu'il a utilisé, il a les compétences pour le faire."
+  },
+  {
+    "start": 1638.23,
+    "end": 1638.41,
+    "text": "OK."
+  },
+  {
+    "start": 1639.05,
+    "end": 1639.39,
+    "text": "Nickel."
+  },
+  {
+    "start": 1641.66,
+    "end": 1641.98,
+    "text": "OK."
+  },
+  {
+    "start": 1646.96,
+    "end": 1647.72,
+    "text": "C'est top."
+  },
+  {
+    "start": 1648.02,
+    "end": 1648.64,
+    "text": "C'est vraiment top."
+  },
+  {
+    "start": 1648.76,
+    "end": 1648.94,
+    "text": "OK."
+  },
+  {
+    "start": 1649.3,
+    "end": 1652.36,
+    "text": "Je pense que t'as assez avec la carto et le..."
+  },
+  {
+    "start": 1654.04,
+    "end": 1655.6,
+    "text": "Et le..."
+  },
+  {
+    "start": 1655.6,
+    "end": 1658.98,
+    "text": "Avec la cartographie et puis..."
+  },
+  {
+    "start": 1659.98,
+    "end": 1661.74,
+    "text": "Il y avait juste le dossier DSI."
+  },
+  {
+    "start": 1662.97,
+    "end": 1665.21,
+    "text": "Comme ça, j'en profite pour tout vous éclaircir."
+  },
+  {
+    "start": 1666.25,
+    "end": 1666.47,
+    "text": "Ouais."
+  },
+  {
+    "start": 1667.09,
+    "end": 1668.63,
+    "text": "Et il y a le formulaire date de visite."
+  },
+  {
+    "start": 1669.51,
+    "end": 1671.15,
+    "text": "Demande de visite aussi que j'ai ajouté."
+  },
+  {
+    "start": 1671.27,
+    "end": 1676.03,
+    "text": "Donc, en fait, en gros, je reçois aussi des demandes de visite de la part des profs."
+  },
+  {
+    "start": 1676.03,
+    "end": 1676.29,
+    "text": "OK."
+  },
+  {
+    "start": 1677.08,
+    "end": 1679.68,
+    "text": "Et je voulais rajouter sur la plateforme d'inscription"
+  },
+  {
+    "start": 1679.68,
+    "end": 1683.8,
+    "text": "peut-être une demande de visite, un formulaire simple."
+  },
+  {
+    "start": 1687.13,
+    "end": 1689.29,
+    "text": "Et ça, ça sera exclusivement pour les écoles."
+  },
+  {
+    "start": 1689.29,
+    "end": 1692.35,
+    "text": "Donc, tu vois, ça sera pas je remplis pour moi-même, pour quelqu'un d'autre, etc."
+  },
+  {
+    "start": 1692.61,
+    "end": 1693.29,
+    "text": "Ça sera..."
+  },
+  {
+    "start": 1693.29,
+    "end": 1695.41,
+    "text": "C'est vraiment les..."
+  },
+  {
+    "start": 1695.41,
+    "end": 1706.15,
+    "text": "Parce que moi, quand j'ai vu DSI avec un..."
+  },
+  {
+    "start": 1706.15,
+    "end": 1707.23,
+    "text": "Alors, non, c'est pas la même chose."
+  },
+  {
+    "start": 1707.31,
+    "end": 1708.19,
+    "text": "DSI, je t'en parle après."
+  },
+  {
+    "start": 1708.49,
+    "end": 1708.71,
+    "text": "OK."
+  },
+  {
+    "start": 1709.11,
+    "end": 1710.93,
+    "text": "C'est que..."
+  },
+  {
+    "start": 1712.03,
+    "end": 1713.87,
+    "text": "Les demandes de visite, c'est que les écoles,"
+  },
+  {
+    "start": 1713.93,
+    "end": 1718.83,
+    "text": "elles me demandent des fois de venir avec 7 élèves pour visiter."
+  },
+  {
+    "start": 1719.27,
+    "end": 1721.79,
+    "text": "Et puis, moi, il y a quelques informations que je voudrais avoir"
+  },
+  {
+    "start": 1721.79,
+    "end": 1722.83,
+    "text": "quand ils me font la demande."
+  },
+  {
+    "start": 1723.11,
+    "end": 1728.54,
+    "text": "Et du coup, j'aimerais bien qu'ils puissent y avoir..."
+  },
+  {
+    "start": 1728.64,
+    "end": 1736.16,
+    "text": "Sur cette plateforme, un encadré de demande de visite"
+  },
+  {
+    "start": 1736.16,
+    "end": 1740.8,
+    "text": "et que ce soit uniquement pour les écoles."
+  },
+  {
+    "start": 1741.46,
+    "end": 1741.74,
+    "text": "OK."
+  },
+  {
+    "start": 1741.82,
+    "end": 1745.76,
+    "text": "Un encadré de demande de visite à l'écran principal, tu veux dire ?"
+  },
+  {
+    "start": 1745.76,
+    "end": 1746.38,
+    "text": "Ouais, voilà."
+  },
+  {
+    "start": 1746.8,
+    "end": 1747.8,
+    "text": "Et du coup, moi, je ferai..."
+  },
+  {
+    "start": 1748.48,
+    "end": 1750.92,
+    "text": "Ça n'ouvrira pas la SharePoint list."
+  },
+  {
+    "start": 1751.26,
+    "end": 1753.2,
+    "text": "Ça sera une demande qui me vient directement,"
+  },
+  {
+    "start": 1754.16,
+    "end": 1757.28,
+    "text": "mais juste avec le formulaire, avec toutes les infos dont j'ai besoin."
+  },
+  {
+    "start": 1757.68,
+    "end": 1758.2,
+    "text": "OK, ouais."
+  },
+  {
+    "start": 1758.78,
+    "end": 1759.06,
+    "text": "OK."
+  },
+  {
+    "start": 1759.66,
+    "end": 1759.96,
+    "text": "Parfait."
+  },
+  {
+    "start": 1759.96,
+    "end": 1760.24,
+    "text": "OK."
+  },
+  {
+    "start": 1760.68,
+    "end": 1761.76,
+    "text": "Ce sera un flux très simple."
+  },
+  {
+    "start": 1762.38,
+    "end": 1763.78,
+    "text": "Mais je vais faire le formulaire."
+  },
+  {
+    "start": 1764.24,
+    "end": 1767.74,
+    "text": "Et puis, je vais l'enlever."
+  },
+  {
+    "start": 1768.46,
+    "end": 1773.58,
+    "text": "Tu m'envoies juste un tableau Excel et puis..."
+  },
+  {
+    "start": 1773.58,
+    "end": 1773.9,
+    "text": "OK."
+  },
+  {
+    "start": 1774.36,
+    "end": 1775.56,
+    "text": "Formulaire de demande de visite."
+  },
+  {
+    "start": 1779.96,
+    "end": 1782.86,
+    "text": "Et puis, le dossier DSI."
+  },
+  {
+    "start": 1783.08,
+    "end": 1785.12,
+    "text": "Alors, le dossier DSI, c'est un exemple."
+  },
+  {
+    "start": 1785.68,
+    "end": 1789.68,
+    "text": "Le DSI, c'est ce qu'ils utilisent sur le secteur éducatif"
+  },
+  {
+    "start": 1789.68,
+    "end": 1791.16,
+    "text": "pour le suivi des bénéficiaires."
+  },
+  {
+    "start": 1792.36,
+    "end": 1793.34,
+    "text": "C'est un..."
+  },
+  {
+    "start": 1793.34,
+    "end": 1798.14,
+    "text": "Comme, en fait, les bénéficiaires, ils sont dans un appartement,"
+  },
+  {
+    "start": 1798.36,
+    "end": 1801.14,
+    "text": "et puis, il y a quelqu'un qui va arriver le matin."
+  },
+  {
+    "start": 1801.38,
+    "end": 1803.48,
+    "text": "Ensuite, à midi, il y a quelqu'un qui prend le relais."
+  },
+  {
+    "start": 1803.62,
+    "end": 1805.44,
+    "text": "Et le soir, c'est quelqu'un d'autre."
+  },
+  {
+    "start": 1806.18,
+    "end": 1809.1,
+    "text": "Et dans ce DSI, en fait, il y a tout le suivi."
+  },
+  {
+    "start": 1809.2,
+    "end": 1814.41,
+    "text": "Il y a un peu toute la vie du bénéficiaire."
+  },
+  {
+    "start": 1815.01,
+    "end": 1817.07,
+    "text": "Toute sa journée, en fait, et toute sa vie."
+  },
+  {
+    "start": 1817.43,
+    "end": 1819.51,
+    "text": "Donc, ça va être toutes les activités qu'ils font,"
+  },
+  {
+    "start": 1819.71,
+    "end": 1822.01,
+    "text": "tous les soins, tous les médicaments qu'ils prennent."
+  },
+  {
+    "start": 1822.49,
+    "end": 1825.53,
+    "text": "Et ça fait que toutes les personnes qui changent dans la journée..."
+  },
+  {
+    "start": 1826.27,
+    "end": 1827.53,
+    "text": "Parce qu'en plus de ça, il y a..."
+  },
+  {
+    "start": 1827.53,
+    "end": 1828.63,
+    "text": "Alors, il y a les éducateurs, les éducateurs, les éducateurs, les éducateurs, les éducateurs, les éducateurs, les éducateurs, les éducateurs, les éducateurs."
+  },
+  {
+    "start": 1828.65,
+    "end": 1833.57,
+    "text": "Enfin, les encadrants, les ASE, les accompagnants qui vont être là, qui changent tout au long de la journée."
+  },
+  {
+    "start": 1834.03,
+    "end": 1837.97,
+    "text": "Mais il y a en plus de ça les infirmiers, il y a en plus de ça les thérapeutes, herbothérapie, etc."
+  },
+  {
+    "start": 1838.67,
+    "end": 1846.62,
+    "text": "Il y a les activités loisirs, on va dire."
+  },
+  {
+    "start": 1846.94,
+    "end": 1849.18,
+    "text": "Et donc, tout le monde a accès à ce fichier."
+  },
+  {
+    "start": 1850.23,
+    "end": 1852.09,
+    "text": "Et tout le monde voit un peu tout ce qui se passe."
+  },
+  {
+    "start": 1852.73,
+    "end": 1856.79,
+    "text": "Et puis, au ZFIP, on s'est rendu compte que nous, on a quand même plusieurs intervenants."
+  },
+  {
+    "start": 1857.09,
+    "end": 1858.79,
+    "text": "Et tout est un peu..."
+  },
+  {
+    "start": 1858.79,
+    "end": 1862.91,
+    "text": "Tu as bien vu dans le dossier, il y a la fiche d'entrée, il y a..."
+  },
+  {
+    "start": 1862.91,
+    "end": 1866.57,
+    "text": "Au moment où je suis en train de te dire ça, je me dis qu'on aurait peut-être dû commencer par ça."
+  },
+  {
+    "start": 1866.83,
+    "end": 1872.62,
+    "text": "Parce que tu as fait du boulot, en fait, sur la base, mais je ne savais pas si..."
+  },
+  {
+    "start": 1872.62,
+    "end": 1874.38,
+    "text": "Je ne pensais pas que j'allais te garder aussi longtemps."
+  },
+  {
+    "start": 1878.32,
+    "end": 1881.72,
+    "text": "Commencer par ça ? Pourquoi ? Parce que c'est plus important que ce qu'on fait, peut-être ?"
+  },
+  {
+    "start": 1881.72,
+    "end": 1883.94,
+    "text": "Non, non, pas du tout. Ce n'est pas du tout plus important."
+  },
+  {
+    "start": 1884.36,
+    "end": 1889.14,
+    "text": "Mais c'est que tu as potentiellement bossé dans un sens et qu'on risque de le défaire."
+  },
+  {
+    "start": 1889.82,
+    "end": 1891.2,
+    "text": "Je vais repartager mon écran."
+  },
+  {
+    "start": 1891.28,
+    "end": 1891.96,
+    "text": "Ça, c'est l'évolution."
+  },
+  {
+    "start": 1893.67,
+    "end": 1895.67,
+    "text": "Je repartage mon écran pour te montrer."
+  },
+  {
+    "start": 1895.87,
+    "end": 1905.22,
+    "text": "En fait, en gros, tu vois, donc, là, stage découverte, ça, c'est le dossier modèle que je t'ai donné"
+  },
+  {
+    "start": 1905.22,
+    "end": 1907.66,
+    "text": "et qu'il renomme tout automatiquement."
+  },
+  {
+    "start": 1909.43,
+    "end": 1911.65,
+    "text": "Donc ça, ça ne va pas bouger la chaîne de la déclaration."
+  },
+  {
+    "start": 1911.97,
+    "end": 1920.6,
+    "text": "Mais dans la fiche d'entrée, fiche d'entrée plus suivi, tu vois..."
+  },
+  {
+    "start": 1920.6,
+    "end": 1922.84,
+    "text": "Attends, je vais te montrer en réel sur un truc."
+  },
+  {
+    "start": 1932.74,
+    "end": 1943.05,
+    "text": "Tu veux faire un truc meilleur que ça, quoi."
+  },
+  {
+    "start": 1944.07,
+    "end": 1944.31,
+    "text": "Oui."
+  },
+  {
+    "start": 1944.91,
+    "end": 1945.87,
+    "text": "En fait, c'est ça, quoi."
+  },
+  {
+    "start": 1946.35,
+    "end": 1947.81,
+    "text": "Tu veux faire un truc meilleur que ça, quoi."
+  },
+  {
+    "start": 1948.09,
+    "end": 1949.83,
+    "text": "Qu'à chaque fois, consulter, consulter."
+  },
+  {
+    "start": 1950.11,
+    "end": 1952.83,
+    "text": "Parce que ça, j'avais remarqué aussi avec la blanchisserie de Tourbillon,"
+  },
+  {
+    "start": 1953.15,
+    "end": 1954.81,
+    "text": "on était aussi..."
+  },
+  {
+    "start": 1954.81,
+    "end": 1955.83,
+    "text": "C'était en fait Fabien."
+  },
+  {
+    "start": 1956.69,
+    "end": 1959.43,
+    "text": "Il avait aussi plein de fichiers rangés partout, comme ça."
+  },
+  {
+    "start": 1960.3,
+    "end": 1963.06,
+    "text": "Et au final, on a décidé de faire un Power Apps."
+  },
+  {
+    "start": 1963.44,
+    "end": 1966.38,
+    "text": "Et comme ça, il pouvait juste cliquer sur une recherche ou autre."
+  },
+  {
+    "start": 1966.46,
+    "end": 1969.86,
+    "text": "Mais c'est vrai que l'évolution, ce serait encore une fois un board intéressant."
+  },
+  {
+    "start": 1970.1,
+    "end": 1975.68,
+    "text": "Ou je ne sais pas, un suivi par personne avec un filtre par nommage ou avec jour."
+  },
+  {
+    "start": 1977.26,
+    "end": 1983.26,
+    "text": "En fait, moi, ce que je voudrais, c'est avoir l'équivalent d'un dossier papier."
+  },
+  {
+    "start": 1983.44,
+    "end": 1989.52,
+    "text": "Tu vois, avant, tu avais un classeur dans le monde avant Internet, avant le numérique."
+  },
+  {
+    "start": 1989.88,
+    "end": 1990.88,
+    "text": "Tu avais un classeur."
+  },
+  {
+    "start": 1990.88,
+    "end": 1999.98,
+    "text": "Et du coup, dans ce classeur, tu pouvais avoir la section 1, c'est tout ce qui est les coordonnées, les infos."
+  },
+  {
+    "start": 2000.1,
+    "end": 2003.36,
+    "text": "Info Admin, par exemple, tu vois."
+  },
+  {
+    "start": 2003.76,
+    "end": 2011.01,
+    "text": "Ce qui correspondrait à la fiche de demande d'entrée, s'il veut bien..."
+  },
+  {
+    "start": 2011.01,
+    "end": 2011.81,
+    "text": "Tu vois ?"
+  },
+  {
+    "start": 2011.81,
+    "end": 2014.57,
+    "text": "Donc, ça serait dans cette première page."
+  },
+  {
+    "start": 2015.72,
+    "end": 2017.44,
+    "text": "Mais ce n'est pas un bon exemple."
+  },
+  {
+    "start": 2017.6,
+    "end": 2018.08,
+    "text": "Si, tu vois."
+  },
+  {
+    "start": 2018.38,
+    "end": 2022.54,
+    "text": "Dans cette première section, il y aurait tout ce qui concerne l'identité de la personne."
+  },
+  {
+    "start": 2023.0,
+    "end": 2024.28,
+    "text": "Donc, le nom, prénom, etc."
+  },
+  {
+    "start": 2024.54,
+    "end": 2029.7,
+    "text": "Donc, une partie de la fiche, là, que je viens de te montrer, que tu connais maintenant assez bien."
+  },
+  {
+    "start": 2030.74,
+    "end": 2030.86,
+    "text": "Oui."
+  },
+  {
+    "start": 2030.86,
+    "end": 2031.5,
+    "text": "Tu vois ?"
+  },
+  {
+    "start": 2031.5,
+    "end": 2043.58,
+    "text": "Avec la personne qui a suivi, le nom, prénom, toutes ces informations, la conseillère AI, la conseillère, la curatrice, la taille, machin."
+  },
+  {
+    "start": 2044.04,
+    "end": 2054.56,
+    "text": "Plus, dans cette section, tu retrouverais le permis."
+  },
+  {
+    "start": 2055.26,
+    "end": 2055.92,
+    "text": "Tu vois ?"
+  },
+  {
+    "start": 2055.92,
+    "end": 2057.9,
+    "text": "Le permis, les diplômes, etc."
+  },
+  {
+    "start": 2058.12,
+    "end": 2059.94,
+    "text": "Donc, ça serait tout ce qui concerne la personne."
+  },
+  {
+    "start": 2060.94,
+    "end": 2066.24,
+    "text": "Après, il faudrait une section suivi des FIP."
+  },
+  {
+    "start": 2066.82,
+    "end": 2067.54,
+    "text": "Tu vois ?"
+  },
+  {
+    "start": 2067.54,
+    "end": 2071.6,
+    "text": "Là, les sections, j'y suis au cas par cas."
+  },
+  {
+    "start": 2071.8,
+    "end": 2076.1,
+    "text": "Mais, par exemple, moi, là, ce que je fais, tu vois, je l'ai rencontré en avril, la première fois."
+  },
+  {
+    "start": 2076.24,
+    "end": 2077.42,
+    "text": "Il y avait ces personnes-là."
+  },
+  {
+    "start": 2077.52,
+    "end": 2078.7,
+    "text": "C'était un bilan de fin de stage."
+  },
+  {
+    "start": 2079.28,
+    "end": 2084.23,
+    "text": "Après, je l'ai revu en avril avec la conseillère AI."
+  },
+  {
+    "start": 2084.81,
+    "end": 2087.01,
+    "text": "Et puis, c'était encore une fois un bilan de stage."
+  },
+  {
+    "start": 2087.51,
+    "end": 2089.03,
+    "text": "Et puis, après, je l'ai revu le 12 mai."
+  },
+  {
+    "start": 2089.17,
+    "end": 2089.81,
+    "text": "Je l'ai revu..."
+  },
+  {
+    "start": 2089.81,
+    "end": 2090.49,
+    "text": "Tu vois ?"
+  },
+  {
+    "start": 2090.49,
+    "end": 2091.35,
+    "text": "Ça serait..."
+  },
+  {
+    "start": 2091.35,
+    "end": 2093.21,
+    "text": "Donc, là, ça pourrait être le suivi des FIP."
+  },
+  {
+    "start": 2093.21,
+    "end": 2095.29,
+    "text": "Ensuite, le suivi des FIP scolaires."
+  },
+  {
+    "start": 2095.69,
+    "end": 2096.34,
+    "text": "Ah ah !"
+  },
+  {
+    "start": 2097.3,
+    "end": 2109.58,
+    "text": "Et, en fait, en gros, ce que je voudrais, moi, c'est que là-dessus, il y ait un document où tu cliques,"
+  },
+  {
+    "start": 2111.97,
+    "end": 2115.47,
+    "text": "où on puisse mettre plein d'infos."
+  },
+  {
+    "start": 2115.57,
+    "end": 2119.85,
+    "text": "Alors, les pièces d'identité, etc., peut-être pas, elles resteront en format PDF."
+  },
+  {
+    "start": 2120.01,
+    "end": 2123.54,
+    "text": "Ce n'est pas gênant parce qu'elles seront enregistrées automatiquement, etc."
+  },
+  {
+    "start": 2123.7,
+    "end": 2124.8,
+    "text": "Donc, ça, ce n'est pas du tout gênant."
+  },
+  {
+    "start": 2125.16,
+    "end": 2127.96,
+    "text": "Mais, en termes de suivi, c'est comme s'il y avait un classeur, tu vois,"
+  },
+  {
+    "start": 2127.96,
+    "end": 2131.99,
+    "text": "où on puisse avoir toutes les informations par rapport..."
+  },
+  {
+    "start": 2133.25,
+    "end": 2137.02,
+    "text": "à l'identité, par rapport au stage qu'il aura fait."
+  },
+  {
+    "start": 2137.16,
+    "end": 2139.04,
+    "text": "Tu vois que c'est stage 1."
+  },
+  {
+    "start": 2139.24,
+    "end": 2143.3,
+    "text": "Et puis, dans le stage 1, eh bien, j'ai les dates, les infos, le bilan."
+  },
+  {
+    "start": 2144.68,
+    "end": 2146.68,
+    "text": "Stage 2, les dates, les infos, le bilan."
+  },
+  {
+    "start": 2147.9,
+    "end": 2149.08,
+    "text": "Le suivi scolaire."
+  },
+  {
+    "start": 2149.2,
+    "end": 2150.78,
+    "text": "Tu vois ce que je veux dire ou pas ?"
+  },
+  {
+    "start": 2150.78,
+    "end": 2151.52,
+    "text": "Oui, oui, je vois, je vois."
+  },
+  {
+    "start": 2152.32,
+    "end": 2152.54,
+    "text": "Voilà."
+  },
+  {
+    "start": 2153.16,
+    "end": 2157.0,
+    "text": "Donc, ce serait avec des onglets, en fait, pouvoir avoir des onglets."
+  },
+  {
+    "start": 2157.0,
+    "end": 2159.54,
+    "text": "Et puis, avoir des onglets et des sous-onglets."
+  },
+  {
+    "start": 2163.74,
+    "end": 2166.54,
+    "text": "Et visuellement, ce serait dans la SharePoint que tu voudrais..."
+  },
+  {
+    "start": 2166.54,
+    "end": 2166.68,
+    "text": "Eh bien, c'est..."
+  },
+  {
+    "start": 2166.7,
+    "end": 2171.15,
+    "text": "Ça, c'est déjà sous forme de métadonnées, tu dis ?"
+  },
+  {
+    "start": 2171.15,
+    "end": 2174.19,
+    "text": "Alors, visuellement, je voudrais qu'il soit dans le dossier là."
+  },
+  {
+    "start": 2176.84,
+    "end": 2178.36,
+    "text": "Tu vois, regarde Dan, par exemple."
+  },
+  {
+    "start": 2179.44,
+    "end": 2180.46,
+    "text": "Dan, c'est plus parlant."
+  },
+  {
+    "start": 2181.1,
+    "end": 2184.74,
+    "text": "Parce que Dan, j'ai une fiche d'entrée pour la restauration,"
+  },
+  {
+    "start": 2184.9,
+    "end": 2186.32,
+    "text": "une fiche d'entrée pour la cuisine,"
+  },
+  {
+    "start": 2186.6,
+    "end": 2188.52,
+    "text": "une fiche d'entrée pour la mesure d'orientation,"
+  },
+  {
+    "start": 2188.6,
+    "end": 2189.5,
+    "text": "une première mesure,"
+  },
+  {
+    "start": 2189.72,
+    "end": 2191.22,
+    "text": "mesure d'orientation numéro 2."
+  },
+  {
+    "start": 2192.75,
+    "end": 2196.15,
+    "text": "Et, en fait, là, c'est parce que ce qui change, c'est les dates."
+  },
+  {
+    "start": 2198.0,
+    "end": 2199.28,
+    "text": "Tu vois, toute la..."
+  },
+  {
+    "start": 2199.28,
+    "end": 2203.89,
+    "text": "Donc, c'est redondant."
+  },
+  {
+    "start": 2203.95,
+    "end": 2205.77,
+    "text": "Il y a plusieurs dossiers pour la même chose, au final."
+  },
+  {
+    "start": 2205.97,
+    "end": 2207.67,
+    "text": "Il y a plusieurs dossiers pour la même chose."
+  },
+  {
+    "start": 2207.79,
+    "end": 2211.02,
+    "text": "Pourquoi il ne m'ouvre pas ?"
+  },
+  {
+    "start": 2211.02,
+    "end": 2211.22,
+    "text": "Voilà."
+  },
+  {
+    "start": 2211.88,
+    "end": 2215.5,
+    "text": "En fait, tu vois, là, j'ai copié-collé le dossier à chaque fois."
+  },
+  {
+    "start": 2215.6,
+    "end": 2216.66,
+    "text": "Donc, j'ai toutes les infos là."
+  },
+  {
+    "start": 2216.8,
+    "end": 2217.74,
+    "text": "Mais ça, je n'ai pas besoin..."
+  },
+  {
+    "start": 2217.74,
+    "end": 2220.74,
+    "text": "Ça fait des infos en plus sur le serveur qui ne sert à rien, quoi."
+  },
+  {
+    "start": 2221.3,
+    "end": 2221.58,
+    "text": "OK."
+  },
+  {
+    "start": 2222.7,
+    "end": 2225.14,
+    "text": "Et ce qui change, c'est soit les dates de stage ici,"
+  },
+  {
+    "start": 2225.58,
+    "end": 2228.14,
+    "text": "soit ici, la demande d'engagement."
+  },
+  {
+    "start": 2228.28,
+    "end": 2230.64,
+    "text": "Parce que quand on fait une mesure d'orientation,"
+  },
+  {
+    "start": 2230.64,
+    "end": 2231.6,
+    "text": "une mesure AI,"
+  },
+  {
+    "start": 2231.6,
+    "end": 2234.92,
+    "text": "je fais une demande d'engagement pour ma collègue du service RH."
+  },
+  {
+    "start": 2235.62,
+    "end": 2235.74,
+    "text": "OK."
+  },
+  {
+    "start": 2236.81,
+    "end": 2238.01,
+    "text": "Et tu vois, elle, après..."
+  },
+  {
+    "start": 2238.87,
+    "end": 2247.97,
+    "text": "Comment elle fait ?"
+  },
+  {
+    "start": 2247.97,
+    "end": 2248.93,
+    "text": "Je ne l'ai pas là, mais..."
+  },
+  {
+    "start": 2248.93,
+    "end": 2251.33,
+    "text": "Elle, après, elle le transforme dans un autre document."
+  },
+  {
+    "start": 2252.02,
+    "end": 2252.42,
+    "text": "OK."
+  },
+  {
+    "start": 2253.14,
+    "end": 2254.8,
+    "text": "Dans un document Word qu'elle fait signer."
+  },
+  {
+    "start": 2254.88,
+    "end": 2256.7,
+    "text": "Parce qu'à partir de ces informations,"
+  },
+  {
+    "start": 2257.4,
+    "end": 2258.9,
+    "text": "elle, elle crée un document Word"
+  },
+  {
+    "start": 2258.9,
+    "end": 2261.86,
+    "text": "qu'elle fait signer par le responsable RH."
+  },
+  {
+    "start": 2262.44,
+    "end": 2262.8,
+    "text": "OK."
+  },
+  {
+    "start": 2264.45,
+    "end": 2266.95,
+    "text": "Et ça, je vais réussir à le trouver, peut-être."
+  },
+  {
+    "start": 2268.1,
+    "end": 2270.46,
+    "text": "Je te montre à quoi ça peut ressembler."
+  },
+  {
+    "start": 2270.46,
+    "end": 2270.62,
+    "text": "OK."
+  },
+  {
+    "start": 2270.62,
+    "end": 2287.92,
+    "text": "Est-ce que là, elle l'avait fait ?"
+  },
+  {
+    "start": 2287.92,
+    "end": 2288.46,
+    "text": "Je ne l'ai pas."
+  },
+  {
+    "start": 2288.58,
+    "end": 2289.16,
+    "text": "Je ne sais pas pourquoi."
+  },
+  {
+    "start": 2292.45,
+    "end": 2292.81,
+    "text": "Mais voilà."
+  },
+  {
+    "start": 2292.95,
+    "end": 2294.39,
+    "text": "En fait, en gros, ce que je voudrais,"
+  },
+  {
+    "start": 2294.53,
+    "end": 2297.31,
+    "text": "c'est qu'on puisse avoir mes collègues et moi,"
+  },
+  {
+    "start": 2297.69,
+    "end": 2302.7,
+    "text": "finalement, comme un dossier de suivi"
+  },
+  {
+    "start": 2302.7,
+    "end": 2305.14,
+    "text": "où il n'y a pas besoin de mettre des pièges jointes,"
+  },
+  {
+    "start": 2305.52,
+    "end": 2307.36,
+    "text": "mais juste un dossier de suivi,"
+  },
+  {
+    "start": 2307.42,
+    "end": 2309.58,
+    "text": "tu vois, où on puisse faire apparaître"
+  },
+  {
+    "start": 2309.58,
+    "end": 2316.26,
+    "text": "un onglet identité, partie admin, par exemple,"
+  },
+  {
+    "start": 2316.26,
+    "end": 2317.86,
+    "text": "un onglet stage,"
+  },
+  {
+    "start": 2318.16,
+    "end": 2319.7,
+    "text": "où là, il y aurait des sous-onglets,"
+  },
+  {
+    "start": 2320.98,
+    "end": 2322.82,
+    "text": "stage 1, stage 2 ou stage restauration,"
+  },
+  {
+    "start": 2323.0,
+    "end": 2324.12,
+    "text": "stage technique, stage machin."
+  },
+  {
+    "start": 2325.78,
+    "end": 2327.18,
+    "text": "Et ça serait module et stage,"
+  },
+  {
+    "start": 2327.26,
+    "end": 2329.34,
+    "text": "module métier, slash stage, par exemple."
+  },
+  {
+    "start": 2329.84,
+    "end": 2331.28,
+    "text": "Et puis, un onglet mesure,"
+  },
+  {
+    "start": 2331.5,
+    "end": 2333.52,
+    "text": "un onglet remédiation scolaire"
+  },
+  {
+    "start": 2333.52,
+    "end": 2336.02,
+    "text": "et un onglet formation."
+  },
+  {
+    "start": 2337.06,
+    "end": 2337.1,
+    "text": "OK."
+  },
+  {
+    "start": 2337.26,
+    "end": 2338.12,
+    "text": "Et comme ça, en fait,"
+  },
+  {
+    "start": 2338.52,
+    "end": 2340.22,
+    "text": "on pourrait avoir tout."
+  },
+  {
+    "start": 2340.5,
+    "end": 2341.7,
+    "text": "Et puis, un onglet insertion."
+  },
+  {
+    "start": 2342.16,
+    "end": 2342.98,
+    "text": "OK."
+  },
+  {
+    "start": 2343.64,
+    "end": 2346.26,
+    "text": "Et comme ça, on pourrait avoir toutes les informations."
+  },
+  {
+    "start": 2346.26,
+    "end": 2346.34,
+    "text": "Oui."
+  },
+  {
+    "start": 2349.5,
+    "end": 2351.18,
+    "text": "d'une personne, toute la vie"
+  },
+  {
+    "start": 2351.18,
+    "end": 2353.14,
+    "text": "clairbois de ce jeune"
+  },
+  {
+    "start": 2353.14,
+    "end": 2355.6,
+    "text": "dans un seul document"
+  },
+  {
+    "start": 2355.6,
+    "end": 2357.64,
+    "text": "comme ça, on peut regarder d'un coup d'oeil"
+  },
+  {
+    "start": 2357.64,
+    "end": 2359.68,
+    "text": "il a fait 5 stages"
+  },
+  {
+    "start": 2359.68,
+    "end": 2361.28,
+    "text": "de telle date à telle date"
+  },
+  {
+    "start": 2361.28,
+    "end": 2364.02,
+    "text": "et puis après il a été en mesure"
+  },
+  {
+    "start": 2364.02,
+    "end": 2365.3,
+    "text": "et puis il a été là, puis il a été là"
+  },
+  {
+    "start": 2365.3,
+    "end": 2366.4,
+    "text": "puis il a fait ci, il a fait ça"
+  },
+  {
+    "start": 2366.4,
+    "end": 2367.94,
+    "text": "avec les évaluations"
+  },
+  {
+    "start": 2367.94,
+    "end": 2374.29,
+    "text": "à voir les évaluations, comment on fait"
+  },
+  {
+    "start": 2374.29,
+    "end": 2376.65,
+    "text": "mais du coup, est-ce que ça c'est quelque chose"
+  },
+  {
+    "start": 2376.65,
+    "end": 2378.25,
+    "text": "qui est faisable ?"
+  },
+  {
+    "start": 2378.25,
+    "end": 2381.51,
+    "text": "Oui, après il faut rester dans la"
+  },
+  {
+    "start": 2381.51,
+    "end": 2382.01,
+    "text": "SharePoint"
+  },
+  {
+    "start": 2382.01,
+    "end": 2387.64,
+    "text": "je pense que c'est faisable"
+  },
+  {
+    "start": 2387.64,
+    "end": 2389.84,
+    "text": "après c'est juste une question de mettre à jour les données"
+  },
+  {
+    "start": 2389.84,
+    "end": 2393.21,
+    "text": "depuis la SharePoint"
+  },
+  {
+    "start": 2393.21,
+    "end": 2393.99,
+    "text": "jusqu'à"
+  },
+  {
+    "start": 2393.99,
+    "end": 2396.83,
+    "text": "moi je vois deux mondes"
+  },
+  {
+    "start": 2396.83,
+    "end": 2398.55,
+    "text": "je vois le monde des humains"
+  },
+  {
+    "start": 2398.55,
+    "end": 2400.15,
+    "text": "où nous on est habitué avec"
+  },
+  {
+    "start": 2400.15,
+    "end": 2402.45,
+    "text": "des classeurs, des arbres en fait"
+  },
+  {
+    "start": 2402.45,
+    "end": 2404.53,
+    "text": "tu ouvres un dossier, t'as un sous-dossier"
+  },
+  {
+    "start": 2404.53,
+    "end": 2405.51,
+    "text": "t'as un autre dossier, etc."
+  },
+  {
+    "start": 2406.15,
+    "end": 2408.71,
+    "text": "et puis il y a le monde des ordinateurs, eux c'est des métadonnées"
+  },
+  {
+    "start": 2408.71,
+    "end": 2409.91,
+    "text": "où c'est vraiment"
+  },
+  {
+    "start": 2409.91,
+    "end": 2412.21,
+    "text": "comme la SharePoint liste, où t'auras juste"
+  },
+  {
+    "start": 2412.21,
+    "end": 2412.97,
+    "text": "des lignes"
+  },
+  {
+    "start": 2412.97,
+    "end": 2416.05,
+    "text": "et des colonnes"
+  },
+  {
+    "start": 2416.05,
+    "end": 2418.41,
+    "text": "avec des entêtes en haut"
+  },
+  {
+    "start": 2418.41,
+    "end": 2419.52,
+    "text": "ok"
+  },
+  {
+    "start": 2419.52,
+    "end": 2424.79,
+    "text": "alors ça"
+  },
+  {
+    "start": 2424.79,
+    "end": 2425.65,
+    "text": "mais les deux"
+  },
+  {
+    "start": 2425.65,
+    "end": 2427.97,
+    "text": "ils peuvent se combiner"
+  },
+  {
+    "start": 2427.97,
+    "end": 2430.27,
+    "text": "par exemple s'il y a une trace"
+  },
+  {
+    "start": 2430.27,
+    "end": 2432.37,
+    "text": "sur la SharePoint liste, elle peut être"
+  },
+  {
+    "start": 2432.37,
+    "end": 2434.59,
+    "text": "transférée via Power Automate"
+  },
+  {
+    "start": 2434.59,
+    "end": 2437.09,
+    "text": "dans un des sous-dossiers"
+  },
+  {
+    "start": 2437.09,
+    "end": 2439.69,
+    "text": "alors, mais le truc"
+  },
+  {
+    "start": 2439.69,
+    "end": 2441.37,
+    "text": "de ce dossier là, en fait"
+  },
+  {
+    "start": 2441.37,
+    "end": 2443.21,
+    "text": "j'ai pas forcément besoin"
+  },
+  {
+    "start": 2443.21,
+    "end": 2445.23,
+    "text": "qu'il soit dans une liste ou autre"
+  },
+  {
+    "start": 2445.23,
+    "end": 2446.83,
+    "text": "j'ai juste besoin qu'on puisse chaque"
+  },
+  {
+    "start": 2446.87,
+    "end": 2449.19,
+    "text": "le remplir, qu'il soit dans SharePoint"
+  },
+  {
+    "start": 2449.19,
+    "end": 2451.96,
+    "text": "et que chacun puisse le remplir"
+  },
+  {
+    "start": 2451.96,
+    "end": 2452.84,
+    "text": "à sa façon"
+  },
+  {
+    "start": 2452.84,
+    "end": 2454.72,
+    "text": "ah ok ok"
+  },
+  {
+    "start": 2454.72,
+    "end": 2457.8,
+    "text": "tu vois de la même manière qu'avec un classeur"
+  },
+  {
+    "start": 2457.8,
+    "end": 2458.92,
+    "text": "moi je vais"
+  },
+  {
+    "start": 2458.92,
+    "end": 2459.92,
+    "text": "mettre"
+  },
+  {
+    "start": 2459.92,
+    "end": 2463.58,
+    "text": "la fiche de stage"
+  },
+  {
+    "start": 2463.58,
+    "end": 2464.88,
+    "text": "avec les dates, etc."
+  },
+  {
+    "start": 2465.58,
+    "end": 2467.42,
+    "text": "et puis après, une fois que le stage est fini"
+  },
+  {
+    "start": 2467.42,
+    "end": 2469.04,
+    "text": "j'aurai rempli l'évaluation à la main"
+  },
+  {
+    "start": 2469.04,
+    "end": 2471.36,
+    "text": "hop, je la classe derrière la fiche de stage"
+  },
+  {
+    "start": 2471.36,
+    "end": 2473.04,
+    "text": "comme ça j'ai la fiche de stage avec toutes les infos"
+  },
+  {
+    "start": 2473.04,
+    "end": 2474.58,
+    "text": "puis derrière j'ai l'évaluation, hop"
+  },
+  {
+    "start": 2474.58,
+    "end": 2476.06,
+    "text": "et puis ma collègue, elle"
+  },
+  {
+    "start": 2477.1,
+    "end": 2477.88,
+    "text": "elle peut venir"
+  },
+  {
+    "start": 2477.88,
+    "end": 2481.24,
+    "text": "quand je le passe en formation"
+  },
+  {
+    "start": 2481.24,
+    "end": 2483.04,
+    "text": "ce jeune, donc moi je m'en occupe plus"
+  },
+  {
+    "start": 2483.04,
+    "end": 2484.84,
+    "text": "je lui donne le classeur à ma collègue"
+  },
+  {
+    "start": 2484.84,
+    "end": 2486.22,
+    "text": "et puis ma collègue, elle"
+  },
+  {
+    "start": 2486.22,
+    "end": 2489.16,
+    "text": "après dans sa partie formation"
+  },
+  {
+    "start": 2489.16,
+    "end": 2490.7,
+    "text": "elle pourra ajouter"
+  },
+  {
+    "start": 2490.7,
+    "end": 2493.5,
+    "text": "ses entretiens qu'elle a fait avec lui"
+  },
+  {
+    "start": 2493.5,
+    "end": 2494.7,
+    "text": "enfin tu vois"
+  },
+  {
+    "start": 2494.7,
+    "end": 2498.01,
+    "text": "elle pourra ajouter"
+  },
+  {
+    "start": 2498.01,
+    "end": 2498.67,
+    "text": "ses documents"
+  },
+  {
+    "start": 2498.67,
+    "end": 2501.65,
+    "text": "ah mais ça elle peut pas"
+  },
+  {
+    "start": 2501.65,
+    "end": 2504.88,
+    "text": "venir les ajouter ici c'est ça ?"
+  },
+  {
+    "start": 2504.88,
+    "end": 2506.12,
+    "text": "alors si, elle peut venir"
+  },
+  {
+    "start": 2506.12,
+    "end": 2507.72,
+    "text": "dans ce dossier"
+  },
+  {
+    "start": 2507.72,
+    "end": 2508.38,
+    "text": "mais"
+  },
+  {
+    "start": 2508.5,
+    "end": 2510.5,
+    "text": "ce qu'on voudrait c'est qu'il y ait tout"
+  },
+  {
+    "start": 2510.5,
+    "end": 2512.5,
+    "text": "les évaluations"
+  },
+  {
+    "start": 2512.5,
+    "end": 2513.5,
+    "text": "tu vois que"
+  },
+  {
+    "start": 2513.5,
+    "end": 2515.5,
+    "text": "parce que là, regarde, par exemple"
+  },
+  {
+    "start": 2515.5,
+    "end": 2519.11,
+    "text": "Dan, là il y a tout ce qui est administratif"
+  },
+  {
+    "start": 2519.11,
+    "end": 2522.43,
+    "text": "et puis là, il y a tout ce qui est évaluation"
+  },
+  {
+    "start": 2522.43,
+    "end": 2525.85,
+    "text": "et donc pour voir l'évaluation"
+  },
+  {
+    "start": 2525.85,
+    "end": 2531.93,
+    "text": "ben là je suis avec les"
+  },
+  {
+    "start": 2531.93,
+    "end": 2539.86,
+    "text": "là je suis avec les dates, tu vois"
+  },
+  {
+    "start": 2539.86,
+    "end": 2540.86,
+    "text": "ah non mais est-ce que"
+  },
+  {
+    "start": 2540.86,
+    "end": 2543.86,
+    "text": "attends, moi j'ai pas bien compris ta demande vis-à-vis de moi"
+  },
+  {
+    "start": 2543.86,
+    "end": 2546.86,
+    "text": "parce que moi je comprenais juste du rangement"
+  },
+  {
+    "start": 2546.86,
+    "end": 2550.53,
+    "text": "est-ce que c'est ça, tu veux juste ranger les choses"
+  },
+  {
+    "start": 2550.53,
+    "end": 2552.53,
+    "text": "non, je veux créer"
+  },
+  {
+    "start": 2552.53,
+    "end": 2554.53,
+    "text": "un fichier ou un document"
+  },
+  {
+    "start": 2554.53,
+    "end": 2556.01,
+    "text": "autrement"
+  },
+  {
+    "start": 2556.01,
+    "end": 2557.01,
+    "text": "non"
+  },
+  {
+    "start": 2557.01,
+    "end": 2561.01,
+    "text": "alors le rangement de cet arborescence là"
+  },
+  {
+    "start": 2561.01,
+    "end": 2562.01,
+    "text": "on la garde"
+  },
+  {
+    "start": 2562.01,
+    "end": 2563.1,
+    "text": "ok"
+  },
+  {
+    "start": 2563.1,
+    "end": 2564.23,
+    "text": "a priori"
+  },
+  {
+    "start": 2564.23,
+    "end": 2568.23,
+    "text": "et après c'est dans administratif que tu veux faire"
+  },
+  {
+    "start": 2568.23,
+    "end": 2569.23,
+    "text": "d'autres rangements au final"
+  },
+  {
+    "start": 2569.23,
+    "end": 2570.23,
+    "text": "c'est juste ça en fait"
+  },
+  {
+    "start": 2570.23,
+    "end": 2573.23,
+    "text": "non, je veux créer un document"
+  },
+  {
+    "start": 2573.23,
+    "end": 2575.23,
+    "text": "un fichier"
+  },
+  {
+    "start": 2575.23,
+    "end": 2577.26,
+    "text": "dans lequel il y a plusieurs onglets"
+  },
+  {
+    "start": 2577.26,
+    "end": 2582.58,
+    "text": "plusieurs onglets. Je ne sais pas si ça peut être un OneNote, par exemple."
+  },
+  {
+    "start": 2586.97,
+    "end": 2589.24,
+    "text": "Attends. Là."
+  },
+  {
+    "start": 2590.38,
+    "end": 2593.44,
+    "text": "Tu vois, moi, j'avais regardé dans OneNote."
+  },
+  {
+    "start": 2598.14,
+    "end": 2601.56,
+    "text": "Là-dessus, tu vois, j'avais essayé de le créer un peu comme ça."
+  },
+  {
+    "start": 2601.7,
+    "end": 2605.88,
+    "text": "Là, j'avais les informations générales, mais du coup, comme c'est des sections, etc.,"
+  },
+  {
+    "start": 2605.88,
+    "end": 2607.04,
+    "text": "ce n'était pas très clair."
+  },
+  {
+    "start": 2607.56,
+    "end": 2613.28,
+    "text": "Mais l'équivalent de ce que je voudrais, c'est ça, c'est d'avoir un truc avec administratif."
+  },
+  {
+    "start": 2613.28,
+    "end": 2614.28,
+    "text": "Hop, tu vois."
+  },
+  {
+    "start": 2614.28,
+    "end": 2615.6,
+    "text": "Voilà. Ensuite, stage."
+  },
+  {
+    "start": 2616.02,
+    "end": 2620.52,
+    "text": "Et dans stage, je voudrais qu'il y ait, voilà, première rencontre, le bilan,"
+  },
+  {
+    "start": 2620.9,
+    "end": 2625.36,
+    "text": "bilan intermédiaire 1, bilan final, tu vois, et qu'il y ait stage 1 ou 2,"
+  },
+  {
+    "start": 2625.68,
+    "end": 2627.1,
+    "text": "qu'on puisse noter les absences."
+  },
+  {
+    "start": 2629.12,
+    "end": 2631.02,
+    "text": "Est-ce que c'est plus clair un peu maintenant ou pas ?"
+  },
+  {
+    "start": 2631.02,
+    "end": 2635.98,
+    "text": "Oui, en fait, tu veux sortir du système SharePoint ?"
+  },
+  {
+    "start": 2635.98,
+    "end": 2638.6,
+    "text": "Non, pas forcément, parce que ça, c'est dans SharePoint."
+  },
+  {
+    "start": 2638.86,
+    "end": 2642.52,
+    "text": "Oui, mais au final, quand tu cliques sur OneNote, tu es dans SharePoint."
+  },
+  {
+    "start": 2642.52,
+    "end": 2644.62,
+    "text": "Oui, parce que ça fait aussi partie de..."
+  },
+  {
+    "start": 2644.62,
+    "end": 2644.98,
+    "text": "Ok."
+  },
+  {
+    "start": 2645.88,
+    "end": 2652.48,
+    "text": "Je veux juste un fichier qui permette de regrouper, tu vois, par exemple, informations générales."
+  },
+  {
+    "start": 2652.64,
+    "end": 2662.7,
+    "text": "Si j'ajoute une page, et puis là, je fais coordonnées, ok ?"
+  },
+  {
+    "start": 2662.7,
+    "end": 2668.95,
+    "text": "Et puis là, je vais taper nom, prénom..."
+  },
+  {
+    "start": 2668.95,
+    "end": 2674.47,
+    "text": "Et toutes les personnes, elles ont accès à cette application ?"
+  },
+  {
+    "start": 2674.47,
+    "end": 2678.28,
+    "text": "Enfin, elles ont tous accès à Clairbois ?"
+  },
+  {
+    "start": 2678.28,
+    "end": 2680.44,
+    "text": "Oui, ça, c'est pour notre équipe, c'est en interne."
+  },
+  {
+    "start": 2680.44,
+    "end": 2682.42,
+    "text": "Ah, ben voilà, ok, c'est bon."
+  },
+  {
+    "start": 2682.54,
+    "end": 2685.04,
+    "text": "Pardon, j'ai pas été assez claire."
+  },
+  {
+    "start": 2685.5,
+    "end": 2690.3,
+    "text": "Donc, l'idée, ça serait de remplacer, en fait, finalement, il est où ?"
+  },
+  {
+    "start": 2690.3,
+    "end": 2694.61,
+    "text": "Ce fichier Excel, celui-là, la fiche d'entrée."
+  },
+  {
+    "start": 2695.98,
+    "end": 2696.28,
+    "text": "Ok."
+  },
+  {
+    "start": 2697.6,
+    "end": 2701.92,
+    "text": "Plus, ça remplacerait le suivi, le document Word, là."
+  },
+  {
+    "start": 2703.19,
+    "end": 2707.57,
+    "text": "Plus, pour moi, en tout cas, après, pour mes autres collègues, il faudrait que je le voie."
+  },
+  {
+    "start": 2708.11,
+    "end": 2713.89,
+    "text": "Mais pour moi, en tout cas, ça regrouperait aussi, il est où ?"
+  },
+  {
+    "start": 2713.89,
+    "end": 2715.39,
+    "text": "Je suis allée trop loin, pardon."
+  },
+  {
+    "start": 2715.77,
+    "end": 2723.36,
+    "text": "Ça regrouperait aussi les évaluations, là, tu vois ?"
+  },
+  {
+    "start": 2723.36,
+    "end": 2726.44,
+    "text": "Parce que, du coup, là, j'aurais informations générales."
+  },
+  {
+    "start": 2726.54,
+    "end": 2727.64,
+    "text": "Tu vois, là, il y a coordonnées."
+  },
+  {
+    "start": 2728.28,
+    "end": 2734.93,
+    "text": "Là, par exemple, il peut y avoir personne de contact en cas d'urgence."
+  },
+  {
+    "start": 2736.17,
+    "end": 2736.39,
+    "text": "Hop."
+  },
+  {
+    "start": 2736.89,
+    "end": 2739.71,
+    "text": "Tu vois, ajouter les tailles."
+  },
+  {
+    "start": 2742.2,
+    "end": 2747.03,
+    "text": "Et puis là, t'as haut, bas, c'est sûr."
+  },
+  {
+    "start": 2751.82,
+    "end": 2753.76,
+    "text": "Donc, ça, ça serait les informations générales."
+  },
+  {
+    "start": 2753.76,
+    "end": 2756.48,
+    "text": "Et puis après, là, ça serait..."
+  },
+  {
+    "start": 2756.48,
+    "end": 2759.7,
+    "text": "Par exemple, ou alors, je fais une nouvelle page."
+  },
+  {
+    "start": 2763.9,
+    "end": 2765.24,
+    "text": "Section stage."
+  },
+  {
+    "start": 2767.83,
+    "end": 2768.21,
+    "text": "Ok."
+  },
+  {
+    "start": 2768.49,
+    "end": 2782.34,
+    "text": "Et puis stage, il y aurait stage restauration, date, site, objectif."
+  },
+  {
+    "start": 2783.02,
+    "end": 2784.18,
+    "text": "Ouais, ouais, tout ça, j'ai compris."
+  },
+  {
+    "start": 2785.2,
+    "end": 2787.24,
+    "text": "Et puis là, ça serait..."
+  },
+  {
+    "start": 2789.96,
+    "end": 2790.92,
+    "text": "Ouais, là, je ne pourrais pas..."
+  },
+  {
+    "start": 2790.92,
+    "end": 2798.19,
+    "text": "Tu vois, là, idéalement, dans ce stage-là, je voudrais recréer une section, une sous-section avec..."
+  },
+  {
+    "start": 2798.19,
+    "end": 2800.59,
+    "text": "Donc, infos générales."
+  },
+  {
+    "start": 2800.75,
+    "end": 2801.59,
+    "text": "Infos générales du stage."
+  },
+  {
+    "start": 2804.93,
+    "end": 2818.24,
+    "text": "En fait, non, c'est là-dedans que je voudrais avoir une sous-section avec informations générales."
+  },
+  {
+    "start": 2818.24,
+    "end": 2823.78,
+    "text": "Et puis, une autre sous-section avec le bilan de ce stage, tu vois."
+  },
+  {
+    "start": 2824.3,
+    "end": 2826.34,
+    "text": "Et où là, je pourrais faire mon bilan de stage."
+  },
+  {
+    "start": 2827.82,
+    "end": 2829.46,
+    "text": "Blablabla, machin."
+  },
+  {
+    "start": 2829.98,
+    "end": 2832.92,
+    "text": "Et puis là, l'autre stage, stage technique."
+  },
+  {
+    "start": 2835.37,
+    "end": 2835.55,
+    "text": "Voilà."
+  },
+  {
+    "start": 2837.96,
+    "end": 2839.42,
+    "text": "Ça, c'est les séances en général."
+  },
+  {
+    "start": 2839.42,
+    "end": 2842.74,
+    "text": "Les premières rencontres."
+  },
+  {
+    "start": 2842.94,
+    "end": 2844.3,
+    "text": "Etc., etc."
+  },
+  {
+    "start": 2844.54,
+    "end": 2852.35,
+    "text": "Là, les absences parce qu'en fait, tu vois, stage 1, par exemple."
+  },
+  {
+    "start": 2854.36,
+    "end": 2859.7,
+    "text": "Et là, je pourrais juste noter le 12 mars, le 14 mars, le 15 mars."
+  },
+  {
+    "start": 2860.48,
+    "end": 2869.94,
+    "text": "Et puis, tu vois, mes collègues, après, quand ils prennent le relais, s'il est en formation, il y aurait formation, les dates d'absence, mesures."
+  },
+  {
+    "start": 2869.94,
+    "end": 2872.94,
+    "text": "Et puis, ça nous permettrait finalement d'avoir un peu..."
+  },
+  {
+    "start": 2874.04,
+    "end": 2875.3,
+    "text": "Le suivi global."
+  },
+  {
+    "start": 2875.34,
+    "end": 2878.64,
+    "text": "Oui, franchement, c'est mieux."
+  },
+  {
+    "start": 2881.08,
+    "end": 2882.96,
+    "text": "Et là, par exemple, insertion."
+  },
+  {
+    "start": 2882.96,
+    "end": 2884.38,
+    "text": "C'est plus parlant, quoi."
+  },
+  {
+    "start": 2884.88,
+    "end": 2885.14,
+    "text": "Comme ça."
+  },
+  {
+    "start": 2886.13,
+    "end": 2887.17,
+    "text": "Ben, c'est ça."
+  },
+  {
+    "start": 2887.57,
+    "end": 2889.72,
+    "text": "Mais sauf que ça..."
+  },
+  {
+    "start": 2889.72,
+    "end": 2890.7,
+    "text": "Mais, bien sûr."
+  },
+  {
+    "start": 2893.42,
+    "end": 2897.54,
+    "text": "Ça, dans l'idée, moi, ce que je voudrais, c'est que tu..."
+  },
+  {
+    "start": 2898.18,
+    "end": 2899.66,
+    "text": "C'est le canevas, en fait."
+  },
+  {
+    "start": 2899.76,
+    "end": 2900.48,
+    "text": "C'est le cocon."
+  },
+  {
+    "start": 2900.76,
+    "end": 2902.82,
+    "text": "Et puis, qu'on puisse après le construire."
+  },
+  {
+    "start": 2905.25,
+    "end": 2907.39,
+    "text": "Mais OneNote, ce n'est pas excellent."
+  },
+  {
+    "start": 2907.39,
+    "end": 2908.39,
+    "text": "Parce qu'en fait, si..."
+  },
+  {
+    "start": 2909.21,
+    "end": 2910.95,
+    "text": "Si possible, je voudrais que ça puisse..."
+  },
+  {
+    "start": 2910.95,
+    "end": 2919.47,
+    "text": "Tu vois que dans ce truc-là, on puisse avoir un tableau Excel ou que ça, ça puisse être complété automatiquement par le Power Automate"
+  },
+  {
+    "start": 2919.47,
+    "end": 2921.39,
+    "text": "quand les gens font une demande de stage."
+  },
+  {
+    "start": 2921.51,
+    "end": 2929.73,
+    "text": "Tu vois, de la même manière que là, maintenant, tu m'as créé un flux qui vient compléter ça et renommer."
+  },
+  {
+    "start": 2930.23,
+    "end": 2932.61,
+    "text": "Ben, je voudrais que ça puisse venir compléter ce dossier-là."
+  },
+  {
+    "start": 2933.63,
+    "end": 2935.15,
+    "text": "Ça, je ne sais pas si c'est possible."
+  },
+  {
+    "start": 2936.4,
+    "end": 2938.38,
+    "text": "Parce qu'en fait, là-dedans, je voudrais pouvoir..."
+  },
+  {
+    "start": 2938.38,
+    "end": 2939.44,
+    "text": "Je n'ai jamais branché."
+  },
+  {
+    "start": 2940.2,
+    "end": 2942.26,
+    "text": "Je n'ai jamais branché OneNote à Power Automate."
+  },
+  {
+    "start": 2942.38,
+    "end": 2943.36,
+    "text": "Mais ça peut être possible."
+  },
+  {
+    "start": 2943.86,
+    "end": 2947.94,
+    "text": "Mais après, comme tu as dit, il n'y a pas les grilles Excel à droite."
+  },
+  {
+    "start": 2950.03,
+    "end": 2951.57,
+    "text": "Mais je pense que c'est quand même possible."
+  },
+  {
+    "start": 2951.89,
+    "end": 2952.93,
+    "text": "Mais après, voilà, il n'y a pas les grilles."
+  },
+  {
+    "start": 2953.45,
+    "end": 2954.07,
+    "text": "Il faut que je regarde."
+  },
+  {
+    "start": 2954.35,
+    "end": 2955.05,
+    "text": "Il faut que j'investigue."
+  },
+  {
+    "start": 2956.09,
+    "end": 2956.31,
+    "text": "Oui."
+  },
+  {
+    "start": 2956.73,
+    "end": 2959.47,
+    "text": "Mais moi, je n'ai pas forcément besoin que ce soit OneNote."
+  },
+  {
+    "start": 2960.17,
+    "end": 2964.81,
+    "text": "Là, je te donne juste un exemple parce que visuellement, ça correspond assez bien avec les onglets et tout ça."
+  },
+  {
+    "start": 2965.33,
+    "end": 2968.67,
+    "text": "Mais peut-être que toi, tu peux créer un truc comme ça."
+  },
+  {
+    "start": 2970.81,
+    "end": 2971.57,
+    "text": "Moi, je peux."
+  },
+  {
+    "start": 2971.57,
+    "end": 2973.05,
+    "text": "Mais ça va sortir de l'environnement."
+  },
+  {
+    "start": 2976.3,
+    "end": 2978.82,
+    "text": "Après, bien sûr, ça sera hébergé chez Infomaniac."
+  },
+  {
+    "start": 2979.28,
+    "end": 2984.28,
+    "text": "Mais ça ne sera pas dans l'environnement SharePoint, mais dans l'environnement Infomaniac."
+  },
+  {
+    "start": 2986.63,
+    "end": 2988.73,
+    "text": "Mais après, voilà, ce sera un système détaché."
+  },
+  {
+    "start": 2988.91,
+    "end": 2996.44,
+    "text": "Et puis, si tu cliques dessus, ça te conduit du coup vers un slash de la plateforme Clairbois officielle au final."
+  },
+  {
+    "start": 2998.82,
+    "end": 3000.04,
+    "text": "Et après, là, tu peux..."
+  },
+  {
+    "start": 3000.04,
+    "end": 3001.28,
+    "text": "En fait, si on sort de là, on peut..."
+  },
+  {
+    "start": 3001.28,
+    "end": 3005.42,
+    "text": "En fait, si tu veux, dans Microsoft, on est contraint d'utiliser leur technologie."
+  },
+  {
+    "start": 3005.42,
+    "end": 3005.52,
+    "text": "Oui."
+  },
+  {
+    "start": 3006.66,
+    "end": 3014.6,
+    "text": "Alors que si on sort de Microsoft et puis qu'on apporte nos propres technologies et puis qu'on les héberge chez Infomaniac auprès de Clairbois officielle,"
+  },
+  {
+    "start": 3014.76,
+    "end": 3016.54,
+    "text": "là, on peut faire quelque chose..."
+  },
+  {
+    "start": 3016.54,
+    "end": 3017.98,
+    "text": "En fait, on peut faire un petit peu ce qu'on veut."
+  },
+  {
+    "start": 3019.02,
+    "end": 3023.04,
+    "text": "Mais tant qu'on est chez Microsoft, on est obligé d'utiliser leur produit."
+  },
+  {
+    "start": 3024.26,
+    "end": 3026.26,
+    "text": "Ils jouent sur ça."
+  },
+  {
+    "start": 3026.36,
+    "end": 3026.92,
+    "text": "Oui, bien sûr."
+  },
+  {
+    "start": 3027.12,
+    "end": 3029.28,
+    "text": "Mais eux-mêmes, ils ne sont pas très..."
+  },
+  {
+    "start": 3029.28,
+    "end": 3035.36,
+    "text": "On veut dire qu'ils ne mettent pas beaucoup d'outils à leurs clients pour faire le nécessaire au final."
+  },
+  {
+    "start": 3038.62,
+    "end": 3038.98,
+    "text": "OK."
+  },
+  {
+    "start": 3039.32,
+    "end": 3041.1,
+    "text": "Enfin, après, c'est normal."
+  },
+  {
+    "start": 3041.22,
+    "end": 3044.27,
+    "text": "Chaque client a assez..."
+  },
+  {
+    "start": 3044.27,
+    "end": 3044.49,
+    "text": "Oui."
+  },
+  {
+    "start": 3045.33,
+    "end": 3049.49,
+    "text": "Après ça, ça ferait presque trop de changements pour mes collègues."
+  },
+  {
+    "start": 3051.17,
+    "end": 3052.85,
+    "text": "Mais..."
+  },
+  {
+    "start": 3052.85,
+    "end": 3060.34,
+    "text": "Si tes collègues, ils ont un OneNote, je pense qu'ils ont déjà utilisé OneNote beaucoup de fois."
+  },
+  {
+    "start": 3061.91,
+    "end": 3063.59,
+    "text": "Donc, ça serait bien de pouvoir le manipuler lui."
+  },
+  {
+    "start": 3063.77,
+    "end": 3069.2,
+    "text": "Mais après, c'est vrai que ça ne fait pas très formel pour y stocker des informations et tout."
+  },
+  {
+    "start": 3069.99,
+    "end": 3071.49,
+    "text": "Oui, puis c'est pas..."
+  },
+  {
+    "start": 3074.72,
+    "end": 3074.9,
+    "text": "Oui."
+  },
+  {
+    "start": 3074.9,
+    "end": 3074.98,
+    "text": "Oui."
+  },
+  {
+    "start": 3075.68,
+    "end": 3079.91,
+    "text": "Moi, je propose Excel avec des pages."
+  },
+  {
+    "start": 3080.77,
+    "end": 3084.39,
+    "text": "Une page information générale, une page stage, une page séance."
+  },
+  {
+    "start": 3085.56,
+    "end": 3088.34,
+    "text": "Et puis là, ça serait très facile de les remplir automatiquement."
+  },
+  {
+    "start": 3091.58,
+    "end": 3094.32,
+    "text": "Mais tu ne peux pas faire des sous-sections dans Excel."
+  },
+  {
+    "start": 3104.92,
+    "end": 3105.64,
+    "text": "C'est ça qui me..."
+  },
+  {
+    "start": 3105.64,
+    "end": 3107.08,
+    "text": "Oui, il faut que j'investis."
+  },
+  {
+    "start": 3108.55,
+    "end": 3113.43,
+    "text": "Déjà, voir ce qu'on peut utiliser qui existe chez Microsoft."
+  },
+  {
+    "start": 3115.37,
+    "end": 3117.69,
+    "text": "Comme ça, ça ne va pas trop bousculer tout le monde."
+  },
+  {
+    "start": 3120.01,
+    "end": 3120.23,
+    "text": "Oui."
+  },
+  {
+    "start": 3120.23,
+    "end": 3120.27,
+    "text": "Oui."
+  },
+  {
+    "start": 3128.96,
+    "end": 3130.14,
+    "text": "Oui, mais c'est vrai que c'est excellent."
+  },
+  {
+    "start": 3130.16,
+    "end": 3131.48,
+    "text": "On ne peut pas faire des sous-dossiers comme ça."
+  },
+  {
+    "start": 3131.76,
+    "end": 3133.58,
+    "text": "C'est dommage qu'ils n'aient pas un mix des deux."
+  },
+  {
+    "start": 3134.6,
+    "end": 3139.08,
+    "text": "Oui, oui, parce que là, tu vois, si je pouvais rajouter un fichier Excel dedans, ça serait trop bien."
+  },
+  {
+    "start": 3141.18,
+    "end": 3143.06,
+    "text": "Et il y a aussi PowerPage."
+  },
+  {
+    "start": 3143.2,
+    "end": 3144.12,
+    "text": "Je ne sais pas si tu as vu, mais voilà."
+  },
+  {
+    "start": 3144.36,
+    "end": 3147.66,
+    "text": "Encore une fois, c'est genre 150 francs par année."
+  },
+  {
+    "start": 3148.4,
+    "end": 3156.8,
+    "text": "Et à partir de là, on pourrait créer un truc qui ressemble à OneNote, mais le moduler comme on veut."
+  },
+  {
+    "start": 3156.8,
+    "end": 3159.86,
+    "text": "Mais voilà, c'est 150 francs par année de plus."
+  },
+  {
+    "start": 3160.96,
+    "end": 3162.96,
+    "text": "Ça, c'est faisable."
+  },
+  {
+    "start": 3165.0,
+    "end": 3167.5,
+    "text": "Ça, c'est faisable, les 150 francs par année."
+  },
+  {
+    "start": 3167.92,
+    "end": 3170.2,
+    "text": "OK, il faut que je regarde du côté de PowerPage."
+  },
+  {
+    "start": 3170.34,
+    "end": 3176.38,
+    "text": "Parce que PowerPage, effectivement, si on peut créer une extension PowerPage et puis la mettre dans la SharePoint liste"
+  },
+  {
+    "start": 3176.38,
+    "end": 3181.5,
+    "text": "et puis juste ouvrir, en fait, comme si on ouvrait un Excel, mais on ouvre un PowerPage."
+  },
+  {
+    "start": 3182.26,
+    "end": 3187.68,
+    "text": "Et le PowerPage, du coup, ce serait le stock, le suivi au final de chacun."
+  },
+  {
+    "start": 3188.35,
+    "end": 3189.19,
+    "text": "Il faut que je regarde sur ça."
+  },
+  {
+    "start": 3190.5,
+    "end": 3191.54,
+    "text": "OK, nickel."
+  },
+  {
+    "start": 3191.54,
+    "end": 3192.8,
+    "text": "Je ne sais pas si tu as déjà vu, mais tu as Microsoft."
+  },
+  {
+    "start": 3193.14,
+    "end": 3194.1,
+    "text": "Il y a Microsoft PowerPage aussi."
+  },
+  {
+    "start": 3197.52,
+    "end": 3200.46,
+    "text": "Mais c'est dans les neuf petits points en haut à gauche."
+  },
+  {
+    "start": 3201.94,
+    "end": 3203.0,
+    "text": "Ah non, là, t'es parti."
+  },
+  {
+    "start": 3206.96,
+    "end": 3211.2,
+    "text": "Là, normalement, il y a tout et puis tu fais plus d'implications et puis il y a PowerPage."
+  },
+  {
+    "start": 3216.8,
+    "end": 3219.04,
+    "text": "C'est vrai que lui, je voulais l'utiliser au tout début."
+  },
+  {
+    "start": 3223.02,
+    "end": 3227.07,
+    "text": "Il est là, en violet, tout en bas à gauche."
+  },
+  {
+    "start": 3234.42,
+    "end": 3238.6,
+    "text": "Et ça, si on peut créer une extension, ça serait nickel."
+  },
+  {
+    "start": 3239.22,
+    "end": 3242.06,
+    "text": "Une extension, ça veut dire que tu appuies dessus et puis ça t'ouvre un classement."
+  },
+  {
+    "start": 3242.72,
+    "end": 3250.36,
+    "text": "Mais PowerPage, en fait, l'idée, c'est de faire un petit peu ce qu'on veut."
+  },
+  {
+    "start": 3250.92,
+    "end": 3254.0,
+    "text": "À ce qui paraît, moi, je n'ai pas encore investigué totalement là-dessus."
+  },
+  {
+    "start": 3261.44,
+    "end": 3261.8,
+    "text": "OK."
+  },
+  {
+    "start": 3262.42,
+    "end": 3267.48,
+    "text": "J'étais venu là au tout début."
+  },
+  {
+    "start": 3274.82,
+    "end": 3277.24,
+    "text": "Tu pourrais regarder un petit peu alors ?"
+  },
+  {
+    "start": 3277.24,
+    "end": 3280.08,
+    "text": "Oui, je vais investiguer sur ça et sur aussi le Dataverse."
+  },
+  {
+    "start": 3281.1,
+    "end": 3283.24,
+    "text": "Il y a deux Dataverse, il y a moyen."
+  },
+  {
+    "start": 3283.7,
+    "end": 3287.03,
+    "text": "Parce que Dataverse, au final, c'est un classeur aussi."
+  },
+  {
+    "start": 3287.75,
+    "end": 3288.97,
+    "text": "Et il est hyper modulable."
+  },
+  {
+    "start": 3290.02,
+    "end": 3292.12,
+    "text": "Et ça, c'est ici ?"
+  },
+  {
+    "start": 3292.12,
+    "end": 3294.12,
+    "text": "Le Dataverse, tu peux le trouver dans PowerApps."
+  },
+  {
+    "start": 3294.88,
+    "end": 3298.8,
+    "text": "Mais Dataverse, c'est comme une sorte de base de..."
+  },
+  {
+    "start": 3298.8,
+    "end": 3300.12,
+    "text": "Ah, il y a List aussi."
+  },
+  {
+    "start": 3300.85,
+    "end": 3302.41,
+    "text": "On peut aller voir ?"
+  },
+  {
+    "start": 3302.41,
+    "end": 3308.95,
+    "text": "List ?"
+  },
+  {
+    "start": 3308.95,
+    "end": 3312.64,
+    "text": "Qu'est-ce que c'est que ça ?"
+  },
+  {
+    "start": 3312.64,
+    "end": 3315.57,
+    "text": "Alors, est-ce qu'il y a un petit..."
+  },
+  {
+    "start": 3315.57,
+    "end": 3317.32,
+    "text": "C'est moi qui ai vu ça ?"
+  },
+  {
+    "start": 3317.32,
+    "end": 3327.53,
+    "text": "Ah oui, OK. Je sais, je sais qui c'est. Merci."
+  },
+  {
+    "start": 3328.49,
+    "end": 3333.0,
+    "text": "La personne qui a utilisé ça, je ne sais pas si elle peut faire des sous-dossiers, etc."
+  },
+  {
+    "start": 3333.04,
+    "end": 3334.32,
+    "text": "De toute façon, je vais investiguer."
+  },
+  {
+    "start": 3335.46,
+    "end": 3338.64,
+    "text": "Je vais regarder un petit peu tous les logiciels existants dans MicroTik."
+  },
+  {
+    "start": 3338.64,
+    "end": 3338.7,
+    "text": "OK."
+  },
+  {
+    "start": 3338.72,
+    "end": 3340.2,
+    "text": "C'est un logiciel d'Aerosoft qu'on peut exploiter."
+  },
+  {
+    "start": 3344.28,
+    "end": 3344.62,
+    "text": "OK."
+  },
+  {
+    "start": 3345.3,
+    "end": 3350.1,
+    "text": "Mais je vois ce que tu veux."
+  },
+  {
+    "start": 3351.83,
+    "end": 3352.79,
+    "text": "C'est le plus important."
+  },
+  {
+    "start": 3356.2,
+    "end": 3359.28,
+    "text": "Comment aller laisser le When request ?"
+  },
+  {
+    "start": 3359.28,
+    "end": 3361.18,
+    "text": "OK."
+  },
+  {
+    "start": 3361.44,
+    "end": 3364.16,
+    "text": "Comme ça, je finis juste ça parce que..."
+  },
+  {
+    "start": 3365.89,
+    "end": 3366.43,
+    "text": "Évaluation."
+  },
+  {
+    "start": 3367.73,
+    "end": 3371.97,
+    "text": "Ça, du coup, si jamais tu l'as dans le modèle que je t'avais partagé."
+  },
+  {
+    "start": 3373.53,
+    "end": 3373.81,
+    "text": "OK."
+  },
+  {
+    "start": 3374.05,
+    "end": 3386.01,
+    "text": "C'est un peu les choses auxquelles je pense."
+  },
+  {
+    "start": 3390.25,
+    "end": 3390.69,
+    "text": "Voilà."
+  },
+  {
+    "start": 3391.17,
+    "end": 3395.03,
+    "text": "OK, parfait."
+  },
+  {
+    "start": 3395.29,
+    "end": 3398.51,
+    "text": "Comme ça, il y a tout."
+  },
+  {
+    "start": 3398.55,
+    "end": 3408.39,
+    "text": "base et après un petit peu les trucs mais ça c'est trop bien c'est trop bien"
+  },
+  {
+    "start": 3408.39,
+    "end": 3414.42,
+    "text": "pour ça idéalement là tu vois d'encore donné je voudrais un petit tableau excel"
+  },
+  {
+    "start": 3414.42,
+    "end": 3420.24,
+    "text": "qui puisse être complété directement par automates quand ils font la demande"
+  },
+  {
+    "start": 3420.24,
+    "end": 3424.86,
+    "text": "tout ça tu vois personne ne contacte en cas d'urgence taille là il ya il ya"
+  },
+  {
+    "start": 3424.86,
+    "end": 3430.53,
+    "text": "conseillère aïe enfin toutes les infos mais tu vois si dans l'information"
+  },
+  {
+    "start": 3430.53,
+    "end": 3434.57,
+    "text": "générale on pouvait juste copier coller le tableau la première page excel là"
+  },
+  {
+    "start": 3434.57,
+    "end": 3443.85,
+    "text": "c'est nickel ou alors on reste sur des fichiers excel et puis tu me crée un"
+  },
+  {
+    "start": 3443.85,
+    "end": 3451.98,
+    "text": "flux qui vient mettre les informations ici ouais de toute façon ça c'est ce qui"
+  },
+  {
+    "start": 3451.98,
+    "end": 3456.92,
+    "text": "avait été tu vois par exemple pour les bilans là dans les stages moi idéalement"
+  },
+  {
+    "start": 3456.92,
+    "end": 3466.0,
+    "text": "ce que je voudrais c'est pouvoir c'est pouvoir avoir ce fichier là tu vois dès"
+  },
+  {
+    "start": 3466.0,
+    "end": 3470.3,
+    "text": "que tu cliques non pas d'explications quand je suis"
+  },
+  {
+    "start": 3470.3,
+    "end": 3470.34,
+    "text": "là"
+  },
+  {
+    "start": 3470.36,
+    "end": 3477.84,
+    "text": "tu vois je fais stage 1 un anglais bilan et je complète directement le fichier"
+  },
+  {
+    "start": 3477.84,
+    "end": 3485.61,
+    "text": "excel là dedans tu vois je vois tout à fait et qu'après je depuis là je puisse"
+  },
+  {
+    "start": 3485.61,
+    "end": 3489.83,
+    "text": "juste l'exporter en pdf et mais comme ça au moins toutes les infos elles sont là"
+  },
+  {
+    "start": 3489.83,
+    "end": 3495.55,
+    "text": "dedans tout est tu vois il ya un classeur par personne parce que là aujourd'hui"
+  },
+  {
+    "start": 3495.55,
+    "end": 3502.83,
+    "text": "ben si quelqu'un vient voir ce jeune a ok il a fait un stage attend je regarde"
+  },
+  {
+    "start": 3502.83,
+    "end": 3508.33,
+    "text": "de telle date un jour à oui il a fait le stage de telle date à telle date et puis"
+  },
+  {
+    "start": 3508.33,
+    "end": 3514.71,
+    "text": "après à la journée tu vois je reviens son évaluation par rapport à ce stage"
+  },
+  {
+    "start": 3514.71,
+    "end": 3523.56,
+    "text": "allé là tu vois ça et puis si je veux voir ses résultats scolaires je vais"
+  },
+  {
+    "start": 3523.56,
+    "end": 3528.22,
+    "text": "te tenter l'evaluation mais c'est là donc c'est juste ça c'est de se dire que"
+  },
+  {
+    "start": 3528.22,
+    "end": 3536.48,
+    "text": "bah j'ouvre un truc là il est où le monde note je vais dans le dossier et puis hop"
+  },
+  {
+    "start": 3536.48,
+    "end": 3538.98,
+    "text": "je clique là, je vais dans remédiation"
+  },
+  {
+    "start": 3538.98,
+    "end": 3540.66,
+    "text": "ses évaluations, en français"
+  },
+  {
+    "start": 3540.66,
+    "end": 3542.74,
+    "text": "il a eu ça, en maths il a eu ça, ok très bien"
+  },
+  {
+    "start": 3542.74,
+    "end": 3544.06,
+    "text": "ou alors ma collègue"
+  },
+  {
+    "start": 3544.06,
+    "end": 3546.36,
+    "text": "elle peut, enfin tu vois, dire ah mais il avait fait"
+  },
+  {
+    "start": 3546.36,
+    "end": 3548.4,
+    "text": "un stage en"
+  },
+  {
+    "start": 3548.4,
+    "end": 3550.34,
+    "text": "technique, ben là voilà"
+  },
+  {
+    "start": 3550.34,
+    "end": 3551.6,
+    "text": "comment ça s'était passé, ok"
+  },
+  {
+    "start": 3551.6,
+    "end": 3554.28,
+    "text": "ok, voilà"
+  },
+  {
+    "start": 3554.28,
+    "end": 3557.08,
+    "text": "et c'est ces mêmes collègues qui vont aussi"
+  },
+  {
+    "start": 3557.08,
+    "end": 3559.12,
+    "text": "avoir potentiellement un accès"
+  },
+  {
+    "start": 3559.12,
+    "end": 3561.02,
+    "text": "sur le board dont on avait"
+  },
+  {
+    "start": 3561.02,
+    "end": 3563.78,
+    "text": "parlé avant ?"
+  },
+  {
+    "start": 3563.78,
+    "end": 3565.22,
+    "text": "pas forcément"
+  },
+  {
+    "start": 3565.22,
+    "end": 3571.6,
+    "text": "ok, moi je vais, ok"
+  },
+  {
+    "start": 3571.6,
+    "end": 3575.51,
+    "text": "voilà, j'ai toutes"
+  },
+  {
+    "start": 3575.51,
+    "end": 3577.86,
+    "text": "mes demandes"
+  },
+  {
+    "start": 3577.86,
+    "end": 3579.24,
+    "text": "ok, ben c'est parfait"
+  },
+  {
+    "start": 3579.24,
+    "end": 3583.47,
+    "text": "moi j'ai tout, il y a tout qui est clair au moins"
+  },
+  {
+    "start": 3583.47,
+    "end": 3587.1,
+    "text": "et enregistré, ok"
+  },
+  {
+    "start": 3587.1,
+    "end": 3589.48,
+    "text": "ben du coup, on attend"
+  },
+  {
+    "start": 3589.48,
+    "end": 3591.28,
+    "text": "le retour de l'équipe informatique aussi"
+  },
+  {
+    "start": 3591.28,
+    "end": 3593.3,
+    "text": "toi t'avances sur tout ce que tu peux avancer"
+  },
+  {
+    "start": 3593.3,
+    "end": 3595.3,
+    "text": "comme tu veux, moi je dois"
+  },
+  {
+    "start": 3595.3,
+    "end": 3597.42,
+    "text": "te faire un retour pour la demande d'uniforme"
+  },
+  {
+    "start": 3598.12,
+    "end": 3599.52,
+    "text": "voir comment ils reçoivent"
+  },
+  {
+    "start": 3599.52,
+    "end": 3601.44,
+    "text": "si c'est une liste, si c'est un truc qu'on puisse leur"
+  },
+  {
+    "start": 3601.44,
+    "end": 3603.08,
+    "text": "envoyer un équivalent"
+  },
+  {
+    "start": 3603.08,
+    "end": 3605.96,
+    "text": "et je regarde un peu"
+  },
+  {
+    "start": 3605.96,
+    "end": 3608.39,
+    "text": "je réfléchis aussi"
+  },
+  {
+    "start": 3608.39,
+    "end": 3610.29,
+    "text": "aux différentes"
+  },
+  {
+    "start": 3610.29,
+    "end": 3612.58,
+    "text": "aux flux"
+  },
+  {
+    "start": 3612.58,
+    "end": 3613.66,
+    "text": "par rapport à l'annulation"
+  },
+  {
+    "start": 3613.66,
+    "end": 3616.72,
+    "text": "et je te fais aussi le formulaire"
+  },
+  {
+    "start": 3616.72,
+    "end": 3617.52,
+    "text": "pour les visites de champ"
+  },
+  {
+    "start": 3617.52,
+    "end": 3620.26,
+    "text": "les visites de champ, les visites"
+  },
+  {
+    "start": 3620.26,
+    "end": 3622.42,
+    "text": "je te fais les champs pour les visites"
+  },
+  {
+    "start": 3622.42,
+    "end": 3624.55,
+    "text": "ok, ok"
+  },
+  {
+    "start": 3624.55,
+    "end": 3626.82,
+    "text": "excellent, on fait comme ça alors"
+  },
+  {
+    "start": 3626.82,
+    "end": 3629.32,
+    "text": "merci beaucoup Karine, tout se passe bien"
+  },
+  {
+    "start": 3629.32,
+    "end": 3631.18,
+    "text": "tu sais que, moi je te laisse parce que"
+  },
+  {
+    "start": 3631.18,
+    "end": 3633.2,
+    "text": "t'es autonome complètement, si t'as besoin de quoi que ce soit"
+  },
+  {
+    "start": 3633.2,
+    "end": 3634.02,
+    "text": "et tout, t'hésites pas"
+  },
+  {
+    "start": 3634.02,
+    "end": 3635.6,
+    "text": "ouais, y'a pas de soucis"
+  },
+  {
+    "start": 3635.6,
+    "end": 3636.8,
+    "text": "super"
+  },
+  {
+    "start": 3636.96,
+    "end": 3638.74,
+    "text": "merci beaucoup"
+  },
+  {
+    "start": 3638.74,
+    "end": 3641.72,
+    "text": "bah belle journée à toi alors"
+  },
+  {
+    "start": 3641.72,
+    "end": 3643.1,
+    "text": "à toi aussi"
+  },
+  {
+    "start": 3643.1,
+    "end": 3645.52,
+    "text": "et puis j'ai aussi lancé un peu"
+  },
+  {
+    "start": 3645.52,
+    "end": 3648.04,
+    "text": "merci, j'ai lancé aussi un petit peu"
+  },
+  {
+    "start": 3648.04,
+    "end": 3650.06,
+    "text": "les démarches pour"
+  },
+  {
+    "start": 3650.06,
+    "end": 3651.16,
+    "text": "Fides"
+  },
+  {
+    "start": 3651.16,
+    "end": 3654.11,
+    "text": "pour voir qui je peux contacter"
+  },
+  {
+    "start": 3654.11,
+    "end": 3656.07,
+    "text": "etc. par rapport à ton profil"
+  },
+  {
+    "start": 3656.07,
+    "end": 3657.53,
+    "text": "ok c'est gentil, merci"
+  },
+  {
+    "start": 3657.53,
+    "end": 3659.65,
+    "text": "je te remercie beaucoup"
+  },
+  {
+    "start": 3659.65,
+    "end": 3661.41,
+    "text": "merci à toi"
+  },
+  {
+    "start": 3661.41,
+    "end": 3663.27,
+    "text": "belle semaine et à dispo"
+  },
+  {
+    "start": 3663.27,
+    "end": 3665.41,
+    "text": "merci, pareil, je suis à dispo"
+  },
+  {
+    "start": 3665.41,
+    "end": 3667.71,
+    "text": "je vais commencer là de toute façon, tranquille avec un café"
+  },
+  {
+    "start": 3668.43,
+    "end": 3671.37,
+    "text": "merci beaucoup, ciao ciao"
+  },
+  {
+    "start": 3671.37,
+    "end": 3671.71,
+    "text": "ciao ciao"
+  }
+]

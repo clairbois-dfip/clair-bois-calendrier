@@ -1,0 +1,604 @@
+{
+  "name": "85126746-e078-44c9-be31-df21319d1c48",
+  "id": "/providers/Microsoft.Flow/flows/85126746-e078-44c9-be31-df21319d1c48",
+  "type": "Microsoft.Flow/flows",
+  "properties": {
+    "apiId": "/providers/Microsoft.PowerApps/apis/shared_logicflows",
+    "displayName": "Flux inscriptions",
+    "definition": {
+      "metadata": {
+        "workflowEntityId": null,
+        "processAdvisorMetadata": null,
+        "flowChargedByPaygo": null,
+        "flowclientsuspensionreason": "None",
+        "flowclientsuspensiontime": null,
+        "flowclientsuspensionreasondetails": null,
+        "creator": {
+          "id": "3995bcc7-5e9e-4254-8370-a930628a2317",
+          "type": "User",
+          "tenantId": "b38370c4-d4e6-4db3-8103-301e95e4e40c"
+        },
+        "provisioningMethod": "FromDefinition",
+        "failureAlertSubscription": true,
+        "clientLastModifiedTime": "2026-02-18T20:27:22.8293934Z",
+        "connectionKeySavedTimeKey": "2026-02-18T20:27:22.8293934Z",
+        "creationSource": "Portal",
+        "modifiedSources": "Portal"
+      },
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "Lorsqu'une_nouvelle_réponse_est_envoyée": {
+          "splitOn": "@triggerOutputs()?['body/value']",
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "parameters": {
+              "form_id": "xHCDs-bUs02BAzAeleTkDMe8lTmeXlRCg3CpMGKKIxdUQllQODVJS0wwV01RM0cwSk1RSTlHUEVPVi4u"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_microsoftforms",
+              "connectionName": "shared_microsoftforms",
+              "operationId": "CreateFormWebhook"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Obtenir_les_détails_de_la_réponse": {
+          "runAfter": {},
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "form_id": "xHCDs-bUs02BAzAeleTkDMe8lTmeXlRCg3CpMGKKIxdUQllQODVJS0wwV01RM0cwSk1RSTlHUEVPVi4u",
+              "response_id": "@triggerOutputs()?['body/resourceData/responseId']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_microsoftforms",
+              "connectionName": "shared_microsoftforms",
+              "operationId": "GetFormResponseById"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Condition_1": {
+          "actions": {
+            "Condition": {
+              "actions": {
+                "Envoyer_une_requête_HTTP_à_SharePoint": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "parameters": {
+                      "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                      "parameters/method": "GET",
+                      "parameters/uri": "@concat('_api/web/lists/getbytitle(''Stagiaire'')/items?$select=Id,AVS&$filter=AVS eq ''', outputs('Obtenir_les_détails_de_la_réponse')?['body/rddc7676789f4474ea2ffd68f6388dfd9'], '''')"
+                    },
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                      "connectionName": "shared_sharepointonline",
+                      "operationId": "HttpRequest"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Condition_3": {
+                  "actions": {
+                    "Mettre_à_jour_l'élément": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                          "table": "bf357221-7e74-4905-9b58-b4ea22f79de0",
+                          "id": "@first(body('Envoyer_une_requête_HTTP_à_SharePoint')?['d']?['results'])?['Id']",
+                          "item/Statut/Value": "En attente",
+                          "item/Nom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r0a5286e1e9484d7fb4917b0e17aafdde']",
+                          "item/Prenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r51eac184630a40c582dda502c5159dcc']",
+                          "item/Sexe/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/re65d57924f8c4271b6e502134e2fe906']",
+                          "item/DateNaissance": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rd674de1f8204491083de8ccfdeb0fd6e']",
+                          "item/NumTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra15151fc6895428ab11b24c3de424a0b']",
+                          "item/Adresse": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r67388c86f7c64c26bc75af14ac4ac699']",
+                          "item/NpaLocalite": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra4388b28125744569c060e3ef31cace9']",
+                          "item/AVS": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rddc7676789f4474ea2ffd68f6388dfd9']",
+                          "item/UrgenceLien/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r0bd85bffee0e45c09d739fe4b871955d']",
+                          "item/UrgenceNom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rb96ff7c4a7c74c06855477eedf3982d1']",
+                          "item/UrgencePrenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r5ff75960203844a0bb3a3e26224b291f']",
+                          "item/UrgenceTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra2f1dfb031ca48e18d8a3d64688dde45']",
+                          "item/Curatelle": "@if(equals(outputs('Obtenir_les_détails_de_la_réponse')?['body/r60b463d8e39146869c8669ea35bc36da'], 'Oui'), true, false)",
+                          "item/CuratelleType/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r669b127914f84e47a35e1275bb176dd1']",
+                          "item/CuratelleNom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r1a6a753b75fd4e5b9fedcac9e4cd04e0']",
+                          "item/CuratellePrenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rb42f90e162eb4f32b31ddf16011f7125']",
+                          "item/CuratelleTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r7456ee13e9374b6891e1d7bb7cf3fd42']",
+                          "item/CuratelleMail": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/re11798a485d14196969cc71183cbc488']",
+                          "item/ObjectifStage": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rf8524324a2184a329c4351ff39b771d7']",
+                          "item/Limitations": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra96b2095ead84cf086d63f5b7bb8842f']",
+                          "item/ParcoursScolaire": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r1b0cf13f9a9c4e5389a6475b485121e7']",
+                          "item/Tests/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rf7189c8f653c40999800b94e591fbe3f']",
+                          "item/Reseau/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r27377ab8dd76443f97ea08c29cfe8f6d']",
+                          "item/TailleTshirt": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r7d55b2fb08c94ca8aca66a96b0b6c8be']",
+                          "item/TaillePantalon": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r96a1290db28d402686ee34174d4990a9']",
+                          "item/Pointure": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r89d1d8e6dafa40e2abbceef073d253dc']",
+                          "item/Mail": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r93aa4aa6613d4e11b7afe37712f9a362']",
+                          "item/AssuranceInvalidite/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra974f77cc1bf40a0832c11f85d0cad2d']",
+                          "item/Secteur": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r1faa50a65150406b95d3a62e45550e40']",
+                          "item/DejaStage": "@if(equals(outputs('Obtenir_les_détails_de_la_réponse')?['body/r9385fc308c554ca68e57f904c4d65bdd'], 'Oui'), true, false)",
+                          "item/AIConseillerNom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r0819bfe19533497a8b944b20dc3bcf02']",
+                          "item/AIConseillerPrenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r32c41d36df3a400eb0408d77919da6e5']",
+                          "item/AIConseillerTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rfd6b36d0309d4e59b2906e0f79c73ac3']",
+                          "item/AIConseillerMail": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r75e583eba6eb4fc292b260baf6d18e32']"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                          "connectionName": "shared_sharepointonline",
+                          "operationId": "PatchItem"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      }
+                    },
+                    "Envoyer_un_e-mail_(V2)_2": {
+                      "runAfter": {
+                        "Mettre_à_jour_l'élément": [
+                          "Succeeded"
+                        ]
+                      },
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "emailMessage/To": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r93aa4aa6613d4e11b7afe37712f9a362']",
+                          "emailMessage/Subject": "@concat('[AVS-756.XXXX.XXXX.', substring(outputs('Obtenir_les_détails_de_la_réponse')?['body/rddc7676789f4474ea2ffd68f6388dfd9'], sub(length(outputs('Obtenir_les_détails_de_la_réponse')?['body/rddc7676789f4474ea2ffd68f6388dfd9']), 2)), ' N°', first(body('Envoyer_une_requête_HTTP_à_SharePoint')?['d']?['results'])?['Id'], '] Documents requis pour ', outputs('Obtenir_les_détails_de_la_réponse')?['body/r0a5286e1e9484d7fb4917b0e17aafdde'], ' ', outputs('Obtenir_les_détails_de_la_réponse')?['body/r51eac184630a40c582dda502c5159dcc'])",
+                          "emailMessage/Body": "<p class=\"editor-paragraph\">Bonjour,<br><br>Merci d'avoir pré-inscrit @{outputs('Obtenir_les_détails_de_la_réponse')?['body/r0a5286e1e9484d7fb4917b0e17aafdde']}@{outputs('Obtenir_les_détails_de_la_réponse')?['body/r51eac184630a40c582dda502c5159dcc']}<br><br>Veuillez s'il vous plaît <b><strong class=\"editor-text-bold\">répondre</strong></b> à ce mail avec les documents en pièce jointe.<br><br>- Copie de votre pièce d'identité</p><p class=\"editor-paragraph\">- Copie de la charte signée<br><br>Avec nos meilleures salutations,<br><br>Clair-Bois<br><br><i><em class=\"editor-text-italic\">Attention : Cette adresse ne peut pas recevoir de Mail en dehors d'une réponse</em></i></p>",
+                          "emailMessage/Importance": "Normal"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                          "connectionName": "shared_office365",
+                          "operationId": "SendEmailV2"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "Envoyer_une_requête_HTTP_à_SharePoint": [
+                      "Succeeded"
+                    ]
+                  },
+                  "else": {
+                    "actions": {
+                      "Créer_un_élément": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                            "table": "bf357221-7e74-4905-9b58-b4ea22f79de0",
+                            "item/Nom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r0a5286e1e9484d7fb4917b0e17aafdde']",
+                            "item/Prenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r51eac184630a40c582dda502c5159dcc']",
+                            "item/Sexe/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/re65d57924f8c4271b6e502134e2fe906']",
+                            "item/DateNaissance": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rd674de1f8204491083de8ccfdeb0fd6e']",
+                            "item/NumTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra15151fc6895428ab11b24c3de424a0b']",
+                            "item/Mail": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r93aa4aa6613d4e11b7afe37712f9a362']",
+                            "item/Adresse": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r67388c86f7c64c26bc75af14ac4ac699']",
+                            "item/NpaLocalite": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra4388b28125744569c060e3ef31cace9']",
+                            "item/AVS": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rddc7676789f4474ea2ffd68f6388dfd9']",
+                            "item/Statut/Value": "En attente",
+                            "item/UrgenceLien/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r0bd85bffee0e45c09d739fe4b871955d']",
+                            "item/UrgenceNom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rb96ff7c4a7c74c06855477eedf3982d1']",
+                            "item/UrgencePrenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r5ff75960203844a0bb3a3e26224b291f']",
+                            "item/UrgenceTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra2f1dfb031ca48e18d8a3d64688dde45']",
+                            "item/Curatelle": "@if(equals(outputs('Obtenir_les_détails_de_la_réponse')?['body/r60b463d8e39146869c8669ea35bc36da'], 'Oui'), true, false)",
+                            "item/CuratelleType/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r669b127914f84e47a35e1275bb176dd1']",
+                            "item/CuratelleNom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r1a6a753b75fd4e5b9fedcac9e4cd04e0']",
+                            "item/CuratellePrenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rb42f90e162eb4f32b31ddf16011f7125']",
+                            "item/CuratelleTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r7456ee13e9374b6891e1d7bb7cf3fd42']",
+                            "item/CuratelleMail": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/re11798a485d14196969cc71183cbc488']",
+                            "item/ObjectifStage": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rf8524324a2184a329c4351ff39b771d7']",
+                            "item/Limitations": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra96b2095ead84cf086d63f5b7bb8842f']",
+                            "item/ParcoursScolaire": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r1b0cf13f9a9c4e5389a6475b485121e7']",
+                            "item/Tests/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rf7189c8f653c40999800b94e591fbe3f']",
+                            "item/Reseau/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r27377ab8dd76443f97ea08c29cfe8f6d']",
+                            "item/TailleTshirt": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r7d55b2fb08c94ca8aca66a96b0b6c8be']",
+                            "item/TaillePantalon": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r96a1290db28d402686ee34174d4990a9']",
+                            "item/Pointure": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r89d1d8e6dafa40e2abbceef073d253dc']",
+                            "item/AssuranceInvalidite/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra974f77cc1bf40a0832c11f85d0cad2d']",
+                            "item/Secteur": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r1faa50a65150406b95d3a62e45550e40']",
+                            "item/DejaStage": "@if(equals(outputs('Obtenir_les_détails_de_la_réponse')?['body/r9385fc308c554ca68e57f904c4d65bdd'], 'Oui'), true, false)",
+                            "item/AIConseillerNom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r0819bfe19533497a8b944b20dc3bcf02']",
+                            "item/AIConseillerPrenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r32c41d36df3a400eb0408d77919da6e5']",
+                            "item/AIConseillerTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rfd6b36d0309d4e59b2906e0f79c73ac3']",
+                            "item/AIConseillerMail": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r75e583eba6eb4fc292b260baf6d18e32']"
+                          },
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                            "connectionName": "shared_sharepointonline",
+                            "operationId": "PostItem"
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        }
+                      },
+                      "Envoyer_un_e-mail_(V2)": {
+                        "runAfter": {
+                          "Créer_un_élément": [
+                            "Succeeded"
+                          ]
+                        },
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "emailMessage/To": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r93aa4aa6613d4e11b7afe37712f9a362']",
+                            "emailMessage/Subject": "@concat('[AVS-756.XXXX.XXXX.', substring(outputs('Créer_un_élément')?['body/AVS'], sub(length(outputs('Créer_un_élément')?['body/AVS']), 2)), ' N°', outputs('Créer_un_élément')?['body/ID'], '] Documents requis pour ', outputs('Créer_un_élément')?['body/Nom'], ' ', outputs('Créer_un_élément')?['body/Prenom'])",
+                            "emailMessage/Body": "<p class=\"editor-paragraph\">Bonjour,<br><br>Merci de vous être pré-inscrit @{outputs('Créer_un_élément')?['body/Nom']} @{outputs('Créer_un_élément')?['body/Prenom']}.<br><br>Veuillez s'il vous plaît <b><strong class=\"editor-text-bold\">répondre</strong></b> à ce mail avec les documents en pièce jointe.<br><br>- Copie de votre pièce d'identité</p><p class=\"editor-paragraph\">- Copie de la charte signée<br><br>Avec nos meilleures salutations,<br><br>Clair-Bois<br><br><i><em class=\"editor-text-italic\">Attention : Cette adresse ne peut pas recevoir de Mail en dehors d'une réponse</em></i></p>",
+                            "emailMessage/Importance": "Normal"
+                          },
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                            "connectionName": "shared_office365",
+                            "operationId": "SendEmailV2"
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        }
+                      }
+                    }
+                  },
+                  "expression": {
+                    "and": [
+                      {
+                        "greater": [
+                          "@length(body('Envoyer_une_requête_HTTP_à_SharePoint')?['d']?['results'])",
+                          0
+                        ]
+                      }
+                    ]
+                  },
+                  "type": "If",
+                  "description": "Existe-il?\nVrai -> Modification\nFaux-> Ajout"
+                }
+              },
+              "else": {
+                "actions": {}
+              },
+              "expression": {
+                "or": [
+                  {
+                    "contains": [
+                      "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r93aa4aa6613d4e11b7afe37712f9a362']",
+                      "@@clair-bois.ch"
+                    ]
+                  },
+                  {
+                    "contains": [
+                      "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r93aa4aa6613d4e11b7afe37712f9a362']",
+                      "rochat.vdge"
+                    ]
+                  }
+                ]
+              },
+              "type": "If"
+            }
+          },
+          "runAfter": {
+            "Obtenir_les_détails_de_la_réponse": [
+              "Succeeded"
+            ]
+          },
+          "else": {
+            "actions": {
+              "Condition_2": {
+                "actions": {
+                  "Envoyer_une_requête_HTTP_à_SharePoint_1": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "parameters": {
+                        "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                        "parameters/method": "GET",
+                        "parameters/uri": "@concat('_api/web/lists/getbytitle(''Stagiaire'')/items?$select=Id,AVS&$filter=AVS eq ''', outputs('Obtenir_les_détails_de_la_réponse')?['body/rddc7676789f4474ea2ffd68f6388dfd9'], '''')"
+                      },
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                        "connectionName": "shared_sharepointonline",
+                        "operationId": "HttpRequest"
+                      },
+                      "authentication": "@parameters('$authentication')"
+                    }
+                  },
+                  "Condition_4": {
+                    "actions": {
+                      "Mettre_à_jour_l'élément_1": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                            "table": "bf357221-7e74-4905-9b58-b4ea22f79de0",
+                            "id": "@first(body('Envoyer_une_requête_HTTP_à_SharePoint_1')?['d']?['results'])?['Id']",
+                            "item/Statut/Value": "En attente",
+                            "item/Nom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r0a5286e1e9484d7fb4917b0e17aafdde']",
+                            "item/Prenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r51eac184630a40c582dda502c5159dcc']",
+                            "item/Sexe/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/re65d57924f8c4271b6e502134e2fe906']",
+                            "item/DateNaissance": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rd674de1f8204491083de8ccfdeb0fd6e']",
+                            "item/NumTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra15151fc6895428ab11b24c3de424a0b']",
+                            "item/Adresse": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r67388c86f7c64c26bc75af14ac4ac699']",
+                            "item/NpaLocalite": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra4388b28125744569c060e3ef31cace9']",
+                            "item/AVS": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rddc7676789f4474ea2ffd68f6388dfd9']",
+                            "item/UrgenceLien/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r0bd85bffee0e45c09d739fe4b871955d']",
+                            "item/UrgenceNom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rb96ff7c4a7c74c06855477eedf3982d1']",
+                            "item/UrgencePrenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r5ff75960203844a0bb3a3e26224b291f']",
+                            "item/UrgenceTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra2f1dfb031ca48e18d8a3d64688dde45']",
+                            "item/Curatelle": "@if(equals(outputs('Obtenir_les_détails_de_la_réponse')?['body/r60b463d8e39146869c8669ea35bc36da'], 'Oui'), true, false)",
+                            "item/CuratelleType/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r669b127914f84e47a35e1275bb176dd1']",
+                            "item/CuratelleNom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r1a6a753b75fd4e5b9fedcac9e4cd04e0']",
+                            "item/CuratellePrenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rb42f90e162eb4f32b31ddf16011f7125']",
+                            "item/CuratelleTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r7456ee13e9374b6891e1d7bb7cf3fd42']",
+                            "item/CuratelleMail": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/re11798a485d14196969cc71183cbc488']",
+                            "item/ObjectifStage": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rf8524324a2184a329c4351ff39b771d7']",
+                            "item/Limitations": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra96b2095ead84cf086d63f5b7bb8842f']",
+                            "item/ParcoursScolaire": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r1b0cf13f9a9c4e5389a6475b485121e7']",
+                            "item/Tests/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rf7189c8f653c40999800b94e591fbe3f']",
+                            "item/Reseau/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r27377ab8dd76443f97ea08c29cfe8f6d']",
+                            "item/TailleTshirt": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r7d55b2fb08c94ca8aca66a96b0b6c8be']",
+                            "item/TaillePantalon": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r96a1290db28d402686ee34174d4990a9']",
+                            "item/Pointure": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r89d1d8e6dafa40e2abbceef073d253dc']",
+                            "item/Mail": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r93aa4aa6613d4e11b7afe37712f9a362']",
+                            "item/AssuranceInvalidite/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra974f77cc1bf40a0832c11f85d0cad2d']",
+                            "item/Secteur": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r1faa50a65150406b95d3a62e45550e40']",
+                            "item/DejaStage": "@if(equals(outputs('Obtenir_les_détails_de_la_réponse')?['body/r9385fc308c554ca68e57f904c4d65bdd'], 'Oui'), true, false)",
+                            "item/AIConseillerNom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r0819bfe19533497a8b944b20dc3bcf02']",
+                            "item/AIConseillerPrenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r32c41d36df3a400eb0408d77919da6e5']",
+                            "item/AIConseillerTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rfd6b36d0309d4e59b2906e0f79c73ac3']",
+                            "item/AIConseillerMail": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r75e583eba6eb4fc292b260baf6d18e32']"
+                          },
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                            "connectionName": "shared_sharepointonline",
+                            "operationId": "PatchItem"
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        }
+                      },
+                      "Envoyer_un_e-mail_(V2)_1_1": {
+                        "runAfter": {
+                          "Créer_un_élément_Référent_1": [
+                            "Succeeded"
+                          ]
+                        },
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "emailMessage/To": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rb05d7471e33c4db1818de26dd59ca4dd']",
+                            "emailMessage/Subject": "@concat('[AVS-756.XXXX.XXXX.', substring(outputs('Obtenir_les_détails_de_la_réponse')?['body/rddc7676789f4474ea2ffd68f6388dfd9'], sub(length(outputs('Obtenir_les_détails_de_la_réponse')?['body/rddc7676789f4474ea2ffd68f6388dfd9']), 2)), ' N°', first(body('Envoyer_une_requête_HTTP_à_SharePoint_1')?['d']?['results'])?['Id'], '] Documents requis pour ', outputs('Obtenir_les_détails_de_la_réponse')?['body/r0a5286e1e9484d7fb4917b0e17aafdde'], ' ', outputs('Obtenir_les_détails_de_la_réponse')?['body/r51eac184630a40c582dda502c5159dcc'])",
+                            "emailMessage/Body": "<p class=\"editor-paragraph\">Bonjour,<br><br>Merci d'avoir pré-inscrit @{outputs('Obtenir_les_détails_de_la_réponse')?['body/r0a5286e1e9484d7fb4917b0e17aafdde']}@{outputs('Obtenir_les_détails_de_la_réponse')?['body/r51eac184630a40c582dda502c5159dcc']}<br><br>Veuillez s'il vous plaît <b><strong class=\"editor-text-bold\">répondre</strong></b> à ce mail avec les documents en pièce jointe.<br><br>- Copie de votre pièce d'identité</p><p class=\"editor-paragraph\">- Copie de la charte signée<br><br>Avec nos meilleures salutations,<br><br>Clair-Bois<br><br><i><em class=\"editor-text-italic\">Attention : Cette adresse ne peut pas recevoir de Mail en dehors d'une réponse</em></i></p>",
+                            "emailMessage/Importance": "Normal"
+                          },
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                            "connectionName": "shared_office365",
+                            "operationId": "SendEmailV2"
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        }
+                      },
+                      "Créer_un_élément_Référent_1": {
+                        "runAfter": {
+                          "Mettre_à_jour_l'élément_1": [
+                            "Succeeded"
+                          ]
+                        },
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                            "table": "7a31b912-99af-4415-bfc9-f2ae1cb19c00",
+                            "item/Partenaire": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r62ce4825b9d641f1b0c916fdab1dc246']",
+                            "item/Fonction/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r64c00ae2bfff4f4a8bbd99885ea40d9c']",
+                            "item/Nom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r8426975aa0714f2ebdf559aca82adb75']",
+                            "item/Prenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r99d854c49c994916a8656e5c39cd8997']",
+                            "item/NumTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r7ed3be9bf05c452c8887b6e39c0400b6']",
+                            "item/Mail": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rb05d7471e33c4db1818de26dd59ca4dd']",
+                            "item/StagiaireID/Id": "@first(body('Envoyer_une_requête_HTTP_à_SharePoint_1')?['d']?['results'])?['Id']"
+                          },
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                            "connectionName": "shared_sharepointonline",
+                            "operationId": "PostItem"
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        }
+                      }
+                    },
+                    "runAfter": {
+                      "Envoyer_une_requête_HTTP_à_SharePoint_1": [
+                        "Succeeded"
+                      ]
+                    },
+                    "else": {
+                      "actions": {
+                        "Créer_un_élément_1": {
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "parameters": {
+                              "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                              "table": "bf357221-7e74-4905-9b58-b4ea22f79de0",
+                              "item/Nom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r0a5286e1e9484d7fb4917b0e17aafdde']",
+                              "item/Prenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r51eac184630a40c582dda502c5159dcc']",
+                              "item/Sexe/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/re65d57924f8c4271b6e502134e2fe906']",
+                              "item/DateNaissance": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rd674de1f8204491083de8ccfdeb0fd6e']",
+                              "item/NumTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra15151fc6895428ab11b24c3de424a0b']",
+                              "item/Mail": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r93aa4aa6613d4e11b7afe37712f9a362']",
+                              "item/Adresse": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r67388c86f7c64c26bc75af14ac4ac699']",
+                              "item/NpaLocalite": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra4388b28125744569c060e3ef31cace9']",
+                              "item/AVS": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rddc7676789f4474ea2ffd68f6388dfd9']",
+                              "item/Statut/Value": "En attente",
+                              "item/UrgenceLien/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r0bd85bffee0e45c09d739fe4b871955d']",
+                              "item/UrgenceNom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rb96ff7c4a7c74c06855477eedf3982d1']",
+                              "item/UrgencePrenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r5ff75960203844a0bb3a3e26224b291f']",
+                              "item/UrgenceTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra2f1dfb031ca48e18d8a3d64688dde45']",
+                              "item/Curatelle": "@if(equals(outputs('Obtenir_les_détails_de_la_réponse')?['body/r60b463d8e39146869c8669ea35bc36da'], 'Oui'), true, false)",
+                              "item/CuratelleType/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r669b127914f84e47a35e1275bb176dd1']",
+                              "item/CuratelleNom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r1a6a753b75fd4e5b9fedcac9e4cd04e0']",
+                              "item/CuratellePrenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rb42f90e162eb4f32b31ddf16011f7125']",
+                              "item/CuratelleTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r7456ee13e9374b6891e1d7bb7cf3fd42']",
+                              "item/CuratelleMail": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/re11798a485d14196969cc71183cbc488']",
+                              "item/ObjectifStage": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rf8524324a2184a329c4351ff39b771d7']",
+                              "item/Limitations": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra96b2095ead84cf086d63f5b7bb8842f']",
+                              "item/ParcoursScolaire": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r1b0cf13f9a9c4e5389a6475b485121e7']",
+                              "item/Tests/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rf7189c8f653c40999800b94e591fbe3f']",
+                              "item/Reseau/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r27377ab8dd76443f97ea08c29cfe8f6d']",
+                              "item/TailleTshirt": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r7d55b2fb08c94ca8aca66a96b0b6c8be']",
+                              "item/TaillePantalon": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r96a1290db28d402686ee34174d4990a9']",
+                              "item/Pointure": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r89d1d8e6dafa40e2abbceef073d253dc']",
+                              "item/AssuranceInvalidite/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/ra974f77cc1bf40a0832c11f85d0cad2d']",
+                              "item/Secteur": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r1faa50a65150406b95d3a62e45550e40']",
+                              "item/DejaStage": "@if(equals(outputs('Obtenir_les_détails_de_la_réponse')?['body/r9385fc308c554ca68e57f904c4d65bdd'], 'Oui'), true, false)",
+                              "item/AIConseillerNom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r0819bfe19533497a8b944b20dc3bcf02']",
+                              "item/AIConseillerPrenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r32c41d36df3a400eb0408d77919da6e5']",
+                              "item/AIConseillerTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rfd6b36d0309d4e59b2906e0f79c73ac3']",
+                              "item/AIConseillerMail": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r75e583eba6eb4fc292b260baf6d18e32']"
+                            },
+                            "host": {
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                              "connectionName": "shared_sharepointonline",
+                              "operationId": "PostItem"
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          }
+                        },
+                        "Envoyer_un_e-mail_(V2)_1": {
+                          "runAfter": {
+                            "Créer_un_élément_Référent": [
+                              "Succeeded"
+                            ]
+                          },
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "parameters": {
+                              "emailMessage/To": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rb05d7471e33c4db1818de26dd59ca4dd']",
+                              "emailMessage/Subject": "@concat('[AVS-756.XXXX.XXXX.', substring(outputs('Créer_un_élément_1')?['body/AVS'], sub(length(outputs('Créer_un_élément_1')?['body/AVS']), 2)), ' N°', outputs('Créer_un_élément_1')?['body/ID'], '] Documents requis pour ', outputs('Créer_un_élément_1')?['body/Nom'], ' ', outputs('Créer_un_élément_1')?['body/Prenom'])",
+                              "emailMessage/Body": "<p class=\"editor-paragraph\">Bonjour,<br><br>Merci d'avoir pré-inscrit @{outputs('Créer_un_élément_1')?['body/Prenom']} @{outputs('Créer_un_élément_1')?['body/Nom']}.<br><br>Veuillez s'il vous plaît <b><strong class=\"editor-text-bold\">répondre</strong></b> à ce mail avec les documents en pièce jointe.<br><br>- Copie de votre pièce d'identité</p><p class=\"editor-paragraph\">- Copie de la charte signée<br><br>Avec nos meilleures salutations,<br><br>Clair-Bois<br><br><i><em class=\"editor-text-italic\">Attention : Cette adresse ne peut pas recevoir de Mail en dehors d'une réponse</em></i></p>",
+                              "emailMessage/Importance": "Normal"
+                            },
+                            "host": {
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                              "connectionName": "shared_office365",
+                              "operationId": "SendEmailV2"
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          }
+                        },
+                        "Créer_un_élément_Référent": {
+                          "runAfter": {
+                            "Créer_un_élément_1": [
+                              "Succeeded"
+                            ]
+                          },
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "parameters": {
+                              "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                              "table": "7a31b912-99af-4415-bfc9-f2ae1cb19c00",
+                              "item/Partenaire": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r62ce4825b9d641f1b0c916fdab1dc246']",
+                              "item/Fonction/Value": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r64c00ae2bfff4f4a8bbd99885ea40d9c']",
+                              "item/Nom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r8426975aa0714f2ebdf559aca82adb75']",
+                              "item/Prenom": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r99d854c49c994916a8656e5c39cd8997']",
+                              "item/NumTel": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r7ed3be9bf05c452c8887b6e39c0400b6']",
+                              "item/Mail": "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rb05d7471e33c4db1818de26dd59ca4dd']",
+                              "item/StagiaireID/Id": "@outputs('Créer_un_élément_1')?['body/ID']"
+                            },
+                            "host": {
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                              "connectionName": "shared_sharepointonline",
+                              "operationId": "PostItem"
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          }
+                        }
+                      }
+                    },
+                    "expression": {
+                      "and": [
+                        {
+                          "greater": [
+                            "@length(body('Envoyer_une_requête_HTTP_à_SharePoint_1')?['d']?['results'])",
+                            0
+                          ]
+                        }
+                      ]
+                    },
+                    "type": "If"
+                  }
+                },
+                "else": {
+                  "actions": {}
+                },
+                "expression": {
+                  "or": [
+                    {
+                      "contains": [
+                        "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rb05d7471e33c4db1818de26dd59ca4dd']",
+                        "@@clair-bois.ch"
+                      ]
+                    },
+                    {
+                      "contains": [
+                        "@outputs('Obtenir_les_détails_de_la_réponse')?['body/rb05d7471e33c4db1818de26dd59ca4dd']",
+                        "rochat.vdge"
+                      ]
+                    }
+                  ]
+                },
+                "type": "If"
+              }
+            }
+          },
+          "expression": {
+            "and": [
+              {
+                "equals": [
+                  "@outputs('Obtenir_les_détails_de_la_réponse')?['body/r279198a1deae49b5b010b443a2e0eeed']",
+                  "Moi-même"
+                ]
+              }
+            ]
+          },
+          "type": "If",
+          "description": "Stagiaire? Ou Référent?\nVrai = Stagaire"
+        }
+      },
+      "outputs": {}
+    },
+    "connectionReferences": {
+      "shared_microsoftforms": {
+        "connectionName": "shared-microsoftform-d85e5621-5e28-4214-b672-097e0a4a02ff",
+        "source": "Embedded",
+        "id": "/providers/Microsoft.PowerApps/apis/shared_microsoftforms",
+        "tier": "NotSpecified",
+        "apiName": "microsoftforms",
+        "isProcessSimpleApiReferenceConversionAlreadyDone": false
+      },
+      "shared_sharepointonline": {
+        "connectionName": "shared-sharepointonl-9d5444a2-e35b-4b0c-a114-8022d6b1ace5",
+        "source": "Embedded",
+        "id": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+        "tier": "NotSpecified",
+        "apiName": "sharepointonline",
+        "isProcessSimpleApiReferenceConversionAlreadyDone": false
+      },
+      "shared_office365": {
+        "connectionName": "shared-office365-8dbff9e2-9647-451f-91d1-c3bf46cb4559",
+        "source": "Embedded",
+        "id": "/providers/Microsoft.PowerApps/apis/shared_office365",
+        "tier": "NotSpecified",
+        "apiName": "office365",
+        "isProcessSimpleApiReferenceConversionAlreadyDone": false
+      }
+    },
+    "flowFailureAlertSubscribed": false,
+    "isManaged": false
+  }
+}

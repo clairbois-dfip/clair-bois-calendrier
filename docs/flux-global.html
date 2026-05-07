@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Clair-Bois — Flux Global</title>
+<script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0f172a; font-family: 'Segoe UI', system-ui, sans-serif; display: flex; height: 100vh; overflow: hidden; }
+
+  #sidebar {
+    width: 200px; flex-shrink: 0; background: #1e293b; color: #cbd5e1;
+    padding: 14px 12px; display: flex; flex-direction: column; gap: 14px;
+    overflow-y: auto; border-right: 1px solid #334155;
+    font-size: 12px;
+  }
+  #sidebar h1 { font-size: 13px; font-weight: 700; color: #f8fafc; line-height: 1.4; }
+  .sub { font-size: 10px; color: #64748b; margin-top: 3px; }
+  .sep { border: none; border-top: 1px solid #334155; }
+  .sec-title { font-size: 9px; text-transform: uppercase; letter-spacing: .07em; color: #64748b; font-weight: 700; margin-bottom: 6px; }
+
+  .leg-item { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; color: #cbd5e1; }
+  .dot  { width: 13px; height: 13px; border-radius: 50%; flex-shrink: 0; }
+  .rect { width: 16px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  .edge-item { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; color: #94a3b8; }
+  .e-solid { width: 22px; height: 2px; background: #475569; flex-shrink: 0; }
+  .e-dash  { width: 22px; height: 2px; flex-shrink: 0;
+    background: repeating-linear-gradient(90deg,#f59e0b 0,#f59e0b 4px,transparent 4px,transparent 8px); }
+
+  .btn {
+    background: #334155; color: #cbd5e1; border: 1px solid #475569;
+    border-radius: 5px; padding: 6px 8px; font-size: 11px; cursor: pointer;
+    text-align: center; width: 100%; margin-bottom: 5px; transition: background .15s;
+  }
+  .btn:hover { background: #475569; color: #fff; }
+  .btn.saved { background: #15803d; border-color: #16a34a; color: #fff; }
+
+  .info { background: #0f172a; border: 1px solid #334155; border-radius: 5px;
+    padding: 8px; font-size: 10px; color: #64748b; line-height: 1.6; }
+
+  #graph-container { flex: 1; position: relative; }
+  #graph { width: 100%; height: 100%; }
+
+  #tip {
+    position: absolute; background: #1e293b; border: 1px solid #3b82f6;
+    border-radius: 7px; padding: 9px 12px; font-size: 11px; color: #e2e8f0;
+    pointer-events: none; display: none; max-width: 250px; z-index: 100;
+    line-height: 1.55;
+  }
+
+  #save-toast {
+    position: absolute; bottom: 20px; right: 20px;
+    background: #15803d; color: white; border-radius: 6px;
+    padding: 8px 14px; font-size: 12px; display: none;
+    z-index: 200; animation: fadeout 2s forwards;
+  }
+  @keyframes fadeout { 0%{opacity:1} 70%{opacity:1} 100%{opacity:0} }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <div>
+    <h1>🗺 Clair-Bois<br>Flux Global</h1>
+    <div class="sub">Glisse les nœuds · Positions sauvegardées</div>
+  </div>
+
+  <hr class="sep">
+
+  <div>
+    <div class="sec-title">Acteurs</div>
+    <div class="leg-item"><div class="dot" style="background:#dc2626"></div> Stagiaire / Référent</div>
+    <div class="leg-item"><div class="dot" style="background:#7c3aed"></div> Rosina</div>
+    <div class="leg-item"><div class="dot" style="background:#b45309"></div> Conseillère AI</div>
+    <div class="leg-item"><div class="dot" style="background:#475569"></div> École / Prof</div>
+  </div>
+
+  <div>
+    <div class="sec-title">Systèmes</div>
+    <div class="leg-item"><div class="rect" style="background:#2563eb"></div> Site React</div>
+    <div class="leg-item"><div class="rect" style="background:#c25d0f"></div> Power Automate ✅</div>
+    <div class="leg-item"><div class="rect" style="background:#78350f;border:1.5px dashed #fbbf24"></div> PA 🆕 À créer</div>
+    <div class="leg-item"><div class="rect" style="background:#7c2d12;border:1.5px dashed #f97316"></div> PA ⚠️ Bloqué crédits</div>
+    <div class="leg-item"><div class="rect" style="background:#15803d"></div> SharePoint Liste</div>
+    <div class="leg-item"><div class="rect" style="background:#065f46"></div> SP Documents</div>
+    <div class="leg-item"><div class="rect" style="background:#6d28d9"></div> Email Outlook</div>
+    <div class="leg-item"><div class="rect" style="background:#1f2937"></div> GitHub</div>
+    <div class="leg-item"><div class="dot" style="background:#0369a1"></div> Cartographie</div>
+  </div>
+
+  <div>
+    <div class="sec-title">Arêtes</div>
+    <div class="edge-item"><div class="e-solid"></div> Flux opérationnel</div>
+    <div class="edge-item"><div class="e-dash"></div> 🆕 À créer</div>
+  </div>
+
+  <hr class="sep">
+
+  <div>
+    <div class="sec-title">Positions</div>
+    <button class="btn" id="btn-save" onclick="savePositions()">💾 Sauvegarder positions</button>
+    <button class="btn" onclick="resetPositions()">↩ Réinitialiser</button>
+  </div>
+
+  <div>
+    <div class="sec-title">Vue</div>
+    <button class="btn" onclick="network.fit({animation:{duration:500}})">🔍 Tout afficher</button>
+  </div>
+
+  <hr class="sep">
+
+  <div class="info">
+    <strong>Glisse</strong> les nœuds pour réorganiser.<br><br>
+    <strong>Survole</strong> un nœud pour ses détails.<br><br>
+    <strong>Arêtes tirets</strong> = flux 🆕 à créer (demandés le 13 avril).
+  </div>
+</div>
+
+<div id="graph-container">
+  <div id="graph"></div>
+  <div id="tip"></div>
+  <div id="save-toast">✅ Positions sauvegardées</div>
+</div>
+
+<script>
+const STORAGE_KEY = 'clair-bois-flux-positions';
+
+// ══════════════════════════════════════════
+// POSITIONS INITIALES (layout lisible L→R)
+// Colonnes : Acteurs | Entrée | PA | SP Data | Sorties
+// ══════════════════════════════════════════
+// Colonnes : Acteurs(-900) | Entrée(-480) | PA-Main(-70) | SP(380) | PA-Sec+Out(810/1200)
+// Rangées : Inscription(top) | Créneaux+Planning(mid) | Email+Conf(lower) | AI+Visite(bottom)
+const DEFAULT_POSITIONS = {
+  // ─── Acteurs (col 1) ───
+  stagiaire:     { x: -900, y: -430 },   // haut — inscription
+  referent:      { x: -900, y: -180 },   // haut — inscription
+  karavia:       { x: -900, y:   80 },   // milieu — validation / confirmation des demandes
+  conseilere_ai: { x: -900, y:  490 },   // bas — canal AI
+  ecole:         { x: -900, y:  730 },   // bas — visite
+
+  // ─── Entrée (col 2) ───
+  site:          { x: -480, y: -240 },   // milieu-haut, relie tout
+  email:         { x: -480, y:  220 },   // milieu-bas, hub PJ + AI + conf
+
+  // ─── Power Automate principal (col 3) ───
+  flux5:         { x:  -70, y: -430 },   // haut — inscription
+  flux4:         { x:  -70, y:   80 },   // milieu — créneaux
+  flux2:         { x:  -70, y:  220 },   // même Y qu'email → trigger direct
+  fluxai:        { x:  -70, y:  530 },   // bas — Word AI
+  fluxvisite:    { x:  -70, y:  730 },   // bas — visite
+
+  // ─── SharePoint (col 4) ───
+  sp_stag:          { x:  380, y: -550 },
+  sp_dem:           { x:  380, y: -200 },   // hub central — tout y passe
+  sp_ref:           { x:  380, y:   80 },
+  sp_cren:          { x:  380, y:  340 },
+  sp_doc:           { x:  380, y:  580 },
+  sp_dossiersuivi:  { x:  380, y:  820 },
+
+  // ─── PA secondaire (col 5) ───
+  flux3:         { x:  810, y: -130 },   // polling SP Dem/Cren
+  fluxconf:      { x:  810, y:  340 },   // déclenché par SP Dem Confirmé
+
+  // ─── Sorties finales (col 6) ───
+  github:        { x: 1200, y: -240 },
+  carto:         { x: 1200, y:  100 },
+  intendance:    { x: 1200, y:  490 },
+};
+
+// ══════════════════════════════════════════
+// NŒUDS
+// ══════════════════════════════════════════
+function buildNodes(positions) {
+  const p = positions;
+  return new vis.DataSet([
+
+    // ── Acteurs ──
+    { id:'stagiaire',     label:'👤\nStagiaire',              group:'actor',    ...p.stagiaire,
+      title:'Se préinscrit via le site React\nou reçoit un email de demande de docs' },
+    { id:'referent',      label:'👤\nRéférent\n/ Partenaire', group:'actor',    ...p.referent,
+      title:'Assistant social, enseignant, tuteur\nRemplit le formulaire pour le stagiaire' },
+    { id:'karavia',       label:'👩‍💼\nRosina',                group:'karavia',  ...p.karavia,
+      title:'Coordinatrice RH-DFIP\nFiltre les "non traités" dans SP Demande\nConsulte la carto avant de placer (places libres + formateur dispo)\nConfirme → statut "Confirmé" → Flux Confirmation en 2 min\nPrise de décision seule pour son équipe (restauration, technique…)' },
+    { id:'conseilere_ai', label:'👩‍⚕️\nConseillère\nAI / OCAS',group:'actor_ai', ...p.conseilere_ai,
+      title:'Envoie un formulaire Word OCAS pré-rempli\npar email sécurisé HIN (via Outlook)' },
+    { id:'ecole',         label:'🏫\nÉcole / Prof',            group:'actor_ext',...p.ecole,
+      title:'🆕 Soumet une demande de visite de classe\nFormulaire simple sur le site' },
+
+    // ── Entrée ──
+    { id:'site',  label:'⚛\nSite React',              group:'react', ...p.site,
+      title:'clair-bois-calendrier (GitHub Pages)\nCalendrier · Inscription (formulaire intégré) · Modules · Signalement · Cartographie\n✅ WeekDetail.jsx : bouton "S\'inscrire" connecté au formulaire intégré (mai 2026)\n⚠️ Flux 4 créneaux : site ouvre encore Forms externe (pas encore migré HTTP)' },
+    { id:'email', label:'✉\nEmail Outlook\nstagiaire.dfip@', group:'email', ...p.email,
+      title:'Boîte email Power Automate\n→ Envoie la demande de PJ au stagiaire\n→ Reçoit les réponses avec PJ jointes\n→ Reçoit les Word OCAS (HIN)' },
+
+    // ── Flux PA opérationnels ──
+    { id:'flux5', label:'⚡ Flux 5\nHTTP Inscription\n✅', group:'pa', ...p.flux5,
+      title:'✅ Opérationnel — étendu mai 2026 (stages + modules)\nTrigger : HTTP POST depuis React\nCheck AVS → Créer/MAJ Stagiaire\n→ Condition parcours :\n  stages : lookup créneau → 1 Demande (TypeDemande=Stage)\n  modules : Foreach → 1 Demande par module (TypeDemande=Module métier)\n→ Créer Referent (si autre)\n→ Email demande documents\nReferentContact : "Prénom Nom — Partenaire" ou "Aucun"\n9 tests automatisés (test-flux5.js) — 9/9 ✅' },
+    { id:'flux4', label:'⚡ Flux 4\nGestion Créneaux\n✅', group:'pa', ...p.flux4,
+      title:'✅ Opérationnel\nTrigger : Forms webhook "Gestion créneaux"\nVérif mot de passe → Créer Créneau dans SP' },
+    { id:'flux2', label:'⚡ Flux 2\nRéception PJ\n✅',    group:'pa', ...p.flux2,
+      title:'✅ Opérationnel depuis 6 mars 2026\nTrigger : Email entrant (filtre: AVS-)\nParse D°ID → Get Demande → Get Stagiaire\n→ Créer dossier SP → Upload PJ → MAJ Statut' },
+    { id:'flux3', label:'⚡ Flux 3\nPlanning JSON\n✅',   group:'pa', ...p.flux3,
+      title:'✅ Opérationnel\nTrigger : Polling SP toutes les 3 min\nGET Créneaux + Demandes → Compter places\n→ Composer JSON → Push GitHub' },
+
+    // ── Flux PA nouveaux ──
+    { id:'fluxconf',  label:'⚡ Flux\nConfirmation\n🆕',group:'pa_new', ...p.fluxconf,
+      title:'🆕 À créer (demandé 13 avril)\nTrigger : Modification Demande → Statut "Confirmé"\n① Email confirmation au stagiaire\n② MAJ Cartographie (place rouge)\n③ Commande uniforme → Intendance' },
+    { id:'fluxai',    label:'⚡ Flux OCAS\nWord→SP\n⚠️ crédits', group:'pa_blocked', ...p.fluxai,
+      title:'⚠️ Construit 4 mai 2026 — bloqué absence crédits AI Builder\nFlow PA : "Flux OCAS Word → SP"\nTrigger : SP "Stagiaires Doc/Réception AI" (fichier créé) ✅\nGetFileContent avec {Identifier} ✅\nAI Builder OCAS-V4 (extraction champs) ❌ — manque crédits\nSuite (quand débloqué) :\n→ Check AVS → Créer/MAJ Stagiaire SP\n→ Créer Demande SP\n→ Email Rosina avec données extraites (Nom, Prénom, AVS…)\nDébloquer : Power Automate Premium pour stagiaire.dfip@clairbois.ch' },
+    { id:'fluxvisite',label:'⚡ Flux\nVisite\n🆕',     group:'pa_new', ...p.fluxvisite,
+      title:'🆕 À créer\nTrigger : HTTP POST (formulaire visite site React)\nFlux simple → Email avec infos école → Karavia\nChamps : à fournir par Karavia' },
+
+    // ── SharePoint Listes ──
+    { id:'sp_stag', label:'📋 SP Stagiaire\n~35 champs',       group:'splist', ...p.sp_stag,
+      title:'Liste SharePoint "Stagiaire"\nNom · Prénom · AVS · Curatelle · AI Conseiller\nTailles · Urgence · Réseau médical…\nID: bf357221-7e74-4905' },
+    { id:'sp_dem',  label:'📋 SP Demande\nStatut · Secteur…', group:'splist', ...p.sp_dem,
+      title:'Liste SharePoint "Demande" (1:N avec Stagiaire)\nStagiaireID · ReferentID · CreneauID\nTypeDemande (Stage / Module métier)\nReferentContact (texte: "Prénom Nom — Partenaire" ou "Aucun")\nSecteur · DateDebut · ObjectifStage · DejaStage\nStatut : En attente docs → Docs reçus → Confirmé → Annulé\nID: 9616ee1d' },
+    { id:'sp_ref',  label:'📋 SP Referent\nPartenaire…',      group:'splist', ...p.sp_ref,
+      title:'Liste SharePoint "Referent"\nPartenaire · Fonction · Nom · Prénom · Tel · Mail\nLié à Stagiaire via StagiaireID\nID: 7a31b912' },
+    { id:'sp_cren', label:'📋 SP Créneaux\nPlaces · Dates',   group:'splist', ...p.sp_cren,
+      title:'Liste SharePoint "Creneaux"\nEtablissement · Secteur · DateDebut · DateFin\nPlacesTotal · TypeCreneau (Stage / Module)\nPlaces utilisées : calculé dynamiquement par Flux 3\nID: 3e2deb27' },
+    { id:'sp_doc',  label:'📁 SP Dossier Doc\n/Stagiaires Doc/{AVS}', group:'spdoc', ...p.sp_doc,
+      title:'Bibliothèque de documents SharePoint\nCréé par Flux 2 à la 1ère réception de PJ\n1. Administratif / 2. Contrats / 3. Mesures\n4. Médical / 5. Evaluation / 6. Ecole…\nNommage auto : "Nom Prénom - Suivi.docx"\n──\nSous-dossier : /Réception AI/\nDrop zone OCAS : conseillères y déposent le PDF OCAS\n→ déclenche Flux OCAS Word→SP\nDriveId : b!OmXUJimCl0KgeQhj_qNKC5a8dvXN…' },
+    { id:'sp_dossiersuivi', label:'📓 Dossier Suivi\npar stagiaire 🆕', group:'pa_new', ...p.sp_dossiersuivi,
+      title:'🆕 À investiguer (demandé 13 avril)\nClasseur numérique par stagiaire avec onglets :\nAdmin · Stage 1/2 · Modules · Mesures\nRemédiation scolaire · Formation · Insertion\nTechnologie : PowerPage (150 CHF/an) ou Excel ?' },
+
+    // ── Sorties ──
+    { id:'github',     label:'🐙 GitHub\nplanning.json',    group:'github', ...p.github,
+      title:'Repo : rochat-dev/clair-bois-calendrier\nFichier : public/planning.json\nMis à jour par Flux 3 (polling 3 min)' },
+    { id:'carto',      label:'🗺 Cartographie\ndes places',  group:'carto',  ...p.carto,
+      title:'🔵 Phase 2 en cours\nBoard visuel des places par secteur\nRouge = occupé · Vert = libre\nHover : nom stagiaire, dates, type\nAccès privé par mot de passe' },
+    { id:'intendance', label:'🧺 Intendance\nLingerie 🆕',  group:'new_sys',...p.intendance,
+      title:'🆕 Service Lingerie / Uniforme\nReçoit automatiquement la commande d\'uniforme\nquand un stage est confirmé par Karavia\n(Nom · Tailles · Site de travail)\nFormat de réception à confirmer avec le service' },
+  ]);
+}
+
+// ══════════════════════════════════════════
+// COULEURS PAR NŒUD SOURCE
+// Chaque arête hérite de la couleur de son nœud de départ
+// ══════════════════════════════════════════
+const C = {
+  // acteurs
+  stagiaire:     '#f87171',   // rouge vif
+  referent:      '#f87171',   // rouge vif
+  karavia:       '#a78bfa',   // violet
+  conseilere_ai: '#fbbf24',   // ambre
+  ecole:         '#9ca3af',   // gris
+  // frontend
+  site:          '#60a5fa',   // bleu
+  // email
+  email:         '#c084fc',   // mauve
+  // PA opérationnels
+  flux5:         '#fb923c',   // orange
+  flux4:         '#fb923c',
+  flux2:         '#fb923c',
+  flux3:         '#fb923c',
+  // PA nouveaux
+  fluxconf:      '#fde047',   // jaune
+  fluxai:        '#fb923c',   // orange (construit, bloqué)
+  fluxvisite:    '#fde047',
+  // SP listes
+  sp_stag:       '#4ade80',   // vert
+  sp_dem:        '#4ade80',
+  sp_ref:        '#4ade80',
+  sp_cren:       '#4ade80',
+  sp_doc:        '#34d399',   // vert émeraude
+  sp_dossiersuivi:'#fde047',
+  // sorties
+  github:        '#94a3b8',   // gris bleu
+  carto:         '#38bdf8',   // cyan
+  intendance:    '#fde047',
+};
+
+function ec(id, dashes) {
+  const c = C[id] || '#64748b';
+  const e = { color:c, highlight:c, hover:c };
+  return dashes ? { color:e, dashes:true } : { color:e };
+}
+
+// ══════════════════════════════════════════
+// ARÊTES
+// ══════════════════════════════════════════
+const edges = new vis.DataSet([
+  // Acteurs → entrée
+  { from:'stagiaire',     to:'site',      label:"s'inscrit",                  ...ec('stagiaire') },
+  { from:'referent',      to:'site',      label:"inscrit un stagiaire",        ...ec('referent') },
+  { from:'karavia',       to:'sp_dem',    label:"filtre · place · confirme",   ...ec('karavia') },
+  { from:'karavia',       to:'carto',     label:"consulte places avant",       ...ec('karavia') },
+  { from:'conseilere_ai', to:'email',     label:"envoie Word OCAS (HIN)",      ...ec('conseilere_ai', true) },
+  { from:'ecole',         to:'site',      label:"demande une visite 🆕",       ...ec('ecole', true) },
+
+  // Site → flux
+  { from:'site', to:'flux5', label:"HTTP POST inscription",                   ...ec('site') },
+  { from:'site', to:'flux4', label:"ouvre Forms créneaux →",                  ...ec('site') },
+
+  // Flux 5 → data
+  { from:'flux5', to:'sp_stag', label:"crée / met à jour",                   ...ec('flux5') },
+  { from:'flux5', to:'sp_dem',  label:"crée demande",                         ...ec('flux5') },
+  { from:'flux5', to:'sp_ref',  label:"crée (si référent)",                   ...ec('flux5') },
+  { from:'flux5', to:'email',   label:"envoie demande docs",                  ...ec('flux5'), smooth:{type:'curvedCW',roundness:0.35} },
+
+  // Boucle email PJ — email→stagiaire arc CCW (passe au-dessus pour éviter croisements)
+  { from:'email',     to:'stagiaire', label:"reçoit · demande PJ",            ...ec('email'),     smooth:{type:'curvedCCW',roundness:0.45} },
+  { from:'stagiaire', to:'email',     label:"répond avec PJ",                  ...ec('stagiaire') },
+  { from:'email',     to:'flux2',     label:"déclenche (filtre AVS-)",         ...ec('email') },
+
+  // Flux 2 → data
+  { from:'flux2', to:'sp_stag', label:"lit (AVS, Nom, Prénom)",               ...ec('flux2') },
+  { from:'flux2', to:'sp_dem',  label:"lit ID + MAJ statut",                  ...ec('flux2') },
+  { from:'flux2', to:'sp_doc',  label:"crée dossier + upload PJ",             ...ec('flux2') },
+
+  // Flux 4 → data
+  { from:'flux4', to:'sp_cren', label:"crée créneau",                         ...ec('flux4') },
+
+  // Boucle planning
+  { from:'sp_dem',  to:'flux3',  label:"polling (3 min)",                     ...ec('sp_dem') },
+  { from:'sp_cren', to:'flux3',  label:"polling (3 min)",                     ...ec('sp_cren') },
+  { from:'flux3',   to:'github', label:"pousse planning.json",                 ...ec('flux3') },
+  { from:'github',  to:'site',   label:"nourrit",                              ...ec('github'), smooth:{type:'curvedCCW',roundness:0.65} },
+
+  // Cartographie ← SP (🆕 pas encore connectée au SP réel)
+  { from:'sp_dem',  to:'carto', label:"nourrit (places)",                     ...ec('sp_dem',  true) },
+  { from:'sp_stag', to:'carto', label:"nourrit (noms)",                       ...ec('sp_stag', true) },
+
+  // Flux Confirmation 🆕
+  { from:'sp_dem',   to:'fluxconf',   label:"statut → Confirmé",              ...ec('sp_dem',  true) },
+  { from:'fluxconf', to:'email',      label:"envoie confirmation",             ...ec('fluxconf',true), smooth:{type:'curvedCW',roundness:0.45} },
+  { from:'fluxconf', to:'carto',      label:"met à jour place (→ rouge)",      ...ec('fluxconf',true) },
+  { from:'fluxconf', to:'intendance', label:"commande uniforme",               ...ec('fluxconf',true) },
+
+  // Flux Word AI — construit, bloqué crédits
+  { from:'conseilere_ai', to:'sp_doc',  label:"dépose PDF OCAS\nRéception AI",  ...ec('conseilere_ai') },
+  { from:'sp_doc',        to:'fluxai',  label:"trigger file drop",              ...ec('sp_doc') },
+  { from:'fluxai',  to:'sp_stag', label:"crée / met à jour",                  ...ec('fluxai', true) },
+  { from:'fluxai',  to:'sp_dem',  label:"crée demande",                       ...ec('fluxai', true) },
+  { from:'fluxai',  to:'karavia', label:"email données OCAS",                  ...ec('fluxai', true), smooth:{type:'curvedCCW',roundness:0.3} },
+
+  // Flux Visite 🆕
+  { from:'site',       to:'fluxvisite', label:"HTTP POST visite",              ...ec('site',      true) },
+  { from:'fluxvisite', to:'karavia',    label:"email infos école",             ...ec('fluxvisite',true), smooth:{type:'curvedCCW',roundness:0.45} },
+
+  // Dossier Suivi 🆕
+  { from:'flux5',    to:'sp_dossiersuivi', label:"renseigne onglet Admin",     ...ec('flux5',    true) },
+  { from:'fluxconf', to:'sp_dossiersuivi', label:"ajoute stage confirmé",      ...ec('fluxconf', true) },
+]);
+
+// ══════════════════════════════════════════
+// OPTIONS
+// ══════════════════════════════════════════
+const options = {
+  groups: {
+    actor:    { shape:'ellipse', color:{background:'#dc2626',border:'#b91c1c'}, font:{color:'white',size:13} },
+    karavia:  { shape:'ellipse', color:{background:'#7c3aed',border:'#6d28d9'}, font:{color:'white',size:13} },
+    actor_ai: { shape:'ellipse', color:{background:'#b45309',border:'#92400e'}, font:{color:'white',size:13} },
+    actor_ext:{ shape:'ellipse', color:{background:'#475569',border:'#374151'}, font:{color:'white',size:13} },
+    react:    { shape:'box',     color:{background:'#2563eb',border:'#1d4ed8'}, font:{color:'white',size:12}, shapeProperties:{borderRadius:7} },
+    pa:       { shape:'box',     color:{background:'#c25d0f',border:'#9a4a0c'}, font:{color:'white',size:12}, shapeProperties:{borderRadius:6} },
+    pa_new:   { shape:'box',     color:{background:'#78350f',border:'#fbbf24'}, font:{color:'#fde68a',size:12}, borderDashes:[6,4], borderWidth:2, shapeProperties:{borderRadius:6} },
+    pa_blocked:{ shape:'box',    color:{background:'#7c2d12',border:'#f97316'}, font:{color:'#fed7aa',size:12}, borderDashes:[5,3], borderWidth:2.5, shapeProperties:{borderRadius:6} },
+    splist:   { shape:'database',color:{background:'#15803d',border:'#166534'}, font:{color:'white',size:12} },
+    spdoc:    { shape:'box',     color:{background:'#065f46',border:'#064e3b'}, font:{color:'#a7f3d0',size:12}, shapeProperties:{borderRadius:6} },
+    email:    { shape:'box',     color:{background:'#6d28d9',border:'#5b21b6'}, font:{color:'white',size:12}, shapeProperties:{borderRadius:6} },
+    github:   { shape:'box',     color:{background:'#1f2937',border:'#374151'}, font:{color:'#f3f4f6',size:12}, shapeProperties:{borderRadius:6} },
+    carto:    { shape:'ellipse', color:{background:'#0369a1',border:'#075985'}, font:{color:'white',size:13} },
+    new_sys:  { shape:'box',     color:{background:'#78350f',border:'#fbbf24'}, font:{color:'#fde68a',size:12}, borderDashes:[6,4], borderWidth:2, shapeProperties:{borderRadius:6} },
+  },
+  nodes: {
+    borderWidth: 2,
+    shadow: { enabled:true, color:'rgba(0,0,0,0.5)', size:8, x:2, y:3 },
+    widthConstraint: { minimum:110, maximum:155 },
+    font: { face:'Segoe UI' },
+  },
+  edges: {
+    arrows: { to:{ enabled:true, scaleFactor:0.7 } },
+    font: { size:10, face:'Segoe UI', align:'middle', background:'rgba(15,23,42,0.9)', color:'#94a3b8', strokeWidth:0 },
+    smooth: { enabled:true, type:'curvedCW', roundness:0.15 },
+    width: 1.5,
+    color: { color:'#475569', highlight:'#3b82f6', hover:'#60a5fa' },
+    selectionWidth: 3,
+    hoverWidth: 2,
+  },
+  // Physique DÉSACTIVÉE — positions fixes définies ci-dessus
+  physics: { enabled: false },
+  interaction: {
+    hover: true, dragNodes: true, dragView: true, zoomView: true,
+    keyboard: { enabled:true, bindToWindow:false },
+  },
+};
+
+// ══════════════════════════════════════════
+// INIT AVEC POSITIONS (localStorage ou défaut)
+// ══════════════════════════════════════════
+function loadPositions() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const saved = JSON.parse(stored);
+      // Fusionner avec les défauts (pour les nouveaux nœuds éventuels)
+      return Object.assign({}, DEFAULT_POSITIONS, saved);
+    }
+  } catch(e) {}
+  return DEFAULT_POSITIONS;
+}
+
+const positions = loadPositions();
+const nodes = buildNodes(positions);
+
+const container = document.getElementById('graph');
+const network = new vis.Network(container, { nodes, edges }, options);
+
+// ── Sauvegarde automatique après chaque déplacement ──
+network.on('dragEnd', function(params) {
+  if (params.nodes.length > 0) {
+    autoSave();
+  }
+});
+
+function autoSave() {
+  const positions = {};
+  nodes.getIds().forEach(id => {
+    const pos = network.getPosition(id);
+    positions[id] = { x: Math.round(pos.x), y: Math.round(pos.y) };
+  });
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(positions));
+  } catch(e) {}
+}
+
+// ── Bouton sauvegarder ──
+function savePositions() {
+  autoSave();
+  const toast = document.getElementById('save-toast');
+  toast.style.display = 'block';
+  toast.style.animation = 'none';
+  toast.offsetHeight; // reflow
+  toast.style.animation = 'fadeout 2s forwards';
+  setTimeout(() => { toast.style.display = 'none'; }, 2100);
+}
+
+// ── Bouton réinitialiser ──
+function resetPositions() {
+  if (!confirm('Réinitialiser toutes les positions ?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+// ── Tooltip personnalisé ──
+const tip = document.getElementById('tip');
+const gc  = document.getElementById('graph-container');
+
+network.on('hoverNode', function(params) {
+  const node = nodes.get(params.node);
+  if (node && node.title) {
+    const name = node.label.replace(/\n/g,' ').trim();
+    tip.innerHTML = '<strong>' + name + '</strong><br>' + node.title.replace(/\n/g,'<br>');
+    tip.style.display = 'block';
+  }
+});
+network.on('blurNode', () => { tip.style.display = 'none'; });
+
+// ── Toggle tirets/plein sur clic d'une arête ──
+const EDGE_STORAGE_KEY = 'clair-bois-edge-dashes';
+function loadEdgeDashes() {
+  try { return JSON.parse(localStorage.getItem(EDGE_STORAGE_KEY) || '{}'); } catch(e) { return {}; }
+}
+function saveEdgeDashes() {
+  const state = {};
+  edges.getIds().forEach(id => { state[id] = edges.get(id).dashes || false; });
+  localStorage.setItem(EDGE_STORAGE_KEY, JSON.stringify(state));
+}
+// Restaurer l'état sauvegardé
+(function() {
+  const saved = loadEdgeDashes();
+  Object.entries(saved).forEach(([id, dashes]) => {
+    const e = edges.get(id);
+    if (e) edges.update({ id, dashes });
+  });
+})();
+network.on('click', function(params) {
+  if (params.edges.length === 1 && params.nodes.length === 0) {
+    const id = params.edges[0];
+    const e = edges.get(id);
+    const wasDashed = e.dashes === true;
+    edges.update({ id, dashes: !wasDashed });
+    saveEdgeDashes();
+  }
+});
+gc.addEventListener('mousemove', function(e) {
+  const r = gc.getBoundingClientRect();
+  const x = e.clientX - r.left, y = e.clientY - r.top;
+  tip.style.left = (x + 18 + 260 > r.width  ? x - 270 : x + 18) + 'px';
+  tip.style.top  = (y + 18 + 200 > r.height ? y - 210 : y + 18) + 'px';
+});
+</script>
+</body>
+</html>

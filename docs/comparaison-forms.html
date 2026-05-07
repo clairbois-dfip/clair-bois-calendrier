@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaires intégrés — Fondation Clair-Bois</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cb: { blue: '#2563eb', green: '#16a34a' }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @media print {
+            body { font-size: 11pt; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800 antialiased">
+
+    <main class="max-w-5xl mx-auto px-4 py-10 space-y-16">
+
+        <!-- TITRE -->
+        <section class="text-center max-w-3xl mx-auto">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6 leading-tight">
+                Pourquoi intégrer les formulaires<br>directement dans le site ?
+            </h1>
+        </section>
+
+        <!-- SÉCURITÉ -->
+        <section>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+                <span class="text-2xl">🔒</span> Sécurité
+            </h2>
+            <p class="text-gray-500 mb-8">Les données suivent le même chemin sécurisé dans les deux cas.</p>
+
+            <!-- Schéma visuel -->
+            <div class="space-y-6">
+                <!-- Chemin actuel -->
+                <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                    <div class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Chemin actuel</div>
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-0">
+                        <div class="bg-gray-100 rounded-xl px-5 py-3 text-center">
+                            <div class="text-2xl mb-1">🖥️</div>
+                            <div class="font-medium text-sm">Navigateur<br>du stagiaire</div>
+                        </div>
+                        <div class="text-gray-400 text-xl md:hidden">↓</div>
+                        <div class="hidden md:block text-gray-400 text-2xl mx-4">→</div>
+                        <div class="bg-orange-50 border border-orange-200 rounded-xl px-5 py-3 text-center">
+                            <div class="text-2xl mb-1">📋</div>
+                            <div class="font-medium text-sm text-orange-700">Microsoft Forms</div>
+                            <div class="text-xs text-orange-500 mt-1">HTTPS chiffré</div>
+                        </div>
+                        <div class="text-gray-400 text-xl md:hidden">↓</div>
+                        <div class="hidden md:block text-gray-400 text-2xl mx-4">→</div>
+                        <div class="bg-blue-50 border border-blue-200 rounded-xl px-5 py-3 text-center">
+                            <div class="text-2xl mb-1">☁️</div>
+                            <div class="font-medium text-sm text-blue-700">Microsoft Cloud</div>
+                            <div class="text-xs text-blue-500 mt-1">SharePoint / Power Automate</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nouveau chemin -->
+                <div class="bg-white rounded-2xl border-2 border-cb-green p-6 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-3 right-4 bg-cb-green text-white text-xs font-semibold px-3 py-1 rounded-full">Proposé</div>
+                    <div class="text-sm font-semibold text-cb-green uppercase tracking-wider mb-4">Nouveau chemin</div>
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-0">
+                        <div class="bg-gray-100 rounded-xl px-5 py-3 text-center">
+                            <div class="text-2xl mb-1">🖥️</div>
+                            <div class="font-medium text-sm">Navigateur<br>du stagiaire</div>
+                        </div>
+                        <div class="text-gray-400 text-xl md:hidden">↓</div>
+                        <div class="hidden md:block text-gray-400 text-2xl mx-4">→</div>
+                        <div class="bg-green-50 border border-green-200 rounded-xl px-5 py-3 text-center">
+                            <div class="text-2xl mb-1">🌐</div>
+                            <div class="font-medium text-sm text-green-700">Site Clair-Bois</div>
+                            <div class="text-xs text-green-500 mt-1">HTTPS chiffré</div>
+                        </div>
+                        <div class="text-gray-400 text-xl md:hidden">↓</div>
+                        <div class="hidden md:block text-gray-400 text-2xl mx-4">→</div>
+                        <div class="bg-blue-50 border border-blue-200 rounded-xl px-5 py-3 text-center">
+                            <div class="text-2xl mb-1">☁️</div>
+                            <div class="font-medium text-sm text-blue-700">Microsoft Cloud</div>
+                            <div class="text-xs text-blue-500 mt-1">SharePoint / Power Automate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Points clés sécurité -->
+            <div class="grid md:grid-cols-2 gap-4 mt-8">
+                <div class="bg-white rounded-xl p-5 border border-gray-200 flex gap-4 items-start">
+                    <div class="text-2xl flex-shrink-0">🔐</div>
+                    <div>
+                        <div class="font-semibold text-gray-900">Même destination finale</div>
+                        <div class="text-sm text-gray-500 mt-1">Dans les deux cas, les données arrivent dans le <strong>Microsoft Cloud de Clair-Bois</strong> (SharePoint, Power Automate). Rien ne change côté stockage.</div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-5 border border-gray-200 flex gap-4 items-start">
+                    <div class="text-2xl flex-shrink-0">🛡️</div>
+                    <div>
+                        <div class="font-semibold text-gray-900">Chiffrement HTTPS</div>
+                        <div class="text-sm text-gray-500 mt-1">Le site utilise le <strong>même protocole sécurisé</strong> (HTTPS) que Microsoft Forms. Les données sont chiffrées pendant le transport.</div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-5 border border-gray-200 flex gap-4 items-start">
+                    <div class="text-2xl flex-shrink-0">🚫</div>
+                    <div>
+                        <div class="font-semibold text-gray-900">Le site ne stocke rien</div>
+                        <div class="text-sm text-gray-500 mt-1">Le site web sert uniquement d'<strong>interface de saisie</strong>. Il ne conserve aucune donnée. Tout est envoyé directement à Microsoft.</div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-5 border border-gray-200 flex gap-4 items-start">
+                    <div class="text-2xl flex-shrink-0">🏢</div>
+                    <div>
+                        <div class="font-semibold text-gray-900">Conformité LPD / RGPD</div>
+                        <div class="text-sm text-gray-500 mt-1">Les données restent dans le <strong>tenant Microsoft 365 de Clair-Bois</strong>. La conformité est identique à la solution actuelle.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TABLEAU COMPARATIF -->
+        <section>
+            <!-- Sécurité -->
+            <div class="mb-10">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <span class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-sm">🔒</span>
+                    Sécurité
+                </h3>
+                <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 border-b border-gray-200">
+                                <th class="text-left px-5 py-3 font-semibold text-gray-600 w-2/5">Critère</th>
+                                <th class="text-center px-4 py-3 font-semibold text-gray-600 w-[30%]">Microsoft Forms</th>
+                                <th class="text-center px-4 py-3 font-semibold text-cb-blue w-[30%]">Formulaire intégré</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr>
+                                <td class="px-5 py-3">Chiffrement des données (HTTPS)</td>
+                                <td class="px-4 py-3 text-center"><span class="text-green-600 text-lg">✅</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Stockage dans le cloud Microsoft</td>
+                                <td class="px-4 py-3 text-center"><span class="text-green-600 text-lg">✅</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Protection anti-robot</td>
+                                <td class="px-4 py-3 text-center"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">intégré</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">reCAPTCHA Google</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Données sensibles protégées (AVS, curatelle)</td>
+                                <td class="px-4 py-3 text-center"><span class="text-green-600 text-lg">✅</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Conformité RGPD / LPD</td>
+                                <td class="px-4 py-3 text-center"><span class="text-green-600 text-lg">✅</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-xs text-gray-400 mt-2 ml-2 italic">La sécurité est identique : même protocole, même destination, même protection.</p>
+            </div>
+
+            <!-- Expérience utilisateur -->
+            <div class="mb-10">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <span class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center text-sm">👤</span>
+                    Expérience pour le stagiaire
+                </h3>
+                <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 border-b border-gray-200">
+                                <th class="text-left px-5 py-3 font-semibold text-gray-600 w-2/5">Critère</th>
+                                <th class="text-center px-4 py-3 font-semibold text-gray-600 w-[30%]">Microsoft Forms</th>
+                                <th class="text-center px-4 py-3 font-semibold text-cb-blue w-[30%]">Formulaire intégré</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr>
+                                <td class="px-5 py-3">Navigation fluide (sans redirection)</td>
+                                <td class="px-4 py-3 text-center"><span class="text-red-500 text-lg">❌</span> <span class="text-xs text-gray-400 block">redirige vers microsoft.com</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">reste sur le site</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Design aux couleurs de Clair-Bois</td>
+                                <td class="px-4 py-3 text-center"><span class="text-red-500 text-lg">❌</span> <span class="text-xs text-gray-400 block">design Microsoft générique</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">logo, couleurs, identité</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Adapté mobile et tablette</td>
+                                <td class="px-4 py-3 text-center"><span class="text-orange-500 text-lg">⚠️</span> <span class="text-xs text-gray-400 block">moyen</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">optimisé</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Sélection visuelle des modules et semaines</td>
+                                <td class="px-4 py-3 text-center"><span class="text-red-500 text-lg">❌</span> <span class="text-xs text-gray-400 block">impossible</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">grille interactive</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Sélection visuelle du secteur et des dates de stage</td>
+                                <td class="px-4 py-3 text-center"><span class="text-red-500 text-lg">❌</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">calendrier interactif</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Pré-remplissage intelligent</td>
+                                <td class="px-4 py-3 text-center"><span class="text-orange-500 text-lg">⚠️</span> <span class="text-xs text-gray-400 block">limité, via URL</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">complet et automatique</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Validation en temps réel pendant la saisie</td>
+                                <td class="px-4 py-3 text-center"><span class="text-red-500 text-lg">❌</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">erreurs signalées immédiatement</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Messages d'erreur clairs en français</td>
+                                <td class="px-4 py-3 text-center"><span class="text-orange-500 text-lg">⚠️</span> <span class="text-xs text-gray-400 block">messages Microsoft</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">messages personnalisés</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Validation des données -->
+            <div class="mb-10">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <span class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-sm">✔️</span>
+                    Validation des données
+                </h3>
+                <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 border-b border-gray-200">
+                                <th class="text-left px-5 py-3 font-semibold text-gray-600 w-2/5">Critère</th>
+                                <th class="text-center px-4 py-3 font-semibold text-gray-600 w-[30%]">Microsoft Forms</th>
+                                <th class="text-center px-4 py-3 font-semibold text-cb-blue w-[30%]">Formulaire intégré</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr>
+                                <td class="px-5 py-3">Format AVS vérifié (756.XXXX.XXXX.XX)</td>
+                                <td class="px-4 py-3 text-center"><span class="text-red-500 text-lg">❌</span> <span class="text-xs text-gray-400 block">accepte n'importe quoi</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">format + chiffre de contrôle</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Format email vérifié</td>
+                                <td class="px-4 py-3 text-center"><span class="text-green-600 text-lg">✅</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Format téléphone suisse vérifié</td>
+                                <td class="px-4 py-3 text-center"><span class="text-red-500 text-lg">❌</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">NPA suisse vérifié (4 chiffres)</td>
+                                <td class="px-4 py-3 text-center"><span class="text-red-500 text-lg">❌</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Champs conditionnels (ex : curatelle → nom du curateur)</td>
+                                <td class="px-4 py-3 text-center"><span class="text-red-500 text-lg">❌</span> <span class="text-xs text-gray-400 block">logique très basique</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">logique avancée</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Date de naissance cohérente</td>
+                                <td class="px-4 py-3 text-center"><span class="text-red-500 text-lg">❌</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">vérifie l'âge</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Maintenance & gestion -->
+            <div class="mb-10">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <span class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center text-sm">⚙️</span>
+                    Maintenance et gestion au quotidien
+                </h3>
+                <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 border-b border-gray-200">
+                                <th class="text-left px-5 py-3 font-semibold text-gray-600 w-2/5">Critère</th>
+                                <th class="text-center px-4 py-3 font-semibold text-gray-600 w-[30%]">Microsoft Forms</th>
+                                <th class="text-center px-4 py-3 font-semibold text-cb-blue w-[30%]">Formulaire intégré</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr>
+                                <td class="px-5 py-3">Nombre de formulaires à gérer</td>
+                                <td class="px-4 py-3 text-center"><span class="text-red-500 text-lg">❌</span> <span class="text-xs text-red-400 block font-semibold">8 formulaires séparés</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-green-600 block font-semibold">1 seul formulaire intelligent</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Nombre de flux Power Automate</td>
+                                <td class="px-4 py-3 text-center"><span class="text-red-500 text-lg">❌</span> <span class="text-xs text-red-400 block font-semibold">8 flux différents</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-green-600 block font-semibold">1 à 2 flux</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Modifier un champ</td>
+                                <td class="px-4 py-3 text-center"><span class="text-red-500 text-lg">❌</span> <span class="text-xs text-gray-400 block">modifier dans 5+ formulaires</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">modifier 1 seule fois</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Ajouter un nouveau secteur ou module</td>
+                                <td class="px-4 py-3 text-center"><span class="text-red-500 text-lg">❌</span> <span class="text-xs text-gray-400 block">modifier chaque formulaire</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">automatique depuis les données</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Cohérence des données</td>
+                                <td class="px-4 py-3 text-center"><span class="text-orange-500 text-lg">⚠️</span> <span class="text-xs text-gray-400 block">IDs différents entre forms</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">1 seul modèle de données</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Historique des modifications</td>
+                                <td class="px-4 py-3 text-center"><span class="text-red-500 text-lg">❌</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">tout est tracé (Git)</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Fonctionnalités avancées -->
+            <div>
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <span class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center text-sm">🚀</span>
+                    Fonctionnalités avancées
+                </h3>
+                <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 border-b border-gray-200">
+                                <th class="text-left px-5 py-3 font-semibold text-gray-600 w-2/5">Critère</th>
+                                <th class="text-center px-4 py-3 font-semibold text-gray-600 w-[30%]">Microsoft Forms</th>
+                                <th class="text-center px-4 py-3 font-semibold text-cb-blue w-[30%]">Formulaire intégré</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr>
+                                <td class="px-5 py-3">Formulaire raccourci pour stagiaires déjà connus</td>
+                                <td class="px-4 py-3 text-center"><span class="text-red-500 text-lg">❌</span> <span class="text-xs text-gray-400 block">nécessite un form séparé</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">même formulaire, champs masqués</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Détection automatique d'un stagiaire existant (AVS)</td>
+                                <td class="px-4 py-3 text-center"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">via Power Automate</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">via Power Automate</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Choix modules et semaines combinés</td>
+                                <td class="px-4 py-3 text-center"><span class="text-red-500 text-lg">❌</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">sélecteur visuel intégré</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Confirmation visuelle après envoi</td>
+                                <td class="px-4 py-3 text-center"><span class="text-orange-500 text-lg">⚠️</span> <span class="text-xs text-gray-400 block">page Microsoft</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span> <span class="text-xs text-gray-400 block">message personnalisé</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-3">Lien direct pré-rempli par email</td>
+                                <td class="px-4 py-3 text-center"><span class="text-green-600 text-lg">✅</span></td>
+                                <td class="px-4 py-3 text-center bg-green-50/50"><span class="text-green-600 text-lg">✅</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>
