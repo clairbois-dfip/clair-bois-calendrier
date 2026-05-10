@@ -10,7 +10,7 @@
  * @param {Function} props.onGoToStages  - Callback pour aller aux stages
  */
 
-export default function HomePage({ data, onGoToModules, onGoToStages, onGoToSignalement, onGoToCartographie }) {
+export default function HomePage({ data, onGoToModules, onGoToStages, onGoToSignalement }) {
   const nbModules = data.modulesMetiers?.modules?.length || 0
 
   return (
@@ -96,16 +96,6 @@ export default function HomePage({ data, onGoToModules, onGoToStages, onGoToSign
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           Signaler une annulation ou un retard
-        </button>
-      </div>
-
-      {/* Lien discret vers la cartographie (usage interne) */}
-      <div className="text-center">
-        <button
-          onClick={onGoToCartographie}
-          className="text-xs text-gray-300 hover:text-gray-500 transition-colors cursor-pointer"
-        >
-          Cartographie des sites
         </button>
       </div>
 

@@ -74,33 +74,41 @@ describe("Cartographie — vue d'ensemble", () => {
     ).toBeInTheDocument()
   })
 
-  it('affiche les 5 cartes de plan metier', () => {
+  it('affiche les 6 cartes de plan metier', () => {
     render(<Cartographie {...DEFAULT_PROPS} />)
     expect(screen.getByRole('heading', { level: 3, name: 'Restauration' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 3, name: 'Cuisine' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 3, name: 'Lingerie' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 3, name: 'Technique' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { level: 3, name: 'Educatif' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 3, name: 'Educatif — Pole enfance-adolescence' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 3, name: 'Educatif — Pole adulte' })).toBeInTheDocument()
   })
 
-  it('affiche les 5 plans dans l\'ordre attendu (Educatif en dernier)', () => {
+  it('affiche les 6 plans dans l\'ordre attendu (deux poles Educatif en dernier)', () => {
     render(<Cartographie {...DEFAULT_PROPS} />)
     const titres = screen
       .getAllByRole('heading', { level: 3 })
       .map((h) => h.textContent)
-    expect(titres).toEqual(['Restauration', 'Cuisine', 'Lingerie', 'Technique', 'Educatif'])
+    expect(titres).toEqual([
+      'Restauration',
+      'Cuisine',
+      'Lingerie',
+      'Technique',
+      'Educatif — Pole enfance-adolescence',
+      'Educatif — Pole adulte',
+    ])
   })
 
   it('chaque carte affiche un decompte de places libres "X place(s) libre(s) sur Y"', () => {
     render(<Cartographie {...DEFAULT_PROPS} />)
-    // 5 cartes => 5 mentions du pattern "place(s) libre(s) sur Y"
+    // 6 cartes => 6 mentions du pattern "place(s) libre(s) sur Y"
     const decomptes = screen.getAllByText(/place[s]? libre[s]? sur \d+/i)
-    expect(decomptes.length).toBe(5)
+    expect(decomptes.length).toBe(6)
   })
 
   it('chaque carte affiche un bouton "Ouvrir le plan"', () => {
     render(<Cartographie {...DEFAULT_PROPS} />)
-    expect(screen.getAllByText('Ouvrir le plan')).toHaveLength(5)
+    expect(screen.getAllByText('Ouvrir le plan')).toHaveLength(6)
   })
 
   it("le bouton \"Retour a l'accueil\" est present et appelle onGoHome", () => {
@@ -194,15 +202,16 @@ describe('Cartographie — navigation', () => {
 // ──────────────────────────────────────────────
 
 describe('Cartographie — places', () => {
-  it("dans la vue detail, les badges de type FPra / AFP-CFC / Stage / CEA sont rendus", () => {
+  it("dans la vue detail, les libelles de type FPra / AFP-CFC / Stage / CEA sont rendus", () => {
     render(<Cartographie {...DEFAULT_PROPS} />)
     fireEvent.click(getCartePlanButton('Restauration'))
 
     const dialog = screen.getByRole('dialog')
-    // Les libelles FPra, AFP/CFC, Stage, CEA apparaissent au moins une fois
+    // Les libelles apparaissent dans les stats du header et la legende
+    // Stage s'affiche desormais "Stage/Mes." (stage ou mesure d'orientation)
     expect(within(dialog).getAllByText('FPra').length).toBeGreaterThan(0)
     expect(within(dialog).getAllByText('AFP/CFC').length).toBeGreaterThan(0)
-    expect(within(dialog).getAllByText('Stage').length).toBeGreaterThan(0)
+    expect(within(dialog).getAllByText('Stage/Mes.').length).toBeGreaterThan(0)
     expect(within(dialog).getAllByText('CEA').length).toBeGreaterThan(0)
   })
 
@@ -225,7 +234,8 @@ describe('Cartographie — places', () => {
     const sieges = within(dialog).getAllByRole('button')
     const labels = sieges.map((b) => b.getAttribute('aria-label') || '')
     const occupees = labels.filter((l) => /occupee par/i.test(l))
-    const libres = labels.filter((l) => /libre, type/i.test(l))
+    // "Place libre —..." (vert) ou "Place libre avec X reservation(s)..." (orange)
+    const libres = labels.filter((l) => /^place libre/i.test(l))
 
     expect(occupees.length).toBeGreaterThan(0)
     expect(libres.length).toBeGreaterThan(0)
@@ -246,36 +256,38 @@ describe('Cartographie — places', () => {
 // ──────────────────────────────────────────────
 
 describe('Cartographie — educatif', () => {
-  it('le plan Educatif affiche les sections "Pole enfance-adolescence" et "Pole adulte"', () => {
+  it('le plan Pole enfance-adolescence rend des tables de Chambesy et Lancy', () => {
     render(<Cartographie {...DEFAULT_PROPS} />)
-    fireEvent.click(getCartePlanButton('Educatif'))
+    fireEvent.click(getCartePlanButton('Educatif — Pole enfance-adolescence'))
     const dialog = screen.getByRole('dialog')
 
-    expect(
-      within(dialog).getByRole('heading', { level: 3, name: /Pole enfance-adolescence/i }),
-    ).toBeInTheDocument()
-    expect(
-      within(dialog).getByRole('heading', { level: 3, name: /Pole adulte/i }),
-    ).toBeInTheDocument()
+    expect(within(dialog).getAllByText('Chambesy').length).toBeGreaterThan(0)
+    expect(within(dialog).getAllByText('Lancy').length).toBeGreaterThan(0)
   })
 
-  it("le plan Educatif rend des tables des deux poles (Chambesy enfance + Gradelle adulte)", () => {
+  it('le plan Pole adulte rend des tables de Gradelle', () => {
     render(<Cartographie {...DEFAULT_PROPS} />)
-    fireEvent.click(getCartePlanButton('Educatif'))
+    fireEvent.click(getCartePlanButton('Educatif — Pole adulte'))
     const dialog = screen.getByRole('dialog')
 
-    // Pole enfance : Chambesy (CBC) et Lancy (CBL) y figurent
-    expect(within(dialog).getAllByText('Chambesy').length).toBeGreaterThan(0)
-    // Pole adulte : Gradelle (CBG) y figure
     expect(within(dialog).getAllByText('Gradelle').length).toBeGreaterThan(0)
   })
 
-  it('un plan non-educatif ne rend pas de section "Pole enfance-adolescence"', () => {
+  it('les poles educatif affichent les types App.non-DFIP et MSP/MSTS', () => {
+    render(<Cartographie {...DEFAULT_PROPS} />)
+    fireEvent.click(getCartePlanButton('Educatif — Pole enfance-adolescence'))
+    const dialog = screen.getByRole('dialog')
+
+    expect(within(dialog).getAllByText('App.non-DFIP').length).toBeGreaterThan(0)
+    expect(within(dialog).getAllByText('MSP/MSTS').length).toBeGreaterThan(0)
+  })
+
+  it('un plan non-educatif n\'affiche pas les types App.non-DFIP ni MSP/MSTS', () => {
     render(<Cartographie {...DEFAULT_PROPS} />)
     fireEvent.click(getCartePlanButton('Cuisine'))
     const dialog = screen.getByRole('dialog')
-    expect(
-      within(dialog).queryByRole('heading', { level: 3, name: /Pole enfance/i }),
-    ).not.toBeInTheDocument()
+
+    expect(within(dialog).queryByText('App.non-DFIP')).not.toBeInTheDocument()
+    expect(within(dialog).queryByText('MSP/MSTS')).not.toBeInTheDocument()
   })
 })

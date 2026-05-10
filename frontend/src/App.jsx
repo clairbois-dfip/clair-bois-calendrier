@@ -36,7 +36,12 @@ function App() {
   const [error, setError] = useState(null)
 
   /* --- Etat de la navigation entre ecrans --- */
-  const [currentView, setCurrentView] = useState('home')
+  const [currentView, setCurrentView] = useState(() => {
+    if (window.location.hash === '#carto') {
+      return isAuthenticated() ? 'cartographie' : 'cartographie-login'
+    }
+    return 'home'
+  })
   const [selectedEtablissement, setSelectedEtablissement] = useState(null)
   const [selectedSecteur, setSelectedSecteur] = useState(null)
   const [selectedWeek, setSelectedWeek] = useState(null)
@@ -247,7 +252,7 @@ function App() {
       <main className="max-w-5xl mx-auto px-4 py-6 flex-1">
         {/* Ecran 1 : Page d'accueil — choix du parcours */}
         {currentView === 'home' && (
-          <HomePage data={data} onGoToModules={goToModules} onGoToStages={goToStages} onGoToSignalement={goToSignalement} onGoToCartographie={goToCartographie} />
+          <HomePage data={data} onGoToModules={goToModules} onGoToStages={goToStages} onGoToSignalement={goToSignalement} />
         )}
 
         {/* Ecran 2 : Page etablissement — choix du secteur */}

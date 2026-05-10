@@ -129,7 +129,7 @@ ASA, ASE, ASSC, Cuisine, Restauration, Pâtisserie-boulangerie, Nettoyage, Explo
   - **Données mock variées** : 4 plans verts, 2 oranges (Cuisine, Éducatif enfance), 1 rouge (Lingerie) — permet de visualiser les codes couleur
   - **Authentification** : `CartographieLogin.jsx` + `cartoAuth.js`, token sessionStorage 24h (clé `cb-carto-token`), mots de passe CSV via `VITE_CARTO_PASSWORDS`
   - **Icônes lucide-react** ajoutées (UtensilsCrossed, ChefHat, Shirt, Wrench, GraduationCap, Home, etc.)
-  - Données mockées en dur — connexion Flux 6 PA prévue (`VITE_PA_CARTO_URL`)
+  - Données mockées en dur — **connexion via Flux Carto (pattern Flux 3) prévue** — voir décisions 8 mai 2026
   - Détails complets : `frontend/CLAUDE.md` section "Cartographie privée"
 - **Flux 5 étendu (mai 2026)** : gère désormais stages ET modules métiers → SP (Stagiaire + Demande[s] + Referent + Email)
   - Modules : 1 Demande par module sélectionné (max 3), Foreach sans lookup créneau (fix bug timeout 504 OData)
@@ -144,32 +144,65 @@ ASA, ASE, ASSC, Cuisine, Restauration, Pâtisserie-boulangerie, Nettoyage, Explo
 - **Formulaire signalement** : annulation/retard accessible depuis la page d'accueil (`FormulaireSignalement.jsx`)
 - **Flux global visuel** : `docs/flux-global.html` — graphe interactif vis-network (acteurs, flux PA, listes SP)
 
-### Sécurité — PA URL et hébergement (mis à jour 6 mai 2026)
+### Sécurité — Hébergement et variables d'environnement (mis à jour 8 mai 2026)
 
-**Risques sécurité majeurs identifiés :**
-- `VITE_PA_HTTP_URL` : si déployée sans proxy, Vite la **bundle** dans le JS compilé → URL visible en clair sur GitHub Pages → spam possible du trigger PA
-- `VITE_CARTO_PASSWORDS` : mots de passe en clair côté client (acceptable en local, à transposer côté serveur en prod)
-- **Token cartographie en base64** (pas de crypto) — à remplacer par un JWT côté serveur
+#### Architecture cible : Vercel (décidé 8 mai 2026)
 
-**Stratégie actuelle (correcte) :**
-- GitHub Pages = mode démo (`VITE_PA_HTTP_URL` absent → simulation côté client)
-- **Travail en local** : `.env.local` avec l'URL réelle → `npm run dev` → formulaire tape dans PA → écrit dans SP → pipeline complet
-- La migration locale → Infomaniak/Azure peut se faire sans bloquer le travail
+**Deux déploiements distincts :**
+- **GitHub Pages** (`rochat-dev/clair-bois-calendrier`) → site public : calendrier, modules métiers, formulaire inscription (mode démo sans PA réelle)
+- **Vercel** (`rochat-dev/clair-bois-calendrier`) → cartographie privée uniquement, accessible à la racine `/` avec mot de passe
 
-**Workflow de test local :**
+**Principe Vercel :** les variables sans préfixe `VITE_` ne sont JAMAIS compilées dans le bundle JS — elles restent côté serveur (serverless functions / middleware).
+
+#### Variables d'environnement Vercel (côté serveur — jamais dans le bundle)
+
+| Variable | Valeur | Usage |
+|---|---|---|
+| `PA_HTTP_URL` | URL trigger Flux 5 PA | Proxy `/api/inscription` → PA |
+| `CARTO_PASSWORD` | mot de passe(s) carto | Vérifié dans `/api/login` (middleware Edge) |
+| `CARTO_JWT_SECRET` | secret aléatoire (32 chars) | Signature du cookie httpOnly |
+
+#### Variables locales (frontend/.env.local — jamais commitées)
+
 ```bash
-# Dans frontend/.env.local (jamais commité)
+VITE_PA_HTTP_URL=https://prod-xx.westeurope.logic.azure.com/...  # dev local uniquement
+VITE_CARTO_PASSWORDS=motdepasse1,motdepasse2                     # dev local uniquement
+```
+
+#### Architecture Vercel — flux sécurisés
+
+```
+# Carto (Vercel)
+Visiteur → / → middleware Edge → pas de cookie valide → /login
+Visiteur → / → middleware Edge → cookie valide → Cartographie.jsx
+POST /api/login → vérifie CARTO_PASSWORD (serveur) → pose cookie httpOnly signé (CARTO_JWT_SECRET)
+
+# Formulaire inscription (Vercel, quand connecté)
+React → POST /api/inscription → serverless function lit PA_HTTP_URL (serveur) → relaye vers PA → retourne réponse
+```
+
+#### Fichiers à créer pour Vercel
+
+- `frontend/middleware.js` — Edge Middleware : protège `/` et toutes les routes, vérifie cookie
+- `frontend/api/login.js` — serverless function : POST {password} → vérifie CARTO_PASSWORD → cookie httpOnly
+- `frontend/api/inscription.js` — serverless function : POST payload → relaye vers PA_HTTP_URL
+- `frontend/vercel.json` — config : SPA rewrite, headers sécurité
+
+#### Routing : carto à la racine, pas liée depuis le site principal
+
+- La carto Vercel est une URL séparée (ex: `clair-bois-carto.vercel.app`) — pas de lien depuis `HomePage.jsx`
+- Supprimer le bouton "Cartographie" de `HomePage.jsx` avant déploiement Vercel
+- Quand on visite la racine `/` → directement la page de login carto
+- `vercel.json` redirige `/` vers `/cartographie` (ou middleware redirige directement)
+
+#### Workflow de test local (inchangé)
+
+```bash
+# frontend/.env.local
 VITE_PA_HTTP_URL=https://prod-xx.westeurope.logic.azure.com/...
 VITE_CARTO_PASSWORDS=motdepasse1,motdepasse2
-
-npm run dev   # → formulaire connecté au vrai Flux 5
+npm run dev   # formulaire connecté au vrai Flux 5, carto avec mdp local
 ```
-
-**Production cible (post-validation IT) :**
-```
-React → /api/inscription (Azure Function ou proxy Infomaniak) → PA → SP
-```
-L'URL PA ne sera jamais dans le bundle client.
 
 ### Legacy code / points ouverts
 - ~~**`WeekDetail.jsx`** : bouton "S'inscrire" redirige encore vers Microsoft Forms~~ — **CORRIGÉ (mai 2026)** : connecté au formulaire React via `onInscription` + `pendingWeekContext`
@@ -194,11 +227,32 @@ Source : `docs/transcription-karavia3.txt` (lignes 1-300) + `docs/transcription-
 - **Plan Éducatif en dernier** — Karavia ne veut pas qu'on commence par ASA/ASE/ASSC. Le plan Éducatif est lui-même divisé en deux pôles : enfance-adolescence et adulte.
 - **Page privée par mot de passe** — accès réservé à la coordination DFIP. En attendant un proxy serveur (Infomaniak/Azure), authentification **côté client** via `sessionStorage` (token 24h, mots de passe CSV dans `VITE_CARTO_PASSWORDS`). Limite assumée et documentée.
 - **Plusieurs mots de passe possibles** — un par utilisateur de la coordination (CSV), index encodé dans le token pour traçabilité future.
-- **Pattern Flux 5 retenu pour la carto** (HTTP request live), pas Flux 3 (polling → GitHub) : la cartographie ne doit jamais être publiée sur un GitHub public et doit refléter l'état SP en temps réel.
+- ~~**Pattern Flux 5 retenu pour la carto**~~ — **ANNULÉ (8 mai 2026)** : remplacé par pattern Flux 3 (push `carto.json` → GitHub). Voir décisions 8 mai 2026.
 
 ### Décisions prises (6 mai 2026)
 - **Refonte cartographie privée** — implémentation des 6 plans métier (avec Éducatif éclaté en 2 pôles), métaphore table+sièges aboutie, animation "boom ça entre", header sticky de stats globales, données mock variées vert/orange/rouge. 24 tests Vitest dédiés, tous passants.
 - **Suppression de la carto isolée** — un projet carto isolé avait été créé sur le PC fixe (commit `3392661 Clair-Bois : carto isolée avec PasswordPage ajoutée` sur `rochat-dev`). Après comparaison avec la version intégrée, **décision de garder uniquement la version intégrée** (métaphore table+sièges, animation immersive, notion d'établissement, multi-mdp, sessionStorage). La version isolée a été supprimée du local et reste à supprimer de la branche `rochat-dev` au prochain commit.
+
+
+### Décisions prises (réunion Karavia — 8 mai 2026)
+Source : `docs/transcription-karavia6.txt` + `docs/transcription-karavia6-resume.md`
+
+- **Cartographie = priorité absolue** — Rosina a perdu sa référente interne, plus de visibilité sur les places. Carto à présenter aux secteurs avant le **18 mai** pour co-construire les vraies données de capacité.
+- **Modifications visuelles carto (cette semaine) :**
+  - Remplacer A/B/C/D par les vrais types : **FPra**, **AFP-CFC**, **Stage**, **CEA** (Stage 1/Stage 2 si plusieurs du même type)
+  - Supprimer le mot "Table" des cercles, supprimer/simplifier la molette de zoom
+  - Système couleur **3 états** : Vert = libre / Rouge = occupé aujourd'hui / **Orange = réservé à date future** (tooltip au survol : prénom + dates)
+  - Ajouter deux nouveaux types uniquement sur **Pôle enfance-adolescence et Pôle adulte** : `App.non-DFIP` et `Stagiaire-MSP/MSTS`
+  - Carto en **lecture seule** — toutes les modifications passent par la SP List des demandes
+- **Pattern Flux Carto = Flux 3 (push JSON), pas HTTP GET** : le Flux Carto pousse `carto.json` sur GitHub comme Flux 3 pousse `planning.json`. Aucune URL exposée dans le bundle → compatible GitHub Pages. `carto.json` contient : secteur, type de place, **prénom uniquement** (pas nom, pas AVS), dates début/fin.
+- **Canal OCAS = PDF, pas Word** — confirmation définitive. AI Builder entraîné à 99% sur 5 exemples. Besoin de vrais PDF de Rosina pour améliorer le modèle.
+- **Cycle de vie stagiaire** : une Demande = une période. Upgrade (stage → mesure → formation) = nouvelle Demande même stagiaire (même AVS). Libère la place précédente, bloque la nouvelle.
+- **Flux Confirmation en cascade** : validation → email stagiaire + secteur + intendance (uniforme) + repas + MAJ OneNote. Re-déclenché si dates modifiées.
+- **Alertes hebdomadaires lundi** : flux scheduler → demandes urgentes non traitées, dossiers incomplets.
+- **Suivi per-stagiaire OneNote** : connecteur OneNote Business (Premium). Prototype pour le **19 mai 15h30** (RDV présentiel). Dépend licence PA.
+- **Carte globale François** : étendre la carto à tous les apprentis y compris non-DFIP — potentiellement 2e mois de mission.
+- **Licences PA Premium** : Benoît (IT) interpellé directement — urgence n°1. ~10 CHF/an. Sans ça : AI Builder, OneNote, nouveaux flux bloqués.
+- **Hébergement** : non bloquant pour la carto (pattern Flux 3). Benoît confirme compatibilité Infomaniac pour la suite.
 
 ### Présentation IT (24 mars 2026)
 - **Fichier** : `docs/presentation-reunion-IT.html` — ouvrir dans un navigateur
@@ -247,24 +301,75 @@ La majorité des référents vient de l'AI (Assurance Invalidité) et possèdent
 
 Le point central reste le même : toutes les inscriptions arrivent dans SP → Rosina valide → Flux Confirmation.
 
-### Prochaines étapes (priorisées — 6 mai 2026)
+### Prochaines étapes (priorisées — 10 mai 2026)
 
-#### CRITIQUE / Bloquant
-1. **Flux 6 PA HTTP GET** — Cartographie : récupère SP Cartographie + SP Demande (`Statut='Confirmé'`) → JSON live, à brancher sur `VITE_PA_CARTO_URL`
-2. **Flux Confirmation Rosina** — déclenché par MAJ `Demande.Statut='Confirmé'` → email stagiaire + MAJ Carto + commande Intendance
-3. **Flux Signalement** — séparer du Flux 5, déclenché par POST `type:'signalement'` depuis `FormulaireSignalement.jsx`
-4. **Canal Word AI / OCAS** — extraction Word depuis email HIN ou folder SharePoint
+#### CRITIQUE / Demain (11 mai) — Flux Carto Power Automate
+1. ~~**Modifications visuelles carto**~~ ✅ (10 mai) — labels FPra/AFP-CFC/Stage/CEA dans les cercles, système 3 couleurs (vert/rouge/orange), App.non-DFIP + MSP/MSTS sur Pôles enfance-ado et adulte, `commentaire` par table (tooltip au survol des cercles), 213/215 tests passants
+2. ~~**SP List "Cartographie" créée**~~ ✅ (10 mai) — 11 colonnes : Titre, Plan, Etablissement, Secteur, PlacesMax_FPRA/AFP_CFC/Stage_Mes/CEA/AppNonDFIP/MSTS, Commentaire — 37 lignes à importer via `docs/sp-cartographie-import.csv`
+3. **Flux Carto (Power Automate)** — à construire demain :
+   - Déclencheur : récurrent (ex. toutes les heures) ou manuel
+   - Étape 1 : lire SP "Cartographie" → capacité par table (Plan × Etab × Secteur)
+   - Étape 2 : lire SP "Demande" filtrée Statut='Confirmé' → réservations actives et futures
+   - Étape 3 : construire `carto.json` (voir format ci-dessous) → push GitHub via HTTP
+   - Étape 4 : React lit `carto.json` statique au lieu des données hardcodées
+
+**Format carto.json attendu** (à respecter dans le Flux Carto) :
+```json
+{
+  "generatedAt": "2026-05-11T08:30:00Z",
+  "plans": [
+    {
+      "id": "restauration",
+      "tables": [
+        {
+          "site": "CBM",
+          "secteur": "Restaurant",
+          "commentaire": "",
+          "places": [
+            { "type": "FPRA", "occupee": false, "reservationsFutures": [] },
+            { "type": "FPRA", "occupee": true, "prenom": "Marie", "dateDebut": "2026-04-20", "dateFin": "2026-04-24" },
+            { "type": "STAGE", "occupee": false, "reservationsFutures": [{ "prenom": "Thomas", "dateDebut": "2026-07-04", "dateFin": "2026-07-05" }] }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Logique de construction des places par type dans chaque table** :
+- Lire `PlacesMax_FPRA` (ex: 2) → créer 2 objets type FPRA
+- Pour chaque Demande confirmée du bon (Plan × Etab × Secteur) :
+  - Si `DateDebut ≤ aujourd'hui ≤ DateFin` → place `occupee: true` avec prénom + dates
+  - Si `DateDebut > aujourd'hui` → place `occupee: false` avec `reservationsFutures: [{prenom, dateDebut, dateFin}]`
+  - Reste des places → `occupee: false, reservationsFutures: []`
+
+**Mapping colonnes SP → clés code** (PA fait la traduction dans carto.json) :
+- `PlacesMax_FPRA` → type `"FPRA"`
+- `PlacesMax_AFP_CFC` → type `"AFP_CFC"`
+- `PlacesMax_Stage_Mes` → type `"STAGE"`
+- `PlacesMax_CEA` → type `"CEA"`
+- `PlacesMax_AppNonDFIP` → type `"APP_NON_DFIP"`
+- `PlacesMax_MSTS` → type `"STAGIAIRE_MSTS"`
+
+4. **Retrait données fictives** — une fois Flux Carto opérationnel, supprimer les `placeLibre/placeOccupee/placeOrange` hardcodés dans `Cartographie.jsx` et lire `carto.json` dynamiquement
+5. **Déploiement Vercel** — une fois flux testé et données réelles validées
+
+#### CRITIQUE / Dès que PA Premium confirmé (Benoît)
+6. **Flux Confirmation Rosina** — déclenché par MAJ `Demande.Statut='Confirmé'` → email stagiaire + secteur + intendance + repas + MAJ OneNote
+7. **Canal PDF AI Builder (OCAS)** — drop PDF dans dossier SP → AI Builder extrait champs → crée/MAJ Demande + Stagiaire. Besoin de vrais PDF de Rosina pour entraîner le modèle.
+8. **Flux Signalement** — séparer du Flux 5, HTTP POST `type:'signalement'` → SP Signalements + email Rosina
 
 #### Important
-5. Refonte des emails automatiques (confirmation, demande de documents, relance J-7)
-6. Vérification doublon stagiaire avant création (lookup AVS depuis frontend)
-7. Proxy sécurisé URL PA (Azure Function ou Infomaniak)
+9. Refonte emails automatiques (confirmation, demande documents, relance J-7, alertes lundi)
+10. Suivi per-stagiaire OneNote — prototype pour le 19 mai (RDV 15h30)
+11. Proxy sécurisé URL PA (Azure Function ou Infomaniak) — non bloquant pour la carto
 
 #### Nice to have
-8. Sauvegarde `sessionStorage` anti-perte de saisie sur le formulaire
-9. Panel référent cadre (gestion dispos directe)
-10. Configuration dynamique des établissements (depuis SP au lieu de hardcodé)
-11. Nettoyage code mort (`MODULES_FORMS_URLS`, `frontend/src/backup-19mars/`, `Cartographie.backup-prototype.jsx`)
+12. Sauvegarde `sessionStorage` anti-perte de saisie formulaire
+13. Vérification doublon AVS avant submit (frontend)
+14. Migration Flux 4 créneaux : Forms → HTTP trigger React
+15. Nettoyage code mort (`MODULES_FORMS_URLS`, `frontend/src/backup-19mars/`, `Cartographie.backup-prototype.jsx`)
 
 #### Étapes terminées (référence)
 - ~~Griser les week-ends~~ ✅
@@ -276,20 +381,33 @@ Le point central reste le même : toutes les inscriptions arrivent dans SP → R
 - ~~Connexion locale~~ ✅ (`.env.local` + `npm run dev` + 9/9 tests)
 - ~~Corriger `WeekDetail.jsx`~~ ✅ (bouton connecté via `pendingWeekContext`)
 - ~~Cartographie Phase 2 — frontend~~ ✅ (6 plans, login mdp, animations, 24 tests — 6 mai 2026)
+- ~~Refonte visuelle carto~~ ✅ (labels typés dans cercles, 3 couleurs, commentaire tooltip, App.non-DFIP/MSP-MSTS — 10 mai 2026)
+- ~~SP List "Cartographie" créée~~ ✅ (11 colonnes, 37 lignes CSV prêt — 10 mai 2026)
 
-## Blocages connus (6 mai 2026)
+## Blocages connus (10 mai 2026)
 
-- **Décision IT pendante** : Infomaniak vs Azure Static Web Apps pour l'hébergement
-- **PA Premium à confirmer** : connecteur Word nécessaire pour OCAS
-- **Crédits PA à valider** avant la création des Flux 6/7/8/9
-- **Décisions Karavia en attente** : canal Word AI (email HIN vs folder SharePoint), modalités de blocage des dates par Karavia
+- **PA Premium non confirmé** : Benoît (IT) doit approuver — urgence n°1. Bloque : AI Builder (PDF OCAS), OneNote connector, nouveaux flux. ~10 CHF/an selon Rosina.
+- **Hébergement Infomaniac** : Benoît doit confirmer la compatibilité — non bloquant pour la carto (pattern Flux 3), bloquant pour le formulaire d'inscription en prod.
+- **Vrais PDF OCAS de Rosina** : nécessaires pour entraîner le modèle AI Builder avant de construire le flux.
+- **Données capacité secteurs** : Rosina fait la tournée des secteurs semaine du 18 mai pour collecter les vraies données (formateurs, places max par type). SP List "Cartographie" remplie avec données fictives en attendant.
+- **Prototype OneNote** : à comparer au RDV du 19 mai avant d'implémenter.
+- **Flux Carto non construit** : carto.json hardcodé pour l'instant — Flux Carto à construire le 11 mai (ne bloque pas les tests locaux, bloque la prod).
 
-## Documentation à créer
+## Documentation
 
-- `transcription-karavia3-resume.md` (résumé des décisions du 13 avril 2026)
+- ~~`transcription-karavia3-resume.md`~~ — à créer (résumé 13 avril)
+- `transcription-karavia6-resume.md` ✅ (résumé 6 mai 2026 — créé le 8 mai)
 - Doc Flux 5 détaillée (`.md`)
 - Doc Cartographie privée (`.md` ou `.html`)
 
+## Références transcriptions
+
+- `docs/transcription-karavia.txt` — réunion 9 mars 2026
+- `docs/transcription-karavia2.txt` — réunion 14 mars 2026
+- `docs/transcription-karavia3.txt` + `.json` — réunion 13 avril 2026
+- `docs/transcription-karavia6.txt` — réunion 6 mai 2026
+- `docs/transcription-karavia6-resume.md` — résumé structuré réunion 6 mai
+- `docs/transcription2-resume.md` — résumé structuré réunion 14 mars
 ## Conventions
 
 - **Git** : `git pull --rebase` avant chaque `git push` (Power Automate pousse planning.json)
