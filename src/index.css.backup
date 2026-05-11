@@ -1,0 +1,57 @@
+/*
+ * Feuille de styles principale — Calendrier Clair-Bois
+ *
+ * Utilise Tailwind CSS v4 avec un theme personnalise.
+ * Les couleurs prefixees "cb-" correspondent au code de disponibilite :
+ *   - cb-green  : >50% des places disponibles
+ *   - cb-orange : 1-50% des places disponibles
+ *   - cb-red    : complet (0 places)
+ *   - cb-gray   : pas de donnees / ferme
+ *   - cb-blue   : couleur principale de l'interface (navigation, liens)
+ *
+ * Chaque couleur a une variante "-light" pour les fonds de cartes et badges.
+ */
+@import "tailwindcss";
+
+/* Definition du theme de couleurs Clair-Bois (Tailwind CSS v4) */
+@theme {
+  --color-cb-green: #2d8a4e;
+  --color-cb-green-light: #e6f4ec;
+  --color-cb-orange: #e8a317;
+  --color-cb-orange-light: #fef3cd;
+  --color-cb-red: #d9534f;
+  --color-cb-red-light: #fde8e8;
+  --color-cb-gray: #9ca3af;
+  --color-cb-gray-light: #f3f4f6;
+  --color-cb-blue: #1e6091;
+  --color-cb-blue-light: #dbeafe;
+}
+
+/* Styles de base du document */
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(135deg, #e8f4f0 0%, #f0f7ff 40%, #f8fafc 70%, #eef6f1 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: #1e293b;
+}
+
+/*
+ * Animation d'apparition pour les transitions entre ecrans.
+ * Appliquee via la classe "animate-fadeIn" sur chaque composant ecran.
+ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
