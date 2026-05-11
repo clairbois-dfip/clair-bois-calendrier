@@ -2,12 +2,12 @@ const fs = require('fs');
 const AdmZip = require('adm-zip');
 
 // Lire le flux test existant pour récupérer les IDs et le token GitHub
-const defPath = 'C:/Users/karim/PowerAutomate-Agent/flux3-work/Microsoft.Flow/flows/e03bb264-eb3c-4ebd-bd63-87a78c083b68/definition.json';
+const defPath = '/home/miles/projets/clair-bois/backend/flux3-work/Microsoft.Flow/flows/e03bb264-eb3c-4ebd-bd63-87a78c083b68/definition.json';
 const testData = JSON.parse(fs.readFileSync(defPath, 'utf8'));
 
 // Extraire le token GitHub du flux test
 const githubToken = testData.properties.definition.actions.GET_SHA_GitHub.inputs.headers.Authorization;
-const GITHUB_REPO = 'rochat-dev/clair-bois-calendrier';
+const GITHUB_REPO = 'clairbois-dfip/clair-bois-calendrier';
 const GITHUB_FILE = 'public/planning.json';
 const GITHUB_API = `https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
 
@@ -230,7 +230,7 @@ console.log('definition.json saved!');
 // =============================================
 // METTRE À JOUR manifest.json (racine)
 // =============================================
-const manifestPath = 'C:/Users/karim/PowerAutomate-Agent/flux3-work/manifest.json';
+const manifestPath = '/home/miles/projets/clair-bois/backend/flux3-work/manifest.json';
 const manifest = {
   schema: "1.0",
   details: {
@@ -287,7 +287,7 @@ console.log('manifest.json saved!');
 // =============================================
 // METTRE À JOUR flows/manifest.json
 // =============================================
-const flowsManifest = 'C:/Users/karim/PowerAutomate-Agent/flux3-work/Microsoft.Flow/flows/manifest.json';
+const flowsManifest = '/home/miles/projets/clair-bois/backend/flux3-work/Microsoft.Flow/flows/manifest.json';
 fs.writeFileSync(flowsManifest, JSON.stringify({
   packageSchemaVersion: "1.0",
   flowAssets: { assetPaths: ["e03bb264-eb3c-4ebd-bd63-87a78c083b68"] }
@@ -299,7 +299,7 @@ console.log('flows/manifest.json saved!');
 // =============================================
 console.log('\nRepackaging zip...');
 const zip = new AdmZip();
-const base = 'C:/Users/karim/PowerAutomate-Agent/flux3-work';
+const base = '/home/miles/projets/clair-bois/backend/flux3-work';
 const flowGuid = 'e03bb264-eb3c-4ebd-bd63-87a78c083b68';
 const flowPath = `Microsoft.Flow/flows/${flowGuid}`;
 
@@ -308,10 +308,10 @@ zip.addLocalFile(`${base}/${flowPath}/connectionsMap.json`, flowPath);
 zip.addLocalFile(`${base}/${flowPath}/definition.json`, flowPath);
 zip.addLocalFile(`${base}/Microsoft.Flow/flows/manifest.json`, 'Microsoft.Flow/flows');
 zip.addLocalFile(`${base}/manifest.json`, '');
-zip.writeZip('C:/Users/karim/PowerAutomate-Agent/flux3-planning-modifie.zip');
+zip.writeZip('/home/miles/projets/clair-bois/backend/flux3-planning-modifie.zip');
 
 // Vérification
-const check = new AdmZip('C:/Users/karim/PowerAutomate-Agent/flux3-planning-modifie.zip');
+const check = new AdmZip('/home/miles/projets/clair-bois/backend/flux3-planning-modifie.zip');
 console.log('\nZIP contents:');
 check.getEntries().forEach(e => console.log('  ' + e.entryName, e.header.size));
 

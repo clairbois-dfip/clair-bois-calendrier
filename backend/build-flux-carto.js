@@ -46,7 +46,7 @@ const FLOW_GUID    = 'b2c3d4e5-f6a7-8901-bcde-f12345678901'; // UUID fixe Flux 6
 const SP_SITE      = 'https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe';
 const DEMANDE_GUID = '9616ee1d-dd0b-44fd-a1c4-34187ebaa9f8';
 
-const GITHUB_REPO  = 'rochat-dev/clair-bois-calendrier';
+const GITHUB_REPO  = 'clairbois-dfip/clair-bois-calendrier';
 const GITHUB_FILE  = 'public/carto.json';
 const GITHUB_API   = `https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
 
