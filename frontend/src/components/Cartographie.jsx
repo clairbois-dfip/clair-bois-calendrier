@@ -86,467 +86,104 @@ function statutPlace(place) {
 }
 
 // ──────────────────────────────────────────────
-// Donnees mock — 6 plans metiers
-// Structure qui reflete le futur carto.json :
-//   contenant (SP List) → nombre de cercles par type
-//   demandes (SP List)  → couleur de chaque cercle
+// Mapping SP → codes internes React
 // ──────────────────────────────────────────────
 
-const PLANS = [
-  // ─── 1. Restauration ─────────────────────────
-  {
-    id: 'restauration',
-    nom: 'Restauration',
-    icone: UtensilsCrossed,
-    description: 'Service en salle, restaurants et patisserie-boulangerie',
-    tables: [
-      {
-        site: 'CBM',
-        secteur: 'Restaurant',
-        commentaire: '',
-        places: [
-          placeLibre('FPRA'),
-          placeOccupee('FPRA', 'Marie', '2026-04-20', '2026-04-24'),
-          placeLibre('AFP_CFC'),
-          placeOrange('STAGE', [{ prenom: 'Thomas', dateDebut: '2026-07-04', dateFin: '2026-07-05' }]),
-          placeOccupee('STAGE', 'Pierre', '2026-05-04', '2026-05-15'),
-          placeLibre('STAGE'),
-          placeLibre('CEA'),
-        ],
-      },
-      {
-        site: 'CBP',
-        secteur: 'Restaurant',
-        commentaire: '',
-        places: [
-          placeLibre('FPRA'),
-          placeLibre('AFP_CFC'),
-          placeOccupee('AFP_CFC', 'Sophie', '2026-04-01', '2026-06-30'),
-          placeOccupee('STAGE', 'Lucas', '2026-04-20', '2026-04-30'),
-          placeLibre('STAGE'),
-          placeLibre('CEA'),
-        ],
-      },
-      {
-        site: 'CBP',
-        secteur: 'Patisserie-boulangerie',
-        commentaire: '',
-        places: [
-          placeLibre('FPRA'),
-          placeLibre('AFP_CFC'),
-          placeOccupee('CEA', 'Camille', '2026-04-06', '2026-06-26'),
-          placeOccupee('CEA', 'Theo', '2026-04-06', '2026-06-26'),
-          placeLibre('CEA'),
-          placeLibre('STAGE'),
-        ],
-      },
-    ],
-  },
+const TYPE_SP_TO_CODE = {
+  'FPRA':         'FPRA',
+  'AFP_CFC':      'AFP_CFC',
+  'Stage/Mes.':   'STAGE',
+  'CEA':          'CEA',
+  'App.non-DFIP': 'APP_NON_DFIP',
+  'MSP/MSTS':     'STAGIAIRE_MSTS',
+}
 
-  // ─── 2. Cuisine ─────────────────────────────
-  {
-    id: 'cuisine',
-    nom: 'Cuisine',
-    icone: ChefHat,
-    description: 'Brigades de cuisine des cinq etablissements',
-    tables: [
-      {
-        site: 'CBC',
-        secteur: 'Cuisine',
-        commentaire: '',
-        places: [
-          placeOccupee('FPRA', 'Anna', '2026-04-13', '2026-05-22'),
-          placeOccupee('AFP_CFC', 'Julien', '2026-04-13', '2026-06-19'),
-          placeOccupee('STAGE', 'Hugo', '2026-04-20', '2026-05-01'),
-          placeLibre('STAGE'),
-        ],
-      },
-      {
-        site: 'CBL',
-        secteur: 'Cuisine',
-        commentaire: '',
-        places: [
-          placeOccupee('FPRA', 'Lea', '2026-05-04', '2026-06-12'),
-          placeOccupee('AFP_CFC', 'Antoine', '2026-04-01', '2026-06-30'),
-          placeLibre('STAGE'),
-          placeOrange('STAGE', [
-            { prenom: 'Sara', dateDebut: '2026-05-11', dateFin: '2026-05-22' },
-            { prenom: 'Adeline', dateDebut: '2026-08-03', dateFin: '2026-08-28' },
-          ]),
-          placeOccupee('CEA', 'Tom', '2026-04-06', '2026-06-26'),
-        ],
-      },
-      {
-        site: 'CBM',
-        secteur: 'Cuisine',
-        commentaire: '',
-        places: [
-          placeOccupee('FPRA', 'Ines', '2026-04-15', '2026-05-15'),
-          placeOccupee('AFP_CFC', 'Alex', '2026-04-01', '2026-07-05'),
-          placeOccupee('STAGE', 'Emma', '2026-05-18', '2026-05-29'),
-          placeOccupee('STAGE', 'Lea', '2026-04-20', '2026-04-24'),
-          placeLibre('CEA'),
-        ],
-      },
-      {
-        site: 'CBP',
-        secteur: 'Cuisine',
-        commentaire: '',
-        places: [
-          placeOccupee('FPRA', 'Nathan', '2026-04-13', '2026-05-29'),
-          placeLibre('AFP_CFC'),
-          placeOccupee('STAGE', 'Tom', '2026-05-11', '2026-05-22'),
-          placeLibre('STAGE'),
-        ],
-      },
-    ],
-  },
+const ETAB_TO_SITE = {
+  Chambesy:   'CBC',
+  Lancy:      'CBL',
+  Gradelle:   'CBG',
+  Minoteries: 'CBM',
+  Pinchat:    'CBP',
+  Tourbillon: 'CBT',
+}
 
-  // ─── 3. Lingerie ────────────────────────────
-  {
-    id: 'lingerie',
-    nom: 'Lingerie',
-    icone: Shirt,
-    description: 'Lingerie et confection',
-    tables: [
-      {
-        site: 'CBL',
-        secteur: 'Lingerie',
-        commentaire: '',
-        places: [
-          placeOccupee('FPRA', 'Ines', '2026-04-13', '2026-05-22'),
-          placeOccupee('FPRA', 'Eva', '2026-04-20', '2026-06-30'),
-          placeOccupee('STAGE', 'Ethan', '2026-04-20', '2026-04-30'),
-          placeOccupee('STAGE', 'Manon', '2026-05-11', '2026-05-22'),
-        ],
-      },
-      {
-        site: 'CBP',
-        secteur: 'Couture',
-        commentaire: '',
-        places: [
-          placeOccupee('FPRA', 'Louis', '2026-05-04', '2026-06-12'),
-          placeOccupee('STAGE', 'Jade', '2026-04-27', '2026-05-08'),
-          placeOccupee('CEA', 'Adam', '2026-04-06', '2026-06-26'),
-        ],
-      },
-    ],
-  },
+const PLAN_CONFIG = {
+  'Restauration':     { id: 'restauration',    icone: UtensilsCrossed, nom: 'Restauration',                       description: 'Service en salle, restaurants et patisserie-boulangerie' },
+  'Cuisine':          { id: 'cuisine',          icone: ChefHat,         nom: 'Cuisine',                             description: 'Brigades de cuisine des cinq etablissements' },
+  'Lingerie':         { id: 'lingerie',         icone: Shirt,           nom: 'Lingerie',                            description: 'Lingerie et confection' },
+  'Technique':        { id: 'technique',        icone: Wrench,          nom: 'Technique',                           description: 'Exploitation, nettoyage, peinture, audio-visuel, graphisme, mediamatique, informatique, ateliers' },
+  'Educatif-Enfance': { id: 'educatif-enfance', icone: GraduationCap,   nom: 'Educatif — Pole enfance-adolescence', description: 'Classes et groupes des ecoles specialisees' },
+  'Educatif-Adulte':  { id: 'educatif-adulte',  icone: Home,            nom: 'Educatif — Pole adulte',              description: 'Appartements et centres de jour pour adultes' },
+}
 
-  // ─── 4. Technique ───────────────────────────
-  {
-    id: 'technique',
-    nom: 'Technique',
-    icone: Wrench,
-    description: 'Exploitation, nettoyage, peinture, audio-visuel, graphisme, mediamatique, informatique, ateliers',
-    tables: [
-      {
-        site: 'CBC',
-        secteur: 'Exploitation',
-        commentaire: '',
-        places: [
-          placeLibre('FPRA'),
-          placeOccupee('STAGE', 'Noah', '2026-04-20', '2026-04-30'),
-          placeLibre('STAGE'),
-        ],
-      },
-      {
-        site: 'CBC',
-        secteur: 'Nettoyage',
-        commentaire: '',
-        places: [
-          placeLibre('FPRA'),
-          placeLibre('STAGE'),
-          placeLibre('CEA'),
-        ],
-      },
-      {
-        site: 'CBL',
-        secteur: 'Nettoyage',
-        commentaire: '',
-        places: [
-          placeLibre('FPRA'),
-          placeOccupee('FPRA', 'Sara', '2026-04-01', '2026-06-30'),
-          placeLibre('STAGE'),
-        ],
-      },
-      {
-        site: 'CBM',
-        secteur: 'Audio-visuel',
-        commentaire: '',
-        places: [
-          placeOccupee('AFP_CFC', 'Leo', '2026-04-01', '2026-07-05'),
-          placeLibre('STAGE'),
-          placeLibre('CEA'),
-        ],
-      },
-      {
-        site: 'CBP',
-        secteur: 'Peinture',
-        commentaire: '',
-        places: [
-          placeLibre('FPRA'),
-          placeLibre('STAGE'),
-        ],
-      },
-      {
-        site: 'CBP',
-        secteur: 'Graphisme',
-        commentaire: '',
-        places: [
-          placeOccupee('AFP_CFC', 'Maya', '2026-04-01', '2026-07-05'),
-          placeLibre('STAGE'),
-        ],
-      },
-      {
-        site: 'CBP',
-        secteur: 'Mediamatique',
-        commentaire: '',
-        places: [
-          placeLibre('AFP_CFC'),
-          placeLibre('STAGE'),
-        ],
-      },
-      {
-        site: 'CBP',
-        secteur: 'Ateliers',
-        commentaire: '',
-        places: [
-          placeLibre('FPRA'),
-          placeLibre('STAGE'),
-          placeOccupee('CEA', 'Jonas', '2026-04-06', '2026-06-26'),
-        ],
-      },
-      {
-        site: 'CBT',
-        secteur: 'Informatique',
-        commentaire: '',
-        places: [
-          placeLibre('AFP_CFC'),
-          placeOccupee('AFP_CFC', 'Aisha', '2026-04-01', '2026-07-05'),
-          placeLibre('STAGE'),
-        ],
-      },
-      {
-        site: 'CBT',
-        secteur: 'Employe·e de commerce',
-        commentaire: '',
-        places: [
-          placeLibre('AFP_CFC'),
-          placeLibre('STAGE'),
-        ],
-      },
-    ],
-  },
+// ──────────────────────────────────────────────
+// Transformation carto.json → structure React
+// ──────────────────────────────────────────────
 
-  // ─── 5. Educatif — Pole enfance-adolescence ──
-  // App.non-DFIP et Stagiaire-MSTS uniquement dans ces deux poles
-  {
-    id: 'educatif-enfance',
-    nom: 'Educatif — Pole enfance-adolescence',
-    icone: GraduationCap,
-    description: 'Classes et groupes des ecoles specialisees',
-    tables: [
-      {
-        site: 'CBC',
-        secteur: 'Groupe A',
-        commentaire: '',
-        places: [
-          placeOccupee('FPRA', 'Marie', '2026-05-04', '2026-06-12'),
-          placeOccupee('AFP_CFC', 'Lea', '2026-04-01', '2026-07-05'),
-          placeOccupee('STAGE', 'Lucas', '2026-04-20', '2026-04-30'),
-          placeLibre('APP_NON_DFIP'),
-          placeOrange('STAGIAIRE_MSTS', [{ prenom: 'Camille', dateDebut: '2026-06-01', dateFin: '2026-06-30' }]),
-        ],
-      },
-      {
-        site: 'CBC',
-        secteur: 'Groupe B',
-        commentaire: '',
-        places: [
-          placeOccupee('FPRA', 'Camille', '2026-04-13', '2026-05-29'),
-          placeLibre('STAGE'),
-          placeLibre('APP_NON_DFIP'),
-          placeLibre('STAGIAIRE_MSTS'),
-        ],
-      },
-      {
-        site: 'CBL',
-        secteur: 'Classe A',
-        commentaire: '',
-        places: [
-          placeOccupee('FPRA', 'Nicolas', '2026-04-20', '2026-04-24'),
-          placeOccupee('AFP_CFC', 'Sophie', '2026-04-01', '2026-06-30'),
-          placeLibre('STAGE'),
-          placeLibre('APP_NON_DFIP'),
-        ],
-      },
-      {
-        site: 'CBL',
-        secteur: 'Classe B',
-        commentaire: '',
-        places: [
-          placeOccupee('FPRA', 'Theo', '2026-05-04', '2026-06-12'),
-          placeOccupee('AFP_CFC', 'Yasmine', '2026-04-01', '2026-07-05'),
-          placeOccupee('STAGE', 'Pierre', '2026-04-27', '2026-05-08'),
-          placeLibre('STAGIAIRE_MSTS'),
-        ],
-      },
-      {
-        site: 'CBL',
-        secteur: 'Classe C',
-        commentaire: '',
-        places: [
-          placeLibre('FPRA'),
-          placeOccupee('STAGE', 'Paul', '2026-05-18', '2026-05-29'),
-        ],
-      },
-      {
-        site: 'CBL',
-        secteur: 'Classe D',
-        commentaire: '',
-        places: [
-          placeOccupee('FPRA', 'Yanis', '2026-05-04', '2026-05-29'),
-          placeOccupee('STAGE', 'Clara', '2026-04-13', '2026-04-24'),
-        ],
-      },
-      {
-        site: 'CBL',
-        secteur: 'Classe E',
-        commentaire: '',
-        places: [
-          placeLibre('STAGE'),
-          placeOccupee('STAGE', 'Maxime', '2026-04-20', '2026-05-01'),
-        ],
-      },
-      {
-        site: 'CBL',
-        secteur: 'Classe F',
-        commentaire: '',
-        places: [
-          placeLibre('FPRA'),
-          placeOccupee('AFP_CFC', 'Diego', '2026-04-01', '2026-07-05'),
-          placeLibre('STAGE'),
-        ],
-      },
-    ],
-  },
+function buildPlaces(placesMax, reservations) {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const places = []
 
-  // ─── 6. Educatif — Pole adulte ───────────────
-  // App.non-DFIP et Stagiaire-MSTS uniquement dans ces deux poles
-  {
-    id: 'educatif-adulte',
-    nom: 'Educatif — Pole adulte',
-    icone: Home,
-    description: 'Appartements et centres de jour pour adultes',
-    tables: [
-      {
-        site: 'CBG',
-        secteur: 'Appartement 1',
-        commentaire: '',
-        places: [
-          placeLibre('FPRA'),
-          placeOccupee('STAGE', 'Aline', '2026-04-13', '2026-04-24'),
-          placeLibre('APP_NON_DFIP'),
-          placeLibre('STAGIAIRE_MSTS'),
-        ],
-      },
-      {
-        site: 'CBG',
-        secteur: 'Appartement 2',
-        commentaire: '',
-        places: [
-          placeLibre('AFP_CFC'),
-          placeLibre('STAGE'),
-          placeLibre('APP_NON_DFIP'),
-        ],
-      },
-      {
-        site: 'CBG',
-        secteur: 'Centre de jour',
-        commentaire: '',
-        places: [
-          placeLibre('FPRA'),
-          placeOccupee('AFP_CFC', 'Luna', '2026-04-01', '2026-07-05'),
-          placeLibre('STAGE'),
-          placeLibre('CEA'),
-          placeOrange('APP_NON_DFIP', [{ prenom: 'Noa', dateDebut: '2026-09-01', dateFin: '2026-12-31' }]),
-        ],
-      },
-      {
-        site: 'CBM',
-        secteur: 'Appartement 2eme',
-        commentaire: '',
-        places: [
-          placeLibre('FPRA'),
-          placeLibre('STAGE'),
-          placeLibre('STAGIAIRE_MSTS'),
-        ],
-      },
-      {
-        site: 'CBM',
-        secteur: 'Appartement 3eme',
-        commentaire: '',
-        places: [
-          placeOccupee('AFP_CFC', 'Nora', '2026-04-01', '2026-07-05'),
-          placeLibre('STAGE'),
-          placeLibre('APP_NON_DFIP'),
-        ],
-      },
-      {
-        site: 'CBM',
-        secteur: 'Centre de jour',
-        commentaire: '',
-        places: [
-          placeLibre('FPRA'),
-          placeLibre('STAGE'),
-          placeLibre('CEA'),
-        ],
-      },
-      {
-        site: 'CBP',
-        secteur: 'Appartement 5A',
-        commentaire: '',
-        places: [
-          placeOccupee('FPRA', 'Sami', '2026-04-20', '2026-06-30'),
-          placeLibre('STAGE'),
-          placeLibre('APP_NON_DFIP'),
-        ],
-      },
-      {
-        site: 'CBP',
-        secteur: 'Appartement 5B',
-        commentaire: '',
-        places: [
-          placeLibre('AFP_CFC'),
-          placeLibre('STAGE'),
-          placeLibre('STAGIAIRE_MSTS'),
-        ],
-      },
-      {
-        site: 'CBP',
-        secteur: 'Centre de jour 1',
-        commentaire: '',
-        places: [
-          placeLibre('FPRA'),
-          placeOccupee('AFP_CFC', 'Maxence', '2026-04-01', '2026-07-05'),
-          placeLibre('STAGE'),
-          placeLibre('CEA'),
-        ],
-      },
-      {
-        site: 'CBP',
-        secteur: 'La Passerelle',
-        commentaire: '',
-        places: [
-          placeLibre('FPRA'),
-          placeLibre('STAGE'),
-          placeLibre('APP_NON_DFIP'),
-        ],
-      },
-    ],
-  },
-]
+  for (const [spKey, total] of Object.entries(placesMax)) {
+    if (total === 0) continue
+    const code = TYPE_SP_TO_CODE[spKey]
+    if (!code) continue
+
+    const resOfType = reservations.filter((r) => r.type === spKey)
+
+    const courantes = resOfType.filter((r) => {
+      const d = new Date(r.dateDebut); d.setHours(0, 0, 0, 0)
+      const f = new Date(r.dateFin);   f.setHours(23, 59, 59, 999)
+      return d <= today && today <= f
+    })
+
+    const futures = resOfType.filter((r) => {
+      const d = new Date(r.dateDebut); d.setHours(0, 0, 0, 0)
+      return d > today
+    })
+
+    let remaining = total
+    for (const r of courantes) {
+      if (remaining <= 0) break
+      places.push(placeOccupee(code, r.prenom, r.dateDebut, r.dateFin))
+      remaining--
+    }
+    for (const r of futures) {
+      if (remaining <= 0) break
+      places.push(placeOrange(code, [{ prenom: r.prenom, dateDebut: r.dateDebut, dateFin: r.dateFin }]))
+      remaining--
+    }
+    for (let i = 0; i < remaining; i++) {
+      places.push(placeLibre(code))
+    }
+  }
+
+  return places
+}
+
+function cartoJsonToPlans(data) {
+  if (!data?.tables) return []
+  const planMap = {}
+
+  for (const table of data.tables) {
+    const cfg = PLAN_CONFIG[table.plan]
+    if (!cfg) continue
+    if (!planMap[table.plan]) planMap[table.plan] = { ...cfg, tables: [] }
+
+    const site = ETAB_TO_SITE[table.etablissement]
+    if (!site) continue
+
+    planMap[table.plan].tables.push({
+      site,
+      secteur: table.secteur,
+      commentaire: table.commentaire || '',
+      places: buildPlaces(table.placesMax, table.reservations),
+    })
+  }
+
+  return Object.keys(PLAN_CONFIG).filter((k) => planMap[k]).map((k) => planMap[k])
+}
 
 // ──────────────────────────────────────────────
 // Helpers de calcul
@@ -1167,12 +804,19 @@ function OverlayPlan({ rect, fermeture, onFermetureFinie, children }) {
 // ──────────────────────────────────────────────
 
 export default function Cartographie({ onGoHome, onLogout }) {
+  const [plans, setPlans] = useState([])
+  const [chargement, setChargement] = useState(true)
+  const [erreur, setErreur] = useState(false)
   const [vueDetail, setVueDetail] = useState(null)
   const [rectOrigine, setRectOrigine] = useState(null)
   const [fermeture, setFermeture] = useState(false)
 
-  const planActif = vueDetail ? PLANS.find((p) => p.id === vueDetail) : null
-  const stats = statsGlobales(PLANS)
+  useEffect(() => {
+    fetch(`${import.meta.env.BASE_URL}carto.json`)
+      .then((r) => { if (!r.ok) throw new Error(); return r.json() })
+      .then((data) => { setPlans(cartoJsonToPlans(data)); setChargement(false) })
+      .catch(() => { setErreur(true); setChargement(false) })
+  }, [])
 
   useEffect(() => {
     if (vueDetail) {
@@ -1192,6 +836,21 @@ export default function Cartographie({ onGoHome, onLogout }) {
       return () => clearTimeout(t)
     }
   }, [fermeture])
+
+  const planActif = vueDetail ? plans.find((p) => p.id === vueDetail) : null
+  const stats = statsGlobales(plans)
+
+  if (chargement) return (
+    <div className="flex items-center justify-center h-64 text-gray-400 text-sm animate-fadeIn">
+      Chargement de la cartographie…
+    </div>
+  )
+
+  if (erreur) return (
+    <div className="flex items-center justify-center h-64 text-cb-red text-sm">
+      Erreur de chargement — rechargez la page.
+    </div>
+  )
 
   function ouvrirPlan(id, element) {
     if (element && element.getBoundingClientRect) {
@@ -1251,7 +910,7 @@ export default function Cartographie({ onGoHome, onLogout }) {
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {PLANS.map((plan) => (
+        {plans.map((plan) => (
           <CartePlan key={plan.id} plan={plan} onOuvrir={ouvrirPlan} />
         ))}
       </div>

@@ -158,9 +158,11 @@ const DEFAULT_POSITIONS = {
   sp_cren:          { x:  380, y:  340 },
   sp_doc:           { x:  380, y:  580 },
   sp_dossiersuivi:  { x:  380, y:  820 },
+  sp_carto:         { x:  380, y: -380 },   // SP "Cartographie" — capacités max
 
   // ─── PA secondaire (col 5) ───
   flux3:         { x:  810, y: -130 },   // polling SP Dem/Cren
+  flux6:         { x:  810, y: -380 },   // Flux Carto → carto.json
   fluxconf:      { x:  810, y:  340 },   // déclenché par SP Dem Confirmé
 
   // ─── Sorties finales (col 6) ───
@@ -194,6 +196,10 @@ function buildNodes(positions) {
     { id:'email', label:'✉\nEmail Outlook\nstagiaire.dfip@', group:'email', ...p.email,
       title:'Boîte email Power Automate\n→ Envoie la demande de PJ au stagiaire\n→ Reçoit les réponses avec PJ jointes\n→ Reçoit les Word OCAS (HIN)' },
 
+    // ── SP Cartographie (nouveau) ──
+    { id:'sp_carto', label:'📋 SP Cartographie\nCapacités max', group:'splist', ...p.sp_carto,
+      title:'Liste SharePoint "Cartographie" ✅ créée 10 mai 2026\n1 ligne par table (Plan × Etablissement × Secteur)\nColonnes : Plan, Etablissement, Secteur\nPlacesMax_FPRA/AFP_CFC/Stage_Mes/CEA/AppNonDFIP/MSTS\nCommentaire (tooltip sur les cercles)\n37 lignes — données fictives en attendant tournée Rosina (18 mai)' },
+
     // ── Flux PA opérationnels ──
     { id:'flux5', label:'⚡ Flux 5\nHTTP Inscription\n✅', group:'pa', ...p.flux5,
       title:'✅ Opérationnel — étendu mai 2026 (stages + modules)\nTrigger : HTTP POST depuis React\nCheck AVS → Créer/MAJ Stagiaire\n→ Condition parcours :\n  stages : lookup créneau → 1 Demande (TypeDemande=Stage)\n  modules : Foreach → 1 Demande par module (TypeDemande=Module métier)\n→ Créer Referent (si autre)\n→ Email demande documents\nReferentContact : "Prénom Nom — Partenaire" ou "Aucun"\n9 tests automatisés (test-flux5.js) — 9/9 ✅' },
@@ -202,7 +208,9 @@ function buildNodes(positions) {
     { id:'flux2', label:'⚡ Flux 2\nRéception PJ\n✅',    group:'pa', ...p.flux2,
       title:'✅ Opérationnel depuis 6 mars 2026\nTrigger : Email entrant (filtre: AVS-)\nParse D°ID → Get Demande → Get Stagiaire\n→ Créer dossier SP → Upload PJ → MAJ Statut' },
     { id:'flux3', label:'⚡ Flux 3\nPlanning JSON\n✅',   group:'pa', ...p.flux3,
-      title:'✅ Opérationnel\nTrigger : Polling SP toutes les 3 min\nGET Créneaux + Demandes → Compter places\n→ Composer JSON → Push GitHub' },
+      title:'✅ Opérationnel\nTrigger : Polling SP toutes les 3 min\nGET Créneaux + Demandes → Compter places\n→ Composer JSON → Push GitHub (planning.json)' },
+    { id:'flux6', label:'⚡ Flux 6\nCarto JSON\n🆕',    group:'pa_new', ...p.flux6,
+      title:'🆕 ZIP généré 11 mai 2026 — à importer dans PA\nTrigger : Récurrent toutes les heures\n1. GET SP "Cartographie" → placesMax par table\n2. GET SP "Demande" Statut=Confirmé + Prenom\n3. Loop : filtre Demandes (PlanMetier+EtabConfirme+SecteurConfirme)\n4. Compose carto.json { generatedAt, tables }\n5. GET SHA + Push → public/carto.json GitHub\nConvention : placesMax keys = TypePlace SP (FPRA/AFP_CFC/Stage/Mes./CEA/App.non-DFIP/MSP/MSTS)' },
 
     // ── Flux PA nouveaux ──
     { id:'fluxconf',  label:'⚡ Flux\nConfirmation\n🆕',group:'pa_new', ...p.fluxconf,
@@ -216,7 +224,7 @@ function buildNodes(positions) {
     { id:'sp_stag', label:'📋 SP Stagiaire\n~35 champs',       group:'splist', ...p.sp_stag,
       title:'Liste SharePoint "Stagiaire"\nNom · Prénom · AVS · Curatelle · AI Conseiller\nTailles · Urgence · Réseau médical…\nID: bf357221-7e74-4905' },
     { id:'sp_dem',  label:'📋 SP Demande\nStatut · Secteur…', group:'splist', ...p.sp_dem,
-      title:'Liste SharePoint "Demande" (1:N avec Stagiaire)\nStagiaireID · ReferentID · CreneauID\nTypeDemande (Stage / Module métier)\nReferentContact (texte: "Prénom Nom — Partenaire" ou "Aucun")\nSecteur · DateDebut · ObjectifStage · DejaStage\nStatut : En attente docs → Docs reçus → Confirmé → Annulé\nID: 9616ee1d' },
+      title:'Liste SharePoint "Demande" (1:N avec Stagiaire)\nStagiaireID · ReferentID · CreneauID\nTypeDemande (Stage / Module métier)\nReferentContact (texte: "Prénom Nom — Partenaire" ou "Aucun")\nSecteur · DateDebut · ObjectifStage · DejaStage\nStatut : En attente docs → Docs reçus → Confirmé → Annulé\n── Confirmation Rosina (ajout 11 mai 2026) ──\nPlanMetier · EtablissementConfirme · SecteurConfirme\nTypePlace · DateDebutConfirmee · DateFinConfirmee\nID: 9616ee1d' },
     { id:'sp_ref',  label:'📋 SP Referent\nPartenaire…',      group:'splist', ...p.sp_ref,
       title:'Liste SharePoint "Referent"\nPartenaire · Fonction · Nom · Prénom · Tel · Mail\nLié à Stagiaire via StagiaireID\nID: 7a31b912' },
     { id:'sp_cren', label:'📋 SP Créneaux\nPlaces · Dates',   group:'splist', ...p.sp_cren,
@@ -227,8 +235,8 @@ function buildNodes(positions) {
       title:'🆕 À investiguer (demandé 13 avril)\nClasseur numérique par stagiaire avec onglets :\nAdmin · Stage 1/2 · Modules · Mesures\nRemédiation scolaire · Formation · Insertion\nTechnologie : PowerPage (150 CHF/an) ou Excel ?' },
 
     // ── Sorties ──
-    { id:'github',     label:'🐙 GitHub\nplanning.json',    group:'github', ...p.github,
-      title:'Repo : rochat-dev/clair-bois-calendrier\nFichier : public/planning.json\nMis à jour par Flux 3 (polling 3 min)' },
+    { id:'github',     label:'🐙 GitHub\nplanning + carto', group:'github', ...p.github,
+      title:'Repo : rochat-dev/clair-bois-calendrier\npublic/planning.json → Flux 3 (polling 3 min)\npublic/carto.json → Flux 6 (horaire)' },
     { id:'carto',      label:'🗺 Cartographie\ndes places',  group:'carto',  ...p.carto,
       title:'🔵 Phase 2 en cours\nBoard visuel des places par secteur\nRouge = occupé · Vert = libre\nHover : nom stagiaire, dates, type\nAccès privé par mot de passe' },
     { id:'intendance', label:'🧺 Intendance\nLingerie 🆕',  group:'new_sys',...p.intendance,
@@ -258,6 +266,7 @@ const C = {
   flux3:         '#fb923c',
   // PA nouveaux
   fluxconf:      '#fde047',   // jaune
+  flux6:         '#fde047',   // jaune
   fluxai:        '#fb923c',   // orange (construit, bloqué)
   fluxvisite:    '#fde047',
   // SP listes
@@ -265,6 +274,7 @@ const C = {
   sp_dem:        '#4ade80',
   sp_ref:        '#4ade80',
   sp_cren:       '#4ade80',
+  sp_carto:      '#4ade80',   // vert
   sp_doc:        '#34d399',   // vert émeraude
   sp_dossiersuivi:'#fde047',
   // sorties
@@ -320,9 +330,13 @@ const edges = new vis.DataSet([
   { from:'flux3',   to:'github', label:"pousse planning.json",                 ...ec('flux3') },
   { from:'github',  to:'site',   label:"nourrit",                              ...ec('github'), smooth:{type:'curvedCCW',roundness:0.65} },
 
-  // Cartographie ← SP (🆕 pas encore connectée au SP réel)
-  { from:'sp_dem',  to:'carto', label:"nourrit (places)",                     ...ec('sp_dem',  true) },
-  { from:'sp_stag', to:'carto', label:"nourrit (noms)",                       ...ec('sp_stag', true) },
+  // Flux 6 — Carto JSON
+  { from:'sp_carto', to:'flux6',  label:"capacités max",                      ...ec('sp_carto') },
+  { from:'sp_dem',   to:'flux6',  label:"réservations Confirmées",             ...ec('sp_dem') },
+  { from:'flux6',    to:'github', label:"pousse carto.json",                   ...ec('flux6') },
+
+  // Cartographie ← GitHub (via carto.json généré par Flux 6)
+  { from:'github',   to:'carto',  label:"nourrit (carto.json)",                ...ec('github') },
 
   // Flux Confirmation 🆕
   { from:'sp_dem',   to:'fluxconf',   label:"statut → Confirmé",              ...ec('sp_dem',  true) },
