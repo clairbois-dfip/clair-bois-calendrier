@@ -302,6 +302,31 @@ function slugify(str) {
  * @param {Object} flat - Donnees brutes depuis planning.json
  * @returns {Object} Donnees structurees pour les composants React
  */
+// Donnees statiques modules metiers — fallback si planning.json ne les contient pas (Flux 3 ne les genere pas)
+const DEFAULT_MODULES_METIERS = {
+  formsUrlModules: 'https://forms.office.com/e/3SZvXC6kb5',
+  maxSelection: 3,
+  semaines: [
+    { semaine: 20, annee: 2026, dateDebut: '2026-05-11', dateFin: '2026-05-15' },
+    { semaine: 40, annee: 2026, dateDebut: '2026-09-28', dateFin: '2026-10-02' },
+    { semaine: 44, annee: 2026, dateDebut: '2026-10-26', dateFin: '2026-10-30' },
+    { semaine: 49, annee: 2026, dateDebut: '2026-11-30', dateFin: '2026-12-04' },
+  ],
+  modules: [
+    { nom: 'Cuisine',       site: 'CBP', jour: 'lundi',    heureDebut: '08:00', heureFin: '11:00', placesTotal: 3, placesUtilisees: 0, couleur: '#e67e22' },
+    { nom: 'Cuisine',       site: 'CBM', jour: 'mercredi', heureDebut: '08:00', heureFin: '11:00', placesTotal: 2, placesUtilisees: 0, couleur: '#e67e22' },
+    { nom: 'Lingerie',      site: 'CBL', jour: 'mardi',    heureDebut: '08:00', heureFin: '11:00', placesTotal: 2, placesUtilisees: 0, couleur: '#8e44ad' },
+    { nom: 'Pâtisserie',    site: 'CBM', jour: 'mercredi', heureDebut: '08:00', heureFin: '11:00', placesTotal: 4, placesUtilisees: 0, couleur: '#f1c40f' },
+    { nom: 'Audiovisuel',   site: 'CBM', jour: 'mercredi', heureDebut: '11:00', heureFin: '14:00', placesTotal: 2, placesUtilisees: 0, couleur: '#27ae60' },
+    { nom: 'Nettoyage',     site: 'CBM', jour: 'jeudi',    heureDebut: '08:00', heureFin: '11:00', placesTotal: 2, placesUtilisees: 0, couleur: '#e74c3c' },
+    { nom: 'Nettoyage',     site: 'CBP', jour: 'lundi',    heureDebut: '14:00', heureFin: '17:00', placesTotal: 3, placesUtilisees: 0, couleur: '#e74c3c' },
+    { nom: 'Technique',     site: 'CBL', jour: 'vendredi', heureDebut: '08:00', heureFin: '11:00', placesTotal: 3, placesUtilisees: 0, couleur: '#2c3e50' },
+    { nom: 'Restauration',  site: 'CBP', jour: 'vendredi', heureDebut: '11:00', heureFin: '14:00', placesTotal: 3, placesUtilisees: 0, couleur: '#e91e8b' },
+    { nom: 'Graphisme',     site: 'CBP', jour: 'jeudi',    heureDebut: '14:00', heureFin: '17:00', placesTotal: 2, placesUtilisees: 0, couleur: '#f39c12' },
+    { nom: 'Ateliers',      site: 'CBP', jour: 'lundi',    heureDebut: '14:00', heureFin: '17:00', placesTotal: 2, placesUtilisees: 0, couleur: '#00bcd4' },
+  ],
+}
+
 export function transformPlanningData(flat) {
   // Retrocompatibilite avec l'ancien format (mock de developpement)
   if (flat.etablissements) return flat
@@ -390,7 +415,7 @@ export function transformPlanningData(flat) {
     formsUrl,
     formsUrlNouvelEtablissement,
     formsUrlNouveauSecteur,
-    modulesMetiers: flat.modulesMetiers || null,
+    modulesMetiers: flat.modulesMetiers || DEFAULT_MODULES_METIERS,
     organization: {
       name: 'Fondation Clair Bois',
       logo: 'assets/logo-clair-bois.png',
