@@ -812,7 +812,7 @@ export default function Cartographie({ onGoHome, onLogout }) {
   const [fermeture, setFermeture] = useState(false)
 
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}carto.json`)
+    fetch(`${import.meta.env.BASE_URL}carto.json?t=${Date.now()}`)
       .then((r) => { if (!r.ok) throw new Error(); return r.json() })
       .then((data) => { setPlans(cartoJsonToPlans(data)); setChargement(false) })
       .catch(() => { setErreur(true); setChargement(false) })
