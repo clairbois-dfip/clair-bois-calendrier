@@ -40,7 +40,7 @@ const TYPES_PLACE = {
   FPRA:           { label: 'FPra',         long: 'Formation pratique' },
   AFP_CFC:        { label: 'AFP/CFC',      long: 'AFP ou CFC (formateur OFPC requis)' },
   STAGE:          { label: 'Stage/Mes.',   long: "Stage ou mesure d'orientation" },
-  CEA:            { label: 'CEA',          long: 'Contrat en emploi adapte' },
+  CEA:            { label: 'CEA',          long: 'Contrat en emploi adapté' },
   APP_NON_DFIP:   { label: 'App.non-DFIP', long: 'Apprenti hors DFIP (budget fondation)' },
   STAGIAIRE_MSTS: { label: 'MSP/MSTS',    long: 'Stagiaire MSP ou MSTS' },
 }
@@ -108,12 +108,12 @@ const ETAB_TO_SITE = {
 }
 
 const PLAN_CONFIG = {
-  'Restauration':     { id: 'restauration',    icone: UtensilsCrossed, nom: 'Restauration',                       description: 'Service en salle, restaurants et patisserie-boulangerie' },
-  'Cuisine':          { id: 'cuisine',          icone: ChefHat,         nom: 'Cuisine',                             description: 'Brigades de cuisine des cinq etablissements' },
+  'Restauration':     { id: 'restauration',    icone: UtensilsCrossed, nom: 'Restauration',                        description: 'Service en salle, restaurants et pâtisserie-boulangerie' },
+  'Cuisine':          { id: 'cuisine',          icone: ChefHat,         nom: 'Cuisine',                             description: 'Brigades de cuisine des cinq établissements' },
   'Lingerie':         { id: 'lingerie',         icone: Shirt,           nom: 'Lingerie',                            description: 'Lingerie et confection' },
-  'Technique':        { id: 'technique',        icone: Wrench,          nom: 'Technique',                           description: 'Exploitation, nettoyage, peinture, audio-visuel, graphisme, mediamatique, informatique, ateliers' },
-  'Educatif-Enfance': { id: 'educatif-enfance', icone: GraduationCap,   nom: 'Educatif — Pole enfance-adolescence', description: 'Classes et groupes des ecoles specialisees' },
-  'Educatif-Adulte':  { id: 'educatif-adulte',  icone: Home,            nom: 'Educatif — Pole adulte',              description: 'Appartements et centres de jour pour adultes' },
+  'Technique':        { id: 'technique',        icone: Wrench,          nom: 'Technique',                           description: 'Exploitation, nettoyage, peinture, audio-visuel, graphisme, médiamatique, informatique, ateliers' },
+  'Educatif-Enfance': { id: 'educatif-enfance', icone: GraduationCap,   nom: 'Éducatif — Pôle enfance-adolescence', description: 'Classes et groupes des écoles spécialisées' },
+  'Educatif-Adulte':  { id: 'educatif-adulte',  icone: Home,            nom: 'Éducatif — Pôle adulte',              description: 'Appartements et centres de jour pour adultes' },
 }
 
 // ──────────────────────────────────────────────
@@ -230,10 +230,10 @@ function statutCouleur(plan) {
 }
 
 const COULEURS_BLOC = {
-  vert:   { bg: 'bg-cb-green-light',  border: 'border-cb-green',  text: 'text-cb-green',  dot: 'bg-cb-green',  bandeau: 'bg-cb-green',  libelle: 'Disponibilites bonnes' },
+  vert:   { bg: 'bg-cb-green-light',  border: 'border-cb-green',  text: 'text-cb-green',  dot: 'bg-cb-green',  bandeau: 'bg-cb-green',  libelle: 'Disponibilités bonnes' },
   orange: { bg: 'bg-cb-orange-light', border: 'border-cb-orange', text: 'text-cb-orange', dot: 'bg-cb-orange', bandeau: 'bg-cb-orange', libelle: 'Quelques places' },
   rouge:  { bg: 'bg-cb-red-light',    border: 'border-cb-red',    text: 'text-cb-red',    dot: 'bg-cb-red',    bandeau: 'bg-cb-red',    libelle: 'Complet' },
-  gris:   { bg: 'bg-cb-gray-light',   border: 'border-cb-gray',   text: 'text-cb-gray',   dot: 'bg-cb-gray',   bandeau: 'bg-cb-gray',   libelle: 'Sans donnees' },
+  gris:   { bg: 'bg-cb-gray-light',   border: 'border-cb-gray',   text: 'text-cb-gray',   dot: 'bg-cb-gray',   bandeau: 'bg-cb-gray',   libelle: 'Sans données' },
 }
 
 function formatDateCourt(iso) {
@@ -283,7 +283,7 @@ function HeaderStatsGlobales({ stats }) {
 
         <div className="flex items-baseline gap-1.5">
           <span className="text-2xl font-bold text-gray-500 leading-none">{occupees}</span>
-          <span className="text-xs uppercase tracking-wide font-semibold text-gray-500">occupees</span>
+          <span className="text-xs uppercase tracking-wide font-semibold text-gray-500">occupées</span>
         </div>
 
         <div className="flex-1 min-w-[180px] flex items-center gap-3">
@@ -452,9 +452,9 @@ function Place({ place, label, commentaire }) {
         title={commentaire || undefined}
         aria-label={
           (statut === 'rouge'
-            ? `Place occupee par ${place.prenom}, du ${formatDateCourt(place.dateDebut)} au ${formatDateCourt(place.dateFin)}`
+            ? `Place occupée par ${place.prenom}, du ${formatDateCourt(place.dateDebut)} au ${formatDateCourt(place.dateFin)}`
             : statut === 'orange'
-              ? `Place libre avec ${place.reservationsFutures.length} reservation(s) prevue(s) — ${label}`
+              ? `Place libre avec ${place.reservationsFutures.length} réservation(s) prévue(s) — ${label}`
               : `Place libre — ${TYPES_PLACE[place.type].long}`
           ) + (commentaire ? ` — Note: ${commentaire}` : '')
         }
@@ -480,7 +480,7 @@ function Place({ place, label, commentaire }) {
             </>
           ) : (
             <>
-              <div className="font-semibold text-sm mb-2 text-orange-300">Reservations planifiees</div>
+              <div className="font-semibold text-sm mb-2 text-orange-300">Réservations planifiées</div>
               {place.reservationsFutures.map((r, i) => (
                 <div key={i} className="flex flex-wrap gap-x-1.5 mb-1 last:mb-0">
                   <span className="font-semibold text-white">{r.prenom}</span>
@@ -622,8 +622,8 @@ function LegendePlaces({ typesPresents }) {
 
   const legendeCouleurs = [
     { statut: 'vert',   bg: 'bg-cb-green',  label: 'Libre' },
-    { statut: 'orange', bg: 'bg-cb-orange', label: 'Reservations futures' },
-    { statut: 'rouge',  bg: 'bg-cb-red',    label: 'Occupe aujourd\'hui' },
+    { statut: 'orange', bg: 'bg-cb-orange', label: 'Réservations futures' },
+    { statut: 'rouge',  bg: 'bg-cb-red',    label: 'Occupé aujourd\'hui' },
   ]
 
   return (
@@ -705,7 +705,7 @@ function VueDetailPlan({ plan, onRetour }) {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-[11px] uppercase tracking-wider font-bold text-cb-blue/70">
-                  Plan metier
+                  Plan métier
                 </span>
                 <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${couleur.bg} ${couleur.text} border ${couleur.border}`}>
                   {couleur.libelle}
@@ -882,7 +882,7 @@ export default function Cartographie({ onGoHome, onLogout }) {
                      px-4 py-2 rounded-lg transition-colors cursor-pointer"
         >
           <ChevronLeft size={16} strokeWidth={2} aria-hidden="true" />
-          Retour a l'accueil
+          Retour à l'accueil
         </button>
 
         <button
@@ -892,7 +892,7 @@ export default function Cartographie({ onGoHome, onLogout }) {
                      hover:bg-cb-red/5 px-3 py-1.5 rounded-md transition-colors cursor-pointer"
         >
           <LogOut size={14} strokeWidth={2} />
-          Deconnexion
+          Déconnexion
         </button>
       </div>
 
@@ -902,10 +902,10 @@ export default function Cartographie({ onGoHome, onLogout }) {
         </h2>
         <p className="text-gray-600 text-sm max-w-xl mx-auto">
           Vue d'ensemble des places de stage, formation pratique, AFP/CFC et CEA
-          par plan metier — etat pour la semaine en cours.
+          par plan métier — état pour la semaine en cours.
         </p>
         <p className="text-[11px] uppercase tracking-wide text-cb-blue/70 font-semibold mt-2">
-          Vue privee — Coordination DFIP
+          Vue privée — Coordination DFIP
         </p>
       </div>
 
@@ -926,7 +926,7 @@ export default function Cartographie({ onGoHome, onLogout }) {
       )}
 
       <p className="text-center text-[11px] text-gray-400 mt-8">
-        Donnees mises a jour automatiquement via Power Automate
+        Données mises à jour automatiquement via Power Automate
       </p>
     </div>
   )
