@@ -49,7 +49,7 @@ function CartographieLogin({ onLogin, onCancel }) {
         className="absolute top-4 left-4 text-sm text-cb-blue hover:text-cb-accent transition-colors cursor-pointer flex items-center gap-1"
       >
         <span aria-hidden="true">&larr;</span>
-        <span>Retour a l'accueil du site</span>
+        <span>Retour à l'accueil du site</span>
       </button>
 
       <div className="w-full max-w-md bg-white rounded-2xl shadow-md border border-slate-200 p-8 sm:p-10">
@@ -67,7 +67,7 @@ function CartographieLogin({ onLogin, onCancel }) {
           Cartographie des places
         </h1>
         <p className="text-sm text-slate-500 text-center mt-2 mb-8">
-          Acces reserve a la coordination DFIP
+          Accès réservé à la coordination DFIP
         </p>
 
         {/* Formulaire */}
@@ -101,13 +101,13 @@ function CartographieLogin({ onLogin, onCancel }) {
             disabled={verificationEnCours || motDePasse.length === 0}
             className="w-full mt-5 py-3 rounded-lg font-semibold text-white bg-cb-blue hover:bg-cb-accent transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {verificationEnCours ? 'Verification...' : 'Acceder a la cartographie'}
+            {verificationEnCours ? 'Vérification...' : 'Accéder à la cartographie'}
           </button>
         </form>
 
         {/* Avertissement discret */}
         <p className="mt-8 text-xs italic text-slate-400 text-center">
-          Authentification locale — ne pas reutiliser un mot de passe sensible
+          Authentification locale — ne pas réutiliser un mot de passe sensible
         </p>
       </div>
     </div>
