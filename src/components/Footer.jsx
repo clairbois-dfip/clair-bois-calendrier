@@ -24,7 +24,7 @@ export default function Footer() {
             </a>
           </div>
           <div>
-            <h3 className="text-white font-semibold mb-2">Foyers et Ecoles</h3>
+            <h3 className="text-white font-semibold mb-2">Foyers et Écoles</h3>
             <ul className="text-sm space-y-0.5">
               <li>Clair Bois-Chambésy</li>
               <li>Clair Bois-Lancy</li>
