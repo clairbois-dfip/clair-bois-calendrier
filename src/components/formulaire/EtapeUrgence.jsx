@@ -29,9 +29,9 @@ export default function EtapeUrgence({ data, errors, onChange, onBlur }) {
           options={[
             { value: 'Père', label: 'Père' },
             { value: 'Mère', label: 'Mère' },
-            { value: 'Soeur', label: 'Soeur' },
+            { value: 'Soeur', label: 'Sœur' },
             { value: 'Frère', label: 'Frère' },
-            { value: 'Epoux·se', label: 'Epoux·se' },
+            { value: 'Epoux·se', label: 'Époux·se' },
             { value: 'Ami·e', label: 'Ami·e' },
             { value: 'Autre', label: 'Autre' },
           ]}
