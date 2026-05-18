@@ -1,0 +1,79 @@
+{
+  "schema": "1.0",
+  "details": {
+    "displayName": "Flux 5 - HTTP Inscription React",
+    "description": "Reçoit les inscriptions (stages et modules) du formulaire React via HTTP POST",
+    "createdTime": "2026-05-04T11:50:22.473Z",
+    "packageTelemetryId": "flux5-http-react-inscription",
+    "creator": "N/A",
+    "sourceEnvironment": ""
+  },
+  "resources": {
+    "a1b2c3d4-e5f6-7890-abcd-ef1234567890": {
+      "type": "Microsoft.Flow/flows",
+      "suggestedCreationType": "New",
+      "creationType": "Existing, New, Update",
+      "details": {
+        "displayName": "Flux 5 - HTTP Inscription React"
+      },
+      "configurableBy": "User",
+      "hierarchy": "Root",
+      "dependsOn": [
+        "2e6b970c-dc5b-4920-8b1a-981b957283d0",
+        "c1e11ff6-1671-4f41-a2e2-6986289998fd",
+        "c70bccb1-c5b8-4d65-afa0-ce6031f446c5",
+        "15b1713b-141c-4abf-b406-9781ffafdbdb"
+      ]
+    },
+    "2e6b970c-dc5b-4920-8b1a-981b957283d0": {
+      "id": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+      "name": "shared_sharepointonline",
+      "type": "Microsoft.PowerApps/apis",
+      "suggestedCreationType": "Existing",
+      "details": {
+        "displayName": "SharePoint"
+      },
+      "configurableBy": "System",
+      "hierarchy": "Child",
+      "dependsOn": []
+    },
+    "c1e11ff6-1671-4f41-a2e2-6986289998fd": {
+      "type": "Microsoft.PowerApps/apis/connections",
+      "suggestedCreationType": "Existing",
+      "creationType": "Existing",
+      "details": {
+        "displayName": "stagiaire.dfip@clairbois.ch"
+      },
+      "configurableBy": "User",
+      "hierarchy": "Child",
+      "dependsOn": [
+        "2e6b970c-dc5b-4920-8b1a-981b957283d0"
+      ]
+    },
+    "c70bccb1-c5b8-4d65-afa0-ce6031f446c5": {
+      "id": "/providers/Microsoft.PowerApps/apis/shared_office365",
+      "name": "shared_office365",
+      "type": "Microsoft.PowerApps/apis",
+      "suggestedCreationType": "Existing",
+      "details": {
+        "displayName": "Office 365 Outlook"
+      },
+      "configurableBy": "System",
+      "hierarchy": "Child",
+      "dependsOn": []
+    },
+    "15b1713b-141c-4abf-b406-9781ffafdbdb": {
+      "type": "Microsoft.PowerApps/apis/connections",
+      "suggestedCreationType": "Existing",
+      "creationType": "Existing",
+      "details": {
+        "displayName": "stagiaire.dfip@clairbois.ch"
+      },
+      "configurableBy": "User",
+      "hierarchy": "Child",
+      "dependsOn": [
+        "c70bccb1-c5b8-4d65-afa0-ce6031f446c5"
+      ]
+    }
+  }
+}

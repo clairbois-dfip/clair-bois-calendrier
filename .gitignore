@@ -28,7 +28,8 @@ desktop.ini
 # Claude Code
 .claude/settings.local.json
 
-# Gros fichiers vidéo (réunions, captures écran)
+# Gros fichiers (réunions, captures écran)
 *.mp4
 *.mov
 *.avi
+*.mp3

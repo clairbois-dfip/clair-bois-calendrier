@@ -1,0 +1,413 @@
+{
+  "lastUpdated": "2026-04-21T08:00:00Z",
+  "semaine": "Semaine 17 — 21 au 25 avril 2026",
+  "secteurs": [
+    {
+      "id": "restauration",
+      "nom": "Restauration",
+      "couleur": "#d97706",
+      "icone": "🍽️",
+      "places": [
+        {
+          "id": "rest-1",
+          "type": "Stage",
+          "statut": "occupé",
+          "stagiaire": {
+            "prenom": "Léa",
+            "nom": "Maillard",
+            "typeStage": "Mesure d'orientation",
+            "dateDebut": "2026-04-14",
+            "dateFin": "2026-04-25"
+          }
+        },
+        {
+          "id": "rest-2",
+          "type": "FP",
+          "statut": "occupé",
+          "stagiaire": {
+            "prenom": "Noah",
+            "nom": "Berset",
+            "typeStage": "Formation pratique AFP",
+            "dateDebut": "2026-03-02",
+            "dateFin": "2026-06-27"
+          }
+        },
+        {
+          "id": "rest-3",
+          "type": "AFP",
+          "statut": "occupé",
+          "stagiaire": {
+            "prenom": "Inès",
+            "nom": "Rochat",
+            "typeStage": "Stage AFP (1ère année)",
+            "dateDebut": "2026-01-05",
+            "dateFin": "2026-07-03"
+          }
+        },
+        {
+          "id": "rest-4",
+          "type": "CEA",
+          "statut": "libre",
+          "stagiaire": null
+        },
+        {
+          "id": "rest-5",
+          "type": "Stage",
+          "statut": "libre",
+          "stagiaire": null
+        }
+      ]
+    },
+    {
+      "id": "lingerie",
+      "nom": "Lingerie",
+      "couleur": "#9333ea",
+      "icone": "🧺",
+      "places": [
+        {
+          "id": "ling-1",
+          "type": "CEA",
+          "statut": "occupé",
+          "stagiaire": {
+            "prenom": "Amara",
+            "nom": "Diallo",
+            "typeStage": "Contrat emploi adapté",
+            "dateDebut": "2026-02-02",
+            "dateFin": "2026-12-18"
+          }
+        },
+        {
+          "id": "ling-2",
+          "type": "Stage",
+          "statut": "occupé",
+          "stagiaire": {
+            "prenom": "Théo",
+            "nom": "Vaucher",
+            "typeStage": "Stage découverte",
+            "dateDebut": "2026-04-21",
+            "dateFin": "2026-05-02"
+          }
+        },
+        {
+          "id": "ling-3",
+          "type": "FP",
+          "statut": "occupé",
+          "stagiaire": {
+            "prenom": "Fatoumata",
+            "nom": "Konaté",
+            "typeStage": "Formation pratique CFC",
+            "dateDebut": "2026-03-16",
+            "dateFin": "2026-08-28"
+          }
+        },
+        {
+          "id": "ling-4",
+          "type": "Stage",
+          "statut": "libre",
+          "stagiaire": null
+        }
+      ]
+    },
+    {
+      "id": "cuisine",
+      "nom": "Cuisine",
+      "couleur": "#dc2626",
+      "icone": "👨‍🍳",
+      "places": [
+        {
+          "id": "cuis-1",
+          "type": "AFP",
+          "statut": "occupé",
+          "stagiaire": {
+            "prenom": "Camille",
+            "nom": "Nussbaum",
+            "typeStage": "Stage AFP (2ème année)",
+            "dateDebut": "2026-01-19",
+            "dateFin": "2026-07-10"
+          }
+        },
+        {
+          "id": "cuis-2",
+          "type": "CFC",
+          "statut": "occupé",
+          "stagiaire": {
+            "prenom": "Elias",
+            "nom": "Perret",
+            "typeStage": "Stage CFC cuisine",
+            "dateDebut": "2026-02-16",
+            "dateFin": "2026-07-31"
+          }
+        },
+        {
+          "id": "cuis-3",
+          "type": "Stage",
+          "statut": "occupé",
+          "stagiaire": {
+            "prenom": "Jade",
+            "nom": "Tissot",
+            "typeStage": "Mesure d'orientation",
+            "dateDebut": "2026-04-07",
+            "dateFin": "2026-04-30"
+          }
+        },
+        {
+          "id": "cuis-4",
+          "type": "FP",
+          "statut": "libre",
+          "stagiaire": null
+        },
+        {
+          "id": "cuis-5",
+          "type": "CEA",
+          "statut": "occupé",
+          "stagiaire": {
+            "prenom": "Omar",
+            "nom": "Sow",
+            "typeStage": "Contrat emploi adapté",
+            "dateDebut": "2026-01-05",
+            "dateFin": "2026-12-31"
+          }
+        },
+        {
+          "id": "cuis-6",
+          "type": "Stage",
+          "statut": "libre",
+          "stagiaire": null
+        }
+      ]
+    },
+    {
+      "id": "technique",
+      "nom": "Technique",
+      "couleur": "#0284c7",
+      "icone": "🔧",
+      "places": [
+        {
+          "id": "tech-1",
+          "type": "CFC",
+          "statut": "occupé",
+          "stagiaire": {
+            "prenom": "Raphaël",
+            "nom": "Girardet",
+            "typeStage": "Stage CFC électricien",
+            "dateDebut": "2026-02-02",
+            "dateFin": "2026-07-17"
+          }
+        },
+        {
+          "id": "tech-2",
+          "type": "AFP",
+          "statut": "occupé",
+          "stagiaire": {
+            "prenom": "Yusuf",
+            "nom": "Amrani",
+            "typeStage": "Stage AFP (1ère année)",
+            "dateDebut": "2026-03-09",
+            "dateFin": "2026-06-26"
+          }
+        },
+        {
+          "id": "tech-3",
+          "type": "Stage",
+          "statut": "libre",
+          "stagiaire": null
+        },
+        {
+          "id": "tech-4",
+          "type": "CEA",
+          "statut": "occupé",
+          "stagiaire": {
+            "prenom": "Lena",
+            "nom": "Hofmann",
+            "typeStage": "Contrat emploi adapté",
+            "dateDebut": "2026-03-02",
+            "dateFin": "2026-11-27"
+          }
+        },
+        {
+          "id": "tech-5",
+          "type": "FP",
+          "statut": "libre",
+          "stagiaire": null
+        }
+      ]
+    },
+    {
+      "id": "educatif-adulte",
+      "nom": "Éducatif pôle adulte",
+      "couleur": "#16a34a",
+      "icone": "🏠",
+      "sous_entites": [
+        {
+          "id": "adulte-appt",
+          "nom": "Appartements",
+          "description": "Foyers et appartements encadrés (multi-sites)"
+        },
+        {
+          "id": "adulte-cdj",
+          "nom": "Centres de jour",
+          "description": "Activités de jour (multi-sites)"
+        }
+      ],
+      "places": [
+        {
+          "id": "edu-ad-1",
+          "type": "Stage",
+          "statut": "occupé",
+          "sous_entite": "adulte-appt",
+          "stagiaire": {
+            "prenom": "Marlène",
+            "nom": "Chevalier",
+            "typeStage": "Stage découverte",
+            "dateDebut": "2026-04-14",
+            "dateFin": "2026-04-25"
+          }
+        },
+        {
+          "id": "edu-ad-2",
+          "type": "FP",
+          "statut": "occupé",
+          "sous_entite": "adulte-appt",
+          "stagiaire": {
+            "prenom": "Baptiste",
+            "nom": "Leclerc",
+            "typeStage": "Formation pratique éducateur",
+            "dateDebut": "2026-02-23",
+            "dateFin": "2026-08-14"
+          }
+        },
+        {
+          "id": "edu-ad-3",
+          "type": "CEA",
+          "statut": "libre",
+          "sous_entite": "adulte-appt",
+          "stagiaire": null
+        },
+        {
+          "id": "edu-ad-4",
+          "type": "Stage",
+          "statut": "occupé",
+          "sous_entite": "adulte-cdj",
+          "stagiaire": {
+            "prenom": "Nora",
+            "nom": "Favre",
+            "typeStage": "Mesure d'orientation",
+            "dateDebut": "2026-04-21",
+            "dateFin": "2026-05-16"
+          }
+        },
+        {
+          "id": "edu-ad-5",
+          "type": "FP",
+          "statut": "occupé",
+          "sous_entite": "adulte-cdj",
+          "stagiaire": {
+            "prenom": "Sébastien",
+            "nom": "Wenger",
+            "typeStage": "Formation pratique éducateur",
+            "dateDebut": "2026-01-26",
+            "dateFin": "2026-07-24"
+          }
+        },
+        {
+          "id": "edu-ad-6",
+          "type": "Stage",
+          "statut": "libre",
+          "sous_entite": "adulte-cdj",
+          "stagiaire": null
+        }
+      ]
+    },
+    {
+      "id": "educatif-enfance",
+      "nom": "Éducatif pôle enfance-adolescence",
+      "couleur": "#db2777",
+      "icone": "🎒",
+      "sous_entites": [
+        {
+          "id": "enfance-classe-a",
+          "nom": "Classes A (primaire)",
+          "description": "Enseignement spécialisé primaire"
+        },
+        {
+          "id": "enfance-classe-b",
+          "nom": "Classes B (cycle)",
+          "description": "Enseignement spécialisé cycle d'orientation"
+        },
+        {
+          "id": "enfance-classe-c",
+          "nom": "Classes C (transition)",
+          "description": "Classes de transition pré-professionnelle"
+        }
+      ],
+      "places": [
+        {
+          "id": "edu-enf-1",
+          "type": "Stage",
+          "statut": "occupé",
+          "sous_entite": "enfance-classe-a",
+          "stagiaire": {
+            "prenom": "Chloé",
+            "nom": "Magnin",
+            "typeStage": "Stage découverte enseignement",
+            "dateDebut": "2026-04-21",
+            "dateFin": "2026-05-02"
+          }
+        },
+        {
+          "id": "edu-enf-2",
+          "type": "FP",
+          "statut": "occupé",
+          "sous_entite": "enfance-classe-a",
+          "stagiaire": {
+            "prenom": "Tom",
+            "nom": "Jaccard",
+            "typeStage": "Formation pratique éducateur spécialisé",
+            "dateDebut": "2026-02-09",
+            "dateFin": "2026-08-07"
+          }
+        },
+        {
+          "id": "edu-enf-3",
+          "type": "Stage",
+          "statut": "libre",
+          "sous_entite": "enfance-classe-b",
+          "stagiaire": null
+        },
+        {
+          "id": "edu-enf-4",
+          "type": "FP",
+          "statut": "occupé",
+          "sous_entite": "enfance-classe-b",
+          "stagiaire": {
+            "prenom": "Anaïs",
+            "nom": "Dubois",
+            "typeStage": "Formation pratique enseignement spécialisé",
+            "dateDebut": "2026-03-02",
+            "dateFin": "2026-09-04"
+          }
+        },
+        {
+          "id": "edu-enf-5",
+          "type": "Stage",
+          "statut": "occupé",
+          "sous_entite": "enfance-classe-c",
+          "stagiaire": {
+            "prenom": "Moussa",
+            "nom": "Baldé",
+            "typeStage": "Mesure d'orientation",
+            "dateDebut": "2026-04-14",
+            "dateFin": "2026-04-30"
+          }
+        },
+        {
+          "id": "edu-enf-6",
+          "type": "CEA",
+          "statut": "libre",
+          "sous_entite": "enfance-classe-c",
+          "stagiaire": null
+        }
+      ]
+    }
+  ]
+}

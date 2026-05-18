@@ -1,0 +1,34 @@
+/* Importation de Tailwind CSS v4 */
+@import "tailwindcss";
+
+/* Police Open Sans depuis Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+/* Variables CSS — Charte graphique Fondation Clair Bois */
+:root {
+  --color-cb-blue:   #092C6A;
+  --color-cb-accent: #2EA3F2;
+  --color-cb-green:  #27AE60;
+  --color-cb-red:    #E74C3C;
+  --color-cb-orange: #F39C12;
+}
+
+/* Thème Tailwind v4 — exposition des couleurs Clair Bois */
+@theme {
+  --color-cb-blue:   #092C6A;
+  --color-cb-accent: #2EA3F2;
+  --color-cb-green:  #27AE60;
+  --color-cb-red:    #E74C3C;
+  --color-cb-orange: #F39C12;
+}
+
+/* Base globale */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+}

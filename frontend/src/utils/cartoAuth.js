@@ -64,8 +64,9 @@ export function verifierMotDePasse(mdpClair) {
   if (typeof mdpClair !== 'string' || mdpClair.length === 0) {
     return null;
   }
+  const mdpTrimmed = mdpClair.trim();
   const motsValides = getMotsDePasseValides();
-  const index = motsValides.indexOf(mdpClair);
+  const index = motsValides.indexOf(mdpTrimmed);
   if (index === -1) {
     return null;
   }

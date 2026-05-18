@@ -163,7 +163,7 @@ MonFlux.zip
 | **Demande** | `9616ee1d-dd0b-44fd-a1c4-34187ebaa9f8` | ACTIVE |
 | **Referent** | `7a31b912-99af-4415-bfc9-f2ae1cb19c00` | ACTIVE |
 | **Creneaux** | `3e2deb27-f496-410f-be74-281eb2b0c079` | ACTIVE |
-| **Cartographie** | — | NON CRÉÉE (à faire pour Flux 6) — schéma à définir : Site, Pole, NomStructure, Type, Accueil, Formateurs, CapacitesParType, Commentaire |
+| **Cartographie** | (liste SP DFIP RH) | ✅ ACTIVE — colonnes : Plan, Etablissement, Secteur, PlacesMax_FPRA/AFP_CFC/Stage_Mes/CEA/AppNonDFIP/MSTS, Commentaire |
 
 ### Connexions (référence complète)
 | Connecteur | GUID Connexion (`connectionsMap`) | GUID API (`apisMap`) |
@@ -820,17 +820,15 @@ outputs('Obtenir_les_détails_de_la_réponse')?['body/{identifiant}']
 
 ## Flux à créer (TODO prioritaire — 6 mai 2026)
 
-### Flux 6 — Cartographie HTTP GET (CRITIQUE — débloque la carto live)
-- **Trigger** : HTTP GET (appelé depuis le frontend via `VITE_PA_CARTO_URL`)
+### ✅ Flux 6 — Cartographie Recurrence (OPÉRATIONNEL — mai 2026)
+- **Trigger** : Recurrence horaire (1×/heure) — design final retenu à la place du HTTP GET
 - **Actions** :
-  1. GET liste **Cartographie** (toutes les places typées par site/pôle/structure)
-  2. GET liste **Demande** filtrée `Statut eq 'Confirmé'` (placements actifs)
-  3. Compose JSON consolidé (places + occupants)
-  4. Response 200 avec le JSON
-- **Pattern réutilisable** : trigger HTTP du Flux 5, compose JSON du Flux 3
-- **Prérequis bloquant** : créer la liste SP **Cartographie** (schéma à définir : Site, Pole, NomStructure, Type, Accueil, Formateurs, CapacitesParType, Commentaire)
-- **Estimation** : 2-3 h
-- **Référence frontend** : section "Cartographie privée" du `frontend/CLAUDE.md`
+  1. GET liste SP **Cartographie** (capacités max par établissement/plan/secteur)
+  2. GET liste SP **Demande** filtrée `Statut eq 'Confirmé'` (placements actifs)
+  3. Compose `carto.json` consolidé (places + occupants par siège)
+  4. Push `carto.json` → `clairbois-dfip/clair-bois-calendrier/public/carto.json` via GitHub API
+- **Fichiers** : `backend/build-flux-carto.js` → `backend/flux-carto.zip`
+- **Frontend** : `Cartographie.jsx` fetch `${BASE_URL}carto.json` (GitHub Pages, statique)
 
 ### Flux Confirmation Rosina (CRITIQUE — workflow Rosina)
 - **Trigger** : MAJ item liste **Demande**, condition `Statut → 'Confirmé'`

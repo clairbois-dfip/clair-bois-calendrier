@@ -199,8 +199,8 @@ const definition = {
                 select: {
                   type:      "@item()?['TypePlace']",
                   prenom:    "@item()?['StagiaireID']?['Prenom']",
-                  dateDebut: "@if(empty(item()?['DateDebutConfirmee']), null, formatDateTime(item()?['DateDebutConfirmee'], 'yyyy-MM-dd'))",
-                  dateFin:   "@if(empty(item()?['DateFinConfirmee']),   null, formatDateTime(item()?['DateFinConfirmee'],   'yyyy-MM-dd'))"
+                  dateDebut: "@if(empty(item()?['DateDebutConfirmee']), null, convertTimeZone(item()?['DateDebutConfirmee'], 'UTC', 'W. Europe Standard Time', 'yyyy-MM-dd'))",
+                  dateFin:   "@if(empty(item()?['DateFinConfirmee']),   null, convertTimeZone(item()?['DateFinConfirmee'],   'UTC', 'W. Europe Standard Time', 'yyyy-MM-dd'))"
                 }
               },
               description: 'Projette type, prénom, dateDébut, dateFin'

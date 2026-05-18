@@ -1,0 +1,931 @@
+{
+  "name": "f5a1b2c3-d4e5-f678-90ab-cdef12345678",
+  "id": "/providers/Microsoft.Flow/flows/f5a1b2c3-d4e5-f678-90ab-cdef12345678",
+  "type": "Microsoft.Flow/flows",
+  "properties": {
+    "apiId": "/providers/Microsoft.PowerApps/apis/shared_logicflows",
+    "displayName": "Flux 5 - HTTP Inscription (Formulaire React)",
+    "definition": {
+      "metadata": {
+        "workflowEntityId": null,
+        "processAdvisorMetadata": null,
+        "flowChargedByPaygo": null,
+        "flowclientsuspensionreason": "None",
+        "flowclientsuspensiontime": null,
+        "flowclientsuspensionreasondetails": null,
+        "creator": {
+          "id": "3995bcc7-5e9e-4254-8370-a930628a2317",
+          "type": "User",
+          "tenantId": "b38370c4-d4e6-4db3-8103-301e95e4e40c"
+        },
+        "provisioningMethod": "FromDefinition",
+        "failureAlertSubscription": true,
+        "clientLastModifiedTime": "2026-05-04T11:50:22.472Z",
+        "creationSource": "Portal",
+        "modifiedSources": "Portal"
+      },
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Http",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "cheminKey": {
+                  "type": "string"
+                },
+                "parcours": {
+                  "type": "string"
+                },
+                "pourQui": {
+                  "type": "string"
+                },
+                "dejaInscrit": {
+                  "type": "boolean"
+                },
+                "dateEnvoi": {
+                  "type": "string"
+                },
+                "secteur": {
+                  "type": "string"
+                },
+                "dateDebut": {
+                  "type": "string"
+                },
+                "dateFin": {
+                  "type": "string"
+                },
+                "modules": {
+                  "type": "array"
+                },
+                "nom": {
+                  "type": "string"
+                },
+                "prenom": {
+                  "type": "string"
+                },
+                "sexe": {
+                  "type": "string"
+                },
+                "date_naissance": {
+                  "type": "string"
+                },
+                "avs": {
+                  "type": "string"
+                },
+                "tel": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "adresse": {
+                  "type": "string"
+                },
+                "npa": {
+                  "type": "string"
+                },
+                "formation": {
+                  "type": "string"
+                },
+                "sous_curatelle": {
+                  "type": "string"
+                },
+                "curatelle_type": {
+                  "type": "string"
+                },
+                "curatelle_nom": {
+                  "type": "string"
+                },
+                "curatelle_prenom": {
+                  "type": "string"
+                },
+                "curatelle_tel": {
+                  "type": "string"
+                },
+                "curatelle_email": {
+                  "type": "string"
+                },
+                "urgence_nom": {
+                  "type": "string"
+                },
+                "urgence_prenom": {
+                  "type": "string"
+                },
+                "urgence_lien": {
+                  "type": "string"
+                },
+                "urgence_tel": {
+                  "type": "string"
+                },
+                "inscrit_ai": {
+                  "type": "string"
+                },
+                "ai_nom": {
+                  "type": "string"
+                },
+                "ai_prenom": {
+                  "type": "string"
+                },
+                "ai_tel": {
+                  "type": "string"
+                },
+                "ai_email": {
+                  "type": "string"
+                },
+                "ai_office": {
+                  "type": "string"
+                },
+                "ai_mesure": {
+                  "type": "string"
+                },
+                "objectif_stage": {
+                  "type": "string"
+                },
+                "parcours_scolaire": {
+                  "type": "string"
+                },
+                "limitations": {
+                  "type": "string"
+                },
+                "deja_tests": {
+                  "type": "string"
+                },
+                "deja_stages_secteur": {
+                  "type": "string"
+                },
+                "reseau_medical": {
+                  "type": "string"
+                },
+                "pointure": {
+                  "type": "string"
+                },
+                "taille_tshirt": {
+                  "type": "string"
+                },
+                "taille_pantalon": {
+                  "type": "string"
+                },
+                "declaration_charte": {
+                  "type": "string"
+                },
+                "declaration_engagement": {
+                  "type": "string"
+                },
+                "referent_partenaire": {
+                  "type": "string"
+                },
+                "referent_nom": {
+                  "type": "string"
+                },
+                "referent_prenom": {
+                  "type": "string"
+                },
+                "referent_tel": {
+                  "type": "string"
+                },
+                "referent_email": {
+                  "type": "string"
+                },
+                "referent_fonction": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "description": "Reçoit le JSON du formulaire React intégré (stages et modules)"
+        }
+      },
+      "actions": {
+        "Check_AVS": {
+          "runAfter": {},
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+              "parameters/method": "GET",
+              "parameters/uri": "@concat('_api/web/lists/getbytitle(''Stagiaire'')/items?$select=Id,AVS&$filter=AVS eq ''', triggerBody()?['avs'], '''')"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "connectionName": "shared_sharepointonline",
+              "operationId": "HttpRequest"
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "description": "Vérifie si cet AVS existe déjà dans la liste Stagiaire"
+        },
+        "Condition_AVS_Existe": {
+          "runAfter": {
+            "Check_AVS": [
+              "Succeeded"
+            ]
+          },
+          "type": "If",
+          "expression": {
+            "and": [
+              {
+                "greater": [
+                  "@length(body('Check_AVS')?['d']?['results'])",
+                  0
+                ]
+              }
+            ]
+          },
+          "description": "AVS existe ? → MAJ ou Créer Stagiaire puis router sur parcours",
+          "actions": {
+            "MAJ_Stagiaire": {
+              "runAfter": {},
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                  "table": "bf357221-7e74-4905-9b58-b4ea22f79de0",
+                  "id": "@first(body('Check_AVS')?['d']?['results'])?['Id']",
+                  "item/Nom": "@triggerBody()?['nom']",
+                  "item/Prenom": "@triggerBody()?['prenom']",
+                  "item/Sexe/Value": "@triggerBody()?['sexe']",
+                  "item/DateNaissance": "@triggerBody()?['date_naissance']",
+                  "item/NumTel": "@triggerBody()?['tel']",
+                  "item/Mail": "@triggerBody()?['email']",
+                  "item/Adresse": "@triggerBody()?['adresse']",
+                  "item/NpaLocalite": "@triggerBody()?['npa']",
+                  "item/AVS": "@triggerBody()?['avs']",
+                  "item/UrgenceLien/Value": "@triggerBody()?['urgence_lien']",
+                  "item/UrgenceNom": "@triggerBody()?['urgence_nom']",
+                  "item/UrgencePrenom": "@triggerBody()?['urgence_prenom']",
+                  "item/UrgenceTel": "@triggerBody()?['urgence_tel']",
+                  "item/Curatelle": "@if(or(equals(triggerBody()?['sous_curatelle'], 'Oui'), startsWith(coalesce(triggerBody()?['sous_curatelle'], ''), 'Oui')), true, false)",
+                  "item/CuratelleType/Value": "@triggerBody()?['curatelle_type']",
+                  "item/CuratelleNom": "@triggerBody()?['curatelle_nom']",
+                  "item/CuratellePrenom": "@triggerBody()?['curatelle_prenom']",
+                  "item/CuratelleTel": "@triggerBody()?['curatelle_tel']",
+                  "item/CuratelleMail": "@triggerBody()?['curatelle_email']",
+                  "item/Limitations": "@triggerBody()?['limitations']",
+                  "item/ParcoursScolaire": "@triggerBody()?['parcours_scolaire']",
+                  "item/Tests/Value": "@triggerBody()?['deja_tests']",
+                  "item/TailleTshirt": "@triggerBody()?['taille_tshirt']",
+                  "item/TaillePantalon": "@triggerBody()?['taille_pantalon']",
+                  "item/Pointure": "@triggerBody()?['pointure']",
+                  "item/AssuranceInvalidite/Value": "@triggerBody()?['inscrit_ai']",
+                  "item/AIConseillerNom": "@triggerBody()?['ai_nom']",
+                  "item/AIConseillerPrenom": "@triggerBody()?['ai_prenom']",
+                  "item/AIConseillerTel": "@triggerBody()?['ai_tel']",
+                  "item/AIConseillerMail": "@triggerBody()?['ai_email']"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                  "connectionName": "shared_sharepointonline",
+                  "operationId": "PatchItem"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "description": "MAJ du stagiaire existant (AVS trouvé)"
+            },
+            "Condition_Parcours_Existant": {
+              "runAfter": {
+                "MAJ_Stagiaire": [
+                  "Succeeded"
+                ]
+              },
+              "type": "If",
+              "expression": {
+                "and": [
+                  {
+                    "equals": [
+                      "@triggerBody()?['parcours']",
+                      "stages"
+                    ]
+                  }
+                ]
+              },
+              "description": "Parcours stages ou modules ? (stagiaire existant)",
+              "actions": {
+                "Requete_HTTP_Creneaux_Existant": {
+                  "runAfter": {},
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "parameters": {
+                      "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                      "parameters/method": "GET",
+                      "parameters/uri": "@concat('_api/web/lists(guid''3e2deb27-f496-410f-be74-281eb2b0c079'')/items?$select=Id&$filter=Secteur eq ''', triggerBody()?['secteur'], ''' and DateDebut le ''', triggerBody()?['dateDebut'], ''' and DateFin ge ''', triggerBody()?['dateDebut'], '''&$top=1')"
+                    },
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                      "connectionName": "shared_sharepointonline",
+                      "operationId": "HttpRequest"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "description": "Cherche le créneau Stage matching (Secteur + date dans la plage)"
+                },
+                "Creer_Demande_Stage_Existant": {
+                  "runAfter": {
+                    "Requete_HTTP_Creneaux_Existant": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "parameters": {
+                      "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                      "table": "9616ee1d-dd0b-44fd-a1c4-34187ebaa9f8",
+                      "item/StagiaireID/Id": "@first(body('Check_AVS')?['d']?['results'])?['Id']",
+                      "item/TypeDemande/Value": "Stage",
+                      "item/Secteur": "@triggerBody()?['secteur']",
+                      "item/DateDebutSouhaitee": "@triggerBody()?['dateDebut']",
+                      "item/ObjectifStage": "@triggerBody()?['objectif_stage']",
+                      "item/DejaStage": "@if(equals(triggerBody()?['deja_stages_secteur'], 'Oui'), true, false)",
+                      "item/Statut/Value": "En attente des documents",
+                      "item/Limitations": "@triggerBody()?['limitations']",
+                      "item/ParcoursScolaire": "@triggerBody()?['parcours_scolaire']",
+                      "item/CreneauID/Id": "@first(body('Requete_HTTP_Creneaux_Existant')?['d']?['results'])?['Id']"
+                    },
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                      "connectionName": "shared_sharepointonline",
+                      "operationId": "PostItem"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "description": "Crée la Demande Stage (Existant)"
+                },
+                "Condition_Referent_Stage_Existant": {
+                  "runAfter": {
+                    "Creer_Demande_Stage_Existant": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "If",
+                  "expression": {
+                    "and": [
+                      {
+                        "equals": [
+                          "@triggerBody()?['pourQui']",
+                          "autre"
+                        ]
+                      }
+                    ]
+                  },
+                  "actions": {
+                    "Creer_Referent_Stage_Existant": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                          "table": "7a31b912-99af-4415-bfc9-f2ae1cb19c00",
+                          "item/Partenaire": "@triggerBody()?['referent_partenaire']",
+                          "item/Fonction/Value": "@triggerBody()?['referent_fonction']",
+                          "item/Nom": "@triggerBody()?['referent_nom']",
+                          "item/Prenom": "@triggerBody()?['referent_prenom']",
+                          "item/NumTel": "@triggerBody()?['referent_tel']",
+                          "item/Mail": "@triggerBody()?['referent_email']",
+                          "item/StagiaireID/Id": "@first(body('Check_AVS')?['d']?['results'])?['Id']"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                          "connectionName": "shared_sharepointonline",
+                          "operationId": "PostItem"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "description": "Crée le Référent Stage (Existant)"
+                    }
+                  },
+                  "else": {
+                    "actions": {}
+                  },
+                  "description": "Si pourQui=autre → créer Référent"
+                },
+                "Email_Stage_Existant": {
+                  "runAfter": {
+                    "Condition_Referent_Stage_Existant": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "parameters": {
+                      "emailMessage/To": "@if(equals(triggerBody()?['pourQui'], 'autre'), triggerBody()?['referent_email'], triggerBody()?['email'])",
+                      "emailMessage/Subject": "@concat('[AVS-756.XXXX.XXXX.', substring(triggerBody()?['avs'], sub(length(triggerBody()?['avs']), 2)), ' D°', outputs('Creer_Demande_Stage_Existant')?['body/ID'], '] Documents requis pour ', triggerBody()?['nom'], ' ', triggerBody()?['prenom'])",
+                      "emailMessage/Body": "<p>Bonjour,<br><br>Merci pour votre demande de pré-inscription pour @{triggerBody()?['prenom']} @{triggerBody()?['nom']}.<br><br>Veuillez s'il vous plaît <b>répondre</b> à ce mail avec les documents en pièce jointe.<br><br>- Copie de la pièce d'identité<br>- Copie de la charte signée<br><br>Avec nos meilleures salutations,<br><br>Clair-Bois<br><br><i>Attention : Cette adresse ne peut pas recevoir de Mail en dehors d'une réponse</i></p>",
+                      "emailMessage/Importance": "Normal"
+                    },
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                      "connectionName": "shared_office365",
+                      "operationId": "SendEmailV2"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "description": "Email demande de documents (stage)"
+                }
+              },
+              "else": {
+                "actions": {
+                  "Condition_Referent_Module_Existant": {
+                    "runAfter": {},
+                    "type": "If",
+                    "expression": {
+                      "and": [
+                        {
+                          "equals": [
+                            "@triggerBody()?['pourQui']",
+                            "autre"
+                          ]
+                        }
+                      ]
+                    },
+                    "actions": {
+                      "Creer_Referent_Module_Existant": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                            "table": "7a31b912-99af-4415-bfc9-f2ae1cb19c00",
+                            "item/Partenaire": "@triggerBody()?['referent_partenaire']",
+                            "item/Fonction/Value": "@triggerBody()?['referent_fonction']",
+                            "item/Nom": "@triggerBody()?['referent_nom']",
+                            "item/Prenom": "@triggerBody()?['referent_prenom']",
+                            "item/NumTel": "@triggerBody()?['referent_tel']",
+                            "item/Mail": "@triggerBody()?['referent_email']",
+                            "item/StagiaireID/Id": "@first(body('Check_AVS')?['d']?['results'])?['Id']"
+                          },
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                            "connectionName": "shared_sharepointonline",
+                            "operationId": "PostItem"
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        },
+                        "description": "Crée le Référent Modules (Existant)"
+                      }
+                    },
+                    "else": {
+                      "actions": {}
+                    },
+                    "description": "Si pourQui=autre → créer Référent (modules)"
+                  },
+                  "Pour_Chaque_Module_Existant": {
+                    "runAfter": {
+                      "Condition_Referent_Module_Existant": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "Foreach",
+                    "foreach": "@triggerBody()?['modules']",
+                    "actions": {
+                      "Requete_Creneau_Module_Existant": {
+                        "runAfter": {},
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                            "parameters/method": "GET",
+                            "parameters/uri": "@concat('_api/web/lists(guid''3e2deb27-f496-410f-be74-281eb2b0c079'')/items?$select=Id&$filter=NomModule eq ''', items('Pour_Chaque_Module_Existant')?['nom'], ''' and DateDebut le ''', items('Pour_Chaque_Module_Existant')?['dateDebut'], ''' and DateFin ge ''', items('Pour_Chaque_Module_Existant')?['dateDebut'], '''&$top=1')"
+                          },
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                            "connectionName": "shared_sharepointonline",
+                            "operationId": "HttpRequest"
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        },
+                        "description": "Cherche le créneau Module métier matching (NomModule + date)"
+                      },
+                      "Creer_Demande_Module_Existant": {
+                        "runAfter": {
+                          "Requete_Creneau_Module_Existant": [
+                            "Succeeded"
+                          ]
+                        },
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                            "table": "9616ee1d-dd0b-44fd-a1c4-34187ebaa9f8",
+                            "item/StagiaireID/Id": "@first(body('Check_AVS')?['d']?['results'])?['Id']",
+                            "item/TypeDemande/Value": "Module métier",
+                            "item/Secteur": "@items('Pour_Chaque_Module_Existant')?['nom']",
+                            "item/DateDebutSouhaitee": "@items('Pour_Chaque_Module_Existant')?['dateDebut']",
+                            "item/Statut/Value": "En attente des documents",
+                            "item/Limitations": "@triggerBody()?['limitations']",
+                            "item/ParcoursScolaire": "@triggerBody()?['parcours_scolaire']",
+                            "item/CreneauID/Id": "@first(body('Requete_Creneau_Module_Existant')?['d']?['results'])?['Id']"
+                          },
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                            "connectionName": "shared_sharepointonline",
+                            "operationId": "PostItem"
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        },
+                        "description": "Crée la Demande Module (Existant) — 1 par module sélectionné"
+                      }
+                    },
+                    "description": "Boucle sur les modules sélectionnés (max 3) — crée 1 Demande par module"
+                  },
+                  "Email_Modules_Existant": {
+                    "runAfter": {
+                      "Pour_Chaque_Module_Existant": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "parameters": {
+                        "emailMessage/To": "@if(equals(triggerBody()?['pourQui'], 'autre'), triggerBody()?['referent_email'], triggerBody()?['email'])",
+                        "emailMessage/Subject": "@concat('[Modules métiers] Inscription de ', triggerBody()?['prenom'], ' ', triggerBody()?['nom'], ' — ', string(length(triggerBody()?['modules'])), ' module(s)')",
+                        "emailMessage/Body": "<p>Bonjour,<br><br>Merci pour votre demande de pré-inscription pour @{triggerBody()?['prenom']} @{triggerBody()?['nom']}.<br><br>Veuillez s'il vous plaît <b>répondre</b> à ce mail avec les documents en pièce jointe.<br><br>- Copie de la pièce d'identité<br>- Copie de la charte signée<br><br>Avec nos meilleures salutations,<br><br>Clair-Bois<br><br><i>Attention : Cette adresse ne peut pas recevoir de Mail en dehors d'une réponse</i></p>",
+                        "emailMessage/Importance": "Normal"
+                      },
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                        "connectionName": "shared_office365",
+                        "operationId": "SendEmailV2"
+                      },
+                      "authentication": "@parameters('$authentication')"
+                    },
+                    "description": "Email récapitulatif inscription modules"
+                  }
+                }
+              }
+            }
+          },
+          "else": {
+            "actions": {
+              "Creer_Stagiaire": {
+                "runAfter": {},
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "parameters": {
+                    "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                    "table": "bf357221-7e74-4905-9b58-b4ea22f79de0",
+                    "item/Nom": "@triggerBody()?['nom']",
+                    "item/Prenom": "@triggerBody()?['prenom']",
+                    "item/Sexe/Value": "@triggerBody()?['sexe']",
+                    "item/DateNaissance": "@triggerBody()?['date_naissance']",
+                    "item/NumTel": "@triggerBody()?['tel']",
+                    "item/Mail": "@triggerBody()?['email']",
+                    "item/Adresse": "@triggerBody()?['adresse']",
+                    "item/NpaLocalite": "@triggerBody()?['npa']",
+                    "item/AVS": "@triggerBody()?['avs']",
+                    "item/UrgenceLien/Value": "@triggerBody()?['urgence_lien']",
+                    "item/UrgenceNom": "@triggerBody()?['urgence_nom']",
+                    "item/UrgencePrenom": "@triggerBody()?['urgence_prenom']",
+                    "item/UrgenceTel": "@triggerBody()?['urgence_tel']",
+                    "item/Curatelle": "@if(or(equals(triggerBody()?['sous_curatelle'], 'Oui'), startsWith(coalesce(triggerBody()?['sous_curatelle'], ''), 'Oui')), true, false)",
+                    "item/CuratelleType/Value": "@triggerBody()?['curatelle_type']",
+                    "item/CuratelleNom": "@triggerBody()?['curatelle_nom']",
+                    "item/CuratellePrenom": "@triggerBody()?['curatelle_prenom']",
+                    "item/CuratelleTel": "@triggerBody()?['curatelle_tel']",
+                    "item/CuratelleMail": "@triggerBody()?['curatelle_email']",
+                    "item/Limitations": "@triggerBody()?['limitations']",
+                    "item/ParcoursScolaire": "@triggerBody()?['parcours_scolaire']",
+                    "item/Tests/Value": "@triggerBody()?['deja_tests']",
+                    "item/TailleTshirt": "@triggerBody()?['taille_tshirt']",
+                    "item/TaillePantalon": "@triggerBody()?['taille_pantalon']",
+                    "item/Pointure": "@triggerBody()?['pointure']",
+                    "item/AssuranceInvalidite/Value": "@triggerBody()?['inscrit_ai']",
+                    "item/AIConseillerNom": "@triggerBody()?['ai_nom']",
+                    "item/AIConseillerPrenom": "@triggerBody()?['ai_prenom']",
+                    "item/AIConseillerTel": "@triggerBody()?['ai_tel']",
+                    "item/AIConseillerMail": "@triggerBody()?['ai_email']"
+                  },
+                  "host": {
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                    "connectionName": "shared_sharepointonline",
+                    "operationId": "PostItem"
+                  },
+                  "authentication": "@parameters('$authentication')"
+                },
+                "description": "Crée un nouveau stagiaire"
+              },
+              "Condition_Parcours_Nouveau": {
+                "runAfter": {
+                  "Creer_Stagiaire": [
+                    "Succeeded"
+                  ]
+                },
+                "type": "If",
+                "expression": {
+                  "and": [
+                    {
+                      "equals": [
+                        "@triggerBody()?['parcours']",
+                        "stages"
+                      ]
+                    }
+                  ]
+                },
+                "description": "Parcours stages ou modules ? (nouveau stagiaire)",
+                "actions": {
+                  "Requete_HTTP_Creneaux_Nouveau": {
+                    "runAfter": {},
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "parameters": {
+                        "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                        "parameters/method": "GET",
+                        "parameters/uri": "@concat('_api/web/lists(guid''3e2deb27-f496-410f-be74-281eb2b0c079'')/items?$select=Id&$filter=Secteur eq ''', triggerBody()?['secteur'], ''' and DateDebut le ''', triggerBody()?['dateDebut'], ''' and DateFin ge ''', triggerBody()?['dateDebut'], '''&$top=1')"
+                      },
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                        "connectionName": "shared_sharepointonline",
+                        "operationId": "HttpRequest"
+                      },
+                      "authentication": "@parameters('$authentication')"
+                    },
+                    "description": "Cherche le créneau Stage matching (Secteur + date dans la plage)"
+                  },
+                  "Creer_Demande_Stage_Nouveau": {
+                    "runAfter": {
+                      "Requete_HTTP_Creneaux_Nouveau": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "parameters": {
+                        "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                        "table": "9616ee1d-dd0b-44fd-a1c4-34187ebaa9f8",
+                        "item/StagiaireID/Id": "@outputs('Creer_Stagiaire')?['body/ID']",
+                        "item/TypeDemande/Value": "Stage",
+                        "item/Secteur": "@triggerBody()?['secteur']",
+                        "item/DateDebutSouhaitee": "@triggerBody()?['dateDebut']",
+                        "item/ObjectifStage": "@triggerBody()?['objectif_stage']",
+                        "item/DejaStage": "@if(equals(triggerBody()?['deja_stages_secteur'], 'Oui'), true, false)",
+                        "item/Statut/Value": "En attente des documents",
+                        "item/Limitations": "@triggerBody()?['limitations']",
+                        "item/ParcoursScolaire": "@triggerBody()?['parcours_scolaire']",
+                        "item/CreneauID/Id": "@first(body('Requete_HTTP_Creneaux_Nouveau')?['d']?['results'])?['Id']"
+                      },
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                        "connectionName": "shared_sharepointonline",
+                        "operationId": "PostItem"
+                      },
+                      "authentication": "@parameters('$authentication')"
+                    },
+                    "description": "Crée la Demande Stage (Nouveau)"
+                  },
+                  "Condition_Referent_Stage_Nouveau": {
+                    "runAfter": {
+                      "Creer_Demande_Stage_Nouveau": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "If",
+                    "expression": {
+                      "and": [
+                        {
+                          "equals": [
+                            "@triggerBody()?['pourQui']",
+                            "autre"
+                          ]
+                        }
+                      ]
+                    },
+                    "actions": {
+                      "Creer_Referent_Stage_Nouveau": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                            "table": "7a31b912-99af-4415-bfc9-f2ae1cb19c00",
+                            "item/Partenaire": "@triggerBody()?['referent_partenaire']",
+                            "item/Fonction/Value": "@triggerBody()?['referent_fonction']",
+                            "item/Nom": "@triggerBody()?['referent_nom']",
+                            "item/Prenom": "@triggerBody()?['referent_prenom']",
+                            "item/NumTel": "@triggerBody()?['referent_tel']",
+                            "item/Mail": "@triggerBody()?['referent_email']",
+                            "item/StagiaireID/Id": "@outputs('Creer_Stagiaire')?['body/ID']"
+                          },
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                            "connectionName": "shared_sharepointonline",
+                            "operationId": "PostItem"
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        },
+                        "description": "Crée le Référent Stage (Nouveau)"
+                      }
+                    },
+                    "else": {
+                      "actions": {}
+                    },
+                    "description": "Si pourQui=autre → créer Référent"
+                  },
+                  "Email_Stage_Nouveau": {
+                    "runAfter": {
+                      "Condition_Referent_Stage_Nouveau": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "parameters": {
+                        "emailMessage/To": "@if(equals(triggerBody()?['pourQui'], 'autre'), triggerBody()?['referent_email'], triggerBody()?['email'])",
+                        "emailMessage/Subject": "@concat('[AVS-756.XXXX.XXXX.', substring(triggerBody()?['avs'], sub(length(triggerBody()?['avs']), 2)), ' D°', outputs('Creer_Demande_Stage_Nouveau')?['body/ID'], '] Documents requis pour ', triggerBody()?['nom'], ' ', triggerBody()?['prenom'])",
+                        "emailMessage/Body": "<p>Bonjour,<br><br>Merci pour votre demande de pré-inscription pour @{triggerBody()?['prenom']} @{triggerBody()?['nom']}.<br><br>Veuillez s'il vous plaît <b>répondre</b> à ce mail avec les documents en pièce jointe.<br><br>- Copie de la pièce d'identité<br>- Copie de la charte signée<br><br>Avec nos meilleures salutations,<br><br>Clair-Bois<br><br><i>Attention : Cette adresse ne peut pas recevoir de Mail en dehors d'une réponse</i></p>",
+                        "emailMessage/Importance": "Normal"
+                      },
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                        "connectionName": "shared_office365",
+                        "operationId": "SendEmailV2"
+                      },
+                      "authentication": "@parameters('$authentication')"
+                    },
+                    "description": "Email demande de documents (stage)"
+                  }
+                },
+                "else": {
+                  "actions": {
+                    "Condition_Referent_Module_Nouveau": {
+                      "runAfter": {},
+                      "type": "If",
+                      "expression": {
+                        "and": [
+                          {
+                            "equals": [
+                              "@triggerBody()?['pourQui']",
+                              "autre"
+                            ]
+                          }
+                        ]
+                      },
+                      "actions": {
+                        "Creer_Referent_Module_Nouveau": {
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "parameters": {
+                              "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                              "table": "7a31b912-99af-4415-bfc9-f2ae1cb19c00",
+                              "item/Partenaire": "@triggerBody()?['referent_partenaire']",
+                              "item/Fonction/Value": "@triggerBody()?['referent_fonction']",
+                              "item/Nom": "@triggerBody()?['referent_nom']",
+                              "item/Prenom": "@triggerBody()?['referent_prenom']",
+                              "item/NumTel": "@triggerBody()?['referent_tel']",
+                              "item/Mail": "@triggerBody()?['referent_email']",
+                              "item/StagiaireID/Id": "@outputs('Creer_Stagiaire')?['body/ID']"
+                            },
+                            "host": {
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                              "connectionName": "shared_sharepointonline",
+                              "operationId": "PostItem"
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          },
+                          "description": "Crée le Référent Modules (Nouveau)"
+                        }
+                      },
+                      "else": {
+                        "actions": {}
+                      },
+                      "description": "Si pourQui=autre → créer Référent (modules)"
+                    },
+                    "Pour_Chaque_Module_Nouveau": {
+                      "runAfter": {
+                        "Condition_Referent_Module_Nouveau": [
+                          "Succeeded"
+                        ]
+                      },
+                      "type": "Foreach",
+                      "foreach": "@triggerBody()?['modules']",
+                      "actions": {
+                        "Requete_Creneau_Module_Nouveau": {
+                          "runAfter": {},
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "parameters": {
+                              "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                              "parameters/method": "GET",
+                              "parameters/uri": "@concat('_api/web/lists(guid''3e2deb27-f496-410f-be74-281eb2b0c079'')/items?$select=Id&$filter=NomModule eq ''', items('Pour_Chaque_Module_Nouveau')?['nom'], ''' and DateDebut le ''', items('Pour_Chaque_Module_Nouveau')?['dateDebut'], ''' and DateFin ge ''', items('Pour_Chaque_Module_Nouveau')?['dateDebut'], '''&$top=1')"
+                            },
+                            "host": {
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                              "connectionName": "shared_sharepointonline",
+                              "operationId": "HttpRequest"
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          },
+                          "description": "Cherche le créneau Module métier matching (NomModule + date)"
+                        },
+                        "Creer_Demande_Module_Nouveau": {
+                          "runAfter": {
+                            "Requete_Creneau_Module_Nouveau": [
+                              "Succeeded"
+                            ]
+                          },
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "parameters": {
+                              "dataset": "https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe",
+                              "table": "9616ee1d-dd0b-44fd-a1c4-34187ebaa9f8",
+                              "item/StagiaireID/Id": "@outputs('Creer_Stagiaire')?['body/ID']",
+                              "item/TypeDemande/Value": "Module métier",
+                              "item/Secteur": "@items('Pour_Chaque_Module_Nouveau')?['nom']",
+                              "item/DateDebutSouhaitee": "@items('Pour_Chaque_Module_Nouveau')?['dateDebut']",
+                              "item/Statut/Value": "En attente des documents",
+                              "item/Limitations": "@triggerBody()?['limitations']",
+                              "item/ParcoursScolaire": "@triggerBody()?['parcours_scolaire']",
+                              "item/CreneauID/Id": "@first(body('Requete_Creneau_Module_Nouveau')?['d']?['results'])?['Id']"
+                            },
+                            "host": {
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                              "connectionName": "shared_sharepointonline",
+                              "operationId": "PostItem"
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          },
+                          "description": "Crée la Demande Module (Nouveau) — 1 par module sélectionné"
+                        }
+                      },
+                      "description": "Boucle sur les modules sélectionnés (max 3) — crée 1 Demande par module"
+                    },
+                    "Email_Modules_Nouveau": {
+                      "runAfter": {
+                        "Pour_Chaque_Module_Nouveau": [
+                          "Succeeded"
+                        ]
+                      },
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "emailMessage/To": "@if(equals(triggerBody()?['pourQui'], 'autre'), triggerBody()?['referent_email'], triggerBody()?['email'])",
+                          "emailMessage/Subject": "@concat('[Modules métiers] Inscription de ', triggerBody()?['prenom'], ' ', triggerBody()?['nom'], ' — ', string(length(triggerBody()?['modules'])), ' module(s)')",
+                          "emailMessage/Body": "<p>Bonjour,<br><br>Merci pour votre demande de pré-inscription pour @{triggerBody()?['prenom']} @{triggerBody()?['nom']}.<br><br>Veuillez s'il vous plaît <b>répondre</b> à ce mail avec les documents en pièce jointe.<br><br>- Copie de la pièce d'identité<br>- Copie de la charte signée<br><br>Avec nos meilleures salutations,<br><br>Clair-Bois<br><br><i>Attention : Cette adresse ne peut pas recevoir de Mail en dehors d'une réponse</i></p>",
+                          "emailMessage/Importance": "Normal"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                          "connectionName": "shared_office365",
+                          "operationId": "SendEmailV2"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "description": "Email récapitulatif inscription modules"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "Reponse_HTTP": {
+          "runAfter": {
+            "Condition_AVS_Existe": [
+              "Succeeded"
+            ]
+          },
+          "type": "Response",
+          "kind": "Http",
+          "inputs": {
+            "statusCode": 200,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "success": true,
+              "message": "Demande enregistrée avec succès"
+            }
+          },
+          "description": "Réponse HTTP 200 au frontend React"
+        }
+      },
+      "outputs": {}
+    },
+    "connectionReferences": {
+      "shared_sharepointonline": {
+        "connectionName": "shared-sharepointonl-9d5444a2-e35b-4b0c-a114-8022d6b1ace5",
+        "source": "Embedded",
+        "id": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+        "tier": "NotSpecified",
+        "apiName": "sharepointonline"
+      },
+      "shared_office365": {
+        "connectionName": "shared-office365-8dbff9e2-9647-451f-91d1-c3bf46cb4559",
+        "source": "Embedded",
+        "id": "/providers/Microsoft.PowerApps/apis/shared_office365",
+        "tier": "NotSpecified",
+        "apiName": "office365"
+      }
+    },
+    "flowFailureAlertSubscribed": false,
+    "isManaged": false
+  }
+}
