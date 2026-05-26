@@ -4,33 +4,24 @@
  * Chaque plan metier regroupe des tables (etablissements/secteurs) avec
  * des places typees (FPRA, AFP/CFC, Stage/Mes., CEA, App.non-DFIP, MSP/MSTS).
  *
- * Systeme de couleurs statut (decisions reunions Karavia, 6 mai 2026) :
- *   Vert   = aucun stage prevu sur toute l'annee
+ * Systeme de couleurs statut (decisions reunions Karavia, 19 mai 2026) :
+ *   Vert   = libre, aucune reservation prevue
  *   Rouge  = occupe aujourd'hui (dateDebut <= today <= dateFin)
  *   Orange = libre aujourd'hui mais reservations futures enregistrees
+ *   Gris   = indisponible (ex: formateur en arret longue duree) — place conservee
  *
  * Le type de place s'affiche directement dans le cercle (ex. "FPra", "Stage 1").
  * Les poles Educatif enfance-ado et adulte ont deux categories supplementaires :
  * App.non-DFIP et MSP/MSTS (apprentis/stagiaires hors DFIP, budget fondation).
  *
- * Donnees mock — seront remplacees par carto.json pousse via Power Automate
- * depuis les SP Lists "contenant" (structure) et "demandes" (occupations).
+ * Donnees chargees depuis carto.json pousse via Power Automate
+ * depuis les SP Lists "Cartographie" (structure) et "Demande" (occupations).
  *
  * @param {Function} props.onGoHome — retour a la page d'accueil du site
  * @param {Function} props.onLogout — deconnexion (efface le token)
  */
 import { useState, useRef, useEffect } from 'react'
-import {
-  UtensilsCrossed,
-  ChefHat,
-  Shirt,
-  Wrench,
-  GraduationCap,
-  Home,
-  ChevronRight,
-  ChevronLeft,
-  LogOut,
-} from 'lucide-react'
+import { ChevronRight, ChevronLeft, LogOut } from 'lucide-react'
 
 // ──────────────────────────────────────────────
 // Types de places
@@ -50,12 +41,13 @@ const TYPES_PLACE = {
 // ──────────────────────────────────────────────
 
 const SITES = {
-  CBC: { nom: 'Chambesy',   couleur: '#2563eb' },
-  CBL: { nom: 'Lancy',      couleur: '#7c3aed' },
-  CBG: { nom: 'Gradelle',   couleur: '#059669' },
-  CBM: { nom: 'Minoteries', couleur: '#d97706' },
-  CBP: { nom: 'Pinchat',    couleur: '#dc2626' },
-  CBT: { nom: 'Tourbillon', couleur: '#0891b2' },
+  CBC:  { nom: 'Chambézy',   couleur: '#2563eb' },
+  CBL:  { nom: 'Lancy',      couleur: '#7c3aed' },
+  CBG:  { nom: 'Gradelle',   couleur: '#059669' },
+  CBM:  { nom: 'Minoteries', couleur: '#d97706' },
+  CBP:  { nom: 'Pinchat',    couleur: '#dc2626' },
+  CBT:  { nom: 'Tourbillon', couleur: '#0891b2' },
+  CB2K: { nom: 'CB2000',     couleur: '#db2777' },
 }
 
 // ──────────────────────────────────────────────
@@ -63,16 +55,16 @@ const SITES = {
 // ──────────────────────────────────────────────
 
 function placeLibre(type) {
-  return { type, occupee: false, reservationsFutures: [] }
+  return { type, occupee: false, indisponible: false, reservationsFutures: [] }
 }
 
 function placeOccupee(type, prenom, dateDebut, dateFin) {
-  return { type, occupee: true, prenom, dateDebut, dateFin }
+  return { type, occupee: true, indisponible: false, prenom, dateDebut, dateFin }
 }
 
 // Place libre aujourd'hui mais avec reservations futures (orange)
 function placeOrange(type, reservationsFutures) {
-  return { type, occupee: false, reservationsFutures }
+  return { type, occupee: false, indisponible: false, reservationsFutures }
 }
 
 // ──────────────────────────────────────────────
@@ -80,6 +72,7 @@ function placeOrange(type, reservationsFutures) {
 // ──────────────────────────────────────────────
 
 function statutPlace(place) {
+  if (place.indisponible) return 'gris'
   if (place.occupee) return 'rouge'
   if (place.reservationsFutures?.length > 0) return 'orange'
   return 'vert'
@@ -105,22 +98,15 @@ const ETAB_TO_SITE = {
   Minoteries: 'CBM',
   Pinchat:    'CBP',
   Tourbillon: 'CBT',
+  CB2000:     'CB2K',
 }
 
-const PLAN_CONFIG = {
-  'Restauration':     { id: 'restauration',    icone: UtensilsCrossed, nom: 'Restauration',                        description: 'Service en salle, restaurants et pâtisserie-boulangerie' },
-  'Cuisine':          { id: 'cuisine',          icone: ChefHat,         nom: 'Cuisine',                             description: 'Brigades de cuisine des cinq établissements' },
-  'Lingerie':         { id: 'lingerie',         icone: Shirt,           nom: 'Lingerie',                            description: 'Lingerie et confection' },
-  'Technique':        { id: 'technique',        icone: Wrench,          nom: 'Technique',                           description: 'Exploitation, nettoyage, peinture, audio-visuel, graphisme, médiamatique, informatique, ateliers' },
-  'Educatif-Enfance': { id: 'educatif-enfance', icone: GraduationCap,   nom: 'Éducatif — Pôle enfance-adolescence', description: 'Classes et groupes des écoles spécialisées' },
-  'Educatif-Adulte':  { id: 'educatif-adulte',  icone: Home,            nom: 'Éducatif — Pôle adulte',              description: 'Appartements et centres de jour pour adultes' },
-}
 
 // ──────────────────────────────────────────────
 // Transformation carto.json → structure React
 // ──────────────────────────────────────────────
 
-function buildPlaces(placesMax, reservations) {
+function buildPlaces(placesMax, reservations, indisponibles = {}) {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
   const places = []
@@ -159,30 +145,55 @@ function buildPlaces(placesMax, reservations) {
     }
   }
 
+  // Places indisponibles (gris) — ex: formateur en arret longue duree
+  for (const [spKey, count] of Object.entries(indisponibles)) {
+    if (!count) continue
+    const code = TYPE_SP_TO_CODE[spKey]
+    if (!code) continue
+    for (let i = 0; i < count; i++) {
+      places.push({ type: code, occupee: false, indisponible: true, reservationsFutures: [] })
+    }
+  }
+
   return places
 }
 
 function cartoJsonToPlans(data) {
-  if (!data?.tables) return []
+  if (!data?.tables || !data?.plans) return []
+
+  const metaMap = {}
+  for (const p of data.plans) {
+    metaMap[p.titre] = p
+  }
+
   const planMap = {}
-
   for (const table of data.tables) {
-    const cfg = PLAN_CONFIG[table.plan]
-    if (!cfg) continue
-    if (!planMap[table.plan]) planMap[table.plan] = { ...cfg, tables: [] }
-
+    const meta = metaMap[table.plan]
+    if (!meta) continue
+    if (!planMap[table.plan]) {
+      planMap[table.plan] = {
+        id: table.plan.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+        nom: meta.nom,
+        icone: meta.icone,
+        description: meta.description,
+        ordre: meta.ordre,
+        tables: [],
+      }
+    }
     const site = ETAB_TO_SITE[table.etablissement]
     if (!site) continue
-
     planMap[table.plan].tables.push({
       site,
       secteur: table.secteur,
       commentaire: table.commentaire || '',
-      places: buildPlaces(table.placesMax, table.reservations),
+      places: buildPlaces(table.placesMax, table.reservations || [], table.placesIndisponibles || {}),
     })
   }
 
-  return Object.keys(PLAN_CONFIG).filter((k) => planMap[k]).map((k) => planMap[k])
+  return data.plans
+    .filter((p) => planMap[p.titre])
+    .sort((a, b) => (a.ordre || 0) - (b.ordre || 0))
+    .map((p) => planMap[p.titre])
 }
 
 // ──────────────────────────────────────────────
@@ -196,7 +207,7 @@ function toutesLesPlaces(plan) {
 function decompteParType(plan) {
   const initial = { FPRA: 0, AFP_CFC: 0, STAGE: 0, CEA: 0, APP_NON_DFIP: 0, STAGIAIRE_MSTS: 0 }
   return toutesLesPlaces(plan)
-    .filter((p) => !p.occupee)
+    .filter((p) => !p.occupee && !p.indisponible)
     .reduce((acc, p) => {
       if (p.type in acc) acc[p.type]++
       return acc
@@ -213,14 +224,16 @@ function totalParType(plan) {
 function statsGlobales(plans) {
   const toutes = plans.flatMap((p) => toutesLesPlaces(p))
   const total = toutes.length
-  const libres = toutes.filter((p) => !p.occupee).length
-  const occupees = total - libres
-  const pourcentageOccupation = total > 0 ? Math.round((occupees / total) * 100) : 0
-  return { total, libres, occupees, pourcentageOccupation }
+  const indisponibles = toutes.filter((p) => p.indisponible).length
+  const actives = toutes.filter((p) => !p.indisponible)
+  const libres = actives.filter((p) => !p.occupee).length
+  const occupees = actives.filter((p) => p.occupee).length
+  const pourcentageOccupation = actives.length > 0 ? Math.round((occupees / actives.length) * 100) : 0
+  return { total, libres, occupees, indisponibles, pourcentageOccupation }
 }
 
 function statutCouleur(plan) {
-  const places = toutesLesPlaces(plan)
+  const places = toutesLesPlaces(plan).filter((p) => !p.indisponible)
   if (places.length === 0) return 'gris'
   const libres = places.filter((p) => !p.occupee).length
   const ratio = libres / places.length
@@ -256,14 +269,15 @@ const COULEURS_STAT = {
 // ──────────────────────────────────────────────
 
 function statutCouleurStats(stats) {
-  if (stats.total === 0) return 'gris'
+  const actives = stats.total - (stats.indisponibles || 0)
+  if (actives === 0) return 'gris'
   if (stats.libres === 0) return 'rouge'
-  if (stats.libres / stats.total > 0.5) return 'vert'
+  if (stats.libres / actives > 0.5) return 'vert'
   return 'orange'
 }
 
 function HeaderStatsGlobales({ stats }) {
-  const { total, libres, occupees, pourcentageOccupation } = stats
+  const { total, libres, occupees, indisponibles, pourcentageOccupation } = stats
   const couleur = COULEURS_BLOC[statutCouleurStats(stats)]
 
   return (
@@ -285,6 +299,13 @@ function HeaderStatsGlobales({ stats }) {
           <span className="text-2xl font-bold text-gray-500 leading-none">{occupees}</span>
           <span className="text-xs uppercase tracking-wide font-semibold text-gray-500">occupées</span>
         </div>
+
+        {indisponibles > 0 && (
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-2xl font-bold text-gray-400 leading-none">{indisponibles}</span>
+            <span className="text-xs uppercase tracking-wide font-semibold text-gray-400">indisponibles</span>
+          </div>
+        )}
 
         <div className="flex-1 min-w-[180px] flex items-center gap-3">
           <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -313,14 +334,12 @@ function HeaderStatsGlobales({ stats }) {
 function CartePlan({ plan, onOuvrir, cardRef }) {
   const places = toutesLesPlaces(plan)
   const total = places.length
-  const libres = places.filter((p) => !p.occupee).length
+  const libres = places.filter((p) => !p.occupee && !p.indisponible).length
   const decompte = decompteParType(plan)
   const totaux = totalParType(plan)
   const couleur = COULEURS_BLOC[statutCouleur(plan)]
 
   const typesPresents = Object.keys(TYPES_PLACE).filter((t) => (totaux[t] || 0) > 0)
-
-  const Icone = plan.icone
 
   return (
     <button
@@ -338,10 +357,10 @@ function CartePlan({ plan, onOuvrir, cardRef }) {
       <div className="p-5 flex flex-col gap-4 flex-1">
         <div className="flex items-start gap-3 min-w-0">
           <span
-            className={`flex-shrink-0 transform group-hover:scale-110 transition-transform duration-300 ${couleur.text}`}
+            className="flex-shrink-0 text-3xl transform group-hover:scale-110 transition-transform duration-300 leading-none"
             aria-hidden="true"
           >
-            <Icone size={32} strokeWidth={2} />
+            {plan.icone}
           </span>
           <div className="min-w-0 flex-1">
             <h3 className="font-bold text-gray-900 text-lg leading-tight">{plan.nom}</h3>
@@ -394,26 +413,24 @@ function CartePlan({ plan, onOuvrir, cardRef }) {
 // ──────────────────────────────────────────────
 // Composant — Place individuelle
 //
-// Le type s'affiche dans le cercle (ex. "FPra", "Stage 1").
-// La couleur indique le statut :
+// Cercle de 56px (w-14 h-14), type dans le cercle.
+// Statuts :
 //   Vert   = libre toute l'annee
 //   Rouge  = occupe aujourd'hui
 //   Orange = libre aujourd'hui, reservations futures
+//   Gris   = indisponible (formateur absent, etc.)
 //
-// Tooltip :
-//   Rouge  → prenom + dates
-//   Orange → liste des reservations planifiees
-//   Vert   → aucun tooltip
+// Tooltip : Rouge → prenom + dates / Orange → reservations planifiees
 // ──────────────────────────────────────────────
 
-function Place({ place, label, commentaire }) {
+function Place({ place, label }) {
   const [visible, setVisible] = useState(false)
   const [posBas, setPosBas] = useState(false)
   const refSiege = useRef(null)
   const statut = statutPlace(place)
 
   function ouvrir() {
-    if (statut === 'vert') return
+    if (statut === 'vert' || statut === 'gris') return
     if (refSiege.current) {
       const r = refSiege.current.getBoundingClientRect()
       setPosBas(r.top < 120)
@@ -425,15 +442,15 @@ function Place({ place, label, commentaire }) {
   const couleurFond =
     statut === 'rouge'  ? 'bg-cb-red text-white border-cb-red shadow-md' :
     statut === 'orange' ? 'bg-cb-orange text-white border-cb-orange shadow-md' :
+    statut === 'gris'   ? 'bg-gray-300 text-gray-500 border-gray-300' :
                           'bg-cb-green text-white border-cb-green shadow-md carto-seat-pulse'
 
-  // Taille de police selon longueur du label
   const len = label.length
   const textSize =
-    len > 9 ? 'text-[7px]' :
-    len > 6 ? 'text-[9px]' :
-    len > 4 ? 'text-[10px]' :
-              'text-xs'
+    len > 9 ? 'text-[9px]' :
+    len > 6 ? 'text-[10px]' :
+    len > 4 ? 'text-xs' :
+              'text-sm'
 
   return (
     <div className="relative inline-flex flex-col items-center">
@@ -444,19 +461,19 @@ function Place({ place, label, commentaire }) {
         onMouseLeave={fermer}
         onFocus={ouvrir}
         onBlur={fermer}
-        className={`w-12 h-12 rounded-full border-2 ${couleurFond}
+        className={`w-14 h-14 rounded-full border-2 ${couleurFond}
                     font-bold flex items-center justify-center text-center
                     leading-tight px-1 transition-transform duration-200
-                    ${statut !== 'vert' ? 'cursor-help hover:scale-110' : 'cursor-default'}
+                    ${statut === 'rouge' || statut === 'orange' ? 'cursor-help hover:scale-110' : 'cursor-default'}
                     focus:outline-none focus:ring-2 focus:ring-cb-blue focus:ring-offset-2`}
-        title={commentaire || undefined}
         aria-label={
-          (statut === 'rouge'
+          statut === 'rouge'
             ? `Place occupée par ${place.prenom}, du ${formatDateCourt(place.dateDebut)} au ${formatDateCourt(place.dateFin)}`
             : statut === 'orange'
               ? `Place libre avec ${place.reservationsFutures.length} réservation(s) prévue(s) — ${label}`
-              : `Place libre — ${TYPES_PLACE[place.type].long}`
-          ) + (commentaire ? ` — Note: ${commentaire}` : '')
+              : statut === 'gris'
+                ? `Place indisponible — ${TYPES_PLACE[place.type].long}`
+                : `Place libre — ${TYPES_PLACE[place.type].long}`
         }
       >
         <span className={`${textSize} font-bold`}>{label}</span>
@@ -509,15 +526,15 @@ function Place({ place, label, commentaire }) {
 // ──────────────────────────────────────────────
 // Composant — Table (etablissement + secteur)
 //
-// Calcule le label de chaque place : type + numero si
-// plusieurs places du meme type dans la meme table.
-// Ex. deux STAGE → "Stage/Mes. 1" et "Stage/Mes. 2".
+// La bulle commentaire (!) s'affiche dans l'en-tete si
+// table.commentaire est non vide (survol → texte complet).
 // ──────────────────────────────────────────────
 
 function Table({ table }) {
   const site = SITES[table.site]
   const places = table.places
-  const libres = places.filter((p) => !p.occupee).length
+  const actives = places.filter((p) => !p.indisponible)
+  const libres = actives.filter((p) => !p.occupee).length
   const total = places.length
 
   // Compte combien de fois chaque type apparait dans cette table
@@ -546,7 +563,7 @@ function Table({ table }) {
     rangeeBas = placesAvecLabel.slice(moitie)
   }
 
-  const ratio = total > 0 ? libres / total : 0
+  const ratio = actives.length > 0 ? libres / actives.length : 0
   const bordureTable =
     libres === 0 ? 'border-cb-red/30' :
     ratio > 0.5  ? 'border-cb-green/30' :
@@ -566,6 +583,16 @@ function Table({ table }) {
             <h4 className="font-semibold text-sm text-gray-900 leading-tight truncate">{site.nom}</h4>
             <p className="text-xs text-gray-500 truncate">{table.secteur}</p>
           </div>
+          {table.commentaire && (
+            <span
+              className="flex-shrink-0 ml-1 w-6 h-6 rounded-full bg-amber-100 border border-amber-300
+                         text-amber-700 text-xs font-bold flex items-center justify-center cursor-help"
+              title={table.commentaire}
+              aria-label={`Note : ${table.commentaire}`}
+            >
+              !
+            </span>
+          )}
         </div>
         <span
           className={`text-xs font-semibold px-2 py-1 rounded-full flex-shrink-0
@@ -582,12 +609,11 @@ function Table({ table }) {
       {rangeeHaut.length > 0 && (
         <div className="flex flex-wrap justify-center gap-3 mb-3">
           {rangeeHaut.map((p, i) => (
-            <Place key={`h-${i}`} place={p} label={p._label} commentaire={table.commentaire} />
+            <Place key={`h-${i}`} place={p} label={p._label} />
           ))}
         </div>
       )}
 
-      {/* Bloc central de la table (sans le mot "Tablee") */}
       <div
         className={`relative mx-auto rounded-full border-2 border-dashed ${bordureTable}
                     bg-gradient-to-br from-amber-50 via-orange-50/40 to-amber-50
@@ -605,7 +631,7 @@ function Table({ table }) {
       {rangeeBas.length > 0 && (
         <div className="flex flex-wrap justify-center gap-3 mt-3">
           {rangeeBas.map((p, i) => (
-            <Place key={`b-${i}`} place={p} label={p._label} commentaire={table.commentaire} />
+            <Place key={`b-${i}`} place={p} label={p._label} />
           ))}
         </div>
       )}
@@ -624,11 +650,11 @@ function LegendePlaces({ typesPresents }) {
     { statut: 'vert',   bg: 'bg-cb-green',  label: 'Libre' },
     { statut: 'orange', bg: 'bg-cb-orange', label: 'Réservations futures' },
     { statut: 'rouge',  bg: 'bg-cb-red',    label: 'Occupé aujourd\'hui' },
+    { statut: 'gris',   bg: 'bg-gray-300',  label: 'Indisponible' },
   ]
 
   return (
     <div className="border-t border-gray-200 pt-5 mt-8 space-y-4">
-      {/* Legende couleurs statut */}
       <div>
         <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-2">
           Statut des places
@@ -643,7 +669,6 @@ function LegendePlaces({ typesPresents }) {
         </div>
       </div>
 
-      {/* Legende types de places */}
       <div>
         <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-2">
           Types de places
@@ -673,14 +698,12 @@ function LegendePlaces({ typesPresents }) {
 function VueDetailPlan({ plan, onRetour }) {
   const places = toutesLesPlaces(plan)
   const total = places.length
-  const libres = places.filter((p) => !p.occupee).length
+  const libres = places.filter((p) => !p.occupee && !p.indisponible).length
   const decompte = decompteParType(plan)
   const totaux = totalParType(plan)
   const couleur = COULEURS_BLOC[statutCouleur(plan)]
 
   const typesPresents = Object.keys(TYPES_PLACE).filter((t) => (totaux[t] || 0) > 0)
-
-  const Icone = plan.icone
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto">
@@ -699,8 +722,8 @@ function VueDetailPlan({ plan, onRetour }) {
         <div className={`h-2 w-full ${couleur.bandeau}`} aria-hidden="true" />
         <div className="p-5 sm:p-6">
           <div className="flex items-start gap-4 mb-4">
-            <span className={`flex-shrink-0 ${couleur.text}`} aria-hidden="true">
-              <Icone size={52} strokeWidth={2} />
+            <span className="flex-shrink-0 text-5xl leading-none" aria-hidden="true">
+              {plan.icone}
             </span>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">

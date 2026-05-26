@@ -12,7 +12,8 @@
 | `flux3b-trigger-creneaux.zip` | Flux 3b | Variante | Polling SP | Variante Flux 3 |
 | `flux4-gestion-creneaux.zip` | Flux 4 | **Opérationnel** | Forms webhook | Gestion créneaux |
 | `Test_20260306125936.zip` | Test | Test | — | Test initial |
-| `flux5-http-inscription.zip` | **Flux 5 (NOUVEAU)** | **À importer** | HTTP POST | Formulaire React → SP |
+| `flux5-http-inscription.zip` | **Flux 5** | **Opérationnel** | HTTP POST | Formulaire React → SP |
+| `flux-carto.zip` | **Flux 6 — Flux Carto** | **✅ À importer** | Récurrence horaire | PlacesCarto + PlanMetierCarto → carto.json → GitHub |
 
 ## Structure d'un ZIP Power Automate
 
@@ -49,6 +50,8 @@ flux-xxx.zip
 | Demande | `9616ee1d-dd0b-44fd-a1c4-34187ebaa9f8` | Demandes de stage/modules |
 | Referent | `7a31b912-99af-4415-bfc9-f2ae1cb19c00` | Référents externes |
 | Creneaux | `3e2deb27-f496-410f-be74-281eb2b0c079` | Créneaux de disponibilité |
+| PlacesCarto | (SP DFIP RH) | Capacités par table — PlanMetier Lookup, PlacesMax_*, PlacesIndisp_FPRA |
+| PlanMetierCarto | (SP DFIP RH) | Référentiel 9 plans métier (Titre clé, Icone, Description, Ordre) |
 
 ## Scripts de construction
 
@@ -61,6 +64,7 @@ flux-xxx.zip
 | `build-flux3b.js` | Flux 3b | Variante Flux 3 |
 | `build-flux4.js` | Flux 4 | Gestion créneaux |
 | `build-flux5-http.js` | **Flux 5** | **HTTP trigger (formulaire React)** |
+| `build-flux-carto.js` | **Flux 6** | **Génération carto.json depuis PlacesCarto + PlanMetierCarto** |
 
 ## Mapping React → SharePoint (Flux 5)
 

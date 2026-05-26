@@ -102,8 +102,8 @@ Adaptation visuelle pour cohérence avec le site officiel WordPress/Divi :
 - **Footer** : 3 colonnes (adresse + foyers + entreprises sociales), fond `#434343`
 - **Illustrations** : Storyset (Freepik), recolorisées en `#092C6A`, style Rafiki
 - **Nom officiel** : "Fondation Clair Bois" (sans tiret)
-- **Tests** : 217 tests Vitest (helpers, validation, formConfig, formulaire, modules, signalement, cartographie)
-- **Icônes** : `lucide-react` (UtensilsCrossed, ChefHat, Shirt, Wrench, GraduationCap, Home, ChevronRight, ChevronLeft, LogOut) — utilisées dans la cartographie
+- **Tests** : 222 tests Vitest (helpers, validation, formConfig, formulaire, modules, signalement, **29 tests cartographie**)
+- **Icônes** : `lucide-react` — uniquement `ChevronRight, ChevronLeft, LogOut` depuis refonte 19 mai (UtensilsCrossed, ChefHat etc. supprimés — remplacés par emojis SP)
 - **Documentation** : `docs/architecture-frontend.html` — architecture interactive
 
 ## Couleurs du code de disponibilité
@@ -200,24 +200,26 @@ src/utils/
 
 **Hébergement cible** : Azure Static Web Apps (tenant Microsoft Clair-Bois)
 
-## Cartographie privée (refonte 6 mai 2026)
+## Cartographie privée (refonte plans métier — 19 mai 2026)
 
-Suite à la réunion du 13 avril 2026 (`docs/transcription-karavia3.txt`), le composant `Cartographie.jsx` a été **complètement refondu**. L'ancien prototype "board des 6 sites" est conservé en référence sous `Cartographie.backup-prototype.jsx` (non importé, supprimable). La nouvelle version implémente l'analogie demandée par Mme Karavia : un **plan de table de mariage** par métier, où chaque table = un établissement et chaque siège = une place de stage typée.
+`Cartographie.jsx` entièrement **data-driven** depuis `carto.json` (chargé via `fetch`). Plus de `PLAN_CONFIG` hardcodé. Les plans sont lus depuis `data.plans[]` (généré par Flux 6 PA depuis `PlanMetierCarto` SP).
 
 ### Vue d'ensemble
-- **Page privée** : protégée par mot de passe, réservée à la coordination DFIP (Karavia + collègues).
-- **6 plans métier** (dans cet ordre, fixé par la transcription du 13 avril) :
-  1. Restauration
-  2. Cuisine
-  3. Lingerie
-  4. Technique
-  5. Éducatif Pôle enfance-adolescence
-  6. Éducatif Pôle adulte
-  - Éducatif est volontairement **en dernier** (consigne Karavia : ne pas commencer par ASA/ASE/ASSC) et **éclaté en deux plans distincts** (enfance-adolescence et adulte) traités comme deux entités à part entière.
-- **6 établissements** (CBC, CBL, CBG, CBM, CBP, CBT) représentés comme tables sur chaque plan métier concerné — motif "bois" pour la métaphore physique.
-- **Sièges** = places typées **FPra / AFP-CFC / Stage / CEA** disposées autour de la table, codés vert (libre) / rouge (occupée). Les types **AFP** et **CFC** sont fusionnés en `AFP_CFC` conformément à la transcription Karavia (lignes 264-267 — "formateur OFPC requis").
-- Hover/focus sur un siège rouge → **tooltip** avec nom du stagiaire, dates, typologie (Mesure d'orientation, Stage découverte, Formation pratique, AFP, CFC, Contrat emploi adapté).
-- **~132 places mockées en dur** dans le composant : ~30 % occupées, réparties pour exposer les trois codes couleur — **4 plans verts, 2 oranges (Cuisine, Éducatif enfance), 1 rouge (Lingerie complète)**.
+- **Page privée** : protégée par mot de passe, réservée à la coordination DFIP.
+- **9 plans métier** (ordre fixé par `PlanMetierCarto.Ordre`) :
+  1. Restauration 🍽️
+  2. Boulangerie / Pâtisserie 🥐 (NOUVEAU — séparé de Restauration)
+  3. Cuisine 👨‍🍳
+  4. Lingerie et Confection 👕
+  5. Services Généraux 🔧 (ex-Technique)
+  6. Multimédia 🎥 (EXECO, Atypique, C'REDAC', Atypique-Médiamatique)
+  7. Administration et Informatique 💻 (Tourbillon)
+  8. Éducatif — Pôle enfance-adolescence 🎓
+  9. Éducatif — Pôle adulte 🏠 (Gradelle, CB2000 NOUVEAU, Pinchat apps 5A→5G, Minoteries)
+- **7 établissements** (CBC, CBL, CBG, CBM, CBP, CBT, CB2K) — CB2000 ajouté le 19 mai
+- **Sièges** = places typées **FPra / AFP-CFC / Stage/Mes. / CEA / App.non-DFIP / MSP-MSTS**, 4 états : vert (libre), rouge (occupé), orange (réservation future), **gris (indisponible — formateur en arrêt)**
+- **Bulle commentaire** (badge "!") sur les tables ayant un `commentaire` non vide dans `carto.json`
+- **Icônes emoji** depuis `plan.icone` (plus de Lucide React sauf navigation : ChevronRight, ChevronLeft, LogOut)
 
 ### Vue d'ensemble : header global + cartes par plan
 - **Header sticky** en haut de la vue 1 : compteurs agrégés (Total places / Libres / Occupées) + barre de progression dont la couleur passe vert/orange/rouge selon le ratio libres/total (mêmes seuils que le calendrier : >50 % vert, 1-50 % orange, 0 % rouge).
@@ -289,11 +291,9 @@ Comme pour `VITE_PA_HTTP_URL`, ces variables sont **bundlées** dans le build pa
 
 ### Statut des données
 
-- **Aujourd'hui (6 mai 2026)** : données mockées en dur dans `Cartographie.jsx` (~132 places réparties sur les 6 plans, dont ~30 % occupées pour exposer les codes couleur vert/orange/rouge).
-- **Prévu (Flux 6 PA — pas encore créé)** :
-  - PA HTTP GET → lit SP `Cartographie` + SP `Demande` filtrées sur `Statut="Confirmé"` → renvoie un JSON consolidé.
-  - URL dans `VITE_PA_CARTO_URL`.
-  - **Pattern Flux 5 (HTTP request live)** retenu, **pas Flux 3** (polling → GitHub) : la cartographie doit refléter l'état SP en temps réel et reste privée (jamais publiée sur GitHub Pages).
+- **Aujourd'hui (26 mai 2026)** : `carto.json` livré avec données de démo (49 tables couvrant les 9 plans). Flux 6 ZIP prêt à importer dans PA → poussera les données réelles depuis SP `PlacesCarto` + `PlanMetierCarto`.
+- **Pattern retenu** : Flux 3 (push `carto.json` statique → GitHub), **pas HTTP GET live**. Compatible GitHub Pages, pas d'URL exposée dans le bundle. Latence max 1h (récurrence horaire).
+- **`VITE_PA_CARTO_URL`** : variable supprimée — inutile avec le pattern Flux 3 statique.
 
 ## Fonctionnalités Phase 2 (état au 6 mai 2026)
 - ~~**Cartographie des sites/pôles** (board interactif capacités — demande Karavia)~~ — **FAIT côté frontend** (6 plans métier, login mot de passe, animations immersives, header stats global, mock data). Reste à brancher **Flux 6 PA** pour les données réelles (`VITE_PA_CARTO_URL`).

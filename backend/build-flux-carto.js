@@ -1,24 +1,30 @@
 /**
  * build-flux-carto.js — Génère le ZIP Power Automate du Flux 6 (Flux Carto)
  *
- * Logique :
- *  1. GET SP "Cartographie"   → capacités max par table (Plan × Etab × Secteur)
- *  2. GET SP "Demande"        → filtre Statut='Confirmé' + Prenom stagiaire (expand)
- *  3. Pour chaque table : filtrer les Demandes correspondantes → construire l'objet table
- *  4. Composer carto.json    → { generatedAt, tables: [...] }
- *  5. GET SHA GitHub + Push  → met à jour public/carto.json sur GitHub
+ * Nouvelle architecture (mai 2026) :
+ *  1. GET SP "PlanMetierCarto"  → référentiel des plans (Titre, Nom, Icone, Description, Ordre)
+ *  2. GET SP "PlacesCarto"      → capacités max par table (PlanMetier lookup × Etab × Secteur)
+ *  3. GET SP "Demande"          → filtre Statut='Confirmé' + Prenom stagiaire (expand)
+ *  4. Pour chaque table : filtrer les Demandes correspondantes → construire l'objet table
+ *  5. Composer carto.json       → { generatedAt, plans: [...], tables: [...] }
+ *  6. GET SHA GitHub + Push     → met à jour public/carto.json sur GitHub
  *
- * Format carto.json émis (tables plates, React groupe par plan) :
+ * Format carto.json émis :
  *  {
- *    generatedAt: "2026-05-11T...",
+ *    generatedAt: "2026-...",
+ *    plans: [
+ *      { titre: "Restauration", nom: "Restauration", icone: "🍽️",
+ *        description: "...", ordre: 1 }, ...
+ *    ],
  *    tables: [
  *      {
- *        plan:          "Restauration",
+ *        plan:          "Restauration",     ← = PlanMetierCarto.Titre
  *        etablissement: "Minoteries",
  *        secteur:       "Restaurant",
  *        commentaire:   "",
  *        placesMax:     { FPRA:2, AFP_CFC:1, "Stage/Mes.":3, CEA:1, "App.non-DFIP":0, "MSP/MSTS":0 },
- *        reservations:  [{ type:"FPRA", prenom:"Marie", dateDebut:"2026-04-20", dateFin:"2026-04-24" }]
+ *        placesIndisponibles: { FPRA:0 },
+ *        reservations:  [{ type:"FPRA", prenom:"Marie", dateDebut:"...", dateFin:"..." }]
  *      }, ...
  *    ]
  *  }
@@ -40,9 +46,10 @@ const AdmZip = require('adm-zip');
 const BACKEND_DIR  = __dirname;
 const OUTPUT_ZIP   = path.join(BACKEND_DIR, 'flux-carto.zip');
 const FLUX3_ZIP    = path.join(BACKEND_DIR, 'flux3-planning-modifie.zip');
-const WORK_SRC     = path.join(BACKEND_DIR, 'flux3b-work'); // fournit apisMap + connectionsMap
+const WORK_SRC     = path.join(BACKEND_DIR, 'flux3b-work');
 
-const FLOW_GUID    = 'b2c3d4e5-f6a7-8901-bcde-f12345678901'; // UUID fixe Flux 6
+const FLOW_GUID    = 'b283bd3d-75a0-46a6-a2ee-055cfe0871ab';  // GUID package PA (exporté le 26 mai)
+const FLOW_ID      = 'f3938561-22e5-4fb6-8d38-a2e14275f625';  // ID interne de la définition
 const SP_SITE      = 'https://fondationclairbois.sharepoint.com/sites/DFIP-SiteEquipe';
 const DEMANDE_GUID = '9616ee1d-dd0b-44fd-a1c4-34187ebaa9f8';
 
@@ -67,7 +74,6 @@ console.log('Token GitHub extrait depuis Flux 3 ✓');
 
 // ──────────────────────────────────────────────
 // Lire apisMap + connectionsMap depuis flux3b-work
-// (même environnement SP, réutilisables)
 // ──────────────────────────────────────────────
 
 const flowSrcDir  = path.join(WORK_SRC, 'Microsoft.Flow', 'flows', 'a3b7c91d-4e5f-6a7b-8c9d-0e1f2a3b4c5d');
@@ -80,8 +86,8 @@ console.log('apisMap + connectionsMap lus depuis flux3b-work ✓');
 // ──────────────────────────────────────────────
 
 const definition = {
-  name: `/${FLOW_GUID}`,
-  id: `/${FLOW_GUID}`,
+  name: FLOW_ID,
+  id: `/providers/Microsoft.Flow/flows/${FLOW_ID}`,
   type: 'Microsoft.Flow/flows',
   properties: {
     displayName: 'Flux 6 - Génération carto.json',
@@ -93,7 +99,6 @@ const definition = {
         $connections:    { defaultValue: {}, type: 'Object' }
       },
 
-      // ── Déclencheur : récurrent toutes les heures ──────────────────────
       triggers: {
         Recurrence: {
           type: 'Recurrence',
@@ -103,8 +108,8 @@ const definition = {
 
       actions: {
 
-        // 1. GET SP "Cartographie" — capacités max (toutes les tables)
-        GET_Cartographie: {
+        // 1. GET SP "PlanMetierCarto" — référentiel des plans (trié par Ordre)
+        GET_PlanMetierCarto: {
           runAfter: {},
           type: 'OpenApiConnection',
           inputs: {
@@ -112,10 +117,36 @@ const definition = {
               dataset: SP_SITE,
               'parameters/method': 'GET',
               'parameters/uri': [
-                "_api/web/lists/GetByTitle('Cartographie')/items",
-                '?$select=Id,Title,Plan,Etablissement,Secteur,PlacesMax_FPRA,',
-                'PlacesMax_AFP_CFC,PlacesMax_Stage_Mes,PlacesMax_CEA,',
-                'PlacesMax_AppNonDFIP,PlacesMax_MSTS,Commentaire',
+                "_api/web/lists/GetByTitle('PlanMetierCarto')/items",
+                '?$select=Title,Description,Icone,Ordre',
+                '&$orderby=Ordre asc',
+                '&$top=100'
+              ].join('')
+            },
+            host: {
+              apiId: '/providers/Microsoft.PowerApps/apis/shared_sharepointonline',
+              connectionName: 'shared_sharepointonline',
+              operationId: 'HttpRequest'
+            },
+            authentication: "@parameters('$authentication')"
+          },
+          description: 'Récupère tous les plans métier avec métadonnées (icône, description, ordre)'
+        },
+
+        // 2. GET SP "PlacesCarto" — capacités max par table
+        GET_PlacesCarto: {
+          runAfter: { GET_PlanMetierCarto: ['Succeeded'] },
+          type: 'OpenApiConnection',
+          inputs: {
+            parameters: {
+              dataset: SP_SITE,
+              'parameters/method': 'GET',
+              'parameters/uri': [
+                "_api/web/lists/GetByTitle('PlacesCarto')/items",
+                '?$select=Id,Title,PlanMetier/Title,Etablissement,Secteur,',
+                'PlacesMax_FPRA,PlacesMax_AFP_CFC,PlacesMax_Stage_Mes,PlacesMax_CEA,',
+                'PlacesMax_AppNonDFIP,PlacesMax_MSTS,PlacesIndisp_FPRA,Commentaire',
+                '&$expand=PlanMetier',
                 '&$top=500'
               ].join('')
             },
@@ -126,12 +157,12 @@ const definition = {
             },
             authentication: "@parameters('$authentication')"
           },
-          description: 'Récupère toutes les tables de la SP List Cartographie'
+          description: 'Récupère toutes les tables de PlacesCarto avec PlanMetier (lookup expandé)'
         },
 
-        // 2. GET SP "Demande" — uniquement les Confirmées + Prenom stagiaire
+        // 3. GET SP "Demande" — uniquement les Confirmées + Prenom stagiaire
         GET_Demandes_Confirmees: {
-          runAfter: { GET_Cartographie: ['Succeeded'] },
+          runAfter: { GET_PlacesCarto: ['Succeeded'] },
           type: 'OpenApiConnection',
           inputs: {
             parameters: {
@@ -153,10 +184,10 @@ const definition = {
             },
             authentication: "@parameters('$authentication')"
           },
-          description: "Récupère les Demandes Confirmées avec Prénom stagiaire"
+          description: 'Récupère les Demandes Confirmées avec Prénom stagiaire'
         },
 
-        // 3. Initialiser le tableau des tables
+        // 4. Initialiser le tableau des tables
         Init_varTables: {
           runAfter: { GET_Demandes_Confirmees: ['Succeeded'] },
           type: 'InitializeVariable',
@@ -165,32 +196,32 @@ const definition = {
           }
         },
 
-        // 4. Boucle sur chaque ligne de SP Cartographie
-        "Loop_Cartographie": {
+        // 5. Boucle sur chaque ligne de PlacesCarto
+        Loop_PlacesCarto: {
           runAfter: { Init_varTables: ['Succeeded'] },
           type: 'Foreach',
-          foreach: "@body('GET_Cartographie')?['d']?['results']",
-          description: 'Pour chaque table : filtre les réservations et construit l’objet table',
+          foreach: "@body('GET_PlacesCarto')?['d']?['results']",
+          description: "Pour chaque table : filtre les réservations et construit l'objet table",
 
           actions: {
 
-            // 4a. Filtrer les Demandes Confirmées pour cette table précise
+            // 5a. Filtrer les Demandes Confirmées pour cette table précise
             Filtrer_Demandes_Table: {
               type: 'Query',
               inputs: {
                 from: "@body('GET_Demandes_Confirmees')?['d']?['results']",
                 where: [
                   "@and(",
-                  "equals(item()?['PlanMetier'], items('Loop_Cartographie')?['Plan']),",
-                  "equals(item()?['EtablissementConfirme'], items('Loop_Cartographie')?['Etablissement']),",
-                  "equals(item()?['SecteurConfirme'], items('Loop_Cartographie')?['Secteur'])",
+                  "equals(item()?['PlanMetier'], items('Loop_PlacesCarto')?['PlanMetier']?['Title']),",
+                  "equals(item()?['EtablissementConfirme'], items('Loop_PlacesCarto')?['Etablissement']),",
+                  "equals(item()?['SecteurConfirme'], items('Loop_PlacesCarto')?['Secteur'])",
                   ")"
                 ].join('')
               },
-              description: 'Filtre les Demandes pour (Plan + Etablissement + Secteur)'
+              description: 'Filtre les Demandes pour (PlanMetier + Etablissement + Secteur)'
             },
 
-            // 4b. Projeter uniquement les champs utiles de chaque réservation
+            // 5b. Projeter uniquement les champs utiles de chaque réservation
             Select_Reservations: {
               runAfter: { Filtrer_Demandes_Table: ['Succeeded'] },
               type: 'Select',
@@ -206,45 +237,49 @@ const definition = {
               description: 'Projette type, prénom, dateDébut, dateFin'
             },
 
-            // 4c. Ajouter la table au tableau global
+            // 5c. Ajouter la table au tableau global
             Ajouter_Table: {
               runAfter: { Select_Reservations: ['Succeeded'] },
               type: 'AppendToArrayVariable',
               inputs: {
                 name: 'varTables',
                 value: {
-                  plan:          "@items('Loop_Cartographie')?['Plan']",
-                  etablissement: "@items('Loop_Cartographie')?['Etablissement']",
-                  secteur:       "@items('Loop_Cartographie')?['Secteur']",
-                  commentaire:   "@if(empty(items('Loop_Cartographie')?['Commentaire']), '', items('Loop_Cartographie')?['Commentaire'])",
+                  plan:          "@items('Loop_PlacesCarto')?['PlanMetier']?['Title']",
+                  etablissement: "@items('Loop_PlacesCarto')?['Etablissement']",
+                  secteur:       "@items('Loop_PlacesCarto')?['Secteur']",
+                  commentaire:   "@if(empty(items('Loop_PlacesCarto')?['Commentaire']), '', items('Loop_PlacesCarto')?['Commentaire'])",
                   placesMax: {
-                    "FPRA":         "@items('Loop_Cartographie')?['PlacesMax_FPRA']",
-                    "AFP_CFC":      "@items('Loop_Cartographie')?['PlacesMax_AFP_CFC']",
-                    "Stage/Mes.":   "@items('Loop_Cartographie')?['PlacesMax_Stage_Mes']",
-                    "CEA":          "@items('Loop_Cartographie')?['PlacesMax_CEA']",
-                    "App.non-DFIP": "@items('Loop_Cartographie')?['PlacesMax_AppNonDFIP']",
-                    "MSP/MSTS":     "@items('Loop_Cartographie')?['PlacesMax_MSTS']"
+                    "FPRA":         "@items('Loop_PlacesCarto')?['PlacesMax_FPRA']",
+                    "AFP_CFC":      "@items('Loop_PlacesCarto')?['PlacesMax_AFP_CFC']",
+                    "Stage/Mes.":   "@items('Loop_PlacesCarto')?['PlacesMax_Stage_Mes']",
+                    "CEA":          "@items('Loop_PlacesCarto')?['PlacesMax_CEA']",
+                    "App.non-DFIP": "@items('Loop_PlacesCarto')?['PlacesMax_AppNonDFIP']",
+                    "MSP/MSTS":     "@items('Loop_PlacesCarto')?['PlacesMax_MSTS']"
+                  },
+                  placesIndisponibles: {
+                    "FPRA": "@items('Loop_PlacesCarto')?['PlacesIndisp_FPRA']"
                   },
                   reservations: "@body('Select_Reservations')"
                 }
               },
-              description: 'Append {plan, etablissement, secteur, commentaire, placesMax, reservations}'
+              description: 'Append {plan, etablissement, secteur, commentaire, placesMax, placesIndisponibles, reservations}'
             }
           }
         },
 
-        // 5. Composer le carto.json final
+        // 6. Composer le carto.json final
         Compose_JSON: {
-          runAfter: { Loop_Cartographie: ['Succeeded'] },
+          runAfter: { Loop_PlacesCarto: ['Succeeded'] },
           type: 'Compose',
           inputs: {
             generatedAt: "@utcNow()",
+            plans:       "@body('GET_PlanMetierCarto')?['d']?['results']",
             tables:      "@variables('varTables')"
           },
-          description: 'Construit le carto.json final (tables plates, React groupe par plan)'
+          description: 'Construit le carto.json final avec plans[] + tables[]'
         },
 
-        // 6. GET SHA actuel de carto.json sur GitHub
+        // 7. GET SHA actuel de carto.json sur GitHub
         GET_SHA_GitHub: {
           runAfter: { Compose_JSON: ['Succeeded'] },
           type: 'Http',
@@ -259,7 +294,7 @@ const definition = {
           description: 'Récupère le SHA du carto.json actuel sur GitHub'
         },
 
-        // 7. Push carto.json vers GitHub
+        // 8. Push carto.json vers GitHub
         Push_GitHub: {
           runAfter: { GET_SHA_GitHub: ['Succeeded'] },
           type: 'Http',
@@ -306,7 +341,7 @@ const manifest = {
   schema: '1.0',
   details: {
     displayName: 'Flux 6 - Génération carto.json',
-    description: 'Génère carto.json depuis SP Cartographie + SP Demande (Confirmé) et push sur GitHub',
+    description: 'Génère carto.json depuis SP PlanMetierCarto + PlacesCarto + Demande (Confirmé) et push sur GitHub',
     createdTime: new Date().toISOString(),
     packageTelemetryId: 'flux6-carto-json',
     creator: 'N/A',
@@ -315,8 +350,8 @@ const manifest = {
   resources: {
     [FLOW_GUID]: {
       type: 'Microsoft.Flow/flows',
-      suggestedCreationType: 'New',
-      creationType: 'New',
+      suggestedCreationType: 'Update',
+      creationType: 'Existing, New, Update',
       details: { displayName: 'Flux 6 - Génération carto.json' },
       configurableBy: 'User',
       hierarchy: 'Root',
@@ -374,22 +409,21 @@ zip.addFile('manifest.json',                        Buffer.from(JSON.stringify(m
 zip.writeZip(OUTPUT_ZIP);
 console.log(`\nZIP généré : ${OUTPUT_ZIP}`);
 
-// Vérification
 const check = new AdmZip(OUTPUT_ZIP);
 console.log('\nContenu du ZIP :');
 check.getEntries().forEach(e => console.log(`  ${e.entryName}  (${e.header.size} bytes)`));
 
-console.log('\n=== FLUX 6 — FLUX CARTO ===');
+console.log('\n=== FLUX 6 — FLUX CARTO (nouvelle architecture) ===');
 console.log('Déclencheur : Récurrent toutes les 1 heure');
 console.log('Actions :');
-console.log('  1. GET_Cartographie         → SP "Cartographie" (GetByTitle)');
-console.log('  2. GET_Demandes_Confirmees  → SP "Demande" Statut=Confirmé + Prenom');
-console.log('  3. Init_varTables           → tableau vide');
-console.log('  4. Loop_Cartographie        → pour chaque table :');
-console.log('       Filtrer_Demandes_Table   (Plan + Etab + Secteur)');
+console.log('  1. GET_PlanMetierCarto      → SP "PlanMetierCarto" (Titre, Icone, Description, Ordre)');
+console.log('  2. GET_PlacesCarto          → SP "PlacesCarto" (PlanMetier lookup expandé + PlacesMax + PlacesIndisp_FPRA)');
+console.log('  3. GET_Demandes_Confirmees  → SP "Demande" Statut=Confirmé + Prenom');
+console.log('  4. Init_varTables           → tableau vide');
+console.log('  5. Loop_PlacesCarto         → pour chaque table :');
+console.log('       Filtrer_Demandes_Table   (PlanMetier.Title + Etab + Secteur)');
 console.log('       Select_Reservations      (type, prenom, dateDebut, dateFin)');
-console.log('       Ajouter_Table            (placesMax + reservations)');
-console.log('  5. Compose_JSON             → { generatedAt, tables }');
-console.log('  6. GET_SHA_GitHub           → SHA carto.json actuel');
-console.log('  7. Push_GitHub              → PUT public/carto.json');
-console.log('\nFormat carto.json : tables plates, React groupe par plan et expande les places.');
+console.log('       Ajouter_Table            (placesMax + placesIndisponibles + reservations)');
+console.log('  6. Compose_JSON             → { generatedAt, plans[], tables[] }');
+console.log('  7. GET_SHA_GitHub           → SHA carto.json actuel');
+console.log('  8. Push_GitHub              → PUT public/carto.json');

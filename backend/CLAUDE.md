@@ -16,7 +16,7 @@ Ce fichier contient la documentation technique et métier des flux Power Automat
 
 ---
 
-## État des flux au 6 mai 2026
+## État des flux au 26 mai 2026
 
 | Flux | Trigger | État | GUID |
 |------|---------|------|------|
@@ -24,6 +24,7 @@ Ce fichier contient la documentation technique et métier des flux Power Automat
 | **Flux 2** | Email entrant (PJ) | ACTIF | `b865cf6d-dfdf-4b46-8df0-5d0e82baed17` |
 | **Flux 3** | Polling SP (3 min) | ACTIF | `e03bb264-eb3c-4ebd-bd63-87a78c083b68` |
 | **Flux 4** | Forms webhook | ACTIF | `f4c82a19-7d5e-4b3a-9f1c-8e6d2a0b5c47` |
+| **Flux 6** | Récurrence horaire | ✅ ZIP prêt — **à importer** dans PA | `b2c3d4e5-f6a7-8901-bcde-f12345678901` |
 | ~~**Flux 1**~~ | ~~Forms webhook~~ | OBSOLÈTE — remplacé par Flux 5 | `8affe7f1-3296-48a2-a2cb-1de6832d8997` |
 
 **Tests automatisés** : `test-flux5.js` couvre 9 cas (5 stages : moi/autre × nouveau/existant + curatelle+AI ; 4 modules : moi/autre × 1/3 modules) — **9/9 ✅** (4 mai 2026).
@@ -163,7 +164,9 @@ MonFlux.zip
 | **Demande** | `9616ee1d-dd0b-44fd-a1c4-34187ebaa9f8` | ACTIVE |
 | **Referent** | `7a31b912-99af-4415-bfc9-f2ae1cb19c00` | ACTIVE |
 | **Creneaux** | `3e2deb27-f496-410f-be74-281eb2b0c079` | ACTIVE |
-| **Cartographie** | (liste SP DFIP RH) | ✅ ACTIVE — colonnes : Plan, Etablissement, Secteur, PlacesMax_FPRA/AFP_CFC/Stage_Mes/CEA/AppNonDFIP/MSTS, Commentaire |
+| ~~**Cartographie**~~ | (obsolète) | Remplacée par PlacesCarto |
+| **PlacesCarto** | (SP DFIP RH) | ✅ ACTIVE — PlanMetier (Lookup→PlanMetierCarto), Etablissement, Secteur, PlacesMax_FPRA/AFP_CFC/Stage_Mes/CEA/AppNonDFIP/MSTS, **PlacesIndisp_FPRA**, Commentaire |
+| **PlanMetierCarto** | (SP DFIP RH) | ✅ ACTIVE — 9 plans métier : Titre (clé), Icone (emoji), Description, Ordre |
 
 ### Connexions (référence complète)
 | Connecteur | GUID Connexion (`connectionsMap`) | GUID API (`apisMap`) |
@@ -820,15 +823,21 @@ outputs('Obtenir_les_détails_de_la_réponse')?['body/{identifiant}']
 
 ## Flux à créer (TODO prioritaire — 6 mai 2026)
 
-### ✅ Flux 6 — Cartographie Recurrence (OPÉRATIONNEL — mai 2026)
-- **Trigger** : Recurrence horaire (1×/heure) — design final retenu à la place du HTTP GET
-- **Actions** :
-  1. GET liste SP **Cartographie** (capacités max par établissement/plan/secteur)
-  2. GET liste SP **Demande** filtrée `Statut eq 'Confirmé'` (placements actifs)
-  3. Compose `carto.json` consolidé (places + occupants par siège)
-  4. Push `carto.json` → `clairbois-dfip/clair-bois-calendrier/public/carto.json` via GitHub API
+### ✅ Flux 6 — Cartographie Recurrence (ZIP PRÊT — 26 mai 2026, à importer dans PA)
+- **Trigger** : Recurrence horaire (1×/heure)
+- **GUID** : `b2c3d4e5-f6a7-8901-bcde-f12345678901`
+- **Actions** (8 total) :
+  1. `GET_PlanMetierCarto` → SP `PlanMetierCarto` (Titre, Icone, Description, Ordre)
+  2. `GET_PlacesCarto` → SP `PlacesCarto` avec `$expand=PlanMetier` (`$select=PlanMetier/Title,...`)
+  3. `GET_Demandes_Confirmees` → SP `Demande` filtrée `Statut eq 'Confirmé'`
+  4. `Init_varTables` → array vide
+  5. `Loop_PlacesCarto` → pour chaque ligne : Filtrer_Demandes_Table + Select_Reservations + Ajouter_Table
+  6. `Compose_JSON` → `{ generatedAt, plans: body(GET_PlanMetierCarto), tables: varTables }`
+  7. `GET_SHA_GitHub` → SHA carto.json actuel
+  8. `Push_GitHub` → PUT `public/carto.json`
 - **Fichiers** : `backend/build-flux-carto.js` → `backend/flux-carto.zip`
 - **Frontend** : `Cartographie.jsx` fetch `${BASE_URL}carto.json` (GitHub Pages, statique)
+- **Import PA** : "Créer en tant que nouveau" — configurer connexion SP `stagiaire.dfip@clairbois.ch` après import
 
 ### Flux Confirmation Rosina (CRITIQUE — workflow Rosina)
 - **Trigger** : MAJ item liste **Demande**, condition `Statut → 'Confirmé'`

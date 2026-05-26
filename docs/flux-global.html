@@ -86,7 +86,7 @@
     <div class="leg-item"><div class="rect" style="background:#065f46"></div> SP Documents</div>
     <div class="leg-item"><div class="rect" style="background:#6d28d9"></div> Email Outlook</div>
     <div class="leg-item"><div class="rect" style="background:#1f2937"></div> GitHub</div>
-    <div class="leg-item"><div class="dot" style="background:#0369a1"></div> Cartographie</div>
+    <div class="leg-item"><div class="dot" style="background:#0369a1"></div> Carto (vue React)</div>
   </div>
 
   <div>
@@ -152,13 +152,14 @@ const DEFAULT_POSITIONS = {
   fluxvisite:    { x:  -70, y:  730 },   // bas — visite
 
   // ─── SharePoint (col 4) ───
-  sp_stag:          { x:  380, y: -550 },
+  sp_stag:          { x:  380, y: -700 },
   sp_dem:           { x:  380, y: -200 },   // hub central — tout y passe
   sp_ref:           { x:  380, y:   80 },
   sp_cren:          { x:  380, y:  340 },
   sp_doc:           { x:  380, y:  580 },
   sp_dossiersuivi:  { x:  380, y:  820 },
-  sp_carto:         { x:  380, y: -380 },   // SP "Cartographie" — capacités max
+  sp_places:        { x:  380, y: -380 },   // SP "PlacesCarto" — capacités max + lookup PlanMetier
+  sp_plancarto:     { x:  380, y: -550 },   // SP "PlanMetierCarto" — 9 plans métier avec emoji
 
   // ─── PA secondaire (col 5) ───
   flux3:         { x:  810, y: -130 },   // polling SP Dem/Cren
@@ -196,9 +197,11 @@ function buildNodes(positions) {
     { id:'email', label:'✉\nEmail Outlook\nstagiaire.dfip@', group:'email', ...p.email,
       title:'Boîte email Power Automate\n→ Envoie la demande de PJ au stagiaire\n→ Reçoit les réponses avec PJ jointes\n→ Reçoit les Word OCAS (HIN)' },
 
-    // ── SP Cartographie (nouveau) ──
-    { id:'sp_carto', label:'📋 SP Cartographie\nCapacités max', group:'splist', ...p.sp_carto,
-      title:'Liste SharePoint "Cartographie" ✅ créée 10 mai 2026\n1 ligne par table (Plan × Etablissement × Secteur)\nColonnes : Plan, Etablissement, Secteur\nPlacesMax_FPRA/AFP_CFC/Stage_Mes/CEA/AppNonDFIP/MSTS\nCommentaire (tooltip sur les cercles)\n37 lignes — données fictives en attendant tournée Rosina (18 mai)' },
+    // ── SP Carto (refonte 19 mai 2026) ──
+    { id:'sp_places', label:'📋 SP PlacesCarto\nCapacités par table', group:'splist', ...p.sp_places,
+      title:'Liste SharePoint "PlacesCarto" ✅ créée 19 mai 2026\nRemplace "Cartographie"\n1 ligne par table (PlanMetier Lookup × Etablissement × Secteur)\nColonnes : PlanMetier (Lookup→PlanMetierCarto), Etablissement, Secteur\nPlacesMax_FPRA/AFP_CFC/Stage_Mes/CEA/AppNonDFIP/MSTS\nPlacesIndisp_FPRA (places grises — formateur en arrêt)\nCommentaire (bulle "!" sur la table)' },
+    { id:'sp_plancarto', label:'📋 SP PlanMetierCarto\n9 plans métier', group:'splist', ...p.sp_plancarto,
+      title:'Liste SharePoint "PlanMetierCarto" ✅ créée 19 mai 2026\nRéférentiel des 9 plans métier\nColonnes : Titre (clé), Icone (emoji), Description, Ordre\nRestaurant 🍽️, Boulangerie/Pâtisserie 🥐 (NOUVEAU), Cuisine 👨‍🍳\nLingerie 👕, Services Généraux 🔧, Multimédia 🎥\nAdministration et Informatique 💻, Éducatif enfance 🎓, Éducatif adulte 🏠' },
 
     // ── Flux PA opérationnels ──
     { id:'flux5', label:'⚡ Flux 5\nHTTP Inscription\n✅', group:'pa', ...p.flux5,
@@ -209,8 +212,8 @@ function buildNodes(positions) {
       title:'✅ Opérationnel depuis 6 mars 2026\nTrigger : Email entrant (filtre: AVS-)\nParse D°ID → Get Demande → Get Stagiaire\n→ Créer dossier SP → Upload PJ → MAJ Statut' },
     { id:'flux3', label:'⚡ Flux 3\nPlanning JSON\n✅',   group:'pa', ...p.flux3,
       title:'✅ Opérationnel\nTrigger : Polling SP toutes les 3 min\nGET Créneaux + Demandes → Compter places\n→ Composer JSON → Push GitHub (planning.json)' },
-    { id:'flux6', label:'⚡ Flux 6\nCarto JSON\n🆕',    group:'pa_new', ...p.flux6,
-      title:'🆕 ZIP généré 11 mai 2026 — à importer dans PA\nTrigger : Récurrent toutes les heures\n1. GET SP "Cartographie" → placesMax par table\n2. GET SP "Demande" Statut=Confirmé + Prenom\n3. Loop : filtre Demandes (PlanMetier+EtabConfirme+SecteurConfirme)\n4. Compose carto.json { generatedAt, tables }\n5. GET SHA + Push → public/carto.json GitHub\nConvention : placesMax keys = TypePlace SP (FPRA/AFP_CFC/Stage/Mes./CEA/App.non-DFIP/MSP/MSTS)' },
+    { id:'flux6', label:'⚡ Flux 6\nCarto JSON\n✅',    group:'pa', ...p.flux6,
+      title:'✅ ZIP généré 26 mai 2026 — à importer dans PA (Créer en tant que nouveau)\nTrigger : Récurrent toutes les heures\n8 actions :\n1. GET PlanMetierCarto (9 plans avec emoji)\n2. GET PlacesCarto avec $expand=PlanMetier\n3. GET Demande Statut=Confirmé\n4. Init_varTables\n5. Loop PlacesCarto → Filtrer_Demandes + Ajouter_Table (placesIndisponibles inclus)\n6. Compose JSON { generatedAt, plans[], tables[] }\n7. GET SHA GitHub + 8. Push carto.json\nConnexion SP à configurer après import : stagiaire.dfip@clairbois.ch' },
 
     // ── Flux PA nouveaux ──
     { id:'fluxconf',  label:'⚡ Flux\nConfirmation\n🆕',group:'pa_new', ...p.fluxconf,
@@ -274,7 +277,8 @@ const C = {
   sp_dem:        '#4ade80',
   sp_ref:        '#4ade80',
   sp_cren:       '#4ade80',
-  sp_carto:      '#4ade80',   // vert
+  sp_places:     '#4ade80',   // vert
+  sp_plancarto:  '#4ade80',   // vert
   sp_doc:        '#34d399',   // vert émeraude
   sp_dossiersuivi:'#fde047',
   // sorties
@@ -331,9 +335,10 @@ const edges = new vis.DataSet([
   { from:'github',  to:'site',   label:"nourrit",                              ...ec('github'), smooth:{type:'curvedCCW',roundness:0.65} },
 
   // Flux 6 — Carto JSON
-  { from:'sp_carto', to:'flux6',  label:"capacités max",                      ...ec('sp_carto') },
-  { from:'sp_dem',   to:'flux6',  label:"réservations Confirmées",             ...ec('sp_dem') },
-  { from:'flux6',    to:'github', label:"pousse carto.json",                   ...ec('flux6') },
+  { from:'sp_plancarto', to:'flux6', label:"9 plans métier",                  ...ec('sp_plancarto') },
+  { from:'sp_places',    to:'flux6', label:"capacités + lookup plan",          ...ec('sp_places') },
+  { from:'sp_dem',       to:'flux6', label:"réservations Confirmées",          ...ec('sp_dem') },
+  { from:'flux6',        to:'github',label:"pousse carto.json",                ...ec('flux6') },
 
   // Cartographie ← GitHub (via carto.json généré par Flux 6)
   { from:'github',   to:'carto',  label:"nourrit (carto.json)",                ...ec('github') },

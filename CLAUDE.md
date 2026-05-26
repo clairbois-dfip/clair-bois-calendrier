@@ -116,21 +116,27 @@ ASA, ASE, ASSC, Cuisine, Restauration, Pâtisserie-boulangerie, Nettoyage, Explo
 - **Doc comparaison** : `docs/comparaison-forms.html`
 - **Backup pré-modifications** : `frontend/src/backup-19mars/`
 
-## État actuel (6 mai 2026)
+## État actuel (26 mai 2026)
 
 - **Site actif et déployé** sur GitHub Pages (commit `0ff6bd7`) — en mode démo (sans connexion PA réelle)
 - **Pipeline opérationnel** : React → Flux 5 HTTP → SP → Flux 3 → GitHub → Site (inchangé)
 - **Frontend FAIT** : aiguillage, 17 secteurs, formulaire React intégré multi-étapes
-- **Cartographie privée refondue (6 mai 2026)** — analogie "plan de table de mariage" demandée par Karavia (réunion 13 avril) :
-  - **6 plans métier** (Restauration, Cuisine, Lingerie, Technique, Éducatif Pôle enfance-adolescence, Éducatif Pôle adulte) — l'Éducatif est éclaté en deux plans distincts conformément à la transcription du 13 avril
-  - **Métaphore visuelle** : tables centrales (motif bois) = établissements, sièges autour = places typées FPra/AFP-CFC/Stage/CEA (cercles colorés)
-  - **Animation "boom ça entre"** au clic sur un plan : capture du rect du bouton + scale 480 ms easing out-expo
-  - **Header sticky de stats globales** sur la vue d'ensemble carto, barre de progression avec couleur dynamique
-  - **Données mock variées** : 4 plans verts, 2 oranges (Cuisine, Éducatif enfance), 1 rouge (Lingerie) — permet de visualiser les codes couleur
-  - **Authentification** : `CartographieLogin.jsx` + `cartoAuth.js`, token sessionStorage 24h (clé `cb-carto-token`), mots de passe CSV via `VITE_CARTO_PASSWORDS`
-  - **Icônes lucide-react** ajoutées (UtensilsCrossed, ChefHat, Shirt, Wrench, GraduationCap, Home, etc.)
-  - Données mockées en dur — **connexion via Flux Carto (pattern Flux 3) prévue** — voir décisions 8 mai 2026
+- **Cartographie refonte plans métier (19 mai 2026)** — 9 plans data-driven depuis `PlanMetierCarto` SP :
+  - **9 plans métier** : Restauration, **Boulangerie/Pâtisserie** (NOUVEAU), Cuisine, Lingerie et Confection, **Services Généraux** (ex-Technique), **Multimédia** (noms officiels Minoteries : EXECO, Atypique, C'REDAC', Atypique-Médiamatique), **Administration et Informatique** (Tourbillon), Éducatif Pôle enfance-adolescence, Éducatif Pôle adulte (Gradelle + CB2000 NOUVEAU + Pinchat apps 5A→5G + Minoteries)
+  - **Data-driven** : `Cartographie.jsx` lit `data.plans[]` depuis `carto.json` — plus de `PLAN_CONFIG` hardcodé
+  - **Icônes emoji** depuis SP `PlanMetierCarto.Icone` (plus de Lucide React sauf navigation)
+  - **4e couleur gris** = place indisponible (`PlacesIndisp_FPRA` dans SP `PlacesCarto`)
+  - **Bulle commentaire** (badge "!") sur les tables ayant un commentaire non vide
+  - Métaphore table+sièges conservée, animation "boom ça entre", header stats globales
+  - `CartographieLogin.jsx` + `cartoAuth.js`, token sessionStorage 24h, CSV `VITE_CARTO_PASSWORDS`
   - Détails complets : `frontend/CLAUDE.md` section "Cartographie privée"
+- **SP Lists refonte carto (19 mai 2026)** :
+  - **`PlanMetierCarto`** : référentiel des 9 plans métier (Titre clé, Icone emoji, Description, Ordre)
+  - **`PlacesCarto`** : remplace `Cartographie` — PlanMetier (Lookup→PlanMetierCarto), Etablissement, Secteur, PlacesMax_FPRA/AFP_CFC/Stage_Mes/CEA/AppNonDFIP/MSTS, **PlacesIndisp_FPRA**, Commentaire
+- **Flux 6 — Flux Carto** ✅ (26 mai 2026) — `flux-carto.zip` généré, 8 actions :
+  - GET `PlanMetierCarto` (9 plans avec emoji) + GET `PlacesCarto` avec `$expand=PlanMetier`
+  - GET `Demande` Statut='Confirmé', Loop PlacesCarto, Compose `{ generatedAt, plans[], tables[] }`, Push GitHub
+  - **À importer dans PA** : remplace ancienne version (si existante)
 - **Flux 5 étendu (mai 2026)** : gère désormais stages ET modules métiers → SP (Stagiaire + Demande[s] + Referent + Email)
   - Modules : 1 Demande par module sélectionné (max 3), Foreach sans lookup créneau (fix bug timeout 504 OData)
   - TypeDemande (Choice: Stage / Module métier) dans SP Demande
@@ -138,7 +144,7 @@ ASA, ASE, ASSC, Cuisine, Restauration, Pâtisserie-boulangerie, Nettoyage, Explo
   - Statut Demande : "Confirmé" (remplace "Validé" — supprimé)
 - **WeekDetail.jsx corrigé** : bouton "S'inscrire" connecté au formulaire React (via `onInscription` + `pendingWeekContext` dans App.jsx)
 - **9/9 tests Flux 5** (`backend/test-flux5.js`) couvrant toutes les branches (stages + modules) ✅
-- **217 tests Vitest** au total côté frontend (helpers, validation, formConfig, formulaire, modules, signalement, **24 tests cartographie** inclus, tous passants)
+- **222 tests Vitest** au total côté frontend (helpers, validation, formConfig, formulaire, modules, signalement, **29 tests cartographie** inclus, tous passants)
 - **Présentation IT créée** : `docs/presentation-reunion-IT.html` (12 slides, laser pointer, popups techniques)
 - **Modules métiers refondus** : sélection semaine d'abord → grille modules avec places par semaine (consigne Rosina)
 - **Formulaire signalement** : annulation/retard accessible depuis la page d'accueil (`FormulaireSignalement.jsx`)
@@ -254,6 +260,21 @@ Source : `docs/transcription-karavia6.txt` + `docs/transcription-karavia6-resume
 - **Licences PA Premium** : Benoît (IT) interpellé directement — urgence n°1. ~10 CHF/an. Sans ça : AI Builder, OneNote, nouveaux flux bloqués.
 - **Hébergement** : non bloquant pour la carto (pattern Flux 3). Benoît confirme compatibilité Infomaniac pour la suite.
 
+### Décisions prises (réunion Karavia — 19 mai 2026)
+Source : `docs/transcription-karavia7-resume.md`
+
+- **9 plans métier** (au lieu de 6) — Boulangerie/Pâtisserie séparée de Restauration, Technique → Services Généraux, Multimédia + Administration et Informatique ajoutés
+- **Noms officiels Minoteries (Multimédia)** : Audiovisuel→EXECO, Graphisme→Atypique, Rédac→C'REDAC', Médiamatique→Atypique-Médiamatique
+- **Éducatif Pôle adulte enrichi** : CB2000 (nouvel établissement, 1 secteur), appartements Pinchat 5A→5G, Gradelle 1→4, Minoteries 2e→5e
+- **4e couleur gris** = place indisponible (formateur en arrêt longue durée) — colonne `PlacesIndisp_FPRA`
+- **Bulle commentaire** (badge "!") par table
+- **Cercles plus grands**, label "Table" supprimé
+- **PlanMetierCarto** créée (référentiel plans) + **PlacesCarto** créée (remplace Cartographie) avec PlanMetier Lookup
+- **Dates de stage simplifiées** : suppression "date début souhaitée" ET "date début confirmée" séparées → UN seul champ DateDebut + DateFin
+- **PA Premium confirmé** (~36 CHF/an) — migration flux vers compte DFIP dédié (adresse à confirmer avec François/Laure)
+- **Infomaniak** : Rosina contacte Magali Martin pour coordonnées hébergement Node.js
+- **Formulaire demande de visite** (3e type, pour enseignants) — champs définis, à créer
+
 ### Présentation IT (24 mars 2026)
 - **Fichier** : `docs/presentation-reunion-IT.html` — ouvrir dans un navigateur
 - **12 slides** avec laser pointer rouge, popups techniques (11 panneaux), navigation clavier/souris
@@ -303,57 +324,39 @@ Le point central reste le même : toutes les inscriptions arrivent dans SP → R
 
 ### Prochaines étapes (priorisées — 10 mai 2026)
 
-#### CRITIQUE / Demain (11 mai) — Flux Carto Power Automate
-1. ~~**Modifications visuelles carto**~~ ✅ (10 mai) — labels FPra/AFP-CFC/Stage/CEA dans les cercles, système 3 couleurs (vert/rouge/orange), App.non-DFIP + MSP/MSTS sur Pôles enfance-ado et adulte, `commentaire` par table (tooltip au survol des cercles), 213/215 tests passants
-2. ~~**SP List "Cartographie" créée**~~ ✅ (10 mai) — 11 colonnes : Titre, Plan, Etablissement, Secteur, PlacesMax_FPRA/AFP_CFC/Stage_Mes/CEA/AppNonDFIP/MSTS, Commentaire — 37 lignes à importer via `docs/sp-cartographie-import.csv`
-3. **Flux Carto (Power Automate)** — à construire demain :
-   - Déclencheur : récurrent (ex. toutes les heures) ou manuel
-   - Étape 1 : lire SP "Cartographie" → capacité par table (Plan × Etab × Secteur)
-   - Étape 2 : lire SP "Demande" filtrée Statut='Confirmé' → réservations actives et futures
-   - Étape 3 : construire `carto.json` (voir format ci-dessous) → push GitHub via HTTP
-   - Étape 4 : React lit `carto.json` statique au lieu des données hardcodées
+#### CRITIQUE / Refonte plans métier 19 mai 2026 — FAIT ✅
+1. ~~**Modifications visuelles carto**~~ ✅ (10 mai) — labels FPra/AFP-CFC/Stage/CEA dans les cercles, système 3 couleurs (vert/rouge/orange), App.non-DFIP + MSP/MSTS sur Pôles enfance-ado et adulte, `commentaire` par table (tooltip au survol des cercles)
+2. ~~**SP Lists PlacesCarto + PlanMetierCarto créées**~~ ✅ (19 mai) — PlanMetierCarto : 9 plans (Titre, Icone emoji, Description, Ordre) — PlacesCarto : remplace Cartographie, PlanMetier Lookup, PlacesIndisp_FPRA
+3. ~~**Flux 6 — Flux Carto (Power Automate)**~~ ✅ (26 mai) — `flux-carto.zip` généré, 8 actions (GET PlanMetierCarto + GET PlacesCarto $expand + GET Demande Confirmée + Loop + Compose `{generatedAt, plans[], tables[]}` + Push GitHub)
+4. ~~**Cartographie.jsx data-driven**~~ ✅ (26 mai) — PLAN_CONFIG supprimé, emojis, `cartoJsonToPlans()` lit `data.plans[]`
+5. ~~**carto.json nouveau format**~~ ✅ (26 mai) — `{ generatedAt, plans: [{titre, nom, icone, description, ordre}], tables: [{plan, etablissement, secteur, commentaire, placesMax, placesIndisponibles, reservations}] }`
+6. **Déploiement Vercel** — une fois Flux 6 testé en prod et données réelles validées
 
-**Format carto.json attendu** (à respecter dans le Flux Carto) :
+**Format carto.json (en production)** :
 ```json
 {
-  "generatedAt": "2026-05-11T08:30:00Z",
+  "generatedAt": "2026-05-26T...",
   "plans": [
+    { "titre": "Restauration", "nom": "Restauration", "icone": "🍽️", "description": "...", "ordre": 1 }
+  ],
+  "tables": [
     {
-      "id": "restauration",
-      "tables": [
-        {
-          "site": "CBM",
-          "secteur": "Restaurant",
-          "commentaire": "",
-          "places": [
-            { "type": "FPRA", "occupee": false, "reservationsFutures": [] },
-            { "type": "FPRA", "occupee": true, "prenom": "Marie", "dateDebut": "2026-04-20", "dateFin": "2026-04-24" },
-            { "type": "STAGE", "occupee": false, "reservationsFutures": [{ "prenom": "Thomas", "dateDebut": "2026-07-04", "dateFin": "2026-07-05" }] }
-          ]
-        }
-      ]
+      "plan": "Restauration",
+      "etablissement": "Minoteries",
+      "secteur": "Restaurant",
+      "commentaire": "",
+      "placesMax": { "FPRA": 2, "AFP_CFC": 1, "Stage/Mes.": 3, "CEA": 1, "App.non-DFIP": 0, "MSP/MSTS": 0 },
+      "placesIndisponibles": { "FPRA": 0 },
+      "reservations": [{ "type": "FPRA", "prenom": "Marie", "dateDebut": "2026-04-20", "dateFin": "2026-04-24" }]
     }
   ]
 }
 ```
 
-**Logique de construction des places par type dans chaque table** :
-- Lire `PlacesMax_FPRA` (ex: 2) → créer 2 objets type FPRA
-- Pour chaque Demande confirmée du bon (Plan × Etab × Secteur) :
-  - Si `DateDebut ≤ aujourd'hui ≤ DateFin` → place `occupee: true` avec prénom + dates
-  - Si `DateDebut > aujourd'hui` → place `occupee: false` avec `reservationsFutures: [{prenom, dateDebut, dateFin}]`
-  - Reste des places → `occupee: false, reservationsFutures: []`
-
-**Mapping colonnes SP → clés code** (PA fait la traduction dans carto.json) :
-- `PlacesMax_FPRA` → type `"FPRA"`
-- `PlacesMax_AFP_CFC` → type `"AFP_CFC"`
-- `PlacesMax_Stage_Mes` → type `"STAGE"`
-- `PlacesMax_CEA` → type `"CEA"`
-- `PlacesMax_AppNonDFIP` → type `"APP_NON_DFIP"`
-- `PlacesMax_MSTS` → type `"STAGIAIRE_MSTS"`
-
-4. **Retrait données fictives** — une fois Flux Carto opérationnel, supprimer les `placeLibre/placeOccupee/placeOrange` hardcodés dans `Cartographie.jsx` et lire `carto.json` dynamiquement
-5. **Déploiement Vercel** — une fois flux testé et données réelles validées
+**Mapping colonnes PlacesCarto → clés React** :
+- `PlacesMax_FPRA` → `FPRA` | `PlacesMax_AFP_CFC` → `AFP_CFC` | `PlacesMax_Stage_Mes` → `Stage/Mes.`
+- `PlacesMax_CEA` → `CEA` | `PlacesMax_AppNonDFIP` → `App.non-DFIP` | `PlacesMax_MSTS` → `MSP/MSTS`
+- `PlacesIndisp_FPRA` → `placesIndisponibles.FPRA` (cercles gris dans React)
 
 #### CRITIQUE / Dès que PA Premium confirmé (Benoît)
 6. **Flux Confirmation Rosina** — déclenché par MAJ `Demande.Statut='Confirmé'` → email stagiaire + secteur + intendance + repas + MAJ OneNote
@@ -384,14 +387,14 @@ Le point central reste le même : toutes les inscriptions arrivent dans SP → R
 - ~~Refonte visuelle carto~~ ✅ (labels typés dans cercles, 3 couleurs, commentaire tooltip, App.non-DFIP/MSP-MSTS — 10 mai 2026)
 - ~~SP List "Cartographie" créée~~ ✅ (11 colonnes, 37 lignes CSV prêt — 10 mai 2026)
 
-## Blocages connus (10 mai 2026)
+## Blocages connus (26 mai 2026)
 
-- **PA Premium non confirmé** : Benoît (IT) doit approuver — urgence n°1. Bloque : AI Builder (PDF OCAS), OneNote connector, nouveaux flux. ~10 CHF/an selon Rosina.
-- **Hébergement Infomaniac** : Benoît doit confirmer la compatibilité — non bloquant pour la carto (pattern Flux 3), bloquant pour le formulaire d'inscription en prod.
-- **Vrais PDF OCAS de Rosina** : nécessaires pour entraîner le modèle AI Builder avant de construire le flux.
-- **Données capacité secteurs** : Rosina fait la tournée des secteurs semaine du 18 mai pour collecter les vraies données (formateurs, places max par type). SP List "Cartographie" remplie avec données fictives en attendant.
-- **Prototype OneNote** : à comparer au RDV du 19 mai avant d'implémenter.
-- **Flux Carto non construit** : carto.json hardcodé pour l'instant — Flux Carto à construire le 11 mai (ne bloque pas les tests locaux, bloque la prod).
+- **PA Premium** : confirmé ~36 CHF/an (non-profit via Benoît) + compte DFIP dédié en cours de validation avec François/Laure. Migration des flux (export/import, ~2-4h) dès adresse confirmée. Bloque encore : AI Builder (PDF OCAS), OneNote connector.
+- **Hébergement Infomaniak** : Rosina contacte Magali Martin pour coordonnées. Option : utiliser compte existant clairbois.ch (si Node.js dispo) ou ouvrir nouveau compte (~150 CHF/an). Non bloquant pour la carto (pattern Flux 3 = carto.json statique).
+- **Vrais PDF OCAS de Rosina** : nécessaires pour entraîner le modèle AI Builder.
+- **Flux Carto — import PA** : `flux-carto.zip` généré, à importer dans PA (Créer en tant que nouveau). Connecteurs SP + GitHub à configurer manuellement après import.
+- **Flux Confirmation Rosina** : non encore construit — déclenché par `Demande.Statut='Confirmé'` → email stagiaire + intendance + MAJ OneNote.
+- **Adresse DFIP dédiée** : Rosina doit confirmer avec François/Laure — bloque la migration des flux.
 
 ## Documentation
 
