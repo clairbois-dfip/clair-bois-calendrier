@@ -161,9 +161,13 @@ function buildPlaces(placesMax, reservations, indisponibles = {}) {
 function cartoJsonToPlans(data) {
   if (!data?.tables || !data?.plans) return []
 
+  // Accepte les deux formats : {titre, nom, icone, description, ordre} (statique)
+  // et {Title, Icone, Description, Ordre} (flux SP natif)
+  const planKey = (p) => p.titre ?? p.Title
+
   const metaMap = {}
   for (const p of data.plans) {
-    metaMap[p.titre] = p
+    metaMap[planKey(p)] = p
   }
 
   const planMap = {}
@@ -173,10 +177,10 @@ function cartoJsonToPlans(data) {
     if (!planMap[table.plan]) {
       planMap[table.plan] = {
         id: table.plan.toLowerCase().replace(/[^a-z0-9]/g, '-'),
-        nom: meta.nom,
-        icone: meta.icone,
-        description: meta.description,
-        ordre: meta.ordre,
+        nom: meta.nom ?? meta.Title,
+        icone: meta.icone ?? meta.Icone,
+        description: meta.description ?? meta.Description,
+        ordre: meta.ordre ?? meta.Ordre,
         tables: [],
       }
     }
@@ -191,9 +195,9 @@ function cartoJsonToPlans(data) {
   }
 
   return data.plans
-    .filter((p) => planMap[p.titre])
-    .sort((a, b) => (a.ordre || 0) - (b.ordre || 0))
-    .map((p) => planMap[p.titre])
+    .filter((p) => planMap[planKey(p)])
+    .sort((a, b) => ((a.ordre ?? a.Ordre) || 0) - ((b.ordre ?? b.Ordre) || 0))
+    .map((p) => planMap[planKey(p)])
 }
 
 // ──────────────────────────────────────────────
