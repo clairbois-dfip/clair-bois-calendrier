@@ -1,8 +1,8 @@
 /**
- * Cartographie.jsx — Vue privee des places de stage par plan metier.
+ * Cartographie.jsx — Vue privée des places de stage par plan métier.
  *
- * Chaque plan metier regroupe des tables (etablissements/secteurs) avec
- * des places typees (FPRA, AFP/CFC, Stage/Mes., CEA, App.non-DFIP, MSP/MSTS).
+ * Chaque plan métier regroupe des tables (établissements/secteurs) avec
+ * des places typées (FPRA, AFP/CFC, Stage/Mes., CEA, App.non-DFIP, MSP/MSTS).
  *
  * Systeme de couleurs statut (decisions reunions Karavia, 19 mai 2026) :
  *   Vert   = libre, aucune reservation prevue
