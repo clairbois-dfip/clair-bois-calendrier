@@ -451,10 +451,10 @@ function Place({ place, label }) {
 
   const len = label.length
   const textSize =
-    len > 9 ? 'text-[9px]' :
-    len > 6 ? 'text-[10px]' :
-    len > 4 ? 'text-xs' :
-              'text-sm'
+    len > 9 ? 'text-[10px]' :
+    len > 6 ? 'text-xs' :
+    len > 4 ? 'text-sm' :
+              'text-base'
 
   return (
     <div className="relative inline-flex flex-col items-center">
@@ -465,7 +465,7 @@ function Place({ place, label }) {
         onMouseLeave={fermer}
         onFocus={ouvrir}
         onBlur={fermer}
-        className={`w-14 h-14 rounded-full border-2 ${couleurFond}
+        className={`w-16 h-16 rounded-full border-2 ${couleurFond}
                     font-bold flex items-center justify-center text-center
                     leading-tight px-1 transition-transform duration-200
                     ${statut === 'rouge' || statut === 'orange' ? 'cursor-help hover:scale-110' : 'cursor-default'}
@@ -574,8 +574,8 @@ function Table({ table }) {
                    'border-cb-orange/30'
 
   return (
-    <div className="relative bg-white rounded-2xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow">
-      <div className="flex items-center justify-between gap-3 mb-4">
+    <div className="relative bg-white rounded-2xl border border-gray-200 p-3 shadow-sm hover:shadow-md transition-shadow">
+      <div className="flex items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-2 min-w-0">
           <span
             className="inline-flex items-center justify-center w-9 h-9 rounded-lg text-white font-bold text-xs flex-shrink-0"
@@ -611,29 +611,15 @@ function Table({ table }) {
       </div>
 
       {rangeeHaut.length > 0 && (
-        <div className="flex flex-wrap justify-center gap-3 mb-3">
+        <div className="flex flex-wrap justify-center gap-2 mb-2">
           {rangeeHaut.map((p, i) => (
             <Place key={`h-${i}`} place={p} label={p._label} />
           ))}
         </div>
       )}
 
-      <div
-        className={`relative mx-auto rounded-full border-2 border-dashed ${bordureTable}
-                    bg-gradient-to-br from-amber-50 via-orange-50/40 to-amber-50
-                    flex items-center justify-center text-center px-5 py-3 my-1 shadow-inner`}
-        style={{
-          backgroundImage:
-            'repeating-linear-gradient(115deg, rgba(180, 130, 70, 0.05) 0 2px, transparent 2px 14px), linear-gradient(to bottom, #fef9f0, #fdf3e0)',
-        }}
-      >
-        <div className="text-sm font-bold text-gray-800 leading-tight">
-          {site.nom} — {table.secteur}
-        </div>
-      </div>
-
       {rangeeBas.length > 0 && (
-        <div className="flex flex-wrap justify-center gap-3 mt-3">
+        <div className="flex flex-wrap justify-center gap-2 mt-2">
           {rangeeBas.map((p, i) => (
             <Place key={`b-${i}`} place={p} label={p._label} />
           ))}
