@@ -28,12 +28,12 @@ import { ChevronRight, ChevronLeft, LogOut } from 'lucide-react'
 // ──────────────────────────────────────────────
 
 const TYPES_PLACE = {
-  FPRA:           { label: 'FPra',         long: 'Formation pratique' },
-  AFP_CFC:        { label: 'AFP/CFC',      long: 'AFP ou CFC (formateur OFPC requis)' },
-  STAGE:          { label: 'Stage/Mes.',   long: "Stage ou mesure d'orientation" },
-  CEA:            { label: 'CEA',          long: 'Contrat en emploi adapté' },
-  APP_NON_DFIP:   { label: 'App.non-DFIP', long: 'Apprenti hors DFIP (budget fondation)' },
-  STAGIAIRE_MSTS: { label: 'MSP/MSTS',    long: 'Stagiaire MSP ou MSTS' },
+  FPRA:           { label: 'FPra',         labelCourt: 'FPra',  long: 'Formation pratique' },
+  AFP_CFC:        { label: 'AFP/CFC',      labelCourt: 'AFP',   long: 'AFP ou CFC (formateur OFPC requis)' },
+  STAGE:          { label: 'Stage/Mes.',   labelCourt: 'Stage', long: "Stage ou mesure d'orientation" },
+  CEA:            { label: 'CEA',          labelCourt: 'CEA',   long: 'Contrat en emploi adapté' },
+  APP_NON_DFIP:   { label: 'App.non-DFIP', labelCourt: 'App.', long: 'Apprenti hors DFIP (budget fondation)' },
+  STAGIAIRE_MSTS: { label: 'MSP/MSTS',    labelCourt: 'MSP',   long: 'Stagiaire MSP ou MSTS' },
 }
 
 // ──────────────────────────────────────────────
@@ -344,6 +344,7 @@ function CartePlan({ plan, onOuvrir, cardRef }) {
   const couleur = COULEURS_BLOC[statutCouleur(plan)]
 
   const typesPresents = Object.keys(TYPES_PLACE).filter((t) => (totaux[t] || 0) > 0)
+  const tablesAvecNote = plan.tables.filter((t) => t.commentaire)
 
   return (
     <button
@@ -357,6 +358,18 @@ function CartePlan({ plan, onOuvrir, cardRef }) {
                   flex flex-col h-full`}
     >
       <div className={`h-1.5 w-full flex-shrink-0 ${couleur.bandeau}`} aria-hidden="true" />
+
+      {tablesAvecNote.length > 0 && (
+        <span
+          className="absolute top-3 right-3 z-10 w-6 h-6 rounded-full bg-amber-100 border border-amber-300
+                     text-amber-700 text-[11px] font-bold flex items-center justify-center cursor-help select-none"
+          title={tablesAvecNote.map((t) => `${t.secteur} : ${t.commentaire}`).join('\n')}
+          aria-label={`${tablesAvecNote.length} note(s) sur ce plan`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          !
+        </span>
+      )}
 
       <div className="p-5 flex flex-col gap-4 flex-1">
         <div className="flex items-start gap-3 min-w-0">
@@ -451,9 +464,9 @@ function Place({ place, label }) {
 
   const len = label.length
   const textSize =
-    len > 9 ? 'text-[9px]' :
-    len > 6 ? 'text-[10px]' :
-    len > 4 ? 'text-xs' :
+    len > 8 ? 'text-[11px]' :
+    len > 5 ? 'text-xs' :
+    len > 3 ? 'text-[13px]' :
               'text-sm'
 
   return (
@@ -465,7 +478,7 @@ function Place({ place, label }) {
         onMouseLeave={fermer}
         onFocus={ouvrir}
         onBlur={fermer}
-        className={`w-14 h-14 rounded-full border-2 ${couleurFond}
+        className={`w-[68px] h-[68px] rounded-full border-2 ${couleurFond}
                     font-bold flex items-center justify-center text-center
                     leading-tight px-1 transition-transform duration-200
                     ${statut === 'rouge' || statut === 'orange' ? 'cursor-help hover:scale-110' : 'cursor-default'}
@@ -552,7 +565,7 @@ function Table({ table }) {
   const placesAvecLabel = places.map((p) => {
     typeIdx[p.type] = (typeIdx[p.type] || 0) + 1
     const label = typeTotaux[p.type] > 1
-      ? `${TYPES_PLACE[p.type].label} ${typeIdx[p.type]}`
+      ? `${TYPES_PLACE[p.type].labelCourt} ${typeIdx[p.type]}`
       : TYPES_PLACE[p.type].label
     return { ...p, _label: label }
   })
@@ -574,7 +587,7 @@ function Table({ table }) {
                    'border-cb-orange/30'
 
   return (
-    <div className="relative bg-white rounded-2xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow">
+    <div className="relative bg-white rounded-2xl border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2 min-w-0">
           <span
@@ -621,16 +634,12 @@ function Table({ table }) {
       <div
         className={`relative mx-auto rounded-full border-2 border-dashed ${bordureTable}
                     bg-gradient-to-br from-amber-50 via-orange-50/40 to-amber-50
-                    flex items-center justify-center text-center px-5 py-3 my-1 shadow-inner`}
+                    h-5 my-1 shadow-inner`}
         style={{
           backgroundImage:
             'repeating-linear-gradient(115deg, rgba(180, 130, 70, 0.05) 0 2px, transparent 2px 14px), linear-gradient(to bottom, #fef9f0, #fdf3e0)',
         }}
-      >
-        <div className="text-sm font-bold text-gray-800 leading-tight">
-          {site.nom} — {table.secteur}
-        </div>
-      </div>
+      />
 
       {rangeeBas.length > 0 && (
         <div className="flex flex-wrap justify-center gap-3 mt-3">
