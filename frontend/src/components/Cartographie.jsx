@@ -632,7 +632,7 @@ function Table({ table }) {
       )}
 
       <div
-        className={`relative mx-auto rounded-full border-2 border-dashed ${bordureTable}
+        className={`relative w-full rounded-full border-2 border-dashed ${bordureTable}
                     bg-gradient-to-br from-amber-50 via-orange-50/40 to-amber-50
                     h-5 my-1 shadow-inner`}
         style={{
