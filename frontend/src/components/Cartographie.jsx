@@ -585,6 +585,10 @@ function Table({ table }) {
     libres === 0 ? 'border-cb-red/30' :
     ratio > 0.5  ? 'border-cb-green/30' :
                    'border-cb-orange/30'
+  const bordureOvale =
+    libres === 0 ? 'border-cb-red/60' :
+    ratio > 0.5  ? 'border-cb-green/60' :
+                   'border-cb-orange/60'
 
   return (
     <div className="relative bg-white rounded-2xl border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow">
@@ -632,12 +636,11 @@ function Table({ table }) {
       )}
 
       <div
-        className={`relative w-full rounded-full border-2 border-dashed ${bordureTable}
-                    bg-gradient-to-br from-amber-50 via-orange-50/40 to-amber-50
-                    h-5 my-1 shadow-inner`}
+        className={`relative w-full rounded-full border-2 border-dashed ${bordureOvale}
+                    h-8 my-2 shadow-inner`}
         style={{
           backgroundImage:
-            'repeating-linear-gradient(115deg, rgba(180, 130, 70, 0.05) 0 2px, transparent 2px 14px), linear-gradient(to bottom, #fef9f0, #fdf3e0)',
+            'repeating-linear-gradient(115deg, rgba(180, 130, 70, 0.06) 0 2px, transparent 2px 14px), linear-gradient(to bottom, #fef9f0, #fdf3e0)',
         }}
       />
 
