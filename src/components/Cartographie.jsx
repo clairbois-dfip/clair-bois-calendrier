@@ -595,10 +595,10 @@ function Table({ table }) {
       <div className="flex items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2 min-w-0">
           <span
-            className="inline-flex items-center justify-center w-9 h-9 rounded-lg text-white font-bold text-xs flex-shrink-0"
-            style={{ backgroundColor: site.couleur }}
+            className="inline-flex items-center justify-center w-9 h-9 rounded-lg text-white font-bold text-base flex-shrink-0"
+            style={{ backgroundColor: '#092C6A' }}
           >
-            {table.site}
+            {site.nom[0]}
           </span>
           <div className="min-w-0">
             <h4 className="font-semibold text-sm text-gray-900 leading-tight truncate">{site.nom}</h4>
