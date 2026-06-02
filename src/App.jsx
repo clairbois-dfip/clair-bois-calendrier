@@ -24,6 +24,7 @@ import StagesPage from './components/StagesPage'
 import Aiguillage from './components/Aiguillage'
 import FormulaireInscription from './components/FormulaireInscription'
 import FormulaireSignalement from './components/FormulaireSignalement'
+import FormulaireVisite from './components/FormulaireVisite'
 import Cartographie from './components/Cartographie'
 import CartographieLogin from './components/CartographieLogin'
 import Footer from './components/Footer'
@@ -173,6 +174,11 @@ function App() {
     setCurrentView('signalement')
   }
 
+  /** Navigation vers le formulaire de demande de visite */
+  const goToVisite = () => {
+    setCurrentView('visite')
+  }
+
   /**
    * Navigation vers la cartographie privee.
    * Verifie le token : si valide, affiche directement la carto ;
@@ -252,7 +258,7 @@ function App() {
       <main className="max-w-5xl mx-auto px-4 py-6 flex-1">
         {/* Ecran 1 : Page d'accueil — choix du parcours */}
         {currentView === 'home' && (
-          <HomePage data={data} onGoToModules={goToModules} onGoToStages={goToStages} onGoToSignalement={goToSignalement} />
+          <HomePage data={data} onGoToModules={goToModules} onGoToStages={goToStages} onGoToSignalement={goToSignalement} onGoToVisite={goToVisite} />
         )}
 
         {/* Ecran 2 : Page etablissement — choix du secteur */}
@@ -323,6 +329,11 @@ function App() {
         {/* Ecran 7 : Signalement d'urgence (annulation / retard) */}
         {currentView === 'signalement' && (
           <FormulaireSignalement onGoHome={goToHome} />
+        )}
+
+        {/* Ecran 9 : Demande de visite (enseignants) */}
+        {currentView === 'visite' && (
+          <FormulaireVisite onGoHome={goToHome} />
         )}
 
         {/* Ecran 8a : Page de connexion a la cartographie privee */}
