@@ -26,6 +26,12 @@ La Fondation Clair-Bois accompagne des personnes en situation de handicap dans l
 ### Structure organisationnelle
 Fondation > Établissements > Secteurs > Créneaux de disponibilité (peuvent se chevaucher). Le système est 100% dynamique, piloté par `public/planning.json`.
 
+## ⚠️ Ce dossier n'est PAS le build source
+
+Le CI build depuis la **racine du repo** (`/home/miles/projets/clair-bois/`), pas depuis `frontend/`.
+**Toujours éditer les fichiers sous `src/` à la racine**, jamais ceux dans `frontend/src/`.
+Ce dossier `frontend/` est un vestige — ne pas y toucher.
+
 ## Stack technique
 - React + Vite
 - Tailwind CSS v4 (plugin @tailwindcss/vite)

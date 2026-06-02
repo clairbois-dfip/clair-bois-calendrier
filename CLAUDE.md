@@ -411,9 +411,25 @@ Le point central reste le même : toutes les inscriptions arrivent dans SP → R
 - `docs/transcription-karavia6.txt` — réunion 6 mai 2026
 - `docs/transcription-karavia6-resume.md` — résumé structuré réunion 6 mai
 - `docs/transcription2-resume.md` — résumé structuré réunion 14 mars
+## ⚠️ CRITIQUE — Fichiers à éditer (ne pas confondre)
+
+Le repo a DEUX copies de certains composants. Le CI build depuis la **racine** (`vite.config.js` à la racine). Toujours éditer les fichiers sous `src/` à la racine :
+
+| À éditer | À NE PAS éditer |
+|---|---|
+| `src/components/Cartographie.jsx` | ~~`frontend/src/components/Cartographie.jsx`~~ |
+| `src/components/CartographieLogin.jsx` | ~~`frontend/src/components/CartographieLogin.jsx`~~ |
+| `src/utils/cartoAuth.js` | ~~`frontend/src/utils/cartoAuth.js`~~ |
+| `src/index.css` | ~~`frontend/src/index.css`~~ |
+| `public/carto.json` | ~~`frontend/public/carto.json`~~ |
+
+Le dossier `frontend/` est un vestige de refactorisation — il n'est PAS utilisé par le build CI.
+Vérifier toujours avec `cat vite.config.js` pour confirmer la racine du build.
+
 ## Conventions
 
-- **Git** : `git pull --rebase` avant chaque `git push` (Power Automate pousse planning.json)
+- **Git** : `git stash && git fetch clairbois-dfip && git rebase clairbois-dfip/main && git stash pop` avant chaque push (Power Automate pousse carto.json en continu)
+- **Deploy** : `git push clairbois-dfip main` — JAMAIS `git push origin main` pour le prod
 - **Frontend** : React 19 + Vite + Tailwind v4, 100% français, mobile-first
 - **Backend** : Édition JSON des flux, repackage en .zip pour import manuel
 - **Documentation** : Commentaires JSDoc en français, pas de mention de Claude ou Karim

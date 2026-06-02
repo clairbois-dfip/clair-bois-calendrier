@@ -604,16 +604,6 @@ function Table({ table }) {
             <h4 className="font-semibold text-sm text-gray-900 leading-tight truncate">{site.nom}</h4>
             <p className="text-xs text-gray-500 truncate">{table.secteur}</p>
           </div>
-          {table.commentaire && (
-            <span
-              className="flex-shrink-0 ml-1 w-6 h-6 rounded-full bg-amber-100 border border-amber-300
-                         text-amber-700 text-xs font-bold flex items-center justify-center cursor-help"
-              title={table.commentaire}
-              aria-label={`Note : ${table.commentaire}`}
-            >
-              !
-            </span>
-          )}
         </div>
         <span
           className={`text-xs font-semibold px-2 py-1 rounded-full flex-shrink-0
@@ -626,6 +616,13 @@ function Table({ table }) {
           {libres}/{total}
         </span>
       </div>
+
+      {table.commentaire && (
+        <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-3 text-amber-800 text-xs leading-snug">
+          <span className="flex-shrink-0 w-4 h-4 rounded-full bg-amber-300 text-amber-900 text-[10px] font-bold flex items-center justify-center mt-px">!</span>
+          <span>{table.commentaire}</span>
+        </div>
+      )}
 
       {rangeeHaut.length > 0 && (
         <div className="flex flex-wrap justify-center gap-3 mb-3">
