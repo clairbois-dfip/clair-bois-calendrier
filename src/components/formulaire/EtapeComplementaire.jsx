@@ -42,7 +42,7 @@ export default function EtapeComplementaire({ data, errors, onChange, onBlur, pa
       />
 
       <ChampFormulaire
-        label="Limitations fonctionnelles, physiques, cognitives ou autres"
+        label="Limitations fonctionnelles, physiques, cognitives ou autres (troubles de la concentration, difficultés relationnelles, taux d'activité réduit, limitation de port de charge, etc.)"
         name="limitations"
         type="textarea"
         value={data.limitations}

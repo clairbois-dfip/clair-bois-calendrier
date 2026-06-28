@@ -85,7 +85,7 @@ export function validateEmailOptional(value) {
   return validateEmail(value)
 }
 
-/** Date de naissance : pas future, âge entre 14 et 99 ans */
+/** Date de naissance : pas future, âge entre 15 et 99 ans */
 export function validateDateNaissance(value) {
   if (!value || !value.trim()) {
     return { valid: false, message: 'La date de naissance est obligatoire.' }
@@ -100,8 +100,8 @@ export function validateDateNaissance(value) {
     return { valid: false, message: 'La date ne peut pas être dans le futur.' }
   }
   const age = Math.floor((today - date) / (365.25 * 24 * 60 * 60 * 1000))
-  if (age < 14) {
-    return { valid: false, message: 'L\'âge minimum est de 14 ans.' }
+  if (age < 15) {
+    return { valid: false, message: 'L\'âge minimum est de 15 ans.' }
   }
   if (age > 99) {
     return { valid: false, message: 'Veuillez vérifier la date de naissance.' }
