@@ -1,0 +1,40 @@
+# Node
+node_modules/
+dist/
+build/
+.vite/
+.next/
+.expo/
+
+# Env / secrets
+.env
+.env.*
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Claude Code
+.claude/settings.local.json
+
+# Gros fichiers (réunions, captures écran)
+*.mp4
+*.mov
+*.avi
+*.mp3
+docs/Karavia19mai.m4a
+
+
+# Sécurité — les zips de flux PA contiennent des tokens dans definition.json
+*.zip
