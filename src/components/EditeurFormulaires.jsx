@@ -227,24 +227,22 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
   }
 
   function handleSupprimer(champ) {
-    // Champ système : suppression bloquée (casserait emails / dédoublonnage / affichage).
+    // On INFORME (sans jamais interdire) : c'est l'admin qui décide, et le
+    // flux Power Automate ignore un champ manquant sans planter.
+    const avertissements = []
     if (estChampSysteme(champ)) {
-      window.alert(
-        `« ${champ.label} » est une question SYSTÈME et ne peut pas être supprimée.\n\n` +
-        `Raison : ${CHAMPS_SYSTEME[champ.champPayload]}.\n\n` +
-        `Vous pouvez modifier son libellé, mais pas la retirer.`
-      )
-      return
+      avertissements.push(`Ce champ est important : ${CHAMPS_SYSTEME[champ.champPayload]}.`)
     }
-    // Champ pilote d'une ou plusieurs conditions : avertir des dépendances.
     const dependants = elementsDependantDe(schema, champ.champPayload)
-    let message = `Supprimer la question « ${champ.label} » ?\n\nLa colonne SharePoint « ${champ.colonneSP || '—'} » n'est pas supprimée — seule la question disparaît du formulaire.`
     if (dependants.length > 0) {
-      message =
-        `⚠️ ATTENTION — d'autres éléments dépendent de « ${champ.label} » :\n` +
-        dependants.map((d) => `  • ${d}`).join('\n') +
-        `\n\nSi vous la supprimez, ${dependants.length > 1 ? 'ces éléments ne s\'afficheront plus jamais' : 'cet élément ne s\'affichera plus jamais'} (leur condition d'affichage devient impossible).\n\nSupprimer quand même ?`
+      avertissements.push(
+        `D'autres éléments dépendent de ce champ et ne s'afficheront plus :\n` +
+        dependants.map((d) => `  • ${d}`).join('\n')
+      )
     }
+    const message = avertissements.length > 0
+      ? `⚠️ Supprimer « ${champ.label} » ?\n\n${avertissements.join('\n\n')}\n\nSupprimer quand même ?`
+      : `Supprimer la question « ${champ.label} » ?\n\nLa colonne SharePoint « ${champ.colonneSP || '—'} » n'est pas supprimée — seule la question disparaît du formulaire.`
     if (!window.confirm(message)) return
     setCleSelection(null)
     appliquer((s) => supprimerChamp(s, cleChamp(champ)))
@@ -807,7 +805,7 @@ function CadreChamp({
               )}
               {estChampSysteme(champ) && (
                 <span className="text-[11px] text-cb-blue bg-cb-blue-light border border-cb-blue/20 rounded px-1.5 py-0.5" title={CHAMPS_SYSTEME[champ.champPayload]}>
-                  🔒 champ système
+                  ℹ️ champ important
                 </span>
               )}
             </div>
@@ -980,13 +978,12 @@ function PanneauProprietes({ champ, schema, onModifier }) {
           <Propriete label="Réponse enregistrée dans SharePoint ?">
             <button
               type="button"
-              disabled={systeme}
               onClick={() =>
                 onModifier(stockeSP ? { listeCible: '', nouveau: undefined } : { listeCible: 'Stagiaire' })
               }
-              className={`w-full px-3 py-2 rounded-lg border text-sm font-medium transition-colors text-left ${
-                systeme ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
-              } ${stockeSP ? 'border-cb-blue bg-cb-blue-light text-cb-blue' : 'border-gray-300 bg-white text-gray-500'}`}
+              className={`w-full px-3 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer text-left ${
+                stockeSP ? 'border-cb-blue bg-cb-blue-light text-cb-blue' : 'border-gray-300 bg-white text-gray-500'
+              }`}
             >
               {stockeSP
                 ? 'Oui — la réponse est écrite dans une colonne SharePoint'
@@ -994,7 +991,7 @@ function PanneauProprietes({ champ, schema, onModifier }) {
             </button>
           </Propriete>
           {systeme && (
-            <p className="text-[11px] text-cb-blue mt-1">🔒 Question système ({CHAMPS_SYSTEME[champ.champPayload]}) — toujours enregistrée, non supprimable.</p>
+            <p className="text-[11px] text-cb-blue mt-1">ℹ️ Champ important : {CHAMPS_SYSTEME[champ.champPayload]}.</p>
           )}
           {!stockeSP && !systeme && (
             <p className="text-[11px] text-gray-400 mt-1">
