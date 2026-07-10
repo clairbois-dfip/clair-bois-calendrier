@@ -24,6 +24,8 @@ import {
   getGithubPat,
   setGithubPat,
 } from '../utils/schemaFormulaires'
+import { normaliserTheme, appliquerTheme } from '../utils/themes'
+import EditeurTheme from './EditeurTheme'
 
 /**
  * EditeurFormulaires — Mode édition des formulaires (CMS interne).
@@ -55,6 +57,7 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
   const [formulaireActif, setFormulaireActif] = useState('inscription')
   const [cleSelection, setCleSelection] = useState(null)
   const [etapeOuverte, setEtapeOuverte] = useState(null) // panneau réglages d'étape
+  const [vue, setVue] = useState('formulaires') // 'formulaires' | 'theme'
   const [modifie, setModifie] = useState(false)
   const [publication, setPublication] = useState({ enCours: false, succes: '', erreur: '' })
   const [patVisible, setPatVisible] = useState(false)
@@ -105,8 +108,6 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
   const etapesActives = (schema.etapes || [])
     .filter((e) => e.formulaire === formulaireActif)
     .sort((a, b) => a.ordre - b.ordre)
-
-  const champSelectionne = schema.champs.find((c) => cleChamp(c) === cleSelection) || null
 
   /* Champs marqués « nouveau » = colonnes SharePoint encore à créer. */
   const colonnesACreer = schema.champs.filter((c) => c.nouveau)
@@ -187,6 +188,13 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
     appliquer((s) => supprimerEtape(s, etape.cle))
   }
 
+  /** Change le thème : stocké dans le schéma ET appliqué en direct (aperçu). */
+  function handleThemeChange(theme) {
+    const t = normaliserTheme(theme)
+    appliquerTheme(t)
+    appliquer((s) => ({ ...s, theme: t }))
+  }
+
   /* ── Rendu ───────────────────────────────────────────── */
 
   return (
@@ -195,26 +203,45 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
       <div className="sticky top-0 z-20 -mx-4 px-4 py-3 bg-white/95 backdrop-blur border-b border-gray-200 mb-6">
         <div className="max-w-3xl mx-auto flex flex-wrap items-center gap-3">
           <h1 className="text-lg font-bold text-cb-blue mr-auto">
-            ✏️ Édition des formulaires
+            {vue === 'theme' ? '🎨 Thème du site' : '✏️ Édition des formulaires'}
             {modifie && (
               <span className="ml-2 text-xs font-medium text-orange-600 bg-orange-50 border border-orange-200 rounded-full px-2 py-0.5 align-middle">
                 modifications non publiées
               </span>
             )}
           </h1>
-          <select
-            value={formulaireActif}
-            onChange={(e) => {
-              setFormulaireActif(e.target.value)
-              setCleSelection(null)
-            }}
-            className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 bg-white cursor-pointer"
-            aria-label="Formulaire à éditer"
-          >
-            {(schema.formulaires || []).map((f) => (
-              <option key={f.cle} value={f.cle}>{f.titre}</option>
-            ))}
-          </select>
+          {/* Bascule Formulaires / Thème */}
+          <div className="flex rounded-lg border border-gray-300 overflow-hidden text-sm">
+            <button
+              type="button"
+              onClick={() => setVue('formulaires')}
+              className={`px-3 py-1.5 transition-colors cursor-pointer ${vue === 'formulaires' ? 'bg-cb-blue text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+            >
+              Formulaires
+            </button>
+            <button
+              type="button"
+              onClick={() => setVue('theme')}
+              className={`px-3 py-1.5 transition-colors cursor-pointer ${vue === 'theme' ? 'bg-cb-blue text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+            >
+              Thème
+            </button>
+          </div>
+          {vue === 'formulaires' && (
+            <select
+              value={formulaireActif}
+              onChange={(e) => {
+                setFormulaireActif(e.target.value)
+                setCleSelection(null)
+              }}
+              className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 bg-white cursor-pointer"
+              aria-label="Formulaire à éditer"
+            >
+              {(schema.formulaires || []).map((f) => (
+                <option key={f.cle} value={f.cle}>{f.titre}</option>
+              ))}
+            </select>
+          )}
           <button
             type="button"
             onClick={handlePublier}
@@ -266,6 +293,18 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
         )}
       </div>
 
+      {/* ── Vue THÈME ── */}
+      {vue === 'theme' && (
+        <div className="max-w-3xl mx-auto">
+          <EditeurTheme
+            themeCourant={schema.theme}
+            onChange={handleThemeChange}
+          />
+        </div>
+      )}
+
+      {/* ── Vue FORMULAIRES ── */}
+      {vue === 'formulaires' && (
       <div className="max-w-3xl mx-auto space-y-8">
         {/* Pédagogie : la règle d'or de l'identifiant SharePoint */}
         <div className="bg-cb-blue-light/60 border border-cb-blue/20 rounded-xl p-4 text-sm text-cb-blue">
@@ -424,6 +463,7 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
           + Ajouter une étape à ce formulaire
         </button>
       </div>
+      )}
 
       {/* Boîte de dialogue : saisie du token GitHub à la première publication */}
       {patVisible && (

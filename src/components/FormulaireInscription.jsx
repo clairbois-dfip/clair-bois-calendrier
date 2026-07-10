@@ -234,7 +234,7 @@ export default function FormulaireInscription({ schema, parcours, chemin, contex
 
   return (
     <div className="animate-fadeIn -mx-4 -mt-6 -mb-6 px-4 pt-6 pb-10 min-h-screen"
-         style={{ background: 'linear-gradient(160deg, #e3ecfa 0%, #ede4f3 30%, #f5f0fa 50%, #e8f0f8 80%, #dce8f5 100%)' }}>
+         style={{ background: 'var(--cb-form-bg, linear-gradient(160deg, #e3ecfa 0%, #ede4f3 30%, #f5f0fa 50%, #e8f0f8 80%, #dce8f5 100%))' }}>
       {/* Retour — étape précédente ou confirmation quitter */}
       <button
         onClick={() => {

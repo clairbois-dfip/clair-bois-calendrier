@@ -49,6 +49,7 @@ import {
   clearToken as clearEditionToken,
   isAuthenticated as isEditionAuthenticated,
 } from './utils/editionAuth'
+import { appliquerTheme } from './utils/themes'
 
 function App() {
   /* --- Etat du chargement des donnees --- */
@@ -108,6 +109,9 @@ function App() {
         // Transforme le format plat (Power Automate) en hierarchie etablissements > secteurs > semaines
         setData(transformPlanningData(planning))
         setSchemaFormulaires(schema)
+        // Applique le thème visuel choisi par la coordination (schema.theme),
+        // sinon le thème officiel Clair Bois par défaut.
+        appliquerTheme(schema?.theme)
         setLoading(false)
       })
       .catch((err) => {

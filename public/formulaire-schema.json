@@ -2,6 +2,16 @@
   "_doc": "Schéma des formulaires Clair-Bois — édité par le mode édition (#edition). 1 entrée de 'champs' = 1 champ = 1 colonne SharePoint ('colonneSP' = nom interne SP, contrat avec Power Automate, cf. docs/SCHEMA.md). Ce fichier est le format d'import de la future liste SP FormulaireSchema (Flux 7).",
   "version": 1,
   "updatedAt": "2026-07-06T00:00:00.000Z",
+  "theme": {
+    "cle": "clairbois",
+    "nom": "Clair Bois — officiel",
+    "primaire": "#092C6A",
+    "primaireLight": "#dbeafe",
+    "accent": "#2EA3F2",
+    "accentLight": "#e0f2fe",
+    "police": "'Open Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+    "fondFormulaire": "linear-gradient(160deg, #e3ecfa 0%, #ede4f3 30%, #f5f0fa 50%, #e8f0f8 80%, #dce8f5 100%)"
+  },
   "formulaires": [
     {
       "cle": "inscription",

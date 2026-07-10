@@ -29,10 +29,12 @@
   --color-cb-accent-light: #e0f2fe;
 }
 
-/* Styles de base du document */
+/* Styles de base du document
+ * La police est pilotée par la variable --cb-police (éditeur de thème,
+ * utils/themes.js) ; fallback Open Sans si aucun thème appliqué. */
 body {
   margin: 0;
-  font-family: 'Open Sans', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--cb-police, 'Open Sans', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
   background: linear-gradient(135deg, #f0f4f8 0%, #f5f8fc 40%, #f8fafc 70%, #f0f4f8 100%);
   background-attachment: fixed;
   min-height: 100vh;
