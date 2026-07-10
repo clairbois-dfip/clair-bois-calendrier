@@ -3,101 +3,1342 @@
   "version": 1,
   "updatedAt": "2026-07-06T00:00:00.000Z",
   "formulaires": [
-    { "cle": "inscription", "titre": "Inscription stage / module métier" },
-    { "cle": "signalement", "titre": "Signalement annulation ou retard" },
-    { "cle": "visite", "titre": "Demande de visite (enseignants)" }
+    {
+      "cle": "inscription",
+      "titre": "Inscription stage / module métier"
+    },
+    {
+      "cle": "signalement",
+      "titre": "Signalement annulation ou retard"
+    },
+    {
+      "cle": "visite",
+      "titre": "Demande de visite (enseignants)"
+    }
   ],
   "etapes": [
-    { "cle": "referent", "titre": "Référent·e", "ordre": 1, "formulaire": "inscription", "conditionAffichage": "pourQui=autre" },
-    { "cle": "stagiaire", "titre": "Stagiaire", "ordre": 2, "formulaire": "inscription", "conditionAffichage": null },
-    { "cle": "curatelle", "titre": "Curatelle", "ordre": 3, "formulaire": "inscription", "conditionAffichage": null },
-    { "cle": "urgence", "titre": "Urgence", "ordre": 4, "formulaire": "inscription", "conditionAffichage": null },
-    { "cle": "ai", "titre": "Assurance AI", "ordre": 5, "formulaire": "inscription", "conditionAffichage": null },
-    { "cle": "complementaire", "titre": "Compléments", "ordre": 6, "formulaire": "inscription", "conditionAffichage": null },
-    { "cle": "declaration", "titre": "Déclaration", "ordre": 7, "formulaire": "inscription", "conditionAffichage": null },
-    { "cle": "signalement", "titre": "Signaler une annulation ou un retard", "ordre": 1, "formulaire": "signalement", "conditionAffichage": null },
-    { "cle": "visite-coordonnees", "titre": "Vos coordonnées", "ordre": 1, "formulaire": "visite", "conditionAffichage": null },
-    { "cle": "visite-groupe", "titre": "Le groupe", "ordre": 2, "formulaire": "visite", "conditionAffichage": null },
-    { "cle": "visite-secteurs", "titre": "Secteurs d'intérêt", "ordre": 3, "formulaire": "visite", "conditionAffichage": null },
-    { "cle": "visite-contexte", "titre": "Contexte du projet de formation", "ordre": 4, "formulaire": "visite", "conditionAffichage": null }
+    {
+      "cle": "referent",
+      "titre": "Référent·e",
+      "ordre": 1,
+      "formulaire": "inscription",
+      "conditionAffichage": "pourQui=autre",
+      "intro": "En tant que référent·e, veuillez renseigner vos coordonnées professionnelles."
+    },
+    {
+      "cle": "stagiaire",
+      "titre": "Stagiaire",
+      "ordre": 2,
+      "formulaire": "inscription",
+      "conditionAffichage": null,
+      "intro": ""
+    },
+    {
+      "cle": "curatelle",
+      "titre": "Curatelle",
+      "ordre": 3,
+      "formulaire": "inscription",
+      "conditionAffichage": null,
+      "intro": ""
+    },
+    {
+      "cle": "urgence",
+      "titre": "Urgence",
+      "ordre": 4,
+      "formulaire": "inscription",
+      "conditionAffichage": null,
+      "intro": "Veuillez indiquer une personne de confiance que nous pouvons contacter en cas d'urgence.",
+      "tonalite": "attention"
+    },
+    {
+      "cle": "ai",
+      "titre": "Assurance AI",
+      "ordre": 5,
+      "formulaire": "inscription",
+      "conditionAffichage": null,
+      "intro": ""
+    },
+    {
+      "cle": "complementaire",
+      "titre": "Compléments",
+      "ordre": 6,
+      "formulaire": "inscription",
+      "conditionAffichage": null,
+      "intro": ""
+    },
+    {
+      "cle": "declaration",
+      "titre": "Déclaration",
+      "ordre": 7,
+      "formulaire": "inscription",
+      "conditionAffichage": null,
+      "intro": "Avant de finaliser votre demande, veuillez prendre connaissance des engagements suivants."
+    },
+    {
+      "cle": "signalement",
+      "titre": "Signaler une annulation ou un retard",
+      "ordre": 1,
+      "formulaire": "signalement",
+      "conditionAffichage": null,
+      "intro": ""
+    },
+    {
+      "cle": "visite-coordonnees",
+      "titre": "Vos coordonnées",
+      "ordre": 1,
+      "formulaire": "visite",
+      "conditionAffichage": null,
+      "intro": ""
+    },
+    {
+      "cle": "visite-groupe",
+      "titre": "Le groupe",
+      "ordre": 2,
+      "formulaire": "visite",
+      "conditionAffichage": null,
+      "intro": ""
+    },
+    {
+      "cle": "visite-secteurs",
+      "titre": "Secteurs d'intérêt",
+      "ordre": 3,
+      "formulaire": "visite",
+      "conditionAffichage": null,
+      "intro": ""
+    },
+    {
+      "cle": "visite-contexte",
+      "titre": "Contexte du projet de formation",
+      "ordre": 4,
+      "formulaire": "visite",
+      "conditionAffichage": null,
+      "intro": ""
+    }
   ],
   "champs": [
-    { "colonneSP": "Partenaire", "champPayload": "referent_partenaire", "listeCible": "Referent", "label": "Organisation / Partenaire", "type": "text", "options": [], "etape": "referent", "ordre": 10, "obligatoire": true, "condition": null, "placeholder": "Ex: SGIPA, ORIF, École spécialisée...", "aide": "", "largeur": "pleine" },
-    { "colonneSP": "Nom", "champPayload": "referent_nom", "listeCible": "Referent", "label": "Votre nom", "type": "text", "options": [], "etape": "referent", "ordre": 20, "obligatoire": true, "condition": null, "placeholder": "", "aide": "" },
-    { "colonneSP": "Prenom", "champPayload": "referent_prenom", "listeCible": "Referent", "label": "Votre prénom", "type": "text", "options": [], "etape": "referent", "ordre": 30, "obligatoire": true, "condition": null, "placeholder": "", "aide": "" },
-    { "colonneSP": "Tel", "champPayload": "referent_tel", "listeCible": "Referent", "label": "Votre téléphone", "type": "tel", "options": [], "etape": "referent", "ordre": 40, "obligatoire": true, "condition": null, "placeholder": "+41 XX XXX XX XX", "aide": "" },
-    { "colonneSP": "Mail", "champPayload": "referent_email", "listeCible": "Referent", "label": "Votre email", "type": "email", "options": [], "etape": "referent", "ordre": 50, "obligatoire": true, "condition": null, "placeholder": "nom@organisation.ch", "aide": "" },
-    { "colonneSP": "Fonction", "champPayload": "referent_fonction", "listeCible": "Referent", "label": "Votre fonction", "type": "select", "options": [ { "value": "Enseignant·e", "label": "Enseignant·e" }, { "value": "Éducateur·trice", "label": "Éducateur·trice" }, { "value": "Conseiller·ère AI", "label": "Conseiller·ère AI" }, { "value": "Conseiller·ère en Insertion", "label": "Conseiller·ère en Insertion" }, { "value": "Curateur·trice", "label": "Curateur·trice" }, { "value": "Parent", "label": "Parent" }, { "value": "Autre", "label": "Autre" } ], "etape": "referent", "ordre": 60, "obligatoire": true, "condition": null, "placeholder": "", "aide": "", "largeur": "pleine" },
-
-    { "colonneSP": "Nom", "champPayload": "nom", "listeCible": "Stagiaire", "label": "Nom", "type": "text", "options": [], "etape": "stagiaire", "ordre": 10, "obligatoire": true, "condition": null, "placeholder": "", "aide": "" },
-    { "colonneSP": "Prenom", "champPayload": "prenom", "listeCible": "Stagiaire", "label": "Prénom", "type": "text", "options": [], "etape": "stagiaire", "ordre": 20, "obligatoire": true, "condition": null, "placeholder": "", "aide": "" },
-    { "colonneSP": "Sexe", "champPayload": "sexe", "listeCible": "Stagiaire", "label": "Sexe", "type": "radio", "options": [ { "value": "Masculin", "label": "Masculin" }, { "value": "Féminin", "label": "Féminin" } ], "etape": "stagiaire", "ordre": 30, "obligatoire": true, "condition": null, "placeholder": "", "aide": "" },
-    { "colonneSP": "DateNaissance", "champPayload": "date_naissance", "listeCible": "Stagiaire", "label": "Date de naissance", "type": "date", "options": [], "etape": "stagiaire", "ordre": 40, "obligatoire": true, "condition": null, "placeholder": "", "aide": "" },
-    { "colonneSP": "AVS", "champPayload": "avs", "listeCible": "Stagiaire", "label": "Numéro AVS", "type": "text", "options": [], "etape": "stagiaire", "ordre": 50, "obligatoire": true, "condition": null, "placeholder": "756.XXXX.XXXX.XX", "aide": "13 chiffres, commence par 756" },
-    { "colonneSP": "Tel", "champPayload": "tel", "listeCible": "Stagiaire", "label": "Téléphone", "type": "tel", "options": [], "etape": "stagiaire", "ordre": 60, "obligatoire": true, "condition": null, "placeholder": "+41 XX XXX XX XX", "aide": "" },
-    { "colonneSP": "Mail", "champPayload": "email", "listeCible": "Stagiaire", "label": "Email", "type": "email", "options": [], "etape": "stagiaire", "ordre": 70, "obligatoire": true, "condition": null, "placeholder": "exemple@email.ch", "aide": "" },
-    { "colonneSP": "Adresse", "champPayload": "adresse", "listeCible": "Stagiaire", "label": "Adresse", "type": "text", "options": [], "etape": "stagiaire", "ordre": 80, "obligatoire": true, "condition": null, "placeholder": "Rue et numéro", "aide": "", "largeur": "pleine" },
-    { "colonneSP": "Npa", "champPayload": "npa", "listeCible": "Stagiaire", "label": "NPA", "type": "text", "options": [], "etape": "stagiaire", "ordre": 90, "obligatoire": true, "condition": null, "placeholder": "1205", "aide": "Code postal (4 chiffres)" },
-    { "colonneSP": "Localite", "champPayload": "localite", "listeCible": "Stagiaire", "label": "Localité", "type": "text", "options": [], "etape": "stagiaire", "ordre": 95, "obligatoire": true, "condition": null, "placeholder": "Genève", "aide": "", "nouveau": true },
-    { "colonneSP": "FormationEnCours", "champPayload": "formation", "listeCible": "Stagiaire", "label": "Envisage d'entrer en formation", "type": "select", "options": [ { "value": "Non", "label": "Non" }, { "value": "Oui, cette année", "label": "Oui, cette année" }, { "value": "Oui, l'année prochaine", "label": "Oui, l'année prochaine" } ], "etape": "stagiaire", "ordre": 100, "obligatoire": true, "condition": null, "placeholder": "", "aide": "" },
-
-    { "colonneSP": "Curatelle", "champPayload": "sous_curatelle", "listeCible": "Stagiaire", "label": "Le ou la stagiaire est sous curatelle :", "type": "radio", "options": [ { "value": "Oui", "label": "Oui" }, { "value": "Oui - curateur complète", "label": "Oui — c'est le curateur qui complète", "condition": "pourQui=autre" }, { "value": "Non", "label": "Non" } ], "etape": "curatelle", "ordre": 10, "obligatoire": true, "condition": null, "placeholder": "", "aide": "" },
-    { "colonneSP": "CuratelleType", "champPayload": "curatelle_type", "listeCible": "Stagiaire", "label": "Curateur·trice", "type": "select", "options": [ { "value": "OPAD", "label": "OPAD" }, { "value": "SPMI", "label": "SPMI" }, { "value": "Mère", "label": "Mère" }, { "value": "Père", "label": "Père" }, { "value": "Avocat", "label": "Avocat" }, { "value": "Autre", "label": "Autre" } ], "etape": "curatelle", "ordre": 20, "obligatoire": true, "condition": "sous_curatelle=Oui*", "placeholder": "", "aide": "", "largeur": "pleine" },
-    { "colonneSP": "CuratelleNom", "champPayload": "curatelle_nom", "listeCible": "Stagiaire", "label": "Nom du curateur", "type": "text", "options": [], "etape": "curatelle", "ordre": 30, "obligatoire": true, "condition": "sous_curatelle=Oui*", "placeholder": "", "aide": "" },
-    { "colonneSP": "CuratellePrenom", "champPayload": "curatelle_prenom", "listeCible": "Stagiaire", "label": "Prénom du curateur", "type": "text", "options": [], "etape": "curatelle", "ordre": 40, "obligatoire": true, "condition": "sous_curatelle=Oui*", "placeholder": "", "aide": "" },
-    { "colonneSP": "CuratelleTel", "champPayload": "curatelle_tel", "listeCible": "Stagiaire", "label": "Téléphone", "type": "tel", "options": [], "etape": "curatelle", "ordre": 50, "obligatoire": true, "condition": "sous_curatelle=Oui*", "placeholder": "+41 XX XXX XX XX", "aide": "" },
-    { "colonneSP": "CuratelleMail", "champPayload": "curatelle_email", "listeCible": "Stagiaire", "label": "Email", "type": "email", "options": [], "etape": "curatelle", "ordre": 60, "obligatoire": true, "condition": "sous_curatelle=Oui*", "placeholder": "curateur@email.ch", "aide": "" },
-
-    { "colonneSP": "UrgenceNom", "champPayload": "urgence_nom", "listeCible": "Stagiaire", "label": "Nom", "type": "text", "options": [], "etape": "urgence", "ordre": 10, "obligatoire": true, "condition": null, "placeholder": "", "aide": "" },
-    { "colonneSP": "UrgencePrenom", "champPayload": "urgence_prenom", "listeCible": "Stagiaire", "label": "Prénom", "type": "text", "options": [], "etape": "urgence", "ordre": 20, "obligatoire": true, "condition": null, "placeholder": "", "aide": "" },
-    { "colonneSP": "UrgenceLien", "champPayload": "urgence_lien", "listeCible": "Stagiaire", "label": "Lien avec le ou la stagiaire", "type": "select", "options": [ { "value": "Père", "label": "Père" }, { "value": "Mère", "label": "Mère" }, { "value": "Soeur", "label": "Sœur" }, { "value": "Frère", "label": "Frère" }, { "value": "Epoux·se", "label": "Époux·se" }, { "value": "Ami·e", "label": "Ami·e" }, { "value": "Autre", "label": "Autre" } ], "etape": "urgence", "ordre": 30, "obligatoire": true, "condition": null, "placeholder": "", "aide": "" },
-    { "colonneSP": "UrgenceTel", "champPayload": "urgence_tel", "listeCible": "Stagiaire", "label": "Téléphone", "type": "tel", "options": [], "etape": "urgence", "ordre": 40, "obligatoire": true, "condition": null, "placeholder": "+41 XX XXX XX XX", "aide": "" },
-
-    { "colonneSP": "AssuranceInvalidite", "champPayload": "inscrit_ai", "listeCible": "Stagiaire", "label": "Inscrit·e à l'Assurance Invalidité", "type": "radio", "options": [ { "value": "Oui - conseiller AI complète", "label": "Oui — c'est le conseiller AI qui complète", "condition": "pourQui=autre" }, { "value": "Oui", "label": "Oui" }, { "value": "Non", "label": "Non" }, { "value": "Demande en cours", "label": "Demande en cours" } ], "etape": "ai", "ordre": 10, "obligatoire": true, "condition": null, "placeholder": "", "aide": "" },
-    { "colonneSP": "AIConseillerNom", "champPayload": "ai_nom", "listeCible": "Stagiaire", "label": "Nom du conseiller AI", "type": "text", "options": [], "etape": "ai", "ordre": 20, "obligatoire": true, "condition": "inscrit_ai!=Non", "placeholder": "Nom", "aide": "" },
-    { "colonneSP": "AIConseillerPrenom", "champPayload": "ai_prenom", "listeCible": "Stagiaire", "label": "Prénom du conseiller AI", "type": "text", "options": [], "etape": "ai", "ordre": 30, "obligatoire": true, "condition": "inscrit_ai!=Non", "placeholder": "Prénom", "aide": "" },
-    { "colonneSP": "AIConseillerTel", "champPayload": "ai_tel", "listeCible": "Stagiaire", "label": "Téléphone", "type": "tel", "options": [], "etape": "ai", "ordre": 40, "obligatoire": true, "condition": "inscrit_ai!=Non", "placeholder": "+41 XX XXX XX XX", "aide": "" },
-    { "colonneSP": "AIConseillerMail", "champPayload": "ai_email", "listeCible": "Stagiaire", "label": "Email", "type": "email", "options": [], "etape": "ai", "ordre": 50, "obligatoire": true, "condition": "inscrit_ai!=Non", "placeholder": "conseiller@ai.ch", "aide": "" },
-    { "colonneSP": "AIOffice", "champPayload": "ai_office", "listeCible": "Stagiaire", "label": "Office AI", "type": "text", "options": [], "etape": "ai", "ordre": 60, "obligatoire": true, "condition": "inscrit_ai!=Non", "placeholder": "Ex: OAI Genève", "aide": "" },
-    { "colonneSP": "TypeMesure", "champPayload": "ai_mesure", "listeCible": "Demande", "label": "Mesure AI", "type": "text", "options": [], "etape": "ai", "ordre": 70, "obligatoire": false, "condition": "inscrit_ai!=Non", "placeholder": "Ex: Mesure de réinsertion", "aide": "" },
-
-    { "colonneSP": "ObjectifStage", "champPayload": "objectif_stage", "listeCible": "Demande", "label": "Quel est l'objectif du stage ?", "type": "textarea", "options": [], "etape": "complementaire", "ordre": 10, "obligatoire": true, "condition": "parcours=stages", "placeholder": "Décrivez l'objectif du stage...", "aide": "" },
-    { "colonneSP": "ParcoursScolaire", "champPayload": "parcours_scolaire", "listeCible": "Stagiaire", "label": "Parcours scolaire (difficultés particulières ?)", "type": "textarea", "options": [], "etape": "complementaire", "ordre": 20, "obligatoire": true, "condition": null, "placeholder": "Décrivez le parcours scolaire...", "aide": "" },
-    { "colonneSP": "Limitations", "champPayload": "limitations", "listeCible": "Stagiaire", "label": "Limitations fonctionnelles, physiques, cognitives ou autres (troubles de la concentration, difficultés relationnelles, taux d'activité réduit, limitation de port de charge, etc.)", "type": "textarea", "options": [], "etape": "complementaire", "ordre": 30, "obligatoire": true, "condition": null, "placeholder": "Indiquez les limitations éventuelles...", "aide": "" },
-    { "colonneSP": "TestsEffectues", "champPayload": "deja_tests", "listeCible": "Stagiaire", "label": "A déjà fait des tests", "type": "select", "options": [ { "value": "Non", "label": "Non" }, { "value": "Oui, d'évaluation et de diagnostic", "label": "Oui, d'évaluation et de diagnostic (dys, TDAH, TSA, etc.)" }, { "value": "Oui, d'évaluation du niveau scolaire", "label": "Oui, d'évaluation du niveau scolaire et des aptitudes (EVA, EVAtech, TAF, etc.)" } ], "etape": "complementaire", "ordre": 40, "obligatoire": true, "condition": null, "placeholder": "", "aide": "" },
-    { "colonneSP": "ReseauMedical", "champPayload": "reseau_medical", "listeCible": "Stagiaire", "label": "Réseau médical (passé ou présent)", "type": "select", "options": [ { "value": "Aucun médecin ou thérapeute", "label": "Aucun médecin ou thérapeute" }, { "value": "Médecin généraliste", "label": "Un·e médecin généraliste" }, { "value": "Thérapeute", "label": "Un·e thérapeute (psychologue, psychiatre, etc.)" }, { "value": "Logothérapeute", "label": "Un·e logothérapeute" }, { "value": "Autre", "label": "Autre" } ], "etape": "complementaire", "ordre": 50, "obligatoire": true, "condition": null, "placeholder": "", "aide": "" },
-    { "colonneSP": "Pointure", "champPayload": "pointure", "listeCible": "Stagiaire", "label": "Pointure", "type": "text", "options": [], "etape": "complementaire", "ordre": 60, "obligatoire": false, "condition": null, "placeholder": "Ex: 42", "aide": "" },
-    { "colonneSP": "TailleTshirt", "champPayload": "taille_tshirt", "listeCible": "Stagiaire", "label": "Taille t-shirt", "type": "text", "options": [], "etape": "complementaire", "ordre": 70, "obligatoire": false, "condition": null, "placeholder": "Ex: M, L, XL", "aide": "" },
-    { "colonneSP": "TaillePantalon", "champPayload": "taille_pantalon", "listeCible": "Stagiaire", "label": "Taille pantalon", "type": "text", "options": [], "etape": "complementaire", "ordre": 80, "obligatoire": false, "condition": null, "placeholder": "Ex: 40", "aide": "" },
-
-    { "colonneSP": "DeclarationCharte", "champPayload": "declaration_charte", "listeCible": "Stagiaire", "label": "En cochant la présente, je déclare que le ou la stagiaire a lu la Charte pour la prévention des abus sexuels, de la maltraitance et d'autres formes de violation de l'intégrité.", "type": "checkbox", "options": [], "etape": "declaration", "ordre": 10, "obligatoire": true, "condition": null, "placeholder": "", "aide": "" },
-    { "colonneSP": "DeclarationEngagement", "champPayload": "declaration_engagement", "listeCible": "Stagiaire", "label": "En cochant la présente, je déclare que le ou la stagiaire s'engage à lire, signer et nous envoyer la Déclaration d'engagement personnelle par courriel.", "type": "checkbox", "options": [], "etape": "declaration", "ordre": 20, "obligatoire": true, "condition": null, "placeholder": "", "aide": "" },
-
-    { "colonneSP": "Nom", "champPayload": "nom", "listeCible": "Signalement", "label": "Nom", "type": "text", "options": [], "etape": "signalement", "ordre": 10, "obligatoire": true, "condition": null, "placeholder": "Dupont", "aide": "" },
-    { "colonneSP": "Prenom", "champPayload": "prenom", "listeCible": "Signalement", "label": "Prénom", "type": "text", "options": [], "etape": "signalement", "ordre": 20, "obligatoire": true, "condition": null, "placeholder": "Marie", "aide": "" },
-    { "colonneSP": "Tel", "champPayload": "tel", "listeCible": "Signalement", "label": "Téléphone", "type": "tel", "options": [], "etape": "signalement", "ordre": 30, "obligatoire": true, "condition": null, "placeholder": "+41 79 123 45 67", "aide": "Format suisse" },
-    { "colonneSP": "Mail", "champPayload": "email", "listeCible": "Signalement", "label": "Email", "type": "email", "options": [], "etape": "signalement", "ordre": 40, "obligatoire": true, "condition": null, "placeholder": "marie.dupont@gmail.com", "aide": "" },
-    { "colonneSP": "AVS", "champPayload": "avs", "listeCible": "Signalement", "label": "Numéro AVS du ou de la stagiaire (facultatif)", "type": "text", "options": [], "etape": "signalement", "ordre": 45, "obligatoire": false, "condition": null, "placeholder": "756.XXXX.XXXX.XX", "aide": "Aide au rattachement du dossier", "nouveau": true },
-    { "colonneSP": "DateConcernee", "champPayload": "date_concernee", "listeCible": "Signalement", "label": "Date du stage ou module concerné (facultatif)", "type": "date", "options": [], "etape": "signalement", "ordre": 47, "obligatoire": false, "condition": null, "placeholder": "", "aide": "", "nouveau": true },
-    { "colonneSP": "Motif", "champPayload": "motif", "listeCible": "Signalement", "label": "Motif", "type": "select", "options": [ { "value": "Annulation", "label": "Annulation" }, { "value": "Retard", "label": "Retard" } ], "etape": "signalement", "ordre": 50, "obligatoire": true, "condition": null, "placeholder": "Sélectionnez un motif", "aide": "" },
-    { "colonneSP": "Commentaire", "champPayload": "commentaire", "listeCible": "Signalement", "label": "Commentaire", "type": "textarea", "options": [], "etape": "signalement", "ordre": 60, "obligatoire": false, "condition": null, "placeholder": "Précisions supplémentaires (facultatif)", "aide": "" },
-
-    { "colonneSP": "Nom", "champPayload": "nom", "listeCible": "Visite", "label": "Nom", "type": "text", "options": [], "etape": "visite-coordonnees", "ordre": 10, "obligatoire": true, "condition": null, "placeholder": "Dupont", "aide": "" },
-    { "colonneSP": "Prenom", "champPayload": "prenom", "listeCible": "Visite", "label": "Prénom", "type": "text", "options": [], "etape": "visite-coordonnees", "ordre": 20, "obligatoire": true, "condition": null, "placeholder": "Marie", "aide": "" },
-    { "colonneSP": "Fonction", "champPayload": "fonction", "listeCible": "Visite", "label": "Fonction", "type": "text", "options": [], "etape": "visite-coordonnees", "ordre": 30, "obligatoire": true, "condition": null, "placeholder": "Enseignant·e spécialisé·e, éducateur·trice…", "aide": "", "largeur": "pleine" },
-    { "colonneSP": "EtablissementScolaire", "champPayload": "etablissement", "listeCible": "Visite", "label": "Établissement / École", "type": "text", "options": [], "etape": "visite-coordonnees", "ordre": 40, "obligatoire": true, "condition": null, "placeholder": "École de la Jonction, Centre ORIF…", "aide": "", "largeur": "pleine" },
-    { "colonneSP": "Mail", "champPayload": "email", "listeCible": "Visite", "label": "Email", "type": "email", "options": [], "etape": "visite-coordonnees", "ordre": 50, "obligatoire": true, "condition": null, "placeholder": "marie.dupont@edu.ge.ch", "aide": "" },
-    { "colonneSP": "Tel", "champPayload": "tel", "listeCible": "Visite", "label": "Téléphone", "type": "tel", "options": [], "etape": "visite-coordonnees", "ordre": 60, "obligatoire": true, "condition": null, "placeholder": "+41 79 123 45 67", "aide": "Format suisse" },
-
-    { "colonneSP": "NbEleves", "champPayload": "nbEleves", "listeCible": "Visite", "label": "Nombre d'élèves", "type": "number", "options": [], "etape": "visite-groupe", "ordre": 10, "obligatoire": true, "condition": null, "placeholder": "12", "aide": "" },
-    { "colonneSP": "NbAccompagnants", "champPayload": "nbEnseignants", "listeCible": "Visite", "label": "Enseignants accompagnants", "type": "number", "options": [], "etape": "visite-groupe", "ordre": 20, "obligatoire": true, "condition": null, "placeholder": "2", "aide": "" },
-    { "colonneSP": "ProfilEleves", "champPayload": "profilEleves", "listeCible": "Visite", "label": "Profil des élèves", "type": "textarea", "options": [], "etape": "visite-groupe", "ordre": 30, "obligatoire": false, "condition": null, "placeholder": "Âge, besoins particuliers, contexte de formation… (facultatif)", "aide": "" },
-
-    { "colonneSP": "SecteursInteret", "champPayload": "secteursInteret", "listeCible": "Visite", "label": "Secteurs d'intérêt", "type": "multiselect", "options": [ { "value": "ASA", "label": "ASA" }, { "value": "ASE", "label": "ASE" }, { "value": "ASSC", "label": "ASSC" }, { "value": "Cuisine", "label": "Cuisine" }, { "value": "Restauration", "label": "Restauration" }, { "value": "Pâtisserie-boulangerie", "label": "Pâtisserie-boulangerie" }, { "value": "Nettoyage", "label": "Nettoyage" }, { "value": "Exploitation", "label": "Exploitation" }, { "value": "Peinture", "label": "Peinture" }, { "value": "Graphisme", "label": "Graphisme" }, { "value": "Audio-visuel", "label": "Audio-visuel" }, { "value": "Médiamatique", "label": "Médiamatique" }, { "value": "Intendance", "label": "Intendance" }, { "value": "Lingerie", "label": "Lingerie" }, { "value": "Informatique", "label": "Informatique" }, { "value": "Confection", "label": "Confection" }, { "value": "Autre", "label": "Autre" } ], "etape": "visite-secteurs", "ordre": 10, "obligatoire": false, "condition": null, "placeholder": "", "aide": "Sélectionnez un ou plusieurs secteurs (facultatif)" },
-
-    { "colonneSP": "StagesAnterieurs", "champPayload": "stagesAnterieurs", "listeCible": "Visite", "label": "Stages antérieurs à Clair Bois ou ailleurs ?", "type": "radio", "options": [ { "value": "Oui", "label": "Oui" }, { "value": "Non", "label": "Non" } ], "etape": "visite-contexte", "ordre": 10, "obligatoire": false, "condition": null, "placeholder": "", "aide": "" },
-    { "colonneSP": "AvancementProjet", "champPayload": "avancement", "listeCible": "Visite", "label": "Où en est le projet de formation ?", "type": "select", "options": [ { "value": "Début", "label": "Début — exploration des possibilités" }, { "value": "En cours", "label": "En cours — quelques pistes identifiées" }, { "value": "Plusieurs cibles", "label": "Plusieurs cibles — comparaison en cours" }, { "value": "Avancé", "label": "Avancé — piste solide, orientation proche" } ], "etape": "visite-contexte", "ordre": 20, "obligatoire": true, "condition": null, "placeholder": "Sélectionnez une étape", "aide": "", "largeur": "pleine" },
-    { "colonneSP": "DemandeAI", "champPayload": "demandeAI", "listeCible": "Visite", "label": "Demande AI (Assurance Invalidité)", "type": "select", "options": [ { "value": "Non faite", "label": "Non faite" }, { "value": "En cours", "label": "En cours" }, { "value": "Validée", "label": "Validée" } ], "etape": "visite-contexte", "ordre": 30, "obligatoire": true, "condition": null, "placeholder": "Sélectionnez un statut", "aide": "", "largeur": "pleine" },
-    { "colonneSP": "AIContact", "champPayload": "contactAI", "listeCible": "Visite", "label": "Coordonnées de la conseillère AI", "type": "text", "options": [], "etape": "visite-contexte", "ordre": 40, "obligatoire": true, "condition": "demandeAI=Validée", "placeholder": "Nom, téléphone ou email", "aide": "", "largeur": "pleine" }
+    {
+      "colonneSP": "Partenaire",
+      "champPayload": "referent_partenaire",
+      "listeCible": "Referent",
+      "label": "Organisation / Partenaire",
+      "type": "text",
+      "options": [],
+      "etape": "referent",
+      "ordre": 10,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "Ex: SGIPA, ORIF, École spécialisée...",
+      "aide": "",
+      "largeur": "pleine"
+    },
+    {
+      "colonneSP": "Nom",
+      "champPayload": "referent_nom",
+      "listeCible": "Referent",
+      "label": "Votre nom",
+      "type": "text",
+      "options": [],
+      "etape": "referent",
+      "ordre": 20,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Prenom",
+      "champPayload": "referent_prenom",
+      "listeCible": "Referent",
+      "label": "Votre prénom",
+      "type": "text",
+      "options": [],
+      "etape": "referent",
+      "ordre": 30,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Tel",
+      "champPayload": "referent_tel",
+      "listeCible": "Referent",
+      "label": "Votre téléphone",
+      "type": "tel",
+      "options": [],
+      "etape": "referent",
+      "ordre": 40,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "+41 XX XXX XX XX",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Mail",
+      "champPayload": "referent_email",
+      "listeCible": "Referent",
+      "label": "Votre email",
+      "type": "email",
+      "options": [],
+      "etape": "referent",
+      "ordre": 50,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "nom@organisation.ch",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Fonction",
+      "champPayload": "referent_fonction",
+      "listeCible": "Referent",
+      "label": "Votre fonction",
+      "type": "select",
+      "options": [
+        {
+          "value": "Enseignant·e",
+          "label": "Enseignant·e"
+        },
+        {
+          "value": "Éducateur·trice",
+          "label": "Éducateur·trice"
+        },
+        {
+          "value": "Conseiller·ère AI",
+          "label": "Conseiller·ère AI"
+        },
+        {
+          "value": "Conseiller·ère en Insertion",
+          "label": "Conseiller·ère en Insertion"
+        },
+        {
+          "value": "Curateur·trice",
+          "label": "Curateur·trice"
+        },
+        {
+          "value": "Parent",
+          "label": "Parent"
+        },
+        {
+          "value": "Autre",
+          "label": "Autre"
+        }
+      ],
+      "etape": "referent",
+      "ordre": 60,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "",
+      "aide": "",
+      "largeur": "pleine"
+    },
+    {
+      "colonneSP": "Nom",
+      "champPayload": "nom",
+      "listeCible": "Stagiaire",
+      "label": "Nom",
+      "type": "text",
+      "options": [],
+      "etape": "stagiaire",
+      "ordre": 10,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Prenom",
+      "champPayload": "prenom",
+      "listeCible": "Stagiaire",
+      "label": "Prénom",
+      "type": "text",
+      "options": [],
+      "etape": "stagiaire",
+      "ordre": 20,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Sexe",
+      "champPayload": "sexe",
+      "listeCible": "Stagiaire",
+      "label": "Sexe",
+      "type": "radio",
+      "options": [
+        {
+          "value": "Masculin",
+          "label": "Masculin"
+        },
+        {
+          "value": "Féminin",
+          "label": "Féminin"
+        }
+      ],
+      "etape": "stagiaire",
+      "ordre": 30,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "DateNaissance",
+      "champPayload": "date_naissance",
+      "listeCible": "Stagiaire",
+      "label": "Date de naissance",
+      "type": "date",
+      "options": [],
+      "etape": "stagiaire",
+      "ordre": 40,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "AVS",
+      "champPayload": "avs",
+      "listeCible": "Stagiaire",
+      "label": "Numéro AVS",
+      "type": "text",
+      "options": [],
+      "etape": "stagiaire",
+      "ordre": 50,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "756.XXXX.XXXX.XX",
+      "aide": "13 chiffres, commence par 756"
+    },
+    {
+      "colonneSP": "Tel",
+      "champPayload": "tel",
+      "listeCible": "Stagiaire",
+      "label": "Téléphone",
+      "type": "tel",
+      "options": [],
+      "etape": "stagiaire",
+      "ordre": 60,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "+41 XX XXX XX XX",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Mail",
+      "champPayload": "email",
+      "listeCible": "Stagiaire",
+      "label": "Email",
+      "type": "email",
+      "options": [],
+      "etape": "stagiaire",
+      "ordre": 70,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "exemple@email.ch",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Adresse",
+      "champPayload": "adresse",
+      "listeCible": "Stagiaire",
+      "label": "Adresse",
+      "type": "text",
+      "options": [],
+      "etape": "stagiaire",
+      "ordre": 80,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "Rue et numéro",
+      "aide": "",
+      "largeur": "pleine"
+    },
+    {
+      "colonneSP": "Npa",
+      "champPayload": "npa",
+      "listeCible": "Stagiaire",
+      "label": "NPA",
+      "type": "text",
+      "options": [],
+      "etape": "stagiaire",
+      "ordre": 90,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "1205",
+      "aide": "Code postal (4 chiffres)"
+    },
+    {
+      "colonneSP": "Localite",
+      "champPayload": "localite",
+      "listeCible": "Stagiaire",
+      "label": "Localité",
+      "type": "text",
+      "options": [],
+      "etape": "stagiaire",
+      "ordre": 95,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "Genève",
+      "aide": "",
+      "nouveau": true
+    },
+    {
+      "colonneSP": "FormationEnCours",
+      "champPayload": "formation",
+      "listeCible": "Stagiaire",
+      "label": "Envisage d'entrer en formation",
+      "type": "select",
+      "options": [
+        {
+          "value": "Non",
+          "label": "Non"
+        },
+        {
+          "value": "Oui, cette année",
+          "label": "Oui, cette année"
+        },
+        {
+          "value": "Oui, l'année prochaine",
+          "label": "Oui, l'année prochaine"
+        }
+      ],
+      "etape": "stagiaire",
+      "ordre": 100,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Curatelle",
+      "champPayload": "sous_curatelle",
+      "listeCible": "Stagiaire",
+      "label": "Le ou la stagiaire est sous curatelle :",
+      "type": "radio",
+      "options": [
+        {
+          "value": "Oui",
+          "label": "Oui"
+        },
+        {
+          "value": "Oui - curateur complète",
+          "label": "Oui — c'est le curateur qui complète",
+          "condition": "pourQui=autre"
+        },
+        {
+          "value": "Non",
+          "label": "Non"
+        }
+      ],
+      "etape": "curatelle",
+      "ordre": 10,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "CuratelleType",
+      "champPayload": "curatelle_type",
+      "listeCible": "Stagiaire",
+      "label": "Curateur·trice",
+      "type": "select",
+      "options": [
+        {
+          "value": "OPAD",
+          "label": "OPAD"
+        },
+        {
+          "value": "SPMI",
+          "label": "SPMI"
+        },
+        {
+          "value": "Mère",
+          "label": "Mère"
+        },
+        {
+          "value": "Père",
+          "label": "Père"
+        },
+        {
+          "value": "Avocat",
+          "label": "Avocat"
+        },
+        {
+          "value": "Autre",
+          "label": "Autre"
+        }
+      ],
+      "etape": "curatelle",
+      "ordre": 20,
+      "obligatoire": true,
+      "condition": "sous_curatelle=Oui*",
+      "placeholder": "",
+      "aide": "",
+      "largeur": "pleine"
+    },
+    {
+      "colonneSP": "CuratelleNom",
+      "champPayload": "curatelle_nom",
+      "listeCible": "Stagiaire",
+      "label": "Nom du curateur",
+      "type": "text",
+      "options": [],
+      "etape": "curatelle",
+      "ordre": 30,
+      "obligatoire": true,
+      "condition": "sous_curatelle=Oui*",
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "CuratellePrenom",
+      "champPayload": "curatelle_prenom",
+      "listeCible": "Stagiaire",
+      "label": "Prénom du curateur",
+      "type": "text",
+      "options": [],
+      "etape": "curatelle",
+      "ordre": 40,
+      "obligatoire": true,
+      "condition": "sous_curatelle=Oui*",
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "CuratelleTel",
+      "champPayload": "curatelle_tel",
+      "listeCible": "Stagiaire",
+      "label": "Téléphone",
+      "type": "tel",
+      "options": [],
+      "etape": "curatelle",
+      "ordre": 50,
+      "obligatoire": true,
+      "condition": "sous_curatelle=Oui*",
+      "placeholder": "+41 XX XXX XX XX",
+      "aide": ""
+    },
+    {
+      "colonneSP": "CuratelleMail",
+      "champPayload": "curatelle_email",
+      "listeCible": "Stagiaire",
+      "label": "Email",
+      "type": "email",
+      "options": [],
+      "etape": "curatelle",
+      "ordre": 60,
+      "obligatoire": true,
+      "condition": "sous_curatelle=Oui*",
+      "placeholder": "curateur@email.ch",
+      "aide": ""
+    },
+    {
+      "colonneSP": "UrgenceNom",
+      "champPayload": "urgence_nom",
+      "listeCible": "Stagiaire",
+      "label": "Nom",
+      "type": "text",
+      "options": [],
+      "etape": "urgence",
+      "ordre": 10,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "UrgencePrenom",
+      "champPayload": "urgence_prenom",
+      "listeCible": "Stagiaire",
+      "label": "Prénom",
+      "type": "text",
+      "options": [],
+      "etape": "urgence",
+      "ordre": 20,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "UrgenceLien",
+      "champPayload": "urgence_lien",
+      "listeCible": "Stagiaire",
+      "label": "Lien avec le ou la stagiaire",
+      "type": "select",
+      "options": [
+        {
+          "value": "Père",
+          "label": "Père"
+        },
+        {
+          "value": "Mère",
+          "label": "Mère"
+        },
+        {
+          "value": "Soeur",
+          "label": "Sœur"
+        },
+        {
+          "value": "Frère",
+          "label": "Frère"
+        },
+        {
+          "value": "Epoux·se",
+          "label": "Époux·se"
+        },
+        {
+          "value": "Ami·e",
+          "label": "Ami·e"
+        },
+        {
+          "value": "Autre",
+          "label": "Autre"
+        }
+      ],
+      "etape": "urgence",
+      "ordre": 30,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "UrgenceTel",
+      "champPayload": "urgence_tel",
+      "listeCible": "Stagiaire",
+      "label": "Téléphone",
+      "type": "tel",
+      "options": [],
+      "etape": "urgence",
+      "ordre": 40,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "+41 XX XXX XX XX",
+      "aide": ""
+    },
+    {
+      "colonneSP": "AssuranceInvalidite",
+      "champPayload": "inscrit_ai",
+      "listeCible": "Stagiaire",
+      "label": "Inscrit·e à l'Assurance Invalidité",
+      "type": "radio",
+      "options": [
+        {
+          "value": "Oui - conseiller AI complète",
+          "label": "Oui — c'est le conseiller AI qui complète",
+          "condition": "pourQui=autre"
+        },
+        {
+          "value": "Oui",
+          "label": "Oui"
+        },
+        {
+          "value": "Non",
+          "label": "Non"
+        },
+        {
+          "value": "Demande en cours",
+          "label": "Demande en cours"
+        }
+      ],
+      "etape": "ai",
+      "ordre": 10,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "AIConseillerNom",
+      "champPayload": "ai_nom",
+      "listeCible": "Stagiaire",
+      "label": "Nom du conseiller AI",
+      "type": "text",
+      "options": [],
+      "etape": "ai",
+      "ordre": 20,
+      "obligatoire": true,
+      "condition": "inscrit_ai!=Non",
+      "placeholder": "Nom",
+      "aide": ""
+    },
+    {
+      "colonneSP": "AIConseillerPrenom",
+      "champPayload": "ai_prenom",
+      "listeCible": "Stagiaire",
+      "label": "Prénom du conseiller AI",
+      "type": "text",
+      "options": [],
+      "etape": "ai",
+      "ordre": 30,
+      "obligatoire": true,
+      "condition": "inscrit_ai!=Non",
+      "placeholder": "Prénom",
+      "aide": ""
+    },
+    {
+      "colonneSP": "AIConseillerTel",
+      "champPayload": "ai_tel",
+      "listeCible": "Stagiaire",
+      "label": "Téléphone",
+      "type": "tel",
+      "options": [],
+      "etape": "ai",
+      "ordre": 40,
+      "obligatoire": true,
+      "condition": "inscrit_ai!=Non",
+      "placeholder": "+41 XX XXX XX XX",
+      "aide": ""
+    },
+    {
+      "colonneSP": "AIConseillerMail",
+      "champPayload": "ai_email",
+      "listeCible": "Stagiaire",
+      "label": "Email",
+      "type": "email",
+      "options": [],
+      "etape": "ai",
+      "ordre": 50,
+      "obligatoire": true,
+      "condition": "inscrit_ai!=Non",
+      "placeholder": "conseiller@ai.ch",
+      "aide": ""
+    },
+    {
+      "colonneSP": "AIOffice",
+      "champPayload": "ai_office",
+      "listeCible": "Stagiaire",
+      "label": "Office AI",
+      "type": "text",
+      "options": [],
+      "etape": "ai",
+      "ordre": 60,
+      "obligatoire": true,
+      "condition": "inscrit_ai!=Non",
+      "placeholder": "Ex: OAI Genève",
+      "aide": ""
+    },
+    {
+      "colonneSP": "TypeMesure",
+      "champPayload": "ai_mesure",
+      "listeCible": "Demande",
+      "label": "Mesure AI",
+      "type": "text",
+      "options": [],
+      "etape": "ai",
+      "ordre": 70,
+      "obligatoire": false,
+      "condition": "inscrit_ai!=Non",
+      "placeholder": "Ex: Mesure de réinsertion",
+      "aide": ""
+    },
+    {
+      "colonneSP": "ObjectifStage",
+      "champPayload": "objectif_stage",
+      "listeCible": "Demande",
+      "label": "Quel est l'objectif du stage ?",
+      "type": "textarea",
+      "options": [],
+      "etape": "complementaire",
+      "ordre": 10,
+      "obligatoire": true,
+      "condition": "parcours=stages",
+      "placeholder": "Décrivez l'objectif du stage...",
+      "aide": ""
+    },
+    {
+      "colonneSP": "ParcoursScolaire",
+      "champPayload": "parcours_scolaire",
+      "listeCible": "Stagiaire",
+      "label": "Parcours scolaire (difficultés particulières ?)",
+      "type": "textarea",
+      "options": [],
+      "etape": "complementaire",
+      "ordre": 20,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "Décrivez le parcours scolaire...",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Limitations",
+      "champPayload": "limitations",
+      "listeCible": "Stagiaire",
+      "label": "Limitations fonctionnelles, physiques, cognitives ou autres (troubles de la concentration, difficultés relationnelles, taux d'activité réduit, limitation de port de charge, etc.)",
+      "type": "textarea",
+      "options": [],
+      "etape": "complementaire",
+      "ordre": 30,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "Indiquez les limitations éventuelles...",
+      "aide": ""
+    },
+    {
+      "colonneSP": "TestsEffectues",
+      "champPayload": "deja_tests",
+      "listeCible": "Stagiaire",
+      "label": "A déjà fait des tests",
+      "type": "select",
+      "options": [
+        {
+          "value": "Non",
+          "label": "Non"
+        },
+        {
+          "value": "Oui, d'évaluation et de diagnostic",
+          "label": "Oui, d'évaluation et de diagnostic (dys, TDAH, TSA, etc.)"
+        },
+        {
+          "value": "Oui, d'évaluation du niveau scolaire",
+          "label": "Oui, d'évaluation du niveau scolaire et des aptitudes (EVA, EVAtech, TAF, etc.)"
+        }
+      ],
+      "etape": "complementaire",
+      "ordre": 40,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "ReseauMedical",
+      "champPayload": "reseau_medical",
+      "listeCible": "Stagiaire",
+      "label": "Réseau médical (passé ou présent)",
+      "type": "select",
+      "options": [
+        {
+          "value": "Aucun médecin ou thérapeute",
+          "label": "Aucun médecin ou thérapeute"
+        },
+        {
+          "value": "Médecin généraliste",
+          "label": "Un·e médecin généraliste"
+        },
+        {
+          "value": "Thérapeute",
+          "label": "Un·e thérapeute (psychologue, psychiatre, etc.)"
+        },
+        {
+          "value": "Logothérapeute",
+          "label": "Un·e logothérapeute"
+        },
+        {
+          "value": "Autre",
+          "label": "Autre"
+        }
+      ],
+      "etape": "complementaire",
+      "ordre": 50,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Pointure",
+      "champPayload": "pointure",
+      "listeCible": "Stagiaire",
+      "label": "Pointure",
+      "type": "text",
+      "options": [],
+      "etape": "complementaire",
+      "ordre": 60,
+      "obligatoire": false,
+      "condition": null,
+      "placeholder": "Ex: 42",
+      "aide": ""
+    },
+    {
+      "colonneSP": "TailleTshirt",
+      "champPayload": "taille_tshirt",
+      "listeCible": "Stagiaire",
+      "label": "Taille t-shirt",
+      "type": "text",
+      "options": [],
+      "etape": "complementaire",
+      "ordre": 70,
+      "obligatoire": false,
+      "condition": null,
+      "placeholder": "Ex: M, L, XL",
+      "aide": ""
+    },
+    {
+      "colonneSP": "TaillePantalon",
+      "champPayload": "taille_pantalon",
+      "listeCible": "Stagiaire",
+      "label": "Taille pantalon",
+      "type": "text",
+      "options": [],
+      "etape": "complementaire",
+      "ordre": 80,
+      "obligatoire": false,
+      "condition": null,
+      "placeholder": "Ex: 40",
+      "aide": ""
+    },
+    {
+      "colonneSP": "DeclarationCharte",
+      "champPayload": "declaration_charte",
+      "listeCible": "Stagiaire",
+      "label": "En cochant la présente, je déclare que le ou la stagiaire a lu la Charte pour la prévention des abus sexuels, de la maltraitance et d'autres formes de violation de l'intégrité.",
+      "type": "checkbox",
+      "options": [],
+      "etape": "declaration",
+      "ordre": 10,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "DeclarationEngagement",
+      "champPayload": "declaration_engagement",
+      "listeCible": "Stagiaire",
+      "label": "En cochant la présente, je déclare que le ou la stagiaire s'engage à lire, signer et nous envoyer la Déclaration d'engagement personnelle par courriel.",
+      "type": "checkbox",
+      "options": [],
+      "etape": "declaration",
+      "ordre": 20,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Nom",
+      "champPayload": "nom",
+      "listeCible": "Signalement",
+      "label": "Nom",
+      "type": "text",
+      "options": [],
+      "etape": "signalement",
+      "ordre": 10,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "Dupont",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Prenom",
+      "champPayload": "prenom",
+      "listeCible": "Signalement",
+      "label": "Prénom",
+      "type": "text",
+      "options": [],
+      "etape": "signalement",
+      "ordre": 20,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "Marie",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Tel",
+      "champPayload": "tel",
+      "listeCible": "Signalement",
+      "label": "Téléphone",
+      "type": "tel",
+      "options": [],
+      "etape": "signalement",
+      "ordre": 30,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "+41 79 123 45 67",
+      "aide": "Format suisse"
+    },
+    {
+      "colonneSP": "Mail",
+      "champPayload": "email",
+      "listeCible": "Signalement",
+      "label": "Email",
+      "type": "email",
+      "options": [],
+      "etape": "signalement",
+      "ordre": 40,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "marie.dupont@gmail.com",
+      "aide": ""
+    },
+    {
+      "colonneSP": "AVS",
+      "champPayload": "avs",
+      "listeCible": "Signalement",
+      "label": "Numéro AVS du ou de la stagiaire (facultatif)",
+      "type": "text",
+      "options": [],
+      "etape": "signalement",
+      "ordre": 45,
+      "obligatoire": false,
+      "condition": null,
+      "placeholder": "756.XXXX.XXXX.XX",
+      "aide": "Aide au rattachement du dossier",
+      "nouveau": true
+    },
+    {
+      "colonneSP": "DateConcernee",
+      "champPayload": "date_concernee",
+      "listeCible": "Signalement",
+      "label": "Date du stage ou module concerné (facultatif)",
+      "type": "date",
+      "options": [],
+      "etape": "signalement",
+      "ordre": 47,
+      "obligatoire": false,
+      "condition": null,
+      "placeholder": "",
+      "aide": "",
+      "nouveau": true
+    },
+    {
+      "colonneSP": "Motif",
+      "champPayload": "motif",
+      "listeCible": "Signalement",
+      "label": "Motif",
+      "type": "select",
+      "options": [
+        {
+          "value": "Annulation",
+          "label": "Annulation"
+        },
+        {
+          "value": "Retard",
+          "label": "Retard"
+        }
+      ],
+      "etape": "signalement",
+      "ordre": 50,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "Sélectionnez un motif",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Commentaire",
+      "champPayload": "commentaire",
+      "listeCible": "Signalement",
+      "label": "Commentaire",
+      "type": "textarea",
+      "options": [],
+      "etape": "signalement",
+      "ordre": 60,
+      "obligatoire": false,
+      "condition": null,
+      "placeholder": "Précisions supplémentaires (facultatif)",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Nom",
+      "champPayload": "nom",
+      "listeCible": "Visite",
+      "label": "Nom",
+      "type": "text",
+      "options": [],
+      "etape": "visite-coordonnees",
+      "ordre": 10,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "Dupont",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Prenom",
+      "champPayload": "prenom",
+      "listeCible": "Visite",
+      "label": "Prénom",
+      "type": "text",
+      "options": [],
+      "etape": "visite-coordonnees",
+      "ordre": 20,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "Marie",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Fonction",
+      "champPayload": "fonction",
+      "listeCible": "Visite",
+      "label": "Fonction",
+      "type": "text",
+      "options": [],
+      "etape": "visite-coordonnees",
+      "ordre": 30,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "Enseignant·e spécialisé·e, éducateur·trice…",
+      "aide": "",
+      "largeur": "pleine"
+    },
+    {
+      "colonneSP": "EtablissementScolaire",
+      "champPayload": "etablissement",
+      "listeCible": "Visite",
+      "label": "Établissement / École",
+      "type": "text",
+      "options": [],
+      "etape": "visite-coordonnees",
+      "ordre": 40,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "École de la Jonction, Centre ORIF…",
+      "aide": "",
+      "largeur": "pleine"
+    },
+    {
+      "colonneSP": "Mail",
+      "champPayload": "email",
+      "listeCible": "Visite",
+      "label": "Email",
+      "type": "email",
+      "options": [],
+      "etape": "visite-coordonnees",
+      "ordre": 50,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "marie.dupont@edu.ge.ch",
+      "aide": ""
+    },
+    {
+      "colonneSP": "Tel",
+      "champPayload": "tel",
+      "listeCible": "Visite",
+      "label": "Téléphone",
+      "type": "tel",
+      "options": [],
+      "etape": "visite-coordonnees",
+      "ordre": 60,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "+41 79 123 45 67",
+      "aide": "Format suisse"
+    },
+    {
+      "colonneSP": "NbEleves",
+      "champPayload": "nbEleves",
+      "listeCible": "Visite",
+      "label": "Nombre d'élèves",
+      "type": "number",
+      "options": [],
+      "etape": "visite-groupe",
+      "ordre": 10,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "12",
+      "aide": ""
+    },
+    {
+      "colonneSP": "NbAccompagnants",
+      "champPayload": "nbEnseignants",
+      "listeCible": "Visite",
+      "label": "Enseignants accompagnants",
+      "type": "number",
+      "options": [],
+      "etape": "visite-groupe",
+      "ordre": 20,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "2",
+      "aide": ""
+    },
+    {
+      "colonneSP": "ProfilEleves",
+      "champPayload": "profilEleves",
+      "listeCible": "Visite",
+      "label": "Profil des élèves",
+      "type": "textarea",
+      "options": [],
+      "etape": "visite-groupe",
+      "ordre": 30,
+      "obligatoire": false,
+      "condition": null,
+      "placeholder": "Âge, besoins particuliers, contexte de formation… (facultatif)",
+      "aide": ""
+    },
+    {
+      "colonneSP": "SecteursInteret",
+      "champPayload": "secteursInteret",
+      "listeCible": "Visite",
+      "label": "Secteurs d'intérêt",
+      "type": "multiselect",
+      "options": [
+        {
+          "value": "ASA",
+          "label": "ASA"
+        },
+        {
+          "value": "ASE",
+          "label": "ASE"
+        },
+        {
+          "value": "ASSC",
+          "label": "ASSC"
+        },
+        {
+          "value": "Cuisine",
+          "label": "Cuisine"
+        },
+        {
+          "value": "Restauration",
+          "label": "Restauration"
+        },
+        {
+          "value": "Pâtisserie-boulangerie",
+          "label": "Pâtisserie-boulangerie"
+        },
+        {
+          "value": "Nettoyage",
+          "label": "Nettoyage"
+        },
+        {
+          "value": "Exploitation",
+          "label": "Exploitation"
+        },
+        {
+          "value": "Peinture",
+          "label": "Peinture"
+        },
+        {
+          "value": "Graphisme",
+          "label": "Graphisme"
+        },
+        {
+          "value": "Audio-visuel",
+          "label": "Audio-visuel"
+        },
+        {
+          "value": "Médiamatique",
+          "label": "Médiamatique"
+        },
+        {
+          "value": "Intendance",
+          "label": "Intendance"
+        },
+        {
+          "value": "Lingerie",
+          "label": "Lingerie"
+        },
+        {
+          "value": "Informatique",
+          "label": "Informatique"
+        },
+        {
+          "value": "Confection",
+          "label": "Confection"
+        },
+        {
+          "value": "Autre",
+          "label": "Autre"
+        }
+      ],
+      "etape": "visite-secteurs",
+      "ordre": 10,
+      "obligatoire": false,
+      "condition": null,
+      "placeholder": "",
+      "aide": "Sélectionnez un ou plusieurs secteurs (facultatif)"
+    },
+    {
+      "colonneSP": "StagesAnterieurs",
+      "champPayload": "stagesAnterieurs",
+      "listeCible": "Visite",
+      "label": "Stages antérieurs à Clair Bois ou ailleurs ?",
+      "type": "radio",
+      "options": [
+        {
+          "value": "Oui",
+          "label": "Oui"
+        },
+        {
+          "value": "Non",
+          "label": "Non"
+        }
+      ],
+      "etape": "visite-contexte",
+      "ordre": 10,
+      "obligatoire": false,
+      "condition": null,
+      "placeholder": "",
+      "aide": ""
+    },
+    {
+      "colonneSP": "AvancementProjet",
+      "champPayload": "avancement",
+      "listeCible": "Visite",
+      "label": "Où en est le projet de formation ?",
+      "type": "select",
+      "options": [
+        {
+          "value": "Début",
+          "label": "Début — exploration des possibilités"
+        },
+        {
+          "value": "En cours",
+          "label": "En cours — quelques pistes identifiées"
+        },
+        {
+          "value": "Plusieurs cibles",
+          "label": "Plusieurs cibles — comparaison en cours"
+        },
+        {
+          "value": "Avancé",
+          "label": "Avancé — piste solide, orientation proche"
+        }
+      ],
+      "etape": "visite-contexte",
+      "ordre": 20,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "Sélectionnez une étape",
+      "aide": "",
+      "largeur": "pleine"
+    },
+    {
+      "colonneSP": "DemandeAI",
+      "champPayload": "demandeAI",
+      "listeCible": "Visite",
+      "label": "Demande AI (Assurance Invalidité)",
+      "type": "select",
+      "options": [
+        {
+          "value": "Non faite",
+          "label": "Non faite"
+        },
+        {
+          "value": "En cours",
+          "label": "En cours"
+        },
+        {
+          "value": "Validée",
+          "label": "Validée"
+        }
+      ],
+      "etape": "visite-contexte",
+      "ordre": 30,
+      "obligatoire": true,
+      "condition": null,
+      "placeholder": "Sélectionnez un statut",
+      "aide": "",
+      "largeur": "pleine"
+    },
+    {
+      "colonneSP": "AIContact",
+      "champPayload": "contactAI",
+      "listeCible": "Visite",
+      "label": "Coordonnées de la conseillère AI",
+      "type": "text",
+      "options": [],
+      "etape": "visite-contexte",
+      "ordre": 40,
+      "obligatoire": true,
+      "condition": "demandeAI=Validée",
+      "placeholder": "Nom, téléphone ou email",
+      "aide": "",
+      "largeur": "pleine"
+    }
   ]
 }

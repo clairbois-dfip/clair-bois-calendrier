@@ -9,8 +9,8 @@
  *     dans le bloc gris « Coordonnées du conseiller·ère AI » ;
  *   - réponse « Non » → message vert, aucun champ AI à remplir.
  */
-import ChampsEtape from './ChampsEtape'
-import { champsVisibles } from '../../utils/formulaireDynamique'
+import ChampsEtape, { IntroEtape } from './ChampsEtape'
+import { champsVisibles, etapeParCle } from '../../utils/formulaireDynamique'
 
 export default function EtapeAI({ schema, data, errors, onChange, onBlur, contexte = {} }) {
   const valeurs = { ...data, ...contexte }
@@ -20,6 +20,7 @@ export default function EtapeAI({ schema, data, errors, onChange, onBlur, contex
 
   return (
     <div className="space-y-4">
+      <IntroEtape etape={etapeParCle(schema, 'ai')} />
       <ChampsEtape champs={pilotes} data={data} errors={errors} onChange={onChange} onBlur={onBlur} valeurs={valeurs} />
 
       {conditionnels.length > 0 && (

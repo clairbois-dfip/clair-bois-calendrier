@@ -10,8 +10,8 @@
  *     regroupés dans un bloc gris « Informations du curateur » ;
  *   - réponse « Non » → message vert, aucun champ supplémentaire.
  */
-import ChampsEtape from './ChampsEtape'
-import { champsDeLEtape, champsVisibles, evaluerCondition } from '../../utils/formulaireDynamique'
+import ChampsEtape, { IntroEtape } from './ChampsEtape'
+import { champsDeLEtape, champsVisibles, evaluerCondition, etapeParCle } from '../../utils/formulaireDynamique'
 
 export default function EtapeCuratelle({ schema, data, errors, onChange, onBlur, contexte = {} }) {
   const valeurs = { ...data, ...contexte }
@@ -26,6 +26,7 @@ export default function EtapeCuratelle({ schema, data, errors, onChange, onBlur,
 
   return (
     <div className="space-y-4">
+      <IntroEtape etape={etapeParCle(schema, 'curatelle')} />
       <ChampsEtape champs={pilotes} data={data} errors={errors} onChange={onChange} onBlur={onBlur} valeurs={valeurs} />
 
       {conditionnels.length > 0 && (

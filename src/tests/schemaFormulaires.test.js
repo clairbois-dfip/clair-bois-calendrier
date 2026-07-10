@@ -16,6 +16,10 @@ import {
   mettreAJourChamp,
   ajouterChamp,
   supprimerChamp,
+  ajouterEtape,
+  mettreAJourEtape,
+  deplacerEtape,
+  supprimerEtape,
   parserOptions,
   optionsVersTexte,
   serialiserSchema,
@@ -135,6 +139,53 @@ describe('mutations du schéma', () => {
     const s2 = supprimerChamp(SCHEMA, 'stagiaire:nom')
     expect(s2.champs).toHaveLength(3)
     expect(s2.champs.some((c) => cleChamp(c) === 'signalement:nom')).toBe(true)
+  })
+})
+
+// ──────────────────────────────────────────────
+// Étapes — ajout, édition, ordre, suppression
+// ──────────────────────────────────────────────
+describe('gestion des étapes', () => {
+  const S = {
+    ...SCHEMA,
+    etapes: [
+      { cle: 'stagiaire', titre: 'Stagiaire', ordre: 1, formulaire: 'inscription' },
+      { cle: 'urgence', titre: 'Urgence', ordre: 2, formulaire: 'inscription' },
+      { cle: 'signalement', titre: 'Signalement', ordre: 1, formulaire: 'signalement' },
+    ],
+  }
+
+  it('ajoute une étape en fin de formulaire avec une clé unique', () => {
+    const { schema: s2, etape } = ajouterEtape(S, 'inscription')
+    expect(etape.cle).toBe('inscription-etape-1')
+    expect(etape.ordre).toBe(3)
+    expect(etape.formulaire).toBe('inscription')
+    expect(s2.etapes).toHaveLength(4)
+  })
+
+  it('met à jour le titre et l\'intro sans jamais toucher la clé', () => {
+    const s2 = mettreAJourEtape(S, 'urgence', { titre: 'Contact d\'urgence', intro: 'Bandeau', cle: 'piratage' })
+    const e = s2.etapes.find(x => x.cle === 'urgence')
+    expect(e.titre).toBe('Contact d\'urgence')
+    expect(e.intro).toBe('Bandeau')
+    expect(s2.etapes.some(x => x.cle === 'piratage')).toBe(false)
+  })
+
+  it('déplace une étape au sein de SON formulaire uniquement', () => {
+    const s2 = deplacerEtape(S, 'urgence', -1)
+    const ordres = s2.etapes.filter(e => e.formulaire === 'inscription').sort((a, b) => a.ordre - b.ordre).map(e => e.cle)
+    expect(ordres).toEqual(['urgence', 'stagiaire'])
+    // Le signalement n'est pas renuméroté
+    expect(s2.etapes.find(e => e.cle === 'signalement').ordre).toBe(1)
+  })
+
+  it('refuse de supprimer une étape qui contient encore des champs', () => {
+    expect(supprimerEtape(S, 'stagiaire')).toBe(S)
+  })
+
+  it('supprime une étape vide', () => {
+    const s2 = supprimerEtape(S, 'urgence')
+    expect(s2.etapes.some(e => e.cle === 'urgence')).toBe(false)
   })
 })
 

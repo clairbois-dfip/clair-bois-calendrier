@@ -30,8 +30,10 @@ import { useState } from 'react'
 import { getFormConfig, getCheminKey, SECTION_LABELS } from '../utils/formConfig'
 import {
   donneesInitiales, validerChamp, validerEtape, collecterPayload, champsVisibles,
+  etapesDuFormulaire,
 } from '../utils/formulaireDynamique'
 import { formatDate } from '../utils/helpers'
+import EtapeGenerique from './formulaire/EtapeGenerique'
 import EtapeStagiaire from './formulaire/EtapeStagiaire'
 import EtapeCuratelle from './formulaire/EtapeCuratelle'
 import EtapeUrgence from './formulaire/EtapeUrgence'
@@ -47,13 +49,25 @@ import Confirmation from './formulaire/Confirmation'
 // #edition). Voir utils/formulaireDynamique.js pour le moteur.
 
 export default function FormulaireInscription({ schema, parcours, chemin, contextData, onBack, onGoHome }) {
-  // La config derive les sections visibles depuis le chemin d'aiguillage
+  // La config garde le libellé/description du chemin d'aiguillage
   const config = getFormConfig(parcours, chemin)
   // cheminKey est inclus dans le payload pour que Power Automate sache quel flux declencher
   const cheminKey = getCheminKey(parcours, chemin)
-  const { sections } = config
   // Contexte injecté dans l'évaluation des conditions du schéma
   const contexte = { parcours, pourQui: chemin.pourQui }
+
+  // Les SECTIONS du wizard viennent du SCHÉMA (mode édition #edition) :
+  // une étape ajoutée/réordonnée par la coordination apparaît automatiquement.
+  // Exception : le chemin court « retour à Clair-Bois » garde sa section figée.
+  const etapesInscription = etapesDuFormulaire(schema, 'inscription', contexte)
+  const sections = cheminKey === 'stages-moi-oui'
+    ? ['stagiaire-retour']
+    : etapesInscription.map((e) => e.cle)
+  // Titres affichés (barre de progression, en-têtes) : schéma d'abord,
+  // libellés historiques en secours (stagiaire-retour n'est pas dans le schéma)
+  const titresEtapes = new Map(etapesInscription.map((e) => [e.cle, e.titre]))
+  const titreSection = (cle) => titresEtapes.get(cle) || SECTION_LABELS[cle] || cle
+  const etapeCourante = (cle) => etapesInscription.find((e) => e.cle === cle)
 
   const [formData, setFormData] = useState(() => donneesInitiales(schema))
   const [errors, setErrors] = useState({})
@@ -245,7 +259,7 @@ export default function FormulaireInscription({ schema, parcours, chemin, contex
       <div className="text-center mb-4">
         <p className="text-sm font-medium text-cb-blue mb-1">{config.label}</p>
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">
-          {isRecap ? 'Récapitulatif' : SECTION_LABELS[currentSection] || 'Formulaire'}
+          {isRecap ? 'Récapitulatif' : titreSection(currentSection)}
         </h2>
         <p className="text-gray-500 text-sm">{contextLabel}</p>
       </div>
@@ -294,7 +308,7 @@ export default function FormulaireInscription({ schema, parcours, chemin, contex
           Étape {Math.min(currentStep + 1, sections.length + 1)} / {sections.length + 1}
           {' — '}
           <span className="text-cb-blue font-medium">
-            {isRecap ? 'Récapitulatif' : SECTION_LABELS[currentSection]}
+            {isRecap ? 'Récapitulatif' : titreSection(currentSection)}
           </span>
         </p>
       </div>
@@ -325,6 +339,18 @@ export default function FormulaireInscription({ schema, parcours, chemin, contex
           )}
           {currentSection === 'declaration' && (
             <EtapeDeclaration schema={schema} contexte={contexte} data={formData} errors={errors} onChange={handleChange} onBlur={handleBlur} />
+          )}
+          {/* Étape AJOUTÉE par la coordination (aucun composant dédié) : rendu générique */}
+          {!isRecap && !SECTION_LABELS[currentSection] && etapeCourante(currentSection) && (
+            <EtapeGenerique
+              schema={schema}
+              etape={etapeCourante(currentSection)}
+              contexte={contexte}
+              data={formData}
+              errors={errors}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
           )}
           {isRecap && (
             <Recapitulatif

@@ -270,6 +270,79 @@ export function optionsVersTexte(options) {
 }
 
 /* ────────────────────────────────────────────
+ * Manipulation des ÉTAPES (sections)
+ * ──────────────────────────────────────────── */
+
+/**
+ * Ajoute une étape vide en fin de formulaire. La clé technique est générée
+ * (unique, stable) — les champs y font référence, elle ne se renomme pas ;
+ * seul le titre affiché est éditable.
+ *
+ * @param {object} schema Schéma complet.
+ * @param {string} formulaire Clé du formulaire d'accueil.
+ * @returns {{ schema: object, etape: object }}
+ */
+export function ajouterEtape(schema, formulaire) {
+  const existantes = new Set((schema.etapes || []).map((e) => e.cle));
+  let n = 1;
+  while (existantes.has(`${formulaire}-etape-${n}`)) n += 1;
+  const duFormulaire = (schema.etapes || []).filter((e) => e.formulaire === formulaire);
+  const etape = {
+    cle: `${formulaire}-etape-${n}`,
+    titre: 'Nouvelle étape',
+    ordre: duFormulaire.length ? Math.max(...duFormulaire.map((e) => e.ordre ?? 0)) + 1 : 1,
+    formulaire,
+    conditionAffichage: null,
+    intro: '',
+  };
+  return { schema: { ...schema, etapes: [...(schema.etapes || []), etape] }, etape };
+}
+
+/**
+ * Met à jour une étape (titre, intro…) et retourne un nouveau schéma.
+ * La clé technique n'est jamais modifiée (les champs y sont rattachés).
+ */
+export function mettreAJourEtape(schema, cle, maj) {
+  const { cle: _ignore, ...reste } = maj;
+  return {
+    ...schema,
+    etapes: schema.etapes.map((e) => (e.cle === cle ? { ...e, ...reste } : e)),
+  };
+}
+
+/**
+ * Déplace une étape d'un cran au sein de son formulaire (renumérotation 1..n).
+ */
+export function deplacerEtape(schema, cle, direction) {
+  const etape = (schema.etapes || []).find((e) => e.cle === cle);
+  if (!etape) return schema;
+  const groupe = schema.etapes
+    .filter((e) => e.formulaire === etape.formulaire)
+    .sort((a, b) => (a.ordre ?? 0) - (b.ordre ?? 0));
+  const index = groupe.findIndex((e) => e.cle === cle);
+  const cible = index + direction;
+  if (cible < 0 || cible >= groupe.length) return schema;
+  const reordonne = [...groupe];
+  [reordonne[index], reordonne[cible]] = [reordonne[cible], reordonne[index]];
+  const ordres = new Map(reordonne.map((e, i) => [e.cle, i + 1]));
+  return {
+    ...schema,
+    etapes: schema.etapes.map((e) => (ordres.has(e.cle) ? { ...e, ordre: ordres.get(e.cle) } : e)),
+  };
+}
+
+/**
+ * Supprime une étape — UNIQUEMENT si aucun champ ne s'y trouve encore
+ * (le composant demande de déplacer/supprimer les questions d'abord).
+ *
+ * @returns {object} Nouveau schéma (inchangé si l'étape contient des champs).
+ */
+export function supprimerEtape(schema, cle) {
+  if ((schema.champs || []).some((c) => c.etape === cle)) return schema;
+  return { ...schema, etapes: schema.etapes.filter((e) => e.cle !== cle) };
+}
+
+/* ────────────────────────────────────────────
  * Chargement / téléchargement / publication
  * ──────────────────────────────────────────── */
 

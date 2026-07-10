@@ -9,6 +9,10 @@ import {
   mettreAJourChamp,
   ajouterChamp,
   supprimerChamp,
+  ajouterEtape,
+  mettreAJourEtape,
+  deplacerEtape,
+  supprimerEtape,
   suggererColonneSP,
   validerColonneSP,
   colonnesDeLaListe,
@@ -50,6 +54,7 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
   const [erreurChargement, setErreurChargement] = useState('')
   const [formulaireActif, setFormulaireActif] = useState('inscription')
   const [cleSelection, setCleSelection] = useState(null)
+  const [etapeOuverte, setEtapeOuverte] = useState(null) // panneau réglages d'étape
   const [modifie, setModifie] = useState(false)
   const [publication, setPublication] = useState({ enCours: false, succes: '', erreur: '' })
   const [patVisible, setPatVisible] = useState(false)
@@ -162,6 +167,26 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
     if (nouvelleCle) setCleSelection(nouvelleCle)
   }
 
+  function handleAjouterEtape() {
+    let nouvelleCle = null
+    appliquer((s) => {
+      const { schema: s2, etape } = ajouterEtape(s, formulaireActif)
+      nouvelleCle = etape.cle
+      return s2
+    })
+    if (nouvelleCle) setEtapeOuverte(nouvelleCle)
+  }
+
+  function handleSupprimerEtape(etape, nbQuestions) {
+    if (nbQuestions > 0) {
+      window.alert('Déplacez ou supprimez d\'abord les questions de cette étape.')
+      return
+    }
+    if (!window.confirm(`Supprimer l'étape « ${etape.titre} » ?`)) return
+    setEtapeOuverte(null)
+    appliquer((s) => supprimerEtape(s, etape.cle))
+  }
+
   /* ── Rendu ───────────────────────────────────────────── */
 
   return (
@@ -270,11 +295,12 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
         )}
 
         {/* Les étapes du formulaire actif */}
-        {etapesActives.map((etape) => {
+        {etapesActives.map((etape, indexEtape) => {
           const champs = champsDeLEtape(schema, etape.cle)
+          const reglagesOuverts = etapeOuverte === etape.cle
           return (
             <section key={etape.cle} aria-label={`Étape ${etape.titre}`}>
-              <div className="flex items-baseline justify-between mb-2">
+              <div className="flex items-center justify-between mb-2 gap-2">
                 <h2 className="text-base font-bold text-gray-700">
                   {etape.titre}
                   <span className="ml-2 text-xs font-normal text-gray-400">
@@ -282,7 +308,75 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
                     {etape.conditionAffichage ? ` — affichée si ${etape.conditionAffichage}` : ''}
                   </span>
                 </h2>
+                <button
+                  type="button"
+                  onClick={() => setEtapeOuverte(reglagesOuverts ? null : etape.cle)}
+                  className={`shrink-0 text-xs px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${
+                    reglagesOuverts ? 'border-cb-accent text-cb-accent bg-white' : 'border-gray-200 text-gray-400 bg-white hover:border-cb-accent hover:text-cb-accent'
+                  }`}
+                  aria-expanded={reglagesOuverts}
+                >
+                  ✎ Étape
+                </button>
               </div>
+
+              {/* Réglages de l'étape : titre, intro, ordre, suppression */}
+              {reglagesOuverts && (
+                <div className="mb-3 bg-white border-2 border-cb-accent rounded-xl p-4 grid gap-3">
+                  <Propriete label="Titre de l'étape">
+                    <input
+                      type="text"
+                      value={etape.titre}
+                      onChange={(e) => appliquer((s) => mettreAJourEtape(s, etape.cle, { titre: e.target.value }))}
+                      className={CLASSES_INPUT_PROP}
+                    />
+                  </Propriete>
+                  <Propriete label="Texte d'introduction (bandeau au-dessus des questions — laisser vide si inutile)">
+                    <textarea
+                      rows={2}
+                      value={etape.intro || ''}
+                      onChange={(e) => appliquer((s) => mettreAJourEtape(s, etape.cle, { intro: e.target.value }))}
+                      className={CLASSES_INPUT_PROP + ' resize-y'}
+                    />
+                  </Propriete>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Propriete label="Style du bandeau">
+                      <select
+                        value={etape.tonalite || 'info'}
+                        onChange={(e) => appliquer((s) => mettreAJourEtape(s, etape.cle, { tonalite: e.target.value === 'info' ? undefined : e.target.value }))}
+                        className={CLASSES_INPUT_PROP + ' cursor-pointer'}
+                      >
+                        <option value="info">Informatif (bleu)</option>
+                        <option value="attention">Attention (orange)</option>
+                      </select>
+                    </Propriete>
+                    <div className="flex gap-1 ml-auto self-end">
+                      <button
+                        type="button"
+                        disabled={indexEtape === 0}
+                        onClick={() => appliquer((s) => deplacerEtape(s, etape.cle, -1))}
+                        className="text-sm px-2.5 py-2 rounded-lg border border-gray-200 bg-white hover:border-cb-accent disabled:opacity-30 cursor-pointer"
+                        title="Monter l'étape"
+                      >↑</button>
+                      <button
+                        type="button"
+                        disabled={indexEtape === etapesActives.length - 1}
+                        onClick={() => appliquer((s) => deplacerEtape(s, etape.cle, 1))}
+                        className="text-sm px-2.5 py-2 rounded-lg border border-gray-200 bg-white hover:border-cb-accent disabled:opacity-30 cursor-pointer"
+                        title="Descendre l'étape"
+                      >↓</button>
+                      <button
+                        type="button"
+                        onClick={() => handleSupprimerEtape(etape, champs.length)}
+                        className={`text-sm px-2.5 py-2 rounded-lg border bg-white cursor-pointer ${
+                          champs.length > 0 ? 'border-gray-200 text-gray-300' : 'border-red-200 text-cb-red hover:bg-red-50'
+                        }`}
+                        title={champs.length > 0 ? "Videz l'étape de ses questions avant de la supprimer" : "Supprimer l'étape"}
+                      >🗑</button>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-2">
                 {champs.map((champ, index) => (
@@ -320,6 +414,15 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
             </section>
           )
         })}
+
+        {/* Ajouter une étape entière au formulaire actif */}
+        <button
+          type="button"
+          onClick={handleAjouterEtape}
+          className="w-full border-2 border-dashed border-cb-accent/40 hover:border-cb-accent text-cb-accent rounded-xl py-3 text-sm font-semibold transition-colors cursor-pointer"
+        >
+          + Ajouter une étape à ce formulaire
+        </button>
       </div>
 
       {/* Boîte de dialogue : saisie du token GitHub à la première publication */}

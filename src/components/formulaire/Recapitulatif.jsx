@@ -12,7 +12,7 @@
  */
 import { formatDate } from '../../utils/helpers'
 import { SECTION_LABELS } from '../../utils/formConfig'
-import { champsVisibles } from '../../utils/formulaireDynamique'
+import { champsVisibles, etapeParCle } from '../../utils/formulaireDynamique'
 
 function Section({ title, fields, onEdit, stepIndex }) {
   // Masquer la section entiere si aucune donnee n'a ete saisie (ex: curatelle non applicable)
@@ -92,7 +92,7 @@ export default function Recapitulatif({ schema, data, contextData, parcours, pou
       {sections.map((sectionKey, idx) => (
         <Section
           key={sectionKey}
-          title={SECTION_LABELS[sectionKey] || sectionKey}
+          title={etapeParCle(schema, sectionKey)?.titre || SECTION_LABELS[sectionKey] || sectionKey}
           fields={champsVisibles(schema, sectionKey, valeurs).map((champ) => ({
             label: champ.label.length > 60 ? `${champ.label.slice(0, 57)}…` : champ.label,
             value: valeurAffichee(champ, data[champ.champPayload]),

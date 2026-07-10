@@ -24,6 +24,21 @@
 import ChampFormulaire from './ChampFormulaire'
 import { optionsVisibles } from '../../utils/formulaireDynamique'
 
+/**
+ * IntroEtape — Bannière d'introduction d'une étape, pilotée par le schéma
+ * (étape.intro, éditable dans le mode édition). Tonalité 'attention' =
+ * bandeau orange (ex. contact d'urgence), sinon bleu informatif.
+ * Ne rend rien si l'étape n'a pas d'intro.
+ */
+export function IntroEtape({ etape }) {
+  if (!etape?.intro) return null
+  const classes =
+    etape.tonalite === 'attention'
+      ? 'bg-cb-orange-light rounded-lg p-3 text-sm text-yellow-800'
+      : 'bg-cb-blue-light/50 rounded-lg p-3 text-sm text-cb-blue'
+  return <div className={classes}>{etape.intro}</div>
+}
+
 /** Un champ occupe-t-il toute la largeur ? */
 function estPleineLargeur(champ) {
   if (champ.largeur === 'pleine') return true

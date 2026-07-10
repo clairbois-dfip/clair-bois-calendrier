@@ -15,17 +15,26 @@
  *   onGoHome — retour a la page d'accueil apres envoi ou annulation
  */
 import { useState } from 'react'
-import ChampsEtape from './formulaire/ChampsEtape'
+import ChampsEtape, { IntroEtape } from './formulaire/ChampsEtape'
 import Confirmation from './formulaire/Confirmation'
 import {
   champsDeLEtape, champsVisibles, validerChamp, validerEtape, collecterPayload,
+  etapesDuFormulaire,
 } from '../utils/formulaireDynamique'
 
 export default function FormulaireSignalement({ schema, onGoHome }) {
+  // Étapes du formulaire signalement (une seule aujourd'hui — la
+  // coordination peut en ajouter via le mode édition)
+  const etapes = etapesDuFormulaire(schema, 'signalement')
+
   const [formData, setFormData] = useState(() => {
-    // Un input contrôlé par champ du schéma, initialisé à ''
+    // Un input contrôlé par champ du schéma, initialisé à '' (ou [] en multi)
     const data = {}
-    for (const champ of champsDeLEtape(schema, 'signalement')) data[champ.champPayload] = ''
+    for (const etape of etapes) {
+      for (const champ of champsDeLEtape(schema, etape.cle)) {
+        data[champ.champPayload] = champ.type === 'multiselect' ? [] : ''
+      }
+    }
     return data
   })
   const [errors, setErrors] = useState({})
@@ -42,17 +51,27 @@ export default function FormulaireSignalement({ schema, onGoHome }) {
 
   /** Valide un champ au blur (validateur dérivé du schéma) */
   const handleBlur = (name) => {
-    const champ = champsDeLEtape(schema, 'signalement').find(c => c.champPayload === name)
-    if (!champ) return
-    const result = validerChamp(champ, formData[name])
-    if (!result.valid) {
-      setErrors(prev => ({ ...prev, [name]: result.message }))
+    for (const etape of etapes) {
+      const champ = champsDeLEtape(schema, etape.cle).find(c => c.champPayload === name)
+      if (champ) {
+        const result = validerChamp(champ, formData[name])
+        if (!result.valid) setErrors(prev => ({ ...prev, [name]: result.message }))
+        return
+      }
     }
   }
 
-  /** Valide tous les champs du schéma avant envoi */
+  /** Valide toutes les étapes du schéma avant envoi */
   const validateAll = () => {
-    const { valid, errors: newErrors } = validerEtape(schema, 'signalement', formData, {})
+    let valid = true
+    const newErrors = {}
+    for (const etape of etapes) {
+      const res = validerEtape(schema, etape.cle, formData, {})
+      if (!res.valid) {
+        valid = false
+        Object.assign(newErrors, res.errors)
+      }
+    }
     setErrors(newErrors)
     return valid
   }
@@ -66,7 +85,7 @@ export default function FormulaireSignalement({ schema, onGoHome }) {
         type: 'signalement',
         dateEnvoi: new Date().toISOString(),
         // Seuls les champs remplis sont envoyés (pas de clés vides)
-        ...collecterPayload(schema, ['signalement'], formData, {}),
+        ...collecterPayload(schema, etapes.map((e) => e.cle), formData, {}),
       }
 
       const httpUrl = import.meta.env.VITE_PA_HTTP_URL
@@ -140,14 +159,25 @@ export default function FormulaireSignalement({ schema, onGoHome }) {
 
       {/* Formulaire */}
       <div className="bg-white rounded-xl border border-gray-200 p-5 md:p-6 mb-4 shadow-sm max-w-lg mx-auto">
-        <ChampsEtape
-          champs={champsVisibles(schema, 'signalement', formData)}
-          data={formData}
-          errors={errors}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          valeurs={formData}
-        />
+        <div className="space-y-6">
+          {etapes.map((etape, i) => (
+            <div key={etape.cle} className="space-y-4">
+              {/* Le titre de section n'apparaît que s'il y a plusieurs étapes */}
+              {etapes.length > 1 && (
+                <h3 className="text-sm font-bold text-cb-blue uppercase tracking-wide">{etape.titre}</h3>
+              )}
+              <IntroEtape etape={etape} />
+              <ChampsEtape
+                champs={champsVisibles(schema, etape.cle, formData)}
+                data={formData}
+                errors={errors}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                valeurs={formData}
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Bouton d'envoi */}

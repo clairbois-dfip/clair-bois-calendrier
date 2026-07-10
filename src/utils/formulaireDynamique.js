@@ -125,6 +125,32 @@ export function evaluerCondition(condition, valeurs) {
 }
 
 /**
+ * Étapes d'un formulaire, triées par ordre, avec leurs conditions
+ * d'affichage évaluées (ex. l'étape référent : `pourQui=autre`).
+ * C'est CETTE liste qui pilote les sections du wizard — une étape ajoutée
+ * par la coordination dans le mode édition apparaît donc automatiquement.
+ *
+ * @param {object} schema Schéma des formulaires.
+ * @param {string} formulaire Clé du formulaire ('inscription', 'signalement', 'visite').
+ * @param {object} [valeurs] Contexte pour les conditions ({ pourQui, parcours… }).
+ * @returns {object[]} Étapes visibles, triées.
+ */
+export function etapesDuFormulaire(schema, formulaire, valeurs = {}) {
+  return (schema?.etapes || [])
+    .filter((e) => e.formulaire === formulaire)
+    .filter((e) => evaluerCondition(e.conditionAffichage, valeurs))
+    .sort((a, b) => (a.ordre ?? 0) - (b.ordre ?? 0))
+}
+
+/**
+ * Retrouve une étape du schéma par sa clé (pour la bannière d'intro
+ * des composants dédiés).
+ */
+export function etapeParCle(schema, cle) {
+  return (schema?.etapes || []).find((e) => e.cle === cle) || null
+}
+
+/**
  * Champs d'une étape, triés, SANS filtrage de condition.
  * Gère la pseudo-étape 'stagiaire-retour' (sous-ensemble de 'stagiaire').
  *

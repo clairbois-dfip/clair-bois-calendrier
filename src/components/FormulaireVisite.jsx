@@ -18,17 +18,16 @@
  *   onGoHome — retour a la page d'accueil apres envoi ou annulation
  */
 import { useState } from 'react'
-import ChampsEtape from './formulaire/ChampsEtape'
+import ChampsEtape, { IntroEtape } from './formulaire/ChampsEtape'
 import Confirmation from './formulaire/Confirmation'
 import {
   champsDeLEtape, champsVisibles, validerChamp, validerEtape, collecterPayload,
+  etapesDuFormulaire,
 } from '../utils/formulaireDynamique'
 
 export default function FormulaireVisite({ schema, onGoHome }) {
   // Étapes du formulaire visite = les cartes-sections affichées
-  const etapes = (schema?.etapes || [])
-    .filter((e) => e.formulaire === 'visite')
-    .sort((a, b) => a.ordre - b.ordre)
+  const etapes = etapesDuFormulaire(schema, 'visite')
 
   const [formData, setFormData] = useState(() => {
     const data = {}
@@ -143,6 +142,7 @@ export default function FormulaireVisite({ schema, onGoHome }) {
       {etapes.map((etape) => (
         <div key={etape.cle} className="bg-white rounded-xl border border-gray-200 p-5 md:p-6 mb-4 shadow-sm max-w-lg mx-auto">
           <h3 className="text-sm font-bold text-cb-blue uppercase tracking-wide mb-4">{etape.titre}</h3>
+          {etape.intro && <div className="mb-4"><IntroEtape etape={etape} /></div>}
           <ChampsEtape
             champs={champsVisibles(schema, etape.cle, formData)}
             data={formData}

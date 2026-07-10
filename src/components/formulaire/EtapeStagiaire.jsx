@@ -10,8 +10,8 @@
  *   - true : stagiaire déjà connu — sous-ensemble figé CHAMPS_RETOUR
  *     (juste assez pour retrouver le dossier existant)
  */
-import ChampsEtape from './ChampsEtape'
-import { champsVisibles } from '../../utils/formulaireDynamique'
+import ChampsEtape, { IntroEtape } from './ChampsEtape'
+import { champsVisibles, etapeParCle } from '../../utils/formulaireDynamique'
 
 export default function EtapeStagiaire({ schema, data, errors, onChange, onBlur, contexte = {}, isRetour = false }) {
   const valeurs = { ...data, ...contexte }
@@ -25,6 +25,7 @@ export default function EtapeStagiaire({ schema, data, errors, onChange, onBlur,
           pour retrouver votre dossier.
         </div>
       )}
+      {!isRetour && <IntroEtape etape={etapeParCle(schema, 'stagiaire')} />}
       <ChampsEtape champs={champs} data={data} errors={errors} onChange={onChange} onBlur={onBlur} valeurs={valeurs} />
     </div>
   )
