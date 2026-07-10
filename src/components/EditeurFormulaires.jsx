@@ -43,6 +43,56 @@ const CONDITIONS_ETAPE = [
 ]
 
 /**
+ * Champs SYSTÈME : leur suppression ou leur mise « sans SharePoint » casse le
+ * pipeline (Flux 5, emails, dédoublonnage) ou l'affichage conditionnel. Clé =
+ * champPayload (le vrai contrat du webhook). Ils sont protégés dans l'éditeur.
+ * Source : investigation du 10 juillet (build-flux5-http.js).
+ */
+const CHAMPS_SYSTEME = {
+  avs: 'sert de clé pour éviter les doublons et à l\'objet de l\'e-mail',
+  email: 'adresse où est envoyée la demande de documents',
+  nom: 'objet de l\'e-mail et nom du dossier du stagiaire',
+  prenom: 'objet de l\'e-mail et nom du dossier du stagiaire',
+  referent_email: 'adresse d\'envoi quand un référent inscrit',
+  referent_partenaire: 'traçabilité du référent',
+  referent_nom: 'traçabilité du référent',
+  referent_prenom: 'traçabilité du référent',
+  sous_curatelle: 'commande l\'affichage du bloc curatelle',
+  inscrit_ai: 'commande l\'affichage du bloc conseiller AI',
+  objectif_stage: 'objectif de la demande de stage',
+  motif: 'motif du signalement',
+}
+
+/** Un champ est-il système (protégé) ? */
+function estChampSysteme(champ) {
+  return Object.prototype.hasOwnProperty.call(CHAMPS_SYSTEME, champ.champPayload)
+}
+
+/**
+ * Le champ pilote-t-il une condition donnée ? (la condition commence par
+ * `champPayload=` ou `champPayload!=`). Sert à détecter les dépendances.
+ */
+function conditionPiloteePar(condition, champPayload) {
+  if (!condition) return false
+  const gauche = condition.split(/!?=/)[0].trim()
+  return gauche === champPayload
+}
+
+/**
+ * Éléments (questions et étapes) dont l'affichage dépend d'un champ pilote.
+ * @returns {string[]} libellés lisibles des dépendants.
+ */
+function elementsDependantDe(schema, champPayload) {
+  const champs = (schema.champs || [])
+    .filter((c) => c.champPayload !== champPayload && conditionPiloteePar(c.condition, champPayload))
+    .map((c) => `la question « ${c.label} »`)
+  const etapes = (schema.etapes || [])
+    .filter((e) => conditionPiloteePar(e.conditionAffichage, champPayload))
+    .map((e) => `l'étape « ${e.titre} »`)
+  return [...champs, ...etapes]
+}
+
+/**
  * EditeurFormulaires — Mode édition des formulaires (CMS interne).
  *
  * Expérience type Jotform pour la coordination DFIP : chaque champ du
@@ -177,10 +227,25 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
   }
 
   function handleSupprimer(champ) {
-    const ok = window.confirm(
-      `Supprimer le champ « ${champ.label} » ?\n\nLa colonne SharePoint « ${champ.colonneSP} » ne sera pas supprimée — seule la question disparaît du formulaire.`
-    )
-    if (!ok) return
+    // Champ système : suppression bloquée (casserait emails / dédoublonnage / affichage).
+    if (estChampSysteme(champ)) {
+      window.alert(
+        `« ${champ.label} » est une question SYSTÈME et ne peut pas être supprimée.\n\n` +
+        `Raison : ${CHAMPS_SYSTEME[champ.champPayload]}.\n\n` +
+        `Vous pouvez modifier son libellé, mais pas la retirer.`
+      )
+      return
+    }
+    // Champ pilote d'une ou plusieurs conditions : avertir des dépendances.
+    const dependants = elementsDependantDe(schema, champ.champPayload)
+    let message = `Supprimer la question « ${champ.label} » ?\n\nLa colonne SharePoint « ${champ.colonneSP || '—'} » n'est pas supprimée — seule la question disparaît du formulaire.`
+    if (dependants.length > 0) {
+      message =
+        `⚠️ ATTENTION — d'autres éléments dépendent de « ${champ.label} » :\n` +
+        dependants.map((d) => `  • ${d}`).join('\n') +
+        `\n\nSi vous la supprimez, ${dependants.length > 1 ? 'ces éléments ne s\'afficheront plus jamais' : 'cet élément ne s\'affichera plus jamais'} (leur condition d'affichage devient impossible).\n\nSupprimer quand même ?`
+    }
+    if (!window.confirm(message)) return
     setCleSelection(null)
     appliquer((s) => supprimerChamp(s, cleChamp(champ)))
   }
@@ -740,6 +805,11 @@ function CadreChamp({
                   colonne SP à créer
                 </span>
               )}
+              {estChampSysteme(champ) && (
+                <span className="text-[11px] text-cb-blue bg-cb-blue-light border border-cb-blue/20 rounded px-1.5 py-0.5" title={CHAMPS_SYSTEME[champ.champPayload]}>
+                  🔒 champ système
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -814,6 +884,7 @@ function PanneauProprietes({ champ, schema, onModifier }) {
   // Sinon (case de consentement, texte informatif, doc renvoyé plus tard…) :
   // pas de colonne, pas d'identifiant à valider, pas de rappel de création.
   const stockeSP = !!(champ.listeCible && champ.listeCible.trim())
+  const systeme = estChampSysteme(champ)
   const autresColonnes = stockeSP ? colonnesDeLaListe(schema, champ.listeCible, cleChamp(champ)) : []
   const validation = stockeSP ? validerColonneSP(champ.colonneSP, autresColonnes) : { valide: true, message: '' }
 
@@ -909,19 +980,23 @@ function PanneauProprietes({ champ, schema, onModifier }) {
           <Propriete label="Réponse enregistrée dans SharePoint ?">
             <button
               type="button"
+              disabled={systeme}
               onClick={() =>
                 onModifier(stockeSP ? { listeCible: '', nouveau: undefined } : { listeCible: 'Stagiaire' })
               }
-              className={`w-full px-3 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer text-left ${
-                stockeSP ? 'border-cb-blue bg-cb-blue-light text-cb-blue' : 'border-gray-300 bg-white text-gray-500'
-              }`}
+              className={`w-full px-3 py-2 rounded-lg border text-sm font-medium transition-colors text-left ${
+                systeme ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
+              } ${stockeSP ? 'border-cb-blue bg-cb-blue-light text-cb-blue' : 'border-gray-300 bg-white text-gray-500'}`}
             >
               {stockeSP
                 ? 'Oui — la réponse est écrite dans une colonne SharePoint'
                 : 'Non — pas de colonne (ex. case de consentement, texte informatif)'}
             </button>
           </Propriete>
-          {!stockeSP && (
+          {systeme && (
+            <p className="text-[11px] text-cb-blue mt-1">🔒 Question système ({CHAMPS_SYSTEME[champ.champPayload]}) — toujours enregistrée, non supprimable.</p>
+          )}
+          {!stockeSP && !systeme && (
             <p className="text-[11px] text-gray-400 mt-1">
               La question s'affiche et peut rester obligatoire, mais sa réponse n'est pas stockée en base
               (utile pour une charte lue/renvoyée séparément, une consigne, une case « je m'engage à… »).
