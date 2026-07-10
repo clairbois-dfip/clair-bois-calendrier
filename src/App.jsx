@@ -22,6 +22,8 @@
  *  - "visite"             → FormulaireVisite     : demande de visite (enseignants)
  *  - "cartographie-login" → CartographieLogin    : connexion requise avant la carto
  *  - "cartographie"       → Cartographie         : carte des sites (acces protege)
+ *  - "edition-login"      → EditionLogin         : connexion au mode edition (URL #edition)
+ *  - "edition"            → EditeurFormulaires   : CMS des formulaires (acces protege)
  */
 import { useState, useEffect } from 'react'
 import { transformPlanningData } from './utils/helpers'
@@ -38,8 +40,15 @@ import FormulaireSignalement from './components/FormulaireSignalement'
 import FormulaireVisite from './components/FormulaireVisite'
 import Cartographie from './components/Cartographie'
 import CartographieLogin from './components/CartographieLogin'
+import EditeurFormulaires from './components/EditeurFormulaires'
+import EditionLogin from './components/EditionLogin'
 import Footer from './components/Footer'
 import { setToken, clearToken, isAuthenticated } from './utils/cartoAuth'
+import {
+  setToken as setEditionToken,
+  clearToken as clearEditionToken,
+  isAuthenticated as isEditionAuthenticated,
+} from './utils/editionAuth'
 
 function App() {
   /* --- Etat du chargement des donnees --- */
@@ -54,6 +63,11 @@ function App() {
   const [currentView, setCurrentView] = useState(() => {
     if (window.location.hash === '#carto') {
       return isAuthenticated() ? 'cartographie' : 'cartographie-login'
+    }
+    // #edition : mode édition des formulaires (CMS interne) — aucun lien
+    // depuis le site public, accès par URL directe uniquement.
+    if (window.location.hash === '#edition') {
+      return isEditionAuthenticated() ? 'edition' : 'edition-login'
     }
     return 'home'
   })
@@ -236,6 +250,19 @@ function App() {
     setCurrentView('home')
   }
 
+  /** Callback succès du login du mode édition : stocke le token et ouvre l'éditeur */
+  const handleEditionLogin = (token) => {
+    setEditionToken(token)
+    setCurrentView('edition')
+  }
+
+  /** Déconnexion du mode édition : efface le token et retour accueil */
+  const handleEditionLogout = () => {
+    clearEditionToken()
+    window.location.hash = ''
+    setCurrentView('home')
+  }
+
   /** Navigation vers le formulaire intégré (depuis StagesPage ou ModulesMetiers) */
   const goToFormulaire = (contextData) => {
     setFormulaireContext(contextData)
@@ -376,6 +403,22 @@ function App() {
         {/* Ecran 8b : Cartographie des sites (acces protege par mot de passe) */}
         {currentView === 'cartographie' && cartoTokenValide && (
           <Cartographie onGoHome={goToHome} onLogout={handleCartoLogout} />
+        )}
+
+        {/* Ecran 10a : Connexion au mode édition des formulaires (URL #edition) */}
+        {currentView === 'edition-login' && (
+          <EditionLogin onLogin={handleEditionLogin} onCancel={handleEditionLogout} />
+        )}
+
+        {/* Ecran 10b : Éditeur de formulaires (CMS interne, accès protégé) */}
+        {currentView === 'edition' && (
+          <EditeurFormulaires
+            onGoHome={() => {
+              window.location.hash = ''
+              setCurrentView('home')
+            }}
+            onLogout={handleEditionLogout}
+          />
         )}
 
         {/* Ecran 8 : Formulaire intégré */}

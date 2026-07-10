@@ -27,6 +27,7 @@ jobs:
       - run: npm run build
         env:
           VITE_CARTO_PASSWORDS: ${{ secrets.VITE_CARTO_PASSWORDS }}
+          VITE_EDIT_PASSWORDS: ${{ secrets.VITE_EDIT_PASSWORDS }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
