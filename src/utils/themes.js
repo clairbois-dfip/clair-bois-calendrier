@@ -119,6 +119,25 @@ export function themeParDefaut() {
 }
 
 /**
+ * Résout le thème d'un formulaire donné. Chaque formulaire a désormais SON
+ * thème (`schema.themes[cle]`). Rétro-compatibilité : à défaut, on retombe
+ * sur l'ancien thème global unique (`schema.theme`), puis sur l'officiel.
+ *
+ * @param {object} schema Schéma des formulaires.
+ * @param {string} formulaire Clé du formulaire ('inscription'…).
+ * @returns {object} Thème normalisé.
+ */
+export function themePourFormulaire(schema, formulaire) {
+  const perForm = schema?.themes?.[formulaire];
+  return normaliserTheme(perForm || schema?.theme || themeParDefaut());
+}
+
+/** Thème « du site » (pages hors formulaire : accueil, calendrier). */
+export function themeDuSite(schema) {
+  return normaliserTheme(schema?.theme || themeParDefaut());
+}
+
+/**
  * Complète un thème partiel (issu du schéma ou d'une personnalisation) :
  * dérive les variantes -light et le fond manquants, garantit une police.
  */

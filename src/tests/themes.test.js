@@ -12,6 +12,8 @@ import {
   themeParDefaut,
   normaliserTheme,
   appliquerTheme,
+  themePourFormulaire,
+  themeDuSite,
 } from '../utils/themes'
 
 describe('melangeBlanc', () => {
@@ -111,5 +113,61 @@ describe('appliquerTheme', () => {
   it('applique le défaut si aucun thème fourni', () => {
     appliquerTheme(undefined)
     expect(document.documentElement.style.getPropertyValue('--color-cb-blue')).toBe('#092C6A')
+  })
+})
+
+describe('themePourFormulaire (un thème par formulaire, non figé)', () => {
+  it('rend le thème propre à chaque formulaire depuis schema.themes', () => {
+    const schema = {
+      themes: {
+        inscription: THEMES[4], // Terracotta
+        signalement: THEMES[1], // Océan
+      },
+    }
+    expect(themePourFormulaire(schema, 'inscription').primaire).toBe('#7A3B25')
+    expect(themePourFormulaire(schema, 'signalement').primaire).toBe('#0E4D64')
+  })
+
+  it('les formulaires ne sont plus figés : chacun peut différer de l\'autre', () => {
+    const schema = { themes: { inscription: THEMES[4], visite: THEMES[2] } }
+    const insc = themePourFormulaire(schema, 'inscription')
+    const visite = themePourFormulaire(schema, 'visite')
+    expect(insc.primaire).not.toBe(visite.primaire)
+  })
+
+  it('retombe sur l\'officiel Clair Bois si le formulaire n\'a pas de thème', () => {
+    const schema = { themes: { inscription: THEMES[4] } }
+    expect(themePourFormulaire(schema, 'signalement').primaire).toBe('#092C6A')
+  })
+
+  it('rétro-compatibilité : à défaut de themes[cle], utilise l\'ancien theme global', () => {
+    const schema = { theme: THEMES[3] } // Aubergine, ancien format global
+    expect(themePourFormulaire(schema, 'inscription').primaire).toBe(THEMES[3].primaire)
+  })
+
+  it('officiel Clair Bois si ni themes ni theme', () => {
+    expect(themePourFormulaire({}, 'inscription').primaire).toBe('#092C6A')
+    expect(themePourFormulaire(undefined, 'inscription').primaire).toBe('#092C6A')
+  })
+
+  it('normalise un thème partiel (dérive -light et fond manquants)', () => {
+    const schema = { themes: { inscription: { primaire: '#123456', accent: '#abcdef' } } }
+    const t = themePourFormulaire(schema, 'inscription')
+    expect(t.primaireLight).toMatch(/^#[0-9a-f]{6}$/i)
+    expect(t.fondFormulaire).toContain('gradient')
+  })
+})
+
+describe('themeDuSite (pages hors formulaire)', () => {
+  it('utilise le theme global du schéma', () => {
+    expect(themeDuSite({ theme: THEMES[1] }).primaire).toBe('#0E4D64')
+  })
+  it('officiel Clair Bois par défaut', () => {
+    expect(themeDuSite({}).primaire).toBe('#092C6A')
+    expect(themeDuSite(undefined).primaire).toBe('#092C6A')
+  })
+  it('ignore les thèmes par formulaire (indépendant de schema.themes)', () => {
+    const schema = { themes: { inscription: THEMES[4] } }
+    expect(themeDuSite(schema).primaire).toBe('#092C6A')
   })
 })

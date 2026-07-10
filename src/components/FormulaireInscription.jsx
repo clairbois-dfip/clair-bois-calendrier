@@ -437,15 +437,6 @@ export default function FormulaireInscription({ schema, parcours, chemin, contex
         )}
       </div>
 
-      {/* Contact en cas de besoin */}
-      <div className="mt-6 text-center">
-        <p className="text-xs text-gray-400">
-          Besoin d'aide ?{' '}
-          <a href="mailto:dfip@clairbois.ch" className="text-cb-blue hover:underline">
-            dfip@clairbois.ch
-          </a>
-        </p>
-      </div>
     </div>
   )
 }

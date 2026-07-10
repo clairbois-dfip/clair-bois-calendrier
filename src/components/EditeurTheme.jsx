@@ -1,5 +1,5 @@
 /**
- * EditeurTheme.jsx — Panneau « Thème du site » du mode édition.
+ * EditeurTheme.jsx — Panneau « Thème du formulaire » du mode édition (un thème par formulaire).
  *
  * La coordination choisit un thème proposé (dont l'officiel Clair Bois,
  * toujours conservé en premier) ou personnalise les couleurs de marque et
@@ -105,10 +105,10 @@ export default function EditeurTheme({ themeCourant, onChange }) {
   return (
     <div className="space-y-6">
       <div className="bg-cb-blue-light/60 border border-cb-blue/20 rounded-xl p-4 text-sm text-cb-blue">
-        <p className="font-semibold mb-1">Personnalisez l'apparence du site</p>
+        <p className="font-semibold mb-1">Personnalisez l'apparence de ce formulaire</p>
         <p>
-          Choisissez un thème ou créez le vôtre. Le changement s'applique <strong>en direct</strong> à
-          tout le site. Les couleurs du calendrier (vert / orange / rouge) ne bougent pas — ce sont des
+          Choisissez un thème ou créez le vôtre — il s'applique à <strong>ce formulaire</strong> (aperçu
+          en direct). Les couleurs du calendrier (vert / orange / rouge) ne bougent pas — ce sont des
           repères de disponibilité. Cliquez <strong>Publier</strong> pour enregistrer.
         </p>
       </div>
@@ -140,7 +140,7 @@ export default function EditeurTheme({ themeCourant, onChange }) {
           <ChoixCouleur label="Couleur principale (header, titres)" valeur={courant.primaire} onChange={(v) => modifier({ primaire: v })} />
           <ChoixCouleur label="Couleur d'action (boutons)" valeur={courant.accent} onChange={(v) => modifier({ accent: v })} />
           <label className="block sm:col-span-2">
-            <span className="block text-xs font-semibold text-gray-500 mb-1">Police du site</span>
+            <span className="block text-xs font-semibold text-gray-500 mb-1">Police</span>
             <select
               value={courant.police}
               onChange={(e) => modifier({ police: e.target.value })}

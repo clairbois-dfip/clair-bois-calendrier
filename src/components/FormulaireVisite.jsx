@@ -140,7 +140,7 @@ export default function FormulaireVisite({ schema, onGoHome }) {
 
       {/* Sections dérivées du schéma : une carte par étape */}
       {etapes.map((etape) => (
-        <div key={etape.cle} className="bg-white rounded-xl border border-gray-200 p-5 md:p-6 mb-4 shadow-sm max-w-lg mx-auto">
+        <div key={etape.cle} className="bg-white rounded-xl border border-gray-200 p-5 md:p-6 mb-4 shadow-sm max-w-2xl mx-auto">
           <h3 className="text-sm font-bold text-cb-blue uppercase tracking-wide mb-4">{etape.titre}</h3>
           {etape.intro && <div className="mb-4"><IntroEtape etape={etape} /></div>}
           <ChampsEtape
@@ -155,7 +155,7 @@ export default function FormulaireVisite({ schema, onGoHome }) {
       ))}
 
       {/* Bouton envoi */}
-      <div className="flex justify-center max-w-lg mx-auto">
+      <div className="flex justify-center max-w-2xl mx-auto">
         <button
           onClick={handleSubmit}
           disabled={isSubmitting}
@@ -178,14 +178,6 @@ export default function FormulaireVisite({ schema, onGoHome }) {
         </button>
       </div>
 
-      <div className="mt-6 text-center">
-        <p className="text-xs text-gray-400">
-          Questions ?{' '}
-          <a href="mailto:dfip@clairbois.ch" className="text-cb-blue hover:underline">
-            dfip@clairbois.ch
-          </a>
-        </p>
-      </div>
     </div>
   )
 }

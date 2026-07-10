@@ -29,7 +29,7 @@ import {
   getGithubPat,
   setGithubPat,
 } from '../utils/schemaFormulaires'
-import { normaliserTheme, appliquerTheme } from '../utils/themes'
+import { normaliserTheme, appliquerTheme, themePourFormulaire } from '../utils/themes'
 import EditeurTheme from './EditeurTheme'
 
 /**
@@ -290,11 +290,14 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
     setDropInfo(null)
   }
 
-  /** Change le thème : stocké dans le schéma ET appliqué en direct (aperçu). */
+  /**
+   * Change le thème DU FORMULAIRE actif : stocké dans schema.themes[cle] ET
+   * appliqué en direct (aperçu). Chaque formulaire a son propre thème.
+   */
   function handleThemeChange(theme) {
     const t = normaliserTheme(theme)
     appliquerTheme(t)
-    appliquer((s) => ({ ...s, theme: t }))
+    appliquer((s) => ({ ...s, themes: { ...(s.themes || {}), [formulaireActif]: t } }))
   }
 
   /* ── Rendu ───────────────────────────────────────────── */
@@ -305,7 +308,7 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
       <div className="sticky top-0 z-20 -mx-4 px-4 py-3 bg-white/95 backdrop-blur border-b border-gray-200 mb-6">
         <div className="max-w-3xl mx-auto flex flex-wrap items-center gap-3">
           <h1 className="text-lg font-bold text-cb-blue mr-auto">
-            {vue === 'theme' ? '🎨 Thème du site' : '✏️ Édition des formulaires'}
+            {vue === 'theme' ? '🎨 Thème du formulaire' : '✏️ Édition des formulaires'}
             {modifie && (
               <span className="ml-2 text-xs font-medium text-orange-600 bg-orange-50 border border-orange-200 rounded-full px-2 py-0.5 align-middle">
                 modifications non publiées
@@ -323,27 +326,33 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
             </button>
             <button
               type="button"
-              onClick={() => setVue('theme')}
+              onClick={() => {
+                setVue('theme')
+                // Aperçu direct : applique le thème du formulaire sélectionné.
+                appliquerTheme(themePourFormulaire(schema, formulaireActif))
+              }}
               className={`px-3 py-1.5 transition-colors cursor-pointer ${vue === 'theme' ? 'bg-cb-blue text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
             >
               Thème
             </button>
           </div>
-          {vue === 'formulaires' && (
-            <select
-              value={formulaireActif}
-              onChange={(e) => {
-                setFormulaireActif(e.target.value)
-                setCleSelection(null)
-              }}
-              className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 bg-white cursor-pointer"
-              aria-label="Formulaire à éditer"
-            >
-              {(schema.formulaires || []).map((f) => (
-                <option key={f.cle} value={f.cle}>{f.titre}</option>
-              ))}
-            </select>
-          )}
+          {/* Sélecteur de formulaire, commun aux deux vues (édition des champs OU du thème) */}
+          <select
+            value={formulaireActif}
+            onChange={(e) => {
+              const cle = e.target.value
+              setFormulaireActif(cle)
+              setCleSelection(null)
+              // En vue thème : aperçu direct du thème de ce formulaire.
+              if (vue === 'theme') appliquerTheme(themePourFormulaire(schema, cle))
+            }}
+            className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 bg-white cursor-pointer"
+            aria-label="Formulaire à éditer"
+          >
+            {(schema.formulaires || []).map((f) => (
+              <option key={f.cle} value={f.cle}>{f.titre}</option>
+            ))}
+          </select>
           <button
             type="button"
             onClick={handlePublier}
@@ -395,11 +404,15 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
         )}
       </div>
 
-      {/* ── Vue THÈME ── */}
+      {/* ── Vue THÈME (par formulaire) ── */}
       {vue === 'theme' && (
         <div className="max-w-3xl mx-auto">
+          <p className="text-sm text-gray-500 mb-3">
+            Vous modifiez l'apparence du formulaire <strong>« {(schema.formulaires || []).find((f) => f.cle === formulaireActif)?.titre }</strong> ».
+            Chaque formulaire peut avoir son propre thème — changez de formulaire dans le menu en haut.
+          </p>
           <EditeurTheme
-            themeCourant={schema.theme}
+            themeCourant={themePourFormulaire(schema, formulaireActif)}
             onChange={handleThemeChange}
           />
         </div>

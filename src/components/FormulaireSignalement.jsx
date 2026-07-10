@@ -158,9 +158,9 @@ export default function FormulaireSignalement({ schema, onGoHome }) {
       </div>
 
       {/* Formulaire */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5 md:p-6 mb-4 shadow-sm max-w-lg mx-auto">
+      <div className="bg-white rounded-xl border border-gray-200 p-5 md:p-6 mb-4 shadow-sm max-w-2xl mx-auto">
         <div className="space-y-6">
-          {etapes.map((etape, i) => (
+          {etapes.map((etape) => (
             <div key={etape.cle} className="space-y-4">
               {/* Le titre de section n'apparaît que s'il y a plusieurs étapes */}
               {etapes.length > 1 && (
@@ -204,15 +204,6 @@ export default function FormulaireSignalement({ schema, onGoHome }) {
         </button>
       </div>
 
-      {/* Contact en cas de besoin */}
-      <div className="mt-6 text-center">
-        <p className="text-xs text-gray-400">
-          Besoin d'aide ?{' '}
-          <a href="mailto:dfip@clairbois.ch" className="text-cb-blue hover:underline">
-            dfip@clairbois.ch
-          </a>
-        </p>
-      </div>
     </div>
   )
 }

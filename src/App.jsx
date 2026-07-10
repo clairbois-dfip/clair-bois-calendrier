@@ -49,7 +49,7 @@ import {
   clearToken as clearEditionToken,
   isAuthenticated as isEditionAuthenticated,
 } from './utils/editionAuth'
-import { appliquerTheme } from './utils/themes'
+import { appliquerTheme, themePourFormulaire, themeDuSite } from './utils/themes'
 
 function App() {
   /* --- Etat du chargement des donnees --- */
@@ -109,9 +109,6 @@ function App() {
         // Transforme le format plat (Power Automate) en hierarchie etablissements > secteurs > semaines
         setData(transformPlanningData(planning))
         setSchemaFormulaires(schema)
-        // Applique le thème visuel choisi par la coordination (schema.theme),
-        // sinon le thème officiel Clair Bois par défaut.
-        appliquerTheme(schema?.theme)
         setLoading(false)
       })
       .catch((err) => {
@@ -119,6 +116,21 @@ function App() {
         setLoading(false)
       })
   }, [])
+
+  /**
+   * Applique le thème visuel selon la vue active : chaque formulaire a SON
+   * thème (mode édition → schema.themes[cle]) ; les autres pages utilisent le
+   * thème du site. Recoloration en direct via les variables CSS.
+   */
+  useEffect(() => {
+    if (!schemaFormulaires) return
+    const cleFormulaire =
+      currentView === 'formulaire' ? 'inscription'
+      : currentView === 'signalement' ? 'signalement'
+      : currentView === 'visite' ? 'visite'
+      : null
+    appliquerTheme(cleFormulaire ? themePourFormulaire(schemaFormulaires, cleFormulaire) : themeDuSite(schemaFormulaires))
+  }, [currentView, schemaFormulaires])
 
   /* --- Fonctions de navigation ---
    * Chaque goTo* est un callback passe en prop aux composants enfants.
@@ -134,14 +146,6 @@ function App() {
     setSelectedWeek(null)
     setAiguillageParcours(null)
     setChemin(null)
-  }
-
-  /** Selection d'un etablissement → affiche ses secteurs */
-  const goToEtablissement = (etab) => {
-    setSelectedEtablissement(etab)
-    setSelectedSecteur(null)
-    setSelectedWeek(null)
-    setCurrentView('etablissement')
   }
 
   /** Selection d'un secteur → affiche le calendrier mensuel */
@@ -237,16 +241,6 @@ function App() {
    * Verifie le token : si valide, affiche directement la carto ;
    * sinon, affiche d'abord la page de connexion.
    */
-  const goToCartographie = () => {
-    if (isAuthenticated()) {
-      setCartoTokenValide(true)
-      setCurrentView('cartographie')
-    } else {
-      setCartoTokenValide(false)
-      setCurrentView('cartographie-login')
-    }
-  }
-
   /** Callback succes du login carto : stocke le token et passe a la vue carto */
   const handleCartoLogin = (token) => {
     setToken(token)
@@ -325,7 +319,7 @@ function App() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header organization={data.organization} />
 
-      <main className="max-w-5xl mx-auto px-4 py-6 flex-1">
+      <main className="max-w-6xl mx-auto px-4 py-6 flex-1">
         {/* Ecran 1 : Page d'accueil — choix du parcours */}
         {currentView === 'home' && (
           <HomePage data={data} onGoToModules={goToModules} onGoToStages={goToStages} onGoToSignalement={goToSignalement} onGoToVisite={goToVisite} />
