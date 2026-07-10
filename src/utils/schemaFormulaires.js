@@ -170,6 +170,35 @@ export function deplacerChamp(schema, cle, direction) {
 }
 
 /**
+ * Réordonne un champ par glisser-déposer : déplace `cleSource` juste avant
+ * (ou après) `cleCible`, AU SEIN de la même étape. Renumérote 10, 20, 30…
+ * Retourne un nouveau schéma (inchangé si les deux champs ne sont pas dans
+ * la même étape ou si source == cible).
+ *
+ * @param {object} schema Schéma complet.
+ * @param {string} cleSource Clé du champ déplacé.
+ * @param {string} cleCible Clé du champ sur lequel on dépose.
+ * @param {boolean} avant true = insérer avant la cible, false = après.
+ * @returns {object} Nouveau schéma.
+ */
+export function reordonnerChampVers(schema, cleSource, cleCible, avant) {
+  if (cleSource === cleCible) return schema
+  const source = (schema?.champs || []).find((c) => cleChamp(c) === cleSource)
+  const cible = (schema?.champs || []).find((c) => cleChamp(c) === cleCible)
+  if (!source || !cible || source.etape !== cible.etape) return schema
+  const groupe = champsDeLEtape(schema, source.etape).filter((c) => cleChamp(c) !== cleSource)
+  const idx = groupe.findIndex((c) => cleChamp(c) === cleCible)
+  groupe.splice(avant ? idx : idx + 1, 0, source)
+  const ordres = new Map(groupe.map((c, i) => [cleChamp(c), (i + 1) * 10]))
+  return {
+    ...schema,
+    champs: schema.champs.map((c) =>
+      ordres.has(cleChamp(c)) ? { ...c, ordre: ordres.get(cleChamp(c)) } : c
+    ),
+  }
+}
+
+/**
  * Met à jour un champ (fusion partielle) et retourne un nouveau schéma.
  *
  * @param {object} schema Schéma complet.

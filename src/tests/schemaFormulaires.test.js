@@ -13,6 +13,7 @@ import {
   colonnesDeLaListe,
   champsDeLEtape,
   deplacerChamp,
+  reordonnerChampVers,
   mettreAJourChamp,
   ajouterChamp,
   supprimerChamp,
@@ -115,6 +116,32 @@ describe('deplacerChamp', () => {
   it('ne modifie pas le schéma original (immutabilité)', () => {
     deplacerChamp(SCHEMA, 'stagiaire:nom', 1)
     expect(SCHEMA.champs[0].ordre).toBe(10)
+  })
+})
+
+// ──────────────────────────────────────────────
+// reordonnerChampVers — glisser-déposer
+// ──────────────────────────────────────────────
+describe('reordonnerChampVers', () => {
+  it('dépose un champ AVANT une cible (nom → avant… lui-même via avs)', () => {
+    // avs déposé avant nom : ordre attendu avs, nom, prenom
+    const s2 = reordonnerChampVers(SCHEMA, 'stagiaire:avs', 'stagiaire:nom', true)
+    expect(champsDeLEtape(s2, 'stagiaire').map((c) => c.champPayload)).toEqual(['avs', 'nom', 'prenom'])
+    expect(champsDeLEtape(s2, 'stagiaire').map((c) => c.ordre)).toEqual([10, 20, 30])
+  })
+  it('dépose un champ APRÈS une cible (nom → après avs)', () => {
+    const s2 = reordonnerChampVers(SCHEMA, 'stagiaire:nom', 'stagiaire:avs', false)
+    expect(champsDeLEtape(s2, 'stagiaire').map((c) => c.champPayload)).toEqual(['prenom', 'avs', 'nom'])
+  })
+  it('ne fait rien si source == cible', () => {
+    expect(reordonnerChampVers(SCHEMA, 'stagiaire:nom', 'stagiaire:nom', true)).toBe(SCHEMA)
+  })
+  it('refuse de déplacer entre deux étapes différentes', () => {
+    expect(reordonnerChampVers(SCHEMA, 'stagiaire:nom', 'signalement:nom', true)).toBe(SCHEMA)
+  })
+  it('n\'altère pas le schéma original (immutabilité)', () => {
+    reordonnerChampVers(SCHEMA, 'stagiaire:avs', 'stagiaire:nom', true)
+    expect(SCHEMA.champs[0].champPayload).toBe('nom')
   })
 })
 

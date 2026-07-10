@@ -6,6 +6,7 @@ import {
   cleChamp,
   champsDeLEtape,
   deplacerChamp,
+  reordonnerChampVers,
   mettreAJourChamp,
   ajouterChamp,
   supprimerChamp,
@@ -58,6 +59,8 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
   const [cleSelection, setCleSelection] = useState(null)
   const [etapeOuverte, setEtapeOuverte] = useState(null) // panneau réglages d'étape
   const [vue, setVue] = useState('formulaires') // 'formulaires' | 'theme'
+  const [dragCle, setDragCle] = useState(null) // champ en cours de glissement
+  const [dropInfo, setDropInfo] = useState(null) // { cle, avant } : cible de dépôt
   const [modifie, setModifie] = useState(false)
   const [publication, setPublication] = useState({ enCours: false, succes: '', erreur: '' })
   const [patVisible, setPatVisible] = useState(false)
@@ -186,6 +189,15 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
     if (!window.confirm(`Supprimer l'étape « ${etape.titre} » ?`)) return
     setEtapeOuverte(null)
     appliquer((s) => supprimerEtape(s, etape.cle))
+  }
+
+  /** Fin d'un glisser-déposer : réordonne le champ vers la cible survolée. */
+  function handleDrop() {
+    if (dragCle && dropInfo && dragCle !== dropInfo.cle) {
+      appliquer((s) => reordonnerChampVers(s, dragCle, dropInfo.cle, dropInfo.avant))
+    }
+    setDragCle(null)
+    setDropInfo(null)
   }
 
   /** Change le thème : stocké dans le schéma ET appliqué en direct (aperçu). */
@@ -426,6 +438,18 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
                     selectionne={cleChamp(champ) === cleSelection}
                     premier={index === 0}
                     dernier={index === champs.length - 1}
+                    /* Glisser-déposer */
+                    enGlissement={dragCle === cleChamp(champ)}
+                    dropAvant={dropInfo?.cle === cleChamp(champ) && dropInfo.avant && dragCle !== cleChamp(champ)}
+                    dropApres={dropInfo?.cle === cleChamp(champ) && !dropInfo.avant && dragCle !== cleChamp(champ)}
+                    onDragStartCarte={() => setDragCle(cleChamp(champ))}
+                    onDragOverCarte={(avant) => {
+                      if (dragCle && dragCle !== cleChamp(champ)) {
+                        setDropInfo((d) => (d?.cle === cleChamp(champ) && d.avant === avant ? d : { cle: cleChamp(champ), avant }))
+                      }
+                    }}
+                    onDropCarte={handleDrop}
+                    onDragEndCarte={() => { setDragCle(null); setDropInfo(null) }}
                     onSelect={() =>
                       setCleSelection(cleChamp(champ) === cleSelection ? null : cleChamp(champ))
                     }
@@ -510,8 +534,12 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
 }
 
 /**
- * CadreChamp — Un champ du formulaire dans son cadre cliquable (style Jotform).
- * Sélectionné : bordure accent + barre d'outils + panneau de propriétés.
+ * CadreChamp — Un champ du formulaire dans son cadre (style Jotform).
+ *
+ * Réordonnancement par GLISSER-DÉPOSER : on attrape la poignée (⠿) et on
+ * dépose le champ où l'on veut ; un liseré indique la position d'insertion.
+ * De petites flèches ↑↓ restent disponibles (précision + accessibilité
+ * clavier). Cliquer le champ l'ouvre pour l'éditer.
  */
 function CadreChamp({
   champ,
@@ -519,6 +547,13 @@ function CadreChamp({
   selectionne,
   premier,
   dernier,
+  enGlissement,
+  dropAvant,
+  dropApres,
+  onDragStartCarte,
+  onDragOverCarte,
+  onDropCarte,
+  onDragEndCarte,
   onSelect,
   onMonter,
   onDescendre,
@@ -526,91 +561,118 @@ function CadreChamp({
   onModifier,
 }) {
   return (
-    <div
-      className={`rounded-xl border-2 transition-all ${
-        selectionne
-          ? 'border-cb-accent bg-white shadow-md'
-          : 'border-transparent bg-white hover:border-gray-200 shadow-sm'
-      }`}
-    >
-      {/* Ligne : flèches d'ordre TOUJOURS visibles (gauche) + aperçu cliquable (droite) */}
-      <div className="flex items-stretch">
-        {/* Poignée de réordonnancement — visible en permanence, indépendante de la sélection */}
-        <div className="flex flex-col justify-center gap-1 pl-2 pr-1 py-2 shrink-0">
-          <button
-            type="button"
-            onClick={onMonter}
-            disabled={premier}
-            className="w-7 h-7 flex items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:border-cb-accent hover:text-cb-accent disabled:opacity-25 disabled:hover:border-gray-200 cursor-pointer disabled:cursor-not-allowed"
-            title="Monter cette question"
-            aria-label={`Monter la question ${champ.label}`}
-          >
-            ↑
-          </button>
-          <button
-            type="button"
-            onClick={onDescendre}
-            disabled={dernier}
-            className="w-7 h-7 flex items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:border-cb-accent hover:text-cb-accent disabled:opacity-25 disabled:hover:border-gray-200 cursor-pointer disabled:cursor-not-allowed"
-            title="Descendre cette question"
-            aria-label={`Descendre la question ${champ.label}`}
-          >
-            ↓
-          </button>
-        </div>
+    <div className={enGlissement ? 'opacity-40' : ''}>
+      {/* Liseré d'insertion AVANT ce champ */}
+      <div className={`h-0.5 rounded-full mb-1 transition-colors ${dropAvant ? 'bg-cb-accent' : 'bg-transparent'}`} />
 
-        {/* Zone cliquable : aperçu du champ tel qu'il apparaît dans le formulaire */}
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={onSelect}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault()
-              onSelect()
-            }
-          }}
-          className="flex-1 min-w-0 p-4 pl-2 cursor-pointer"
-          aria-label={`Modifier la question ${champ.label}`}
-          aria-expanded={selectionne}
-        >
-          <ApercuChamp champ={champ} />
-          <div className="flex flex-wrap items-center gap-2 mt-2">
-            <span className="text-[11px] font-mono text-gray-400 bg-gray-50 border border-gray-200 rounded px-1.5 py-0.5">
-              {champ.colonneSP}
+      <div
+        className={`rounded-xl border-2 transition-all ${
+          selectionne
+            ? 'border-cb-accent bg-white shadow-md'
+            : 'border-transparent bg-white hover:border-gray-200 shadow-sm'
+        }`}
+        /* Zone de dépôt : autorise le drop et calcule avant/après selon la position */
+        onDragOver={(e) => {
+          e.preventDefault()
+          const r = e.currentTarget.getBoundingClientRect()
+          onDragOverCarte(e.clientY < r.top + r.height / 2)
+        }}
+        onDrop={(e) => { e.preventDefault(); onDropCarte() }}
+      >
+        {/* Ligne : poignée (glisser) + flèches (précision) à gauche, aperçu cliquable à droite */}
+        <div className="flex items-stretch">
+          <div
+            className="flex flex-col items-center justify-center gap-1 pl-2 pr-1 py-2 shrink-0"
+            /* Toute la colonne gauche est la source du glisser-déposer */
+            draggable
+            onDragStart={(e) => { e.dataTransfer.effectAllowed = 'move'; onDragStartCarte() }}
+            onDragEnd={onDragEndCarte}
+          >
+            <span
+              className="w-7 h-6 flex items-center justify-center text-gray-400 cursor-grab active:cursor-grabbing select-none"
+              title="Glisser pour déplacer cette question où vous voulez"
+              aria-hidden="true"
+            >
+              ⠿
             </span>
-            <span className="text-[11px] text-gray-400">liste {champ.listeCible}</span>
-            {champ.condition && (
-              <span className="text-[11px] text-purple-500 bg-purple-50 border border-purple-100 rounded px-1.5 py-0.5">
-                si {champ.condition}
-              </span>
-            )}
-            {champ.nouveau && (
-              <span className="text-[11px] text-yellow-700 bg-yellow-50 border border-yellow-200 rounded px-1.5 py-0.5">
-                colonne SP à créer
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Barre d'outils + panneau de propriétés (champ sélectionné) */}
-      {selectionne && (
-        <div className="border-t border-gray-100">
-          <div className="flex items-center gap-1 px-3 py-2 bg-gray-50/60">
-            <span className="text-xs text-gray-400">Utilisez les flèches ↑ ↓ à gauche pour changer l'ordre.</span>
             <button
               type="button"
-              onClick={onSupprimer}
-              className="ml-auto text-sm px-2.5 py-1 rounded-lg border border-red-200 text-cb-red bg-white hover:bg-red-50 cursor-pointer"
-              title="Supprimer la question"
+              onClick={onMonter}
+              disabled={premier}
+              className="w-7 h-6 flex items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:border-cb-accent hover:text-cb-accent disabled:opacity-25 disabled:hover:border-gray-200 cursor-pointer disabled:cursor-not-allowed text-xs"
+              title="Monter d'un cran"
+              aria-label={`Monter la question ${champ.label}`}
             >
-              🗑 Supprimer
+              ↑
+            </button>
+            <button
+              type="button"
+              onClick={onDescendre}
+              disabled={dernier}
+              className="w-7 h-6 flex items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:border-cb-accent hover:text-cb-accent disabled:opacity-25 disabled:hover:border-gray-200 cursor-pointer disabled:cursor-not-allowed text-xs"
+              title="Descendre d'un cran"
+              aria-label={`Descendre la question ${champ.label}`}
+            >
+              ↓
             </button>
           </div>
-          <PanneauProprietes champ={champ} schema={schema} onModifier={onModifier} />
+
+          {/* Zone cliquable : aperçu du champ tel qu'il apparaît dans le formulaire */}
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={onSelect}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                onSelect()
+              }
+            }}
+            className="flex-1 min-w-0 p-4 pl-2 cursor-pointer"
+            aria-label={`Modifier la question ${champ.label}`}
+            aria-expanded={selectionne}
+          >
+            <ApercuChamp champ={champ} />
+            <div className="flex flex-wrap items-center gap-2 mt-2">
+              <span className="text-[11px] font-mono text-gray-400 bg-gray-50 border border-gray-200 rounded px-1.5 py-0.5">
+                {champ.colonneSP}
+              </span>
+              <span className="text-[11px] text-gray-400">liste {champ.listeCible}</span>
+              {champ.condition && (
+                <span className="text-[11px] text-purple-500 bg-purple-50 border border-purple-100 rounded px-1.5 py-0.5">
+                  si {champ.condition}
+                </span>
+              )}
+              {champ.nouveau && (
+                <span className="text-[11px] text-yellow-700 bg-yellow-50 border border-yellow-200 rounded px-1.5 py-0.5">
+                  colonne SP à créer
+                </span>
+              )}
+            </div>
+          </div>
         </div>
-      )}
+
+        {/* Barre d'outils + panneau de propriétés (champ sélectionné) */}
+        {selectionne && (
+          <div className="border-t border-gray-100">
+            <div className="flex items-center gap-1 px-3 py-2 bg-gray-50/60">
+              <span className="text-xs text-gray-400">Glissez la poignée ⠿ à gauche pour déplacer la question.</span>
+              <button
+                type="button"
+                onClick={onSupprimer}
+                className="ml-auto text-sm px-2.5 py-1 rounded-lg border border-red-200 text-cb-red bg-white hover:bg-red-50 cursor-pointer"
+                title="Supprimer la question"
+              >
+                🗑 Supprimer
+              </button>
+            </div>
+            <PanneauProprietes champ={champ} schema={schema} onModifier={onModifier} />
+          </div>
+        )}
+      </div>
+
+      {/* Liseré d'insertion APRÈS ce champ */}
+      <div className={`h-0.5 rounded-full mt-1 transition-colors ${dropApres ? 'bg-cb-accent' : 'bg-transparent'}`} />
     </div>
   )
 }
