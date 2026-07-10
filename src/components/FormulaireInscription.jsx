@@ -27,11 +27,10 @@
  *   onGoHome    : rappele apres confirmation ou depuis l'ecran final
  */
 import { useState } from 'react'
-import { getFormConfig, getCheminKey, SECTION_LABELS, INITIAL_DATA } from '../utils/formConfig'
+import { getFormConfig, getCheminKey, SECTION_LABELS } from '../utils/formConfig'
 import {
-  validateRequired, validateAVS, validatePhone, validatePhoneOptional,
-  validateNPA, validateEmail, validateEmailOptional, validateDateNaissance,
-} from '../utils/validation'
+  donneesInitiales, validerChamp, validerEtape, collecterPayload, champsVisibles,
+} from '../utils/formulaireDynamique'
 import { formatDate } from '../utils/helpers'
 import EtapeStagiaire from './formulaire/EtapeStagiaire'
 import EtapeCuratelle from './formulaire/EtapeCuratelle'
@@ -43,89 +42,20 @@ import EtapeDeclaration from './formulaire/EtapeDeclaration'
 import Recapitulatif from './formulaire/Recapitulatif'
 import Confirmation from './formulaire/Confirmation'
 
-// Chaque cle correspond a un nom de champ du formulaire.
-// Les validateurs sont appeles a la fois au blur (handleBlur) et a la soumission d'etape (validateStep).
-const VALIDATORS = {
-  // Stagiaire
-  nom: validateRequired,
-  prenom: validateRequired,
-  sexe: validateRequired,
-  date_naissance: validateDateNaissance,
-  avs: validateAVS,
-  tel: validatePhone,
-  email: validateEmail,
-  adresse: validateRequired,
-  npa: validateNPA,
-  formation: validateRequired,
+// Les champs, leurs conditions et leurs validateurs sont désormais dérivés
+// du schéma des formulaires (public/formulaire-schema.json — mode édition
+// #edition). Voir utils/formulaireDynamique.js pour le moteur.
 
-  // Curatelle
-  sous_curatelle: validateRequired,
-  curatelle_type: validateRequired,
-  curatelle_nom: validateRequired,
-  curatelle_prenom: validateRequired,
-  curatelle_tel: validatePhone,
-  curatelle_email: validateEmail,
-
-  // Urgence
-  urgence_nom: validateRequired,
-  urgence_prenom: validateRequired,
-  urgence_lien: validateRequired,
-  urgence_tel: validatePhone,
-
-  // AI
-  inscrit_ai: validateRequired,
-  ai_tel: validatePhoneOptional,
-  ai_email: validateEmailOptional,
-
-  // Complémentaire
-  objectif_stage: validateRequired,
-  parcours_scolaire: validateRequired,
-  limitations: validateRequired,
-  deja_tests: validateRequired,
-  deja_stages_secteur: validateRequired,
-  reseau_medical: validateRequired,
-
-  // Déclaration
-  declaration_charte: validateRequired,
-  declaration_engagement: validateRequired,
-
-  // Référent
-  referent_partenaire: validateRequired,
-  referent_nom: validateRequired,
-  referent_prenom: validateRequired,
-  referent_tel: validatePhone,
-  referent_email: validateEmail,
-  referent_fonction: validateRequired,
-}
-
-// Champs systematiquement valides pour chaque section.
-// Les champs conditionnels (curatelle, AI) sont ajoutes dynamiquement dans validateStep/buildPayload.
-const SECTION_FIELDS = {
-  referent: ['referent_partenaire', 'referent_nom', 'referent_prenom', 'referent_tel', 'referent_email', 'referent_fonction'],
-  stagiaire: ['nom', 'prenom', 'sexe', 'date_naissance', 'avs', 'tel', 'email', 'adresse', 'npa', 'formation'],
-  // Chemin retour : seuls les identifiants sont re-saisis, le reste est deja en dossier
-  'stagiaire-retour': ['nom', 'prenom', 'sexe', 'date_naissance', 'avs', 'tel', 'email'],
-  curatelle: ['sous_curatelle'],  // Les champs curateur sont conditionnels (voir CURATELLE_FIELDS)
-  urgence: ['urgence_nom', 'urgence_prenom', 'urgence_lien', 'urgence_tel'],
-  ai: ['inscrit_ai'],  // Les champs conseiller AI sont conditionnels (voir AI_FIELDS)
-  complementaire: ['parcours_scolaire', 'limitations', 'deja_tests', 'deja_stages_secteur', 'reseau_medical'],
-  declaration: ['declaration_charte', 'declaration_engagement'],
-}
-
-// Requis seulement si sous_curatelle commence par 'Oui' (gere dans validateStep et buildPayload)
-const CURATELLE_FIELDS = ['curatelle_type', 'curatelle_nom', 'curatelle_prenom', 'curatelle_tel', 'curatelle_email']
-
-// Requis seulement si inscrit_ai !== 'Non' (presence d'un conseiller AI connu ou en cours)
-const AI_FIELDS = ['ai_nom', 'ai_prenom', 'ai_tel', 'ai_email', 'ai_office']
-
-export default function FormulaireInscription({ parcours, chemin, contextData, onBack, onGoHome }) {
+export default function FormulaireInscription({ schema, parcours, chemin, contextData, onBack, onGoHome }) {
   // La config derive les sections visibles depuis le chemin d'aiguillage
   const config = getFormConfig(parcours, chemin)
   // cheminKey est inclus dans le payload pour que Power Automate sache quel flux declencher
   const cheminKey = getCheminKey(parcours, chemin)
   const { sections } = config
+  // Contexte injecté dans l'évaluation des conditions du schéma
+  const contexte = { parcours, pourQui: chemin.pourQui }
 
-  const [formData, setFormData] = useState({ ...INITIAL_DATA })
+  const [formData, setFormData] = useState(() => donneesInitiales(schema))
   const [errors, setErrors] = useState({})
   const [currentStep, setCurrentStep] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -145,57 +75,25 @@ export default function FormulaireInscription({ parcours, chemin, contextData, o
     }
   }
 
-  /** Valide un champ au blur */
+  /** Valide un champ au blur (validateur dérivé du schéma) */
   const handleBlur = (name) => {
-    const validator = VALIDATORS[name]
-    if (validator) {
-      const result = validator(formData[name])
-      if (!result.valid) {
-        setErrors(prev => ({ ...prev, [name]: result.message }))
-      }
+    const champ = champsVisibles(schema, currentSection, { ...formData, ...contexte })
+      .find(c => c.champPayload === name)
+    if (!champ) return
+    const result = validerChamp(champ, formData[name])
+    if (!result.valid) {
+      setErrors(prev => ({ ...prev, [name]: result.message }))
     }
   }
 
   /**
-   * Valide tous les champs obligatoires de l'etape courante avant de passer a la suivante.
-   * Les champs conditionnels (curatelle, AI) sont inclus dynamiquement selon les reponses.
+   * Valide tous les champs VISIBLES de l'etape courante (conditions du
+   * schéma évaluées : curatelle, AI, parcours) avant de passer a la suivante.
    * Retourne true si l'etape est valide, false sinon (et popule errors).
    */
   const validateStep = () => {
     if (isRecap) return true
-
-    const section = sections[currentStep]
-    let fields = [...(SECTION_FIELDS[section] || [])]
-
-    // Les champs du curateur ne sont requis que si la personne est effectivement sous curatelle
-    if (section === 'curatelle' && formData.sous_curatelle && formData.sous_curatelle.startsWith('Oui')) {
-      fields = [...fields, ...CURATELLE_FIELDS]
-    }
-
-    // Les coordonnees du conseiller AI ne sont requises que si un suivi est en cours ou confirme
-    if (section === 'ai' && formData.inscrit_ai && formData.inscrit_ai !== 'Non') {
-      fields = [...fields, ...AI_FIELDS]
-    }
-
-    // L'objectif de stage est specifique au parcours stages et sans equivalent pour les modules
-    if (section === 'complementaire' && parcours === 'stages') {
-      fields = [...fields, 'objectif_stage']
-    }
-
-    const newErrors = {}
-    let valid = true
-
-    for (const field of fields) {
-      const validator = VALIDATORS[field]
-      if (validator) {
-        const result = validator(formData[field])
-        if (!result.valid) {
-          newErrors[field] = result.message
-          valid = false
-        }
-      }
-    }
-
+    const { valid, errors: newErrors } = validerEtape(schema, sections[currentStep], formData, contexte)
     setErrors(prev => ({ ...prev, ...newErrors }))
     return valid
   }
@@ -256,36 +154,9 @@ export default function FormulaireInscription({ parcours, chemin, contextData, o
       }))
     }
 
-    // Iterer uniquement les sections affichees pour ne pas envoyer de donnees hors-chemin
-    for (const section of sections) {
-      const fields = SECTION_FIELDS[section] || []
-      for (const field of fields) {
-        if (formData[field]) payload[field] = formData[field]
-      }
-      // Coordonnees du curateur : incluses seulement si curatelle active
-      if (section === 'curatelle' && formData.sous_curatelle && formData.sous_curatelle.startsWith('Oui')) {
-        for (const field of CURATELLE_FIELDS) {
-          if (formData[field]) payload[field] = formData[field]
-        }
-      }
-      // Coordonnees du conseiller AI et mesure : incluses seulement si suivi AI present
-      if (section === 'ai' && formData.inscrit_ai && formData.inscrit_ai !== 'Non') {
-        for (const field of AI_FIELDS) {
-          if (formData[field]) payload[field] = formData[field]
-        }
-        if (formData.ai_mesure) payload.ai_mesure = formData.ai_mesure
-      }
-      // Objectif de stage : n'existe pas dans le parcours modules
-      if (section === 'complementaire' && parcours === 'stages' && formData.objectif_stage) {
-        payload.objectif_stage = formData.objectif_stage
-      }
-      // Tailles vestimentaires : optionnelles, non soumises a validation
-      if (section === 'complementaire') {
-        for (const field of ['pointure', 'taille_tshirt', 'taille_pantalon']) {
-          if (formData[field]) payload[field] = formData[field]
-        }
-      }
-    }
+    // Champs des sections affichees, filtres par les conditions du schéma
+    // (curatelle, AI, parcours) — seuls les champs remplis sont inclus.
+    Object.assign(payload, collecterPayload(schema, sections, formData, contexte))
 
     return payload
   }
@@ -432,34 +303,36 @@ export default function FormulaireInscription({ parcours, chemin, contextData, o
       <div className="bg-white rounded-xl border border-gray-200 p-5 md:p-6 mb-4 shadow-sm">
         <div className="animate-fadeIn" key={currentStep}>
           {currentSection === 'referent' && (
-            <EtapeReferent data={formData} errors={errors} onChange={handleChange} onBlur={handleBlur} />
+            <EtapeReferent schema={schema} contexte={contexte} data={formData} errors={errors} onChange={handleChange} onBlur={handleBlur} />
           )}
           {(currentSection === 'stagiaire') && (
-            <EtapeStagiaire data={formData} errors={errors} onChange={handleChange} onBlur={handleBlur} />
+            <EtapeStagiaire schema={schema} contexte={contexte} data={formData} errors={errors} onChange={handleChange} onBlur={handleBlur} />
           )}
           {currentSection === 'stagiaire-retour' && (
-            <EtapeStagiaire data={formData} errors={errors} onChange={handleChange} onBlur={handleBlur} isRetour />
+            <EtapeStagiaire schema={schema} contexte={contexte} data={formData} errors={errors} onChange={handleChange} onBlur={handleBlur} isRetour />
           )}
           {currentSection === 'curatelle' && (
-            <EtapeCuratelle data={formData} errors={errors} onChange={handleChange} onBlur={handleBlur} pourQui={chemin.pourQui} />
+            <EtapeCuratelle schema={schema} contexte={contexte} data={formData} errors={errors} onChange={handleChange} onBlur={handleBlur} />
           )}
           {currentSection === 'urgence' && (
-            <EtapeUrgence data={formData} errors={errors} onChange={handleChange} onBlur={handleBlur} />
+            <EtapeUrgence schema={schema} contexte={contexte} data={formData} errors={errors} onChange={handleChange} onBlur={handleBlur} />
           )}
           {currentSection === 'ai' && (
-            <EtapeAI data={formData} errors={errors} onChange={handleChange} onBlur={handleBlur} pourQui={chemin.pourQui} />
+            <EtapeAI schema={schema} contexte={contexte} data={formData} errors={errors} onChange={handleChange} onBlur={handleBlur} />
           )}
           {currentSection === 'complementaire' && (
-            <EtapeComplementaire data={formData} errors={errors} onChange={handleChange} onBlur={handleBlur} parcours={parcours} />
+            <EtapeComplementaire schema={schema} contexte={contexte} data={formData} errors={errors} onChange={handleChange} onBlur={handleBlur} />
           )}
           {currentSection === 'declaration' && (
-            <EtapeDeclaration data={formData} errors={errors} onChange={handleChange} />
+            <EtapeDeclaration schema={schema} contexte={contexte} data={formData} errors={errors} onChange={handleChange} onBlur={handleBlur} />
           )}
           {isRecap && (
             <Recapitulatif
+              schema={schema}
               data={formData}
               contextData={contextData}
               parcours={parcours}
+              pourQui={chemin.pourQui}
               sections={sections}
               onEdit={goToStep}
             />

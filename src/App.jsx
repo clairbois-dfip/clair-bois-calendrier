@@ -53,6 +53,9 @@ import {
 function App() {
   /* --- Etat du chargement des donnees --- */
   const [data, setData] = useState(null)
+  // Schéma des formulaires (public/formulaire-schema.json, édité via #edition) :
+  // pilote les champs des formulaires d'inscription et de signalement.
+  const [schemaFormulaires, setSchemaFormulaires] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -93,14 +96,18 @@ function App() {
    * la version la plus recente.
    */
   useEffect(() => {
-    fetch(import.meta.env.BASE_URL + 'planning.json', { cache: 'no-cache' })
-      .then((res) => {
+    const chargerJson = (fichier) =>
+      fetch(import.meta.env.BASE_URL + fichier, { cache: 'no-cache' }).then((res) => {
         if (!res.ok) throw new Error('Erreur lors du chargement des données')
         return res.json()
       })
-      .then((json) => {
+
+    // planning.json (Flux 3) + formulaire-schema.json (mode édition) chargés ensemble
+    Promise.all([chargerJson('planning.json'), chargerJson('formulaire-schema.json')])
+      .then(([planning, schema]) => {
         // Transforme le format plat (Power Automate) en hierarchie etablissements > secteurs > semaines
-        setData(transformPlanningData(json))
+        setData(transformPlanningData(planning))
+        setSchemaFormulaires(schema)
         setLoading(false)
       })
       .catch((err) => {
@@ -387,7 +394,7 @@ function App() {
 
         {/* Ecran 7 : Signalement d'urgence (annulation / retard) */}
         {currentView === 'signalement' && (
-          <FormulaireSignalement onGoHome={goToHome} />
+          <FormulaireSignalement schema={schemaFormulaires} onGoHome={goToHome} />
         )}
 
         {/* Ecran 9 : Demande de visite (enseignants) */}
@@ -424,6 +431,7 @@ function App() {
         {/* Ecran 8 : Formulaire intégré */}
         {currentView === 'formulaire' && chemin && formulaireContext && (
           <FormulaireInscription
+            schema={schemaFormulaires}
             parcours={aiguillageParcours}
             chemin={chemin}
             contextData={formulaireContext}

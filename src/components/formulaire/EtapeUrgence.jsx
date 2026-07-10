@@ -1,61 +1,23 @@
 /**
  * EtapeUrgence.jsx — Etape "contact d'urgence" du parcours d'inscription.
  *
- * Place dans le parcours : separee du flux principal car elle ne concerne pas
- * le profil fonctionnel du stagiaire mais sa securite physique sur site.
- * Elle est positionnee en fin de parcours pour ne pas "alarmer" l'utilisateur
- * en debut de saisie, tout en restant obligatoire avant la declaration finale.
- *
- * Le champ "lien" permet aux encadrants d'adapter la communication en cas
- * d'incident (appeler un parent vs un curateur ne suit pas le meme protocole).
- *
- * Champs : urgence_nom, urgence_prenom, urgence_lien, urgence_tel
+ * Champs rendus dynamiquement depuis le schéma des formulaires
+ * (public/formulaire-schema.json, mode édition #edition) ; seul le décor
+ * (bannière orange) reste ici.
  */
-import ChampFormulaire from './ChampFormulaire'
+import ChampsEtape from './ChampsEtape'
+import { champsVisibles } from '../../utils/formulaireDynamique'
 
-export default function EtapeUrgence({ data, errors, onChange, onBlur }) {
+export default function EtapeUrgence({ schema, data, errors, onChange, onBlur, contexte = {} }) {
+  const valeurs = { ...data, ...contexte }
+  const champs = champsVisibles(schema, 'urgence', valeurs)
+
   return (
     <div className="space-y-4">
       <div className="bg-cb-orange-light rounded-lg p-3 text-sm text-yellow-800">
         Veuillez indiquer une personne de confiance que nous pouvons contacter en cas d'urgence.
       </div>
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        <ChampFormulaire label="Nom" name="urgence_nom" value={data.urgence_nom} onChange={onChange} onBlur={onBlur} error={errors.urgence_nom} required />
-        <ChampFormulaire label="Prénom" name="urgence_prenom" value={data.urgence_prenom} onChange={onChange} onBlur={onBlur} error={errors.urgence_prenom} required />
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        <ChampFormulaire
-          label="Lien avec le ou la stagiaire"
-          name="urgence_lien"
-          type="select"
-          value={data.urgence_lien}
-          onChange={onChange}
-          error={errors.urgence_lien}
-          required
-          options={[
-            { value: 'Père', label: 'Père' },
-            { value: 'Mère', label: 'Mère' },
-            { value: 'Soeur', label: 'Sœur' },
-            { value: 'Frère', label: 'Frère' },
-            { value: 'Epoux·se', label: 'Époux·se' },
-            { value: 'Ami·e', label: 'Ami·e' },
-            { value: 'Autre', label: 'Autre' },
-          ]}
-        />
-        <ChampFormulaire
-          label="Téléphone"
-          name="urgence_tel"
-          type="tel"
-          value={data.urgence_tel}
-          onChange={onChange}
-          onBlur={onBlur}
-          error={errors.urgence_tel}
-          required
-          placeholder="+41 XX XXX XX XX"
-        />
-      </div>
+      <ChampsEtape champs={champs} data={data} errors={errors} onChange={onChange} onBlur={onBlur} valeurs={valeurs} />
     </div>
   )
 }

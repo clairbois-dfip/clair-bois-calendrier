@@ -1,68 +1,31 @@
 /**
  * EtapeAI.jsx — Etape "Assurance Invalidité" du parcours d'inscription.
  *
- * Place dans le parcours : apres les infos personnelles du stagiaire,
- * avant la curatelle. Les donnees AI sont obligatoires des que le statut
- * n'est pas "Non", car le conseiller est interlocuteur cle du dossier.
- *
- * Logique conditionnelle :
- *   - inscrit_ai = "Non"              → message vert, aucun champ AI a remplir
- *   - inscrit_ai = "Oui" ou "Demande" → bloc coordonnees conseiller visible (animate-fadeIn)
- *   - pourQui = "autre"               → option supplementaire "conseiller AI complete"
- *     car c'est parfois le conseiller lui-meme qui remplit le formulaire
+ * Champs rendus dynamiquement depuis le schéma des formulaires.
+ * Structure préservée de l'historique :
+ *   - champ pilote (inscrit_ai) ; son option « conseiller AI complète »
+ *     n'apparaît que si pourQui=autre (condition d'option du schéma) ;
+ *   - les champs conditionnels (condition inscrit_ai!=Non) sont regroupés
+ *     dans le bloc gris « Coordonnées du conseiller·ère AI » ;
+ *   - réponse « Non » → message vert, aucun champ AI à remplir.
  */
-import ChampFormulaire from './ChampFormulaire'
+import ChampsEtape from './ChampsEtape'
+import { champsVisibles } from '../../utils/formulaireDynamique'
 
-export default function EtapeAI({ data, errors, onChange, onBlur, pourQui = 'moi' }) {
-  // Quand c'est un referent qui remplit (pas le stagiaire), on propose
-  // l'option ou c'est le conseiller AI qui prend en charge la completion
-  const aiOptions = pourQui === 'autre'
-    ? [
-        { value: 'Oui - conseiller AI complète', label: 'Oui — c\'est le conseiller AI qui complète' },
-        { value: 'Oui', label: 'Oui' },
-        { value: 'Non', label: 'Non' },
-        { value: 'Demande en cours', label: 'Demande en cours' },
-      ]
-    : [
-        { value: 'Oui', label: 'Oui' },
-        { value: 'Non', label: 'Non' },
-        { value: 'Demande en cours', label: 'Demande en cours' },
-      ]
+export default function EtapeAI({ schema, data, errors, onChange, onBlur, contexte = {} }) {
+  const valeurs = { ...data, ...contexte }
+  const visibles = champsVisibles(schema, 'ai', valeurs)
+  const pilotes = visibles.filter((c) => !c.condition)
+  const conditionnels = visibles.filter((c) => c.condition)
 
   return (
     <div className="space-y-4">
-      <ChampFormulaire
-        label="Inscrit·e à l'Assurance Invalidité"
-        name="inscrit_ai"
-        type="radio-group"
-        value={data.inscrit_ai}
-        onChange={onChange}
-        error={errors.inscrit_ai}
-        required
-        options={aiOptions}
-      />
+      <ChampsEtape champs={pilotes} data={data} errors={errors} onChange={onChange} onBlur={onBlur} valeurs={valeurs} />
 
-      {/* Bloc coordonnees : s'affiche seulement si la reponse n'est pas "Non".
-          Tous les champs sont requis pour que la fondation puisse contacter
-          le conseiller directement en cas de besoin sur le dossier. */}
-      {(data.inscrit_ai && data.inscrit_ai !== 'Non') && (
+      {conditionnels.length > 0 && (
         <div className="animate-fadeIn space-y-4 bg-gray-50 rounded-xl p-4 border border-gray-200">
           <p className="text-sm font-medium text-gray-700">Coordonnées du conseiller·ère AI</p>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            <ChampFormulaire label="Nom du conseiller AI" name="ai_nom" value={data.ai_nom} onChange={onChange} onBlur={onBlur} error={errors.ai_nom} placeholder="Nom" required />
-            <ChampFormulaire label="Prénom du conseiller AI" name="ai_prenom" value={data.ai_prenom} onChange={onChange} onBlur={onBlur} error={errors.ai_prenom} placeholder="Prénom" required />
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            <ChampFormulaire label="Téléphone" name="ai_tel" type="tel" value={data.ai_tel} onChange={onChange} onBlur={onBlur} error={errors.ai_tel} placeholder="+41 XX XXX XX XX" required />
-            <ChampFormulaire label="Email" name="ai_email" type="email" value={data.ai_email} onChange={onChange} onBlur={onBlur} error={errors.ai_email} placeholder="conseiller@ai.ch" required />
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            <ChampFormulaire label="Office AI" name="ai_office" value={data.ai_office} onChange={onChange} onBlur={onBlur} error={errors.ai_office} placeholder="Ex: OAI Genève" required />
-            <ChampFormulaire label="Mesure AI" name="ai_mesure" value={data.ai_mesure} onChange={onChange} onBlur={onBlur} error={errors.ai_mesure} placeholder="Ex: Mesure de réinsertion" />
-          </div>
+          <ChampsEtape champs={conditionnels} data={data} errors={errors} onChange={onChange} onBlur={onBlur} valeurs={valeurs} />
         </div>
       )}
 

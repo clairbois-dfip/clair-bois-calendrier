@@ -581,6 +581,7 @@ function PanneauProprietes({ champ, schema, onModifier }) {
           </Propriete>
           <p className="text-[11px] text-gray-400 mt-1">
             ⚠️ La <em>valeur</em> (avant le « | ») doit correspondre exactement au choix de la colonne SharePoint.
+            Un 3<sup>e</sup> segment optionnel = condition d'affichage de l'option (ex. <code>Oui - curateur complète | Oui — c'est le curateur qui complète | pourQui=autre</code>).
           </p>
         </div>
       )}

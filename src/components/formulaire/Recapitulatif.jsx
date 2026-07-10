@@ -1,18 +1,18 @@
 /**
  * Recapitulatif.jsx — Ecran de verification avant soumission.
  *
- * Affiche toutes les donnees saisies groupees par section.
- * Chaque section dispose d'un bouton "Modifier" qui teleporte l'utilisateur
- * directement a l'etape correspondante (via onEdit(stepIndex)).
+ * Les lignes affichées sont dérivées dynamiquement du schéma des
+ * formulaires (labels + ordre + conditions identiques aux étapes), si bien
+ * que tout champ ajouté par la coordination apparaît automatiquement ici.
  *
- * Le contexte (secteur+dates ou modules selectionnes) est affiche en lecture seule :
- * il provient de l'aiguillage precedent et ne peut pas etre modifie ici.
- *
- * Les sections sans aucune valeur renseignee sont automatiquement masquees
- * pour ne pas surcharger l'ecran avec des blocs vides.
+ * Chaque section dispose d'un bouton "Modifier" qui téléporte l'utilisateur
+ * directement à l'étape correspondante (via onEdit(stepIndex)).
+ * Le contexte (secteur+dates ou modules) est affiché en lecture seule.
+ * Les sections sans aucune valeur renseignée sont masquées.
  */
 import { formatDate } from '../../utils/helpers'
 import { SECTION_LABELS } from '../../utils/formConfig'
+import { champsVisibles } from '../../utils/formulaireDynamique'
 
 function Section({ title, fields, onEdit, stepIndex }) {
   // Masquer la section entiere si aucune donnee n'a ete saisie (ex: curatelle non applicable)
@@ -44,8 +44,18 @@ function Section({ title, fields, onEdit, stepIndex }) {
   )
 }
 
-export default function Recapitulatif({ data, contextData, parcours, sections, onEdit }) {
-  // Construction du bloc contexte (lecture seule, pas de bouton Modifier)
+/** Valeur affichée pour un champ du schéma (dates formatées, cases → mention lisible). */
+function valeurAffichee(champ, brute) {
+  if (!brute) return ''
+  if (champ.type === 'date') return formatDate(brute)
+  if (champ.type === 'checkbox') return brute === 'Oui' ? 'Lu et accepté' : ''
+  return brute
+}
+
+export default function Recapitulatif({ schema, data, contextData, parcours, pourQui, sections, onEdit }) {
+  const valeurs = { ...data, parcours, pourQui }
+
+  // Bloc contexte (lecture seule, pas de bouton Modifier)
   const contextFields = []
   if (parcours === 'stages' && contextData) {
     if (contextData.secteur) contextFields.push({ label: 'Secteur', value: contextData.secteur })
@@ -59,79 +69,6 @@ export default function Recapitulatif({ data, contextData, parcours, sections, o
         value: `${m.mod.nom} (${m.mod.site}) — Semaine ${m.semaine.semaine}`,
       })
     })
-  }
-
-  // Table de correspondance section -> champs a afficher dans le recapitulatif.
-  // Les champs conditionnels (curatelle, AI) sont inclus : Section les masque automatiquement
-  // si leur valeur est vide, pas besoin de gerer la condition ici.
-  const sectionFields = {
-    referent: [
-      { label: 'Organisation', value: data.referent_partenaire },
-      { label: 'Nom', value: data.referent_nom },
-      { label: 'Prénom', value: data.referent_prenom },
-      { label: 'Téléphone', value: data.referent_tel },
-      { label: 'Email', value: data.referent_email },
-      { label: 'Fonction', value: data.referent_fonction },
-    ],
-    stagiaire: [
-      { label: 'Nom', value: data.nom },
-      { label: 'Prénom', value: data.prenom },
-      { label: 'Sexe', value: data.sexe },
-      { label: 'Date de naissance', value: data.date_naissance ? formatDate(data.date_naissance) : '' },
-      { label: 'N° AVS', value: data.avs },
-      { label: 'Téléphone', value: data.tel },
-      { label: 'Email', value: data.email },
-      { label: 'Adresse', value: data.adresse },
-      { label: 'NPA', value: data.npa },
-      { label: 'Formation', value: data.formation },
-    ],
-    'stagiaire-retour': [
-      { label: 'Nom', value: data.nom },
-      { label: 'Prénom', value: data.prenom },
-      { label: 'Sexe', value: data.sexe },
-      { label: 'Date de naissance', value: data.date_naissance ? formatDate(data.date_naissance) : '' },
-      { label: 'N° AVS', value: data.avs },
-      { label: 'Téléphone', value: data.tel },
-      { label: 'Email', value: data.email },
-    ],
-    curatelle: [
-      { label: 'Sous curatelle', value: data.sous_curatelle },
-      { label: 'Type', value: data.curatelle_type },
-      { label: 'Nom du curateur', value: data.curatelle_nom },
-      { label: 'Prénom du curateur', value: data.curatelle_prenom },
-      { label: 'Téléphone', value: data.curatelle_tel },
-      { label: 'Email', value: data.curatelle_email },
-    ],
-    urgence: [
-      { label: 'Nom', value: data.urgence_nom },
-      { label: 'Prénom', value: data.urgence_prenom },
-      { label: 'Lien', value: data.urgence_lien },
-      { label: 'Téléphone', value: data.urgence_tel },
-    ],
-    ai: [
-      { label: 'Inscrit·e AI', value: data.inscrit_ai },
-      { label: 'Nom conseiller', value: data.ai_nom },
-      { label: 'Prénom conseiller', value: data.ai_prenom },
-      { label: 'Téléphone', value: data.ai_tel },
-      { label: 'Email', value: data.ai_email },
-      { label: 'Office AI', value: data.ai_office },
-      { label: 'Mesure', value: data.ai_mesure },
-    ],
-    complementaire: [
-      { label: 'Objectif du stage', value: data.objectif_stage },
-      { label: 'Parcours scolaire', value: data.parcours_scolaire },
-      { label: 'Limitations', value: data.limitations },
-      { label: 'Tests effectués', value: data.deja_tests },
-      { label: 'Stages déjà effectués', value: data.deja_stages_secteur },
-      { label: 'Réseau médical', value: data.reseau_medical },
-      { label: 'Pointure', value: data.pointure },
-      { label: 'Taille t-shirt', value: data.taille_tshirt },
-      { label: 'Taille pantalon', value: data.taille_pantalon },
-    ],
-    declaration: [
-      { label: 'Charte prévention', value: data.declaration_charte === 'Oui' ? 'Lu et accepté' : '' },
-      { label: 'Engagement personnel', value: data.declaration_engagement === 'Oui' ? 'Lu et accepté' : '' },
-    ],
   }
 
   return (
@@ -151,12 +88,15 @@ export default function Recapitulatif({ data, contextData, parcours, sections, o
         />
       )}
 
-      {/* Sections du formulaire */}
+      {/* Sections du formulaire, dérivées du schéma */}
       {sections.map((sectionKey, idx) => (
         <Section
           key={sectionKey}
           title={SECTION_LABELS[sectionKey] || sectionKey}
-          fields={sectionFields[sectionKey] || []}
+          fields={champsVisibles(schema, sectionKey, valeurs).map((champ) => ({
+            label: champ.label.length > 60 ? `${champ.label.slice(0, 57)}…` : champ.label,
+            value: valeurAffichee(champ, data[champ.champPayload]),
+          }))}
           onEdit={onEdit}
           stepIndex={idx}
         />

@@ -8,7 +8,10 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import FormulaireSignalement from '../components/FormulaireSignalement'
 
+import schema from '../../public/formulaire-schema.json'
+
 const DEFAULT_PROPS = {
+  schema,
   onGoHome: vi.fn(),
 }
 
@@ -127,7 +130,7 @@ describe('FormulaireSignalement — soumission', () => {
 
   it('appelle onGoHome depuis la confirmation', async () => {
     const onGoHome = vi.fn()
-    render(<FormulaireSignalement onGoHome={onGoHome} />)
+    render(<FormulaireSignalement schema={schema} onGoHome={onGoHome} />)
     fillForm()
     fireEvent.click(screen.getByText('Envoyer le signalement'))
 
@@ -147,7 +150,7 @@ describe('FormulaireSignalement — soumission', () => {
 describe('FormulaireSignalement — navigation', () => {
   it('appelle onGoHome au clic sur le bouton retour', () => {
     const onGoHome = vi.fn()
-    render(<FormulaireSignalement onGoHome={onGoHome} />)
+    render(<FormulaireSignalement schema={schema} onGoHome={onGoHome} />)
     // Le premier bouton "Retour" est celui en haut du formulaire
     const retourButtons = screen.getAllByText("Retour à l'accueil")
     fireEvent.click(retourButtons[0])

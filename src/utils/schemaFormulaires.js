@@ -228,11 +228,12 @@ export function supprimerChamp(schema, cle) {
 
 /**
  * Convertit le texte du panneau « Options » (une valeur par ligne)
- * en tableau [{ value, label }] consommé par ChampFormulaire.
- * Syntaxe avancée facultative « valeur | Label affiché ».
+ * en tableau [{ value, label, condition? }] consommé par ChampFormulaire.
+ * Syntaxes : « valeur », « valeur | Label affiché »,
+ * « valeur | Label | condition » (ex. `pourQui=autre` — option contextuelle).
  *
  * @param {string} texte Contenu du textarea.
- * @returns {{value: string, label: string}[]}
+ * @returns {{value: string, label: string, condition?: string}[]}
  */
 export function parserOptions(texte) {
   if (!texte) return [];
@@ -241,22 +242,28 @@ export function parserOptions(texte) {
     .map((l) => l.trim())
     .filter(Boolean)
     .map((ligne) => {
-      const [valeur, label] = ligne.split('|').map((p) => p.trim());
-      return { value: valeur, label: label || valeur };
+      const [valeur, label, condition] = ligne.split('|').map((p) => p.trim());
+      const option = { value: valeur, label: label || valeur };
+      if (condition) option.condition = condition;
+      return option;
     });
 }
 
 /**
  * Convertit un tableau d'options en texte éditable (une valeur par ligne,
- * « valeur | label » si le label diffère de la valeur).
+ * « valeur | label » si le label diffère, « valeur | label | condition »
+ * si l'option est contextuelle — l'aller-retour ne perd RIEN).
  *
- * @param {{value: string, label: string}[]} options
+ * @param {{value: string, label: string, condition?: string}[]} options
  * @returns {string}
  */
 export function optionsVersTexte(options) {
   if (!Array.isArray(options)) return '';
   return options
-    .map((o) => (o.label && o.label !== o.value ? `${o.value} | ${o.label}` : o.value))
+    .map((o) => {
+      if (o.condition) return `${o.value} | ${o.label || o.value} | ${o.condition}`;
+      return o.label && o.label !== o.value ? `${o.value} | ${o.label}` : o.value;
+    })
     .join('\n');
 }
 

@@ -15,37 +15,19 @@
  *   onGoHome — retour a la page d'accueil apres envoi ou annulation
  */
 import { useState } from 'react'
-import ChampFormulaire from './formulaire/ChampFormulaire'
+import ChampsEtape from './formulaire/ChampsEtape'
 import Confirmation from './formulaire/Confirmation'
-import { validateRequired, validatePhone, validateEmail } from '../utils/validation'
+import {
+  champsDeLEtape, champsVisibles, validerChamp, validerEtape, collecterPayload,
+} from '../utils/formulaireDynamique'
 
-/** Champs du formulaire et leurs regles de validation */
-const VALIDATORS = {
-  nom: validateRequired,
-  prenom: validateRequired,
-  tel: validatePhone,
-  email: validateEmail,
-  motif: validateRequired,
-}
-
-/** Options du champ motif */
-const MOTIF_OPTIONS = [
-  { value: 'Annulation', label: 'Annulation' },
-  { value: 'Retard', label: 'Retard' },
-]
-
-/** Donnees initiales du formulaire */
-const INITIAL_DATA = {
-  nom: '',
-  prenom: '',
-  tel: '',
-  email: '',
-  motif: '',
-  commentaire: '',
-}
-
-export default function FormulaireSignalement({ onGoHome }) {
-  const [formData, setFormData] = useState({ ...INITIAL_DATA })
+export default function FormulaireSignalement({ schema, onGoHome }) {
+  const [formData, setFormData] = useState(() => {
+    // Un input contrôlé par champ du schéma, initialisé à ''
+    const data = {}
+    for (const champ of champsDeLEtape(schema, 'signalement')) data[champ.champPayload] = ''
+    return data
+  })
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitResult, setSubmitResult] = useState(null)
@@ -58,28 +40,19 @@ export default function FormulaireSignalement({ onGoHome }) {
     }
   }
 
-  /** Valide un champ au blur pour un retour immediat sans attendre la soumission */
+  /** Valide un champ au blur (validateur dérivé du schéma) */
   const handleBlur = (name) => {
-    const validator = VALIDATORS[name]
-    if (validator) {
-      const result = validator(formData[name])
-      if (!result.valid) {
-        setErrors(prev => ({ ...prev, [name]: result.message }))
-      }
+    const champ = champsDeLEtape(schema, 'signalement').find(c => c.champPayload === name)
+    if (!champ) return
+    const result = validerChamp(champ, formData[name])
+    if (!result.valid) {
+      setErrors(prev => ({ ...prev, [name]: result.message }))
     }
   }
 
-  /** Valide tous les champs obligatoires avant envoi */
+  /** Valide tous les champs du schéma avant envoi */
   const validateAll = () => {
-    const newErrors = {}
-    let valid = true
-    for (const [field, validator] of Object.entries(VALIDATORS)) {
-      const result = validator(formData[field])
-      if (!result.valid) {
-        newErrors[field] = result.message
-        valid = false
-      }
-    }
+    const { valid, errors: newErrors } = validerEtape(schema, 'signalement', formData, {})
     setErrors(newErrors)
     return valid
   }
@@ -92,7 +65,8 @@ export default function FormulaireSignalement({ onGoHome }) {
       const payload = {
         type: 'signalement',
         dateEnvoi: new Date().toISOString(),
-        ...formData,
+        // Seuls les champs remplis sont envoyés (pas de clés vides)
+        ...collecterPayload(schema, ['signalement'], formData, {}),
       }
 
       const httpUrl = import.meta.env.VITE_PA_HTTP_URL
@@ -166,77 +140,14 @@ export default function FormulaireSignalement({ onGoHome }) {
 
       {/* Formulaire */}
       <div className="bg-white rounded-xl border border-gray-200 p-5 md:p-6 mb-4 shadow-sm max-w-lg mx-auto">
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <ChampFormulaire
-              label="Nom"
-              name="nom"
-              value={formData.nom}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={errors.nom}
-              required
-              placeholder="Dupont"
-            />
-            <ChampFormulaire
-              label="Prénom"
-              name="prenom"
-              value={formData.prenom}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={errors.prenom}
-              required
-              placeholder="Marie"
-            />
-          </div>
-
-          <ChampFormulaire
-            label="Téléphone"
-            name="tel"
-            type="tel"
-            value={formData.tel}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            error={errors.tel}
-            required
-            placeholder="+41 79 123 45 67"
-            helpText="Format suisse"
-          />
-
-          <ChampFormulaire
-            label="Email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            error={errors.email}
-            required
-            placeholder="marie.dupont@gmail.com"
-          />
-
-          <ChampFormulaire
-            label="Motif"
-            name="motif"
-            type="select"
-            value={formData.motif}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            error={errors.motif}
-            required
-            options={MOTIF_OPTIONS}
-            placeholder="Sélectionnez un motif"
-          />
-
-          <ChampFormulaire
-            label="Commentaire"
-            name="commentaire"
-            type="textarea"
-            value={formData.commentaire}
-            onChange={handleChange}
-            placeholder="Précisions supplémentaires (facultatif)"
-          />
-        </div>
+        <ChampsEtape
+          champs={champsVisibles(schema, 'signalement', formData)}
+          data={formData}
+          errors={errors}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          valeurs={formData}
+        />
       </div>
 
       {/* Bouton d'envoi */}

@@ -1,8 +1,10 @@
 /**
  * Tests unitaires — Composants du formulaire Clair-Bois.
  *
- * Teste le rendu de chaque étape avec données falsifiées,
- * les conditions d'affichage, et la navigation.
+ * Depuis la refonte dynamique (juillet 2026), les étapes rendent leurs
+ * champs depuis public/formulaire-schema.json : le schéma RÉEL sert de
+ * fixture, si bien que ces tests valident à la fois les composants ET le
+ * contenu du schéma (options, conditions, libellés).
  */
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
@@ -15,34 +17,15 @@ import EtapeComplementaire from '../components/formulaire/EtapeComplementaire'
 import EtapeDeclaration from '../components/formulaire/EtapeDeclaration'
 import ChampFormulaire from '../components/formulaire/ChampFormulaire'
 import { INITIAL_DATA } from '../utils/formConfig'
+import schema from '../../public/formulaire-schema.json'
+
+// Contextes d'aiguillage utilisés par les conditions du schéma
+const CTX_MOI = { parcours: 'stages', pourQui: 'moi' }
+const CTX_AUTRE = { parcours: 'stages', pourQui: 'autre' }
 
 // ──────────────────────────────────────────────
 // Données de test falsifiées — Stagiaire complet
 // ──────────────────────────────────────────────
-const FAKE_STAGIAIRE = {
-  ...INITIAL_DATA,
-  nom: 'Dupont',
-  prenom: 'Marie',
-  sexe: 'Féminin',
-  date_naissance: '1998-03-15',
-  avs: '756.1234.5678.97',
-  tel: '+41 79 123 45 67',
-  email: 'marie.dupont@gmail.com',
-  adresse: 'Rue de Carouge 42',
-  npa: '1205',
-  formation: 'Oui, cette année',
-}
-
-const FAKE_REFERENT = {
-  ...INITIAL_DATA,
-  referent_partenaire: 'SGIPA',
-  referent_nom: 'Martin',
-  referent_prenom: 'Pierre',
-  referent_tel: '+41 22 345 67 89',
-  referent_email: 'p.martin@sgipa.ch',
-  referent_fonction: 'Éducateur·trice',
-}
-
 const FAKE_CURATELLE_OUI = {
   ...INITIAL_DATA,
   sous_curatelle: 'Oui',
@@ -66,7 +49,6 @@ const FAKE_AI_OUI = {
 
 const noop = () => {}
 const mockOnChange = vi.fn()
-const mockOnBlur = vi.fn()
 
 // ──────────────────────────────────────────────
 // ChampFormulaire
@@ -125,8 +107,8 @@ describe('ChampFormulaire', () => {
 // EtapeStagiaire
 // ──────────────────────────────────────────────
 describe('EtapeStagiaire', () => {
-  it('affiche tous les champs en version complète', () => {
-    const { container } = render(<EtapeStagiaire data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
+  it('affiche tous les champs en version complète (y compris Localité)', () => {
+    const { container } = render(<EtapeStagiaire schema={schema} contexte={CTX_MOI} data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
     expect(container.querySelector('#nom')).toBeInTheDocument()
     expect(container.querySelector('#prenom')).toBeInTheDocument()
     expect(screen.getByText('Masculin')).toBeInTheDocument()
@@ -137,27 +119,29 @@ describe('EtapeStagiaire', () => {
     expect(container.querySelector('#email')).toBeInTheDocument()
     expect(container.querySelector('#adresse')).toBeInTheDocument()
     expect(container.querySelector('#npa')).toBeInTheDocument()
+    expect(container.querySelector('#localite')).toBeInTheDocument()
     expect(container.querySelector('#formation')).toBeInTheDocument()
   })
 
   it('n\'affiche PAS "Autre" dans les options de sexe', () => {
-    render(<EtapeStagiaire data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
+    render(<EtapeStagiaire schema={schema} contexte={CTX_MOI} data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.queryByText('Autre')).not.toBeInTheDocument()
   })
 
   it('affiche la version retour avec tél et email', () => {
-    const { container } = render(<EtapeStagiaire data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} isRetour />)
+    const { container } = render(<EtapeStagiaire schema={schema} contexte={CTX_MOI} data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} isRetour />)
     expect(container.querySelector('#nom')).toBeInTheDocument()
     expect(container.querySelector('#avs')).toBeInTheDocument()
     expect(container.querySelector('#tel')).toBeInTheDocument()
     expect(container.querySelector('#email')).toBeInTheDocument()
-    // Ne doit PAS avoir adresse, NPA, formation
+    // Ne doit PAS avoir adresse, NPA, localité, formation
     expect(container.querySelector('#adresse')).not.toBeInTheDocument()
     expect(container.querySelector('#npa')).not.toBeInTheDocument()
+    expect(container.querySelector('#localite')).not.toBeInTheDocument()
   })
 
   it('formation est un select (pas un champ texte)', () => {
-    render(<EtapeStagiaire data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
+    render(<EtapeStagiaire schema={schema} contexte={CTX_MOI} data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.getByText('Oui, cette année')).toBeInTheDocument()
     expect(screen.getByText("Oui, l'année prochaine")).toBeInTheDocument()
   })
@@ -168,35 +152,35 @@ describe('EtapeStagiaire', () => {
 // ──────────────────────────────────────────────
 describe('EtapeCuratelle', () => {
   it('affiche Oui/Non pour pourQui=moi', () => {
-    render(<EtapeCuratelle data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} pourQui="moi" />)
+    render(<EtapeCuratelle schema={schema} contexte={CTX_MOI} data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.getByText('Oui')).toBeInTheDocument()
     expect(screen.getByText('Non')).toBeInTheDocument()
     expect(screen.queryByText(/curateur qui complète/)).not.toBeInTheDocument()
   })
 
   it('affiche 3 options pour pourQui=autre', () => {
-    render(<EtapeCuratelle data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} pourQui="autre" />)
+    render(<EtapeCuratelle schema={schema} contexte={CTX_AUTRE} data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.getByText('Oui')).toBeInTheDocument()
     expect(screen.getByText('Non')).toBeInTheDocument()
     expect(screen.getByText(/curateur qui complète/)).toBeInTheDocument()
   })
 
   it('affiche les champs curateur si sous_curatelle=Oui', () => {
-    render(<EtapeCuratelle data={FAKE_CURATELLE_OUI} errors={{}} onChange={noop} onBlur={noop} />)
+    render(<EtapeCuratelle schema={schema} contexte={CTX_MOI} data={FAKE_CURATELLE_OUI} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.getByText('Informations du curateur ou de la curatrice')).toBeInTheDocument()
     expect(screen.getByText('OPAD')).toBeInTheDocument()
   })
 
   it('cache les champs curateur si sous_curatelle=Non', () => {
     const data = { ...INITIAL_DATA, sous_curatelle: 'Non' }
-    render(<EtapeCuratelle data={data} errors={{}} onChange={noop} onBlur={noop} />)
+    render(<EtapeCuratelle schema={schema} contexte={CTX_MOI} data={data} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.queryByText('Informations du curateur ou de la curatrice')).not.toBeInTheDocument()
     expect(screen.getByText(/Pas de curatelle/)).toBeInTheDocument()
   })
 
   it('affiche les champs si curateur complète', () => {
     const data = { ...INITIAL_DATA, sous_curatelle: 'Oui - curateur complète' }
-    render(<EtapeCuratelle data={data} errors={{}} onChange={noop} onBlur={noop} />)
+    render(<EtapeCuratelle schema={schema} contexte={CTX_AUTRE} data={data} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.getByText('Informations du curateur ou de la curatrice')).toBeInTheDocument()
   })
 })
@@ -206,7 +190,7 @@ describe('EtapeCuratelle', () => {
 // ──────────────────────────────────────────────
 describe('EtapeUrgence', () => {
   it('affiche les bons choix de lien', () => {
-    render(<EtapeUrgence data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
+    render(<EtapeUrgence schema={schema} contexte={CTX_MOI} data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.getByText('Père')).toBeInTheDocument()
     expect(screen.getByText('Mère')).toBeInTheDocument()
     expect(screen.getByText('Sœur')).toBeInTheDocument() // label affiché (valeur du choix : 'Soeur')
@@ -225,7 +209,7 @@ describe('EtapeUrgence', () => {
 // ──────────────────────────────────────────────
 describe('EtapeAI', () => {
   it('affiche Oui/Non/Demande pour pourQui=moi', () => {
-    render(<EtapeAI data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} pourQui="moi" />)
+    render(<EtapeAI schema={schema} contexte={CTX_MOI} data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.getByText('Oui')).toBeInTheDocument()
     expect(screen.getByText('Non')).toBeInTheDocument()
     expect(screen.getByText('Demande en cours')).toBeInTheDocument()
@@ -233,33 +217,33 @@ describe('EtapeAI', () => {
   })
 
   it('affiche 4 options pour pourQui=autre', () => {
-    render(<EtapeAI data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} pourQui="autre" />)
+    render(<EtapeAI schema={schema} contexte={CTX_AUTRE} data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.getByText(/conseiller AI qui complète/)).toBeInTheDocument()
     expect(screen.getByText('Demande en cours')).toBeInTheDocument()
   })
 
   it('affiche les champs conseiller si inscrit_ai=Oui', () => {
-    render(<EtapeAI data={FAKE_AI_OUI} errors={{}} onChange={noop} onBlur={noop} />)
+    render(<EtapeAI schema={schema} contexte={CTX_MOI} data={FAKE_AI_OUI} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.getByText('Coordonnées du conseiller·ère AI')).toBeInTheDocument()
     expect(screen.getByDisplayValue('Bernasconi')).toBeInTheDocument()
   })
 
   it('cache les champs si inscrit_ai=Non', () => {
     const data = { ...INITIAL_DATA, inscrit_ai: 'Non' }
-    render(<EtapeAI data={data} errors={{}} onChange={noop} onBlur={noop} />)
+    render(<EtapeAI schema={schema} contexte={CTX_MOI} data={data} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.queryByText('Coordonnées du conseiller·ère AI')).not.toBeInTheDocument()
     expect(screen.getByText(/Pas d'AI/)).toBeInTheDocument()
   })
 
   it('affiche les champs si Demande en cours', () => {
     const data = { ...INITIAL_DATA, inscrit_ai: 'Demande en cours' }
-    render(<EtapeAI data={data} errors={{}} onChange={noop} onBlur={noop} />)
+    render(<EtapeAI schema={schema} contexte={CTX_MOI} data={data} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.getByText('Coordonnées du conseiller·ère AI')).toBeInTheDocument()
   })
 
   it('affiche les champs si conseiller AI complète', () => {
     const data = { ...INITIAL_DATA, inscrit_ai: 'Oui - conseiller AI complète' }
-    render(<EtapeAI data={data} errors={{}} onChange={noop} onBlur={noop} />)
+    render(<EtapeAI schema={schema} contexte={CTX_AUTRE} data={data} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.getByText('Coordonnées du conseiller·ère AI')).toBeInTheDocument()
   })
 })
@@ -269,7 +253,7 @@ describe('EtapeAI', () => {
 // ──────────────────────────────────────────────
 describe('EtapeReferent', () => {
   it('affiche tous les champs dont fonction en select', () => {
-    render(<EtapeReferent data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
+    render(<EtapeReferent schema={schema} contexte={CTX_AUTRE} data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.getByLabelText(/Organisation/)).toBeInTheDocument()
     expect(screen.getByText('Enseignant·e')).toBeInTheDocument()
     expect(screen.getByText('Éducateur·trice')).toBeInTheDocument()
@@ -284,26 +268,31 @@ describe('EtapeReferent', () => {
 // ──────────────────────────────────────────────
 describe('EtapeComplementaire', () => {
   it('affiche objectif du stage pour parcours=stages', () => {
-    render(<EtapeComplementaire data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} parcours="stages" />)
+    render(<EtapeComplementaire schema={schema} contexte={{ parcours: 'stages', pourQui: 'moi' }} data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.getByLabelText(/objectif du stage/i)).toBeInTheDocument()
   })
 
   it('cache objectif du stage pour parcours=modules', () => {
-    render(<EtapeComplementaire data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} parcours="modules" />)
+    render(<EtapeComplementaire schema={schema} contexte={{ parcours: 'modules', pourQui: 'moi' }} data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.queryByLabelText(/objectif du stage/i)).not.toBeInTheDocument()
   })
 
   it('affiche les champs tailles (optionnels)', () => {
-    render(<EtapeComplementaire data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
+    render(<EtapeComplementaire schema={schema} contexte={CTX_MOI} data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.getByLabelText(/Pointure/)).toBeInTheDocument()
     expect(screen.getByLabelText(/Taille t-shirt/)).toBeInTheDocument()
     expect(screen.getByLabelText(/Taille pantalon/)).toBeInTheDocument()
   })
 
   it('affiche les options de tests', () => {
-    render(<EtapeComplementaire data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
+    render(<EtapeComplementaire schema={schema} contexte={CTX_MOI} data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
     expect(screen.getByText(/évaluation et de diagnostic/)).toBeInTheDocument()
     expect(screen.getByText(/évaluation du niveau scolaire/)).toBeInTheDocument()
+  })
+
+  it('ne contient PLUS le champ deja_stages_secteur (décision Q4)', () => {
+    const { container } = render(<EtapeComplementaire schema={schema} contexte={CTX_MOI} data={INITIAL_DATA} errors={{}} onChange={noop} onBlur={noop} />)
+    expect(container.querySelector('[name="deja_stages_secteur"]')).not.toBeInTheDocument()
   })
 })
 
@@ -312,21 +301,21 @@ describe('EtapeComplementaire', () => {
 // ──────────────────────────────────────────────
 describe('EtapeDeclaration', () => {
   it('affiche les 2 cases à cocher', () => {
-    render(<EtapeDeclaration data={INITIAL_DATA} errors={{}} onChange={noop} />)
+    render(<EtapeDeclaration schema={schema} contexte={CTX_MOI} data={INITIAL_DATA} errors={{}} onChange={noop} />)
     expect(screen.getByText(/Charte pour la prévention/)).toBeInTheDocument()
     expect(screen.getByText(/Déclaration d'engagement personnelle/)).toBeInTheDocument()
   })
 
   it('les checkboxes sont cochées quand data = Oui', () => {
     const data = { ...INITIAL_DATA, declaration_charte: 'Oui', declaration_engagement: 'Oui' }
-    render(<EtapeDeclaration data={data} errors={{}} onChange={noop} />)
+    render(<EtapeDeclaration schema={schema} contexte={CTX_MOI} data={data} errors={{}} onChange={noop} />)
     const checkboxes = screen.getAllByRole('checkbox')
     expect(checkboxes[0]).toBeChecked()
     expect(checkboxes[1]).toBeChecked()
   })
 
   it('affiche les erreurs', () => {
-    render(<EtapeDeclaration data={INITIAL_DATA} errors={{ declaration_charte: 'Obligatoire', declaration_engagement: 'Obligatoire' }} onChange={noop} />)
+    render(<EtapeDeclaration schema={schema} contexte={CTX_MOI} data={INITIAL_DATA} errors={{ declaration_charte: 'Obligatoire', declaration_engagement: 'Obligatoire' }} onChange={noop} />)
     expect(screen.getAllByText('Obligatoire')).toHaveLength(2)
   })
 })
