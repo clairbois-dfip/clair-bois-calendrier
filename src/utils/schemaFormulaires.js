@@ -372,6 +372,58 @@ export function supprimerEtape(schema, cle) {
 }
 
 /* ────────────────────────────────────────────
+ * Questions PRÉALABLES (posées avant le formulaire)
+ * ──────────────────────────────────────────── */
+
+/**
+ * Questions préalables d'un formulaire (posées sur un écran AVANT le
+ * formulaire ; leur réponse peut conditionner l'affichage d'une étape).
+ *
+ * @param {object} schema Schéma complet.
+ * @param {string} formulaire Clé du formulaire.
+ * @returns {object[]}
+ */
+export function questionsPrealablesDe(schema, formulaire) {
+  return (schema?.questionsPrealables || []).filter((q) => q.formulaire === formulaire)
+}
+
+/**
+ * Ajoute une question préalable (Oui/Non par défaut) et retourne
+ * { schema, question }. La clé est générée, stable, et sert de variable de
+ * condition (ex. `prealable_1=Oui`).
+ */
+export function ajouterQuestionPrealable(schema, formulaire) {
+  const existantes = new Set((schema.questionsPrealables || []).map((q) => q.cle))
+  let n = 1
+  while (existantes.has(`prealable_${n}`)) n += 1
+  const question = {
+    cle: `prealable_${n}`,
+    formulaire,
+    label: 'Nouvelle question préalable',
+    aide: '',
+    options: [
+      { value: 'Oui', label: 'Oui' },
+      { value: 'Non', label: 'Non' },
+    ],
+  }
+  return { schema: { ...schema, questionsPrealables: [...(schema.questionsPrealables || []), question] }, question }
+}
+
+/** Met à jour une question préalable (fusion partielle ; la clé ne change pas). */
+export function mettreAJourQuestionPrealable(schema, cle, maj) {
+  const { cle: _ignore, ...reste } = maj
+  return {
+    ...schema,
+    questionsPrealables: (schema.questionsPrealables || []).map((q) => (q.cle === cle ? { ...q, ...reste } : q)),
+  }
+}
+
+/** Supprime une question préalable. */
+export function supprimerQuestionPrealable(schema, cle) {
+  return { ...schema, questionsPrealables: (schema.questionsPrealables || []).filter((q) => q.cle !== cle) }
+}
+
+/* ────────────────────────────────────────────
  * Chargement / téléchargement / publication
  * ──────────────────────────────────────────── */
 

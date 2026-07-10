@@ -20,6 +20,10 @@ import {
   ajouterEtape,
   mettreAJourEtape,
   deplacerEtape,
+  questionsPrealablesDe,
+  ajouterQuestionPrealable,
+  mettreAJourQuestionPrealable,
+  supprimerQuestionPrealable,
   supprimerEtape,
   parserOptions,
   optionsVersTexte,
@@ -213,6 +217,43 @@ describe('gestion des étapes', () => {
   it('supprime une étape vide', () => {
     const s2 = supprimerEtape(S, 'urgence')
     expect(s2.etapes.some(e => e.cle === 'urgence')).toBe(false)
+  })
+})
+
+// ──────────────────────────────────────────────
+// Questions préalables (posées avant le formulaire)
+// ──────────────────────────────────────────────
+describe('questions préalables', () => {
+  const S = { ...SCHEMA, questionsPrealables: [] }
+
+  it('ajoute une question préalable Oui/Non avec une clé unique', () => {
+    const { schema: s2, question } = ajouterQuestionPrealable(S, 'inscription')
+    expect(question.cle).toBe('prealable_1')
+    expect(question.formulaire).toBe('inscription')
+    expect(question.options.map((o) => o.value)).toEqual(['Oui', 'Non'])
+    expect(s2.questionsPrealables).toHaveLength(1)
+  })
+
+  it('génère des clés distinctes à chaque ajout', () => {
+    let s2 = ajouterQuestionPrealable(S, 'inscription').schema
+    s2 = ajouterQuestionPrealable(s2, 'inscription').schema
+    expect(s2.questionsPrealables.map((q) => q.cle)).toEqual(['prealable_1', 'prealable_2'])
+  })
+
+  it('met à jour le libellé sans toucher la clé', () => {
+    const s1 = ajouterQuestionPrealable(S, 'inscription').schema
+    const s2 = mettreAJourQuestionPrealable(s1, 'prealable_1', { label: 'Déjà inscrit ?', cle: 'piratage' })
+    expect(s2.questionsPrealables[0].label).toBe('Déjà inscrit ?')
+    expect(s2.questionsPrealables[0].cle).toBe('prealable_1')
+  })
+
+  it('filtre par formulaire et supprime par clé', () => {
+    let s2 = ajouterQuestionPrealable(S, 'inscription').schema
+    s2 = ajouterQuestionPrealable(s2, 'signalement').schema
+    expect(questionsPrealablesDe(s2, 'inscription')).toHaveLength(1)
+    const s3 = supprimerQuestionPrealable(s2, 'prealable_1')
+    expect(questionsPrealablesDe(s3, 'inscription')).toHaveLength(0)
+    expect(questionsPrealablesDe(s3, 'signalement')).toHaveLength(1)
   })
 })
 

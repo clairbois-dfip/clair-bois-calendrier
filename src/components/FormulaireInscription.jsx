@@ -33,7 +33,9 @@ import {
   etapesDuFormulaire,
 } from '../utils/formulaireDynamique'
 import { formatDate } from '../utils/helpers'
+import { questionsPrealablesDe } from '../utils/schemaFormulaires'
 import EtapeGenerique from './formulaire/EtapeGenerique'
+import QuestionsPrealables from './QuestionsPrealables'
 import EtapeStagiaire from './formulaire/EtapeStagiaire'
 import EtapeCuratelle from './formulaire/EtapeCuratelle'
 import EtapeUrgence from './formulaire/EtapeUrgence'
@@ -53,8 +55,16 @@ export default function FormulaireInscription({ schema, parcours, chemin, contex
   const config = getFormConfig(parcours, chemin)
   // cheminKey est inclus dans le payload pour que Power Automate sache quel flux declencher
   const cheminKey = getCheminKey(parcours, chemin)
+
+  // Questions préalables (mode édition) : posées AVANT le formulaire, leurs
+  // réponses conditionnent l'affichage des étapes. Le chemin court « retour »
+  // n'a qu'une étape → on saute les préalables.
+  const questionsPrealables = cheminKey === 'stages-moi-oui' ? [] : questionsPrealablesDe(schema, 'inscription')
+  const [prealables, setPrealables] = useState(questionsPrealables.length ? null : {})
+
   // Contexte injecté dans l'évaluation des conditions du schéma
-  const contexte = { parcours, pourQui: chemin.pourQui }
+  // (aiguillage + réponses aux questions préalables).
+  const contexte = { parcours, pourQui: chemin.pourQui, ...(prealables || {}) }
 
   // Les SECTIONS du wizard viennent du SCHÉMA (mode édition #edition) :
   // une étape ajoutée/réordonnée par la coordination apparaît automatiquement.
@@ -222,6 +232,18 @@ export default function FormulaireInscription({ schema, parcours, chemin, contex
           onRetry={() => setSubmitResult(null)}
         />
       </div>
+    )
+  }
+
+  // Écran des questions préalables (avant le wizard) — tant que non répondues
+  if (questionsPrealables.length > 0 && prealables === null) {
+    return (
+      <QuestionsPrealables
+        questions={questionsPrealables}
+        titre={config.label}
+        onValider={(reponses) => setPrealables(reponses)}
+        onRetour={onBack}
+      />
     )
   }
 

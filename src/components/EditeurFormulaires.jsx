@@ -17,6 +17,10 @@ import {
   suggererColonneSP,
   validerColonneSP,
   colonnesDeLaListe,
+  questionsPrealablesDe,
+  ajouterQuestionPrealable,
+  mettreAJourQuestionPrealable,
+  supprimerQuestionPrealable,
   parserOptions,
   optionsVersTexte,
   chargerSchema,
@@ -41,32 +45,6 @@ const CONDITIONS_ETAPE = [
   { valeur: 'parcours=stages', label: 'Seulement pour une demande de stage' },
   { valeur: 'parcours=modules', label: 'Seulement pour les modules métiers' },
 ]
-
-/**
- * Champs SYSTÈME : leur suppression ou leur mise « sans SharePoint » casse le
- * pipeline (Flux 5, emails, dédoublonnage) ou l'affichage conditionnel. Clé =
- * champPayload (le vrai contrat du webhook). Ils sont protégés dans l'éditeur.
- * Source : investigation du 10 juillet (build-flux5-http.js).
- */
-const CHAMPS_SYSTEME = {
-  avs: 'sert de clé pour éviter les doublons et à l\'objet de l\'e-mail',
-  email: 'adresse où est envoyée la demande de documents',
-  nom: 'objet de l\'e-mail et nom du dossier du stagiaire',
-  prenom: 'objet de l\'e-mail et nom du dossier du stagiaire',
-  referent_email: 'adresse d\'envoi quand un référent inscrit',
-  referent_partenaire: 'traçabilité du référent',
-  referent_nom: 'traçabilité du référent',
-  referent_prenom: 'traçabilité du référent',
-  sous_curatelle: 'commande l\'affichage du bloc curatelle',
-  inscrit_ai: 'commande l\'affichage du bloc conseiller AI',
-  objectif_stage: 'objectif de la demande de stage',
-  motif: 'motif du signalement',
-}
-
-/** Un champ est-il système (protégé) ? */
-function estChampSysteme(champ) {
-  return Object.prototype.hasOwnProperty.call(CHAMPS_SYSTEME, champ.champPayload)
-}
 
 /**
  * Le champ pilote-t-il une condition donnée ? (la condition commence par
@@ -176,6 +154,20 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
     .filter((e) => e.formulaire === formulaireActif)
     .sort((a, b) => a.ordre - b.ordre)
 
+  // Questions préalables du formulaire actif (posées avant le formulaire).
+  const prealablesActives = questionsPrealablesDe(schema, formulaireActif)
+
+  // Conditions d'étape proposées = presets + réponses aux questions préalables.
+  const conditionsEtapeDisponibles = [
+    ...CONDITIONS_ETAPE,
+    ...prealablesActives.flatMap((q) =>
+      (q.options || []).map((o) => ({
+        valeur: `${q.cle}=${o.value}`,
+        label: `Si « ${q.label} » = ${o.label}`,
+      }))
+    ),
+  ]
+
   /* Un champ est stocké en SP ssi il vise une liste. Les champs sans liste
    * (consentements, textes informatifs, docs renvoyés séparément) n'ont ni
    * colonne à créer ni identifiant à valider. */
@@ -229,19 +221,11 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
   function handleSupprimer(champ) {
     // On INFORME (sans jamais interdire) : c'est l'admin qui décide, et le
     // flux Power Automate ignore un champ manquant sans planter.
-    const avertissements = []
-    if (estChampSysteme(champ)) {
-      avertissements.push(`Ce champ est important : ${CHAMPS_SYSTEME[champ.champPayload]}.`)
-    }
     const dependants = elementsDependantDe(schema, champ.champPayload)
-    if (dependants.length > 0) {
-      avertissements.push(
-        `D'autres éléments dépendent de ce champ et ne s'afficheront plus :\n` +
-        dependants.map((d) => `  • ${d}`).join('\n')
-      )
-    }
-    const message = avertissements.length > 0
-      ? `⚠️ Supprimer « ${champ.label} » ?\n\n${avertissements.join('\n\n')}\n\nSupprimer quand même ?`
+    const message = dependants.length > 0
+      ? `⚠️ Supprimer « ${champ.label} » ?\n\nD'autres éléments dépendent de ce champ et ne s'afficheront plus :\n` +
+        dependants.map((d) => `  • ${d}`).join('\n') +
+        `\n\nSupprimer quand même ?`
       : `Supprimer la question « ${champ.label} » ?\n\nLa colonne SharePoint « ${champ.colonneSP || '—'} » n'est pas supprimée — seule la question disparaît du formulaire.`
     if (!window.confirm(message)) return
     setCleSelection(null)
@@ -280,6 +264,21 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
     if (!window.confirm(`Supprimer l'étape « ${etape.titre} » ?`)) return
     setEtapeOuverte(null)
     appliquer((s) => supprimerEtape(s, etape.cle))
+  }
+
+  /* ── Questions préalables ── */
+  function handleAjouterPrealable() {
+    appliquer((s) => ajouterQuestionPrealable(s, formulaireActif).schema)
+  }
+  function handleSupprimerPrealable(question) {
+    const dependants = (schema.etapes || [])
+      .filter((e) => conditionPiloteePar(e.conditionAffichage, question.cle))
+      .map((e) => `l'étape « ${e.titre} »`)
+    const msg = dependants.length
+      ? `Supprimer la question préalable « ${question.label} » ?\n\nCes éléments en dépendent et redeviendront « toujours affichés » :\n${dependants.map((d) => '  • ' + d).join('\n')}\n\nSupprimer quand même ?`
+      : `Supprimer la question préalable « ${question.label} » ?`
+    if (!window.confirm(msg)) return
+    appliquer((s) => supprimerQuestionPrealable(s, question.cle))
   }
 
   /** Fin d'un glisser-déposer : réordonne le champ vers la cible survolée. */
@@ -452,6 +451,56 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
           </div>
         )}
 
+        {/* Questions préalables : posées AVANT le formulaire, pour conditionner les étapes */}
+        <section className="bg-purple-50/50 border border-purple-200 rounded-xl p-4">
+          <h2 className="text-base font-bold text-purple-800 mb-1">Questions préalables</h2>
+          <p className="text-xs text-purple-700/80 mb-3">
+            Posées sur un écran <strong>avant</strong> le formulaire. Leur réponse permet ensuite de décider,
+            dans les réglages d'une étape (« Quand afficher cette étape ? »), si celle-ci est nécessaire.
+          </p>
+          <div className="space-y-3">
+            {prealablesActives.map((q) => (
+              <div key={q.cle} className="bg-white border border-purple-100 rounded-lg p-3 grid gap-2">
+                <label className="block">
+                  <span className="block text-xs font-semibold text-gray-500 mb-1">Question</span>
+                  <input
+                    type="text"
+                    value={q.label}
+                    onChange={(e) => appliquer((s) => mettreAJourQuestionPrealable(s, q.cle, { label: e.target.value }))}
+                    className={CLASSES_INPUT_PROP}
+                  />
+                </label>
+                <div className="flex items-end gap-2">
+                  <label className="block flex-1">
+                    <span className="block text-xs font-semibold text-gray-500 mb-1">Réponses possibles (une par ligne)</span>
+                    <textarea
+                      rows={2}
+                      value={optionsVersTexte(q.options)}
+                      onChange={(e) => appliquer((s) => mettreAJourQuestionPrealable(s, q.cle, { options: parserOptions(e.target.value) }))}
+                      className={CLASSES_INPUT_PROP + ' font-mono text-xs resize-y'}
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => handleSupprimerPrealable(q)}
+                    className="shrink-0 text-sm px-2.5 py-2 rounded-lg border border-red-200 text-cb-red bg-white hover:bg-red-50 cursor-pointer"
+                    title="Supprimer cette question préalable"
+                  >
+                    🗑
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={handleAjouterPrealable}
+            className="mt-3 w-full border-2 border-dashed border-purple-300 hover:border-purple-500 text-purple-600 rounded-xl py-2.5 text-sm font-medium transition-colors cursor-pointer"
+          >
+            + Ajouter une question préalable
+          </button>
+        </section>
+
         {/* Les étapes du formulaire actif */}
         {etapesActives.map((etape, indexEtape) => {
           const champs = champsDeLEtape(schema, etape.cle)
@@ -511,14 +560,14 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
                     </Propriete>
                     <Propriete label="Quand afficher cette étape ?">
                       <select
-                        value={CONDITIONS_ETAPE.some((c) => c.valeur === (etape.conditionAffichage || '')) ? (etape.conditionAffichage || '') : '__perso'}
+                        value={conditionsEtapeDisponibles.some((c) => c.valeur === (etape.conditionAffichage || '')) ? (etape.conditionAffichage || '') : '__perso'}
                         onChange={(e) => {
                           const v = e.target.value
                           appliquer((s) => mettreAJourEtape(s, etape.cle, { conditionAffichage: v === '__perso' ? (etape.conditionAffichage || 'champ=valeur') : (v || null) }))
                         }}
                         className={CLASSES_INPUT_PROP + ' cursor-pointer'}
                       >
-                        {CONDITIONS_ETAPE.map((c) => (
+                        {conditionsEtapeDisponibles.map((c) => (
                           <option key={c.valeur || 'toujours'} value={c.valeur}>{c.label}</option>
                         ))}
                         <option value="__perso">Personnalisé (avancé)…</option>
@@ -526,7 +575,7 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
                     </Propriete>
                   </div>
                   {/* Champ libre visible uniquement si la condition n'est pas un preset */}
-                  {etape.conditionAffichage && !CONDITIONS_ETAPE.some((c) => c.valeur === etape.conditionAffichage) && (
+                  {etape.conditionAffichage && !conditionsEtapeDisponibles.some((c) => c.valeur === etape.conditionAffichage) && (
                     <Propriete label="Condition personnalisée (avancé)">
                       <input
                         type="text"
@@ -803,11 +852,6 @@ function CadreChamp({
                   colonne SP à créer
                 </span>
               )}
-              {estChampSysteme(champ) && (
-                <span className="text-[11px] text-cb-blue bg-cb-blue-light border border-cb-blue/20 rounded px-1.5 py-0.5" title={CHAMPS_SYSTEME[champ.champPayload]}>
-                  ℹ️ champ important
-                </span>
-              )}
             </div>
           </div>
         </div>
@@ -882,7 +926,6 @@ function PanneauProprietes({ champ, schema, onModifier }) {
   // Sinon (case de consentement, texte informatif, doc renvoyé plus tard…) :
   // pas de colonne, pas d'identifiant à valider, pas de rappel de création.
   const stockeSP = !!(champ.listeCible && champ.listeCible.trim())
-  const systeme = estChampSysteme(champ)
   const autresColonnes = stockeSP ? colonnesDeLaListe(schema, champ.listeCible, cleChamp(champ)) : []
   const validation = stockeSP ? validerColonneSP(champ.colonneSP, autresColonnes) : { valide: true, message: '' }
 
@@ -990,10 +1033,7 @@ function PanneauProprietes({ champ, schema, onModifier }) {
                 : 'Non — pas de colonne (ex. case de consentement, texte informatif)'}
             </button>
           </Propriete>
-          {systeme && (
-            <p className="text-[11px] text-cb-blue mt-1">ℹ️ Champ important : {CHAMPS_SYSTEME[champ.champPayload]}.</p>
-          )}
-          {!stockeSP && !systeme && (
+          {!stockeSP && (
             <p className="text-[11px] text-gray-400 mt-1">
               La question s'affiche et peut rester obligatoire, mais sa réponse n'est pas stockée en base
               (utile pour une charte lue/renvoyée séparément, une consigne, une case « je m'engage à… »).
