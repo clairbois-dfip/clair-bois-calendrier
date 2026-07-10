@@ -28,14 +28,16 @@ export const TYPES_CHAMP = [
   { value: 'textarea', label: 'Texte long (plusieurs lignes)' },
   { value: 'select', label: 'Liste déroulante' },
   { value: 'radio', label: 'Boutons de choix' },
+  { value: 'multiselect', label: 'Choix multiples (pastilles)' },
   { value: 'checkbox', label: 'Case à cocher' },
+  { value: 'number', label: 'Nombre' },
   { value: 'date', label: 'Date' },
   { value: 'tel', label: 'Téléphone' },
   { value: 'email', label: 'Email' },
 ];
 
 /** Listes SharePoint qu'un champ peut alimenter. */
-export const LISTES_CIBLES = ['Stagiaire', 'Demande', 'Referent', 'Signalement'];
+export const LISTES_CIBLES = ['Stagiaire', 'Demande', 'Referent', 'Signalement', 'Visite'];
 
 /**
  * Clé UNIQUE d'un champ dans le schéma.

@@ -399,7 +399,7 @@ function App() {
 
         {/* Ecran 9 : Demande de visite (enseignants) */}
         {currentView === 'visite' && (
-          <FormulaireVisite onGoHome={goToHome} />
+          <FormulaireVisite schema={schemaFormulaires} onGoHome={goToHome} />
         )}
 
         {/* Ecran 8a : Page de connexion a la cartographie privee */}

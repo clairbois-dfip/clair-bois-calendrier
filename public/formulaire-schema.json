@@ -4,7 +4,8 @@
   "updatedAt": "2026-07-06T00:00:00.000Z",
   "formulaires": [
     { "cle": "inscription", "titre": "Inscription stage / module métier" },
-    { "cle": "signalement", "titre": "Signalement annulation ou retard" }
+    { "cle": "signalement", "titre": "Signalement annulation ou retard" },
+    { "cle": "visite", "titre": "Demande de visite (enseignants)" }
   ],
   "etapes": [
     { "cle": "referent", "titre": "Référent·e", "ordre": 1, "formulaire": "inscription", "conditionAffichage": "pourQui=autre" },
@@ -14,7 +15,11 @@
     { "cle": "ai", "titre": "Assurance AI", "ordre": 5, "formulaire": "inscription", "conditionAffichage": null },
     { "cle": "complementaire", "titre": "Compléments", "ordre": 6, "formulaire": "inscription", "conditionAffichage": null },
     { "cle": "declaration", "titre": "Déclaration", "ordre": 7, "formulaire": "inscription", "conditionAffichage": null },
-    { "cle": "signalement", "titre": "Signaler une annulation ou un retard", "ordre": 1, "formulaire": "signalement", "conditionAffichage": null }
+    { "cle": "signalement", "titre": "Signaler une annulation ou un retard", "ordre": 1, "formulaire": "signalement", "conditionAffichage": null },
+    { "cle": "visite-coordonnees", "titre": "Vos coordonnées", "ordre": 1, "formulaire": "visite", "conditionAffichage": null },
+    { "cle": "visite-groupe", "titre": "Le groupe", "ordre": 2, "formulaire": "visite", "conditionAffichage": null },
+    { "cle": "visite-secteurs", "titre": "Secteurs d'intérêt", "ordre": 3, "formulaire": "visite", "conditionAffichage": null },
+    { "cle": "visite-contexte", "titre": "Contexte du projet de formation", "ordre": 4, "formulaire": "visite", "conditionAffichage": null }
   ],
   "champs": [
     { "colonneSP": "Partenaire", "champPayload": "referent_partenaire", "listeCible": "Referent", "label": "Organisation / Partenaire", "type": "text", "options": [], "etape": "referent", "ordre": 10, "obligatoire": true, "condition": null, "placeholder": "Ex: SGIPA, ORIF, École spécialisée...", "aide": "", "largeur": "pleine" },
@@ -75,6 +80,24 @@
     { "colonneSP": "AVS", "champPayload": "avs", "listeCible": "Signalement", "label": "Numéro AVS du ou de la stagiaire (facultatif)", "type": "text", "options": [], "etape": "signalement", "ordre": 45, "obligatoire": false, "condition": null, "placeholder": "756.XXXX.XXXX.XX", "aide": "Aide au rattachement du dossier", "nouveau": true },
     { "colonneSP": "DateConcernee", "champPayload": "date_concernee", "listeCible": "Signalement", "label": "Date du stage ou module concerné (facultatif)", "type": "date", "options": [], "etape": "signalement", "ordre": 47, "obligatoire": false, "condition": null, "placeholder": "", "aide": "", "nouveau": true },
     { "colonneSP": "Motif", "champPayload": "motif", "listeCible": "Signalement", "label": "Motif", "type": "select", "options": [ { "value": "Annulation", "label": "Annulation" }, { "value": "Retard", "label": "Retard" } ], "etape": "signalement", "ordre": 50, "obligatoire": true, "condition": null, "placeholder": "Sélectionnez un motif", "aide": "" },
-    { "colonneSP": "Commentaire", "champPayload": "commentaire", "listeCible": "Signalement", "label": "Commentaire", "type": "textarea", "options": [], "etape": "signalement", "ordre": 60, "obligatoire": false, "condition": null, "placeholder": "Précisions supplémentaires (facultatif)", "aide": "" }
+    { "colonneSP": "Commentaire", "champPayload": "commentaire", "listeCible": "Signalement", "label": "Commentaire", "type": "textarea", "options": [], "etape": "signalement", "ordre": 60, "obligatoire": false, "condition": null, "placeholder": "Précisions supplémentaires (facultatif)", "aide": "" },
+
+    { "colonneSP": "Nom", "champPayload": "nom", "listeCible": "Visite", "label": "Nom", "type": "text", "options": [], "etape": "visite-coordonnees", "ordre": 10, "obligatoire": true, "condition": null, "placeholder": "Dupont", "aide": "" },
+    { "colonneSP": "Prenom", "champPayload": "prenom", "listeCible": "Visite", "label": "Prénom", "type": "text", "options": [], "etape": "visite-coordonnees", "ordre": 20, "obligatoire": true, "condition": null, "placeholder": "Marie", "aide": "" },
+    { "colonneSP": "Fonction", "champPayload": "fonction", "listeCible": "Visite", "label": "Fonction", "type": "text", "options": [], "etape": "visite-coordonnees", "ordre": 30, "obligatoire": true, "condition": null, "placeholder": "Enseignant·e spécialisé·e, éducateur·trice…", "aide": "", "largeur": "pleine" },
+    { "colonneSP": "EtablissementScolaire", "champPayload": "etablissement", "listeCible": "Visite", "label": "Établissement / École", "type": "text", "options": [], "etape": "visite-coordonnees", "ordre": 40, "obligatoire": true, "condition": null, "placeholder": "École de la Jonction, Centre ORIF…", "aide": "", "largeur": "pleine" },
+    { "colonneSP": "Mail", "champPayload": "email", "listeCible": "Visite", "label": "Email", "type": "email", "options": [], "etape": "visite-coordonnees", "ordre": 50, "obligatoire": true, "condition": null, "placeholder": "marie.dupont@edu.ge.ch", "aide": "" },
+    { "colonneSP": "Tel", "champPayload": "tel", "listeCible": "Visite", "label": "Téléphone", "type": "tel", "options": [], "etape": "visite-coordonnees", "ordre": 60, "obligatoire": true, "condition": null, "placeholder": "+41 79 123 45 67", "aide": "Format suisse" },
+
+    { "colonneSP": "NbEleves", "champPayload": "nbEleves", "listeCible": "Visite", "label": "Nombre d'élèves", "type": "number", "options": [], "etape": "visite-groupe", "ordre": 10, "obligatoire": true, "condition": null, "placeholder": "12", "aide": "" },
+    { "colonneSP": "NbAccompagnants", "champPayload": "nbEnseignants", "listeCible": "Visite", "label": "Enseignants accompagnants", "type": "number", "options": [], "etape": "visite-groupe", "ordre": 20, "obligatoire": true, "condition": null, "placeholder": "2", "aide": "" },
+    { "colonneSP": "ProfilEleves", "champPayload": "profilEleves", "listeCible": "Visite", "label": "Profil des élèves", "type": "textarea", "options": [], "etape": "visite-groupe", "ordre": 30, "obligatoire": false, "condition": null, "placeholder": "Âge, besoins particuliers, contexte de formation… (facultatif)", "aide": "" },
+
+    { "colonneSP": "SecteursInteret", "champPayload": "secteursInteret", "listeCible": "Visite", "label": "Secteurs d'intérêt", "type": "multiselect", "options": [ { "value": "ASA", "label": "ASA" }, { "value": "ASE", "label": "ASE" }, { "value": "ASSC", "label": "ASSC" }, { "value": "Cuisine", "label": "Cuisine" }, { "value": "Restauration", "label": "Restauration" }, { "value": "Pâtisserie-boulangerie", "label": "Pâtisserie-boulangerie" }, { "value": "Nettoyage", "label": "Nettoyage" }, { "value": "Exploitation", "label": "Exploitation" }, { "value": "Peinture", "label": "Peinture" }, { "value": "Graphisme", "label": "Graphisme" }, { "value": "Audio-visuel", "label": "Audio-visuel" }, { "value": "Médiamatique", "label": "Médiamatique" }, { "value": "Intendance", "label": "Intendance" }, { "value": "Lingerie", "label": "Lingerie" }, { "value": "Informatique", "label": "Informatique" }, { "value": "Confection", "label": "Confection" }, { "value": "Autre", "label": "Autre" } ], "etape": "visite-secteurs", "ordre": 10, "obligatoire": false, "condition": null, "placeholder": "", "aide": "Sélectionnez un ou plusieurs secteurs (facultatif)" },
+
+    { "colonneSP": "StagesAnterieurs", "champPayload": "stagesAnterieurs", "listeCible": "Visite", "label": "Stages antérieurs à Clair Bois ou ailleurs ?", "type": "radio", "options": [ { "value": "Oui", "label": "Oui" }, { "value": "Non", "label": "Non" } ], "etape": "visite-contexte", "ordre": 10, "obligatoire": false, "condition": null, "placeholder": "", "aide": "" },
+    { "colonneSP": "AvancementProjet", "champPayload": "avancement", "listeCible": "Visite", "label": "Où en est le projet de formation ?", "type": "select", "options": [ { "value": "Début", "label": "Début — exploration des possibilités" }, { "value": "En cours", "label": "En cours — quelques pistes identifiées" }, { "value": "Plusieurs cibles", "label": "Plusieurs cibles — comparaison en cours" }, { "value": "Avancé", "label": "Avancé — piste solide, orientation proche" } ], "etape": "visite-contexte", "ordre": 20, "obligatoire": true, "condition": null, "placeholder": "Sélectionnez une étape", "aide": "", "largeur": "pleine" },
+    { "colonneSP": "DemandeAI", "champPayload": "demandeAI", "listeCible": "Visite", "label": "Demande AI (Assurance Invalidité)", "type": "select", "options": [ { "value": "Non faite", "label": "Non faite" }, { "value": "En cours", "label": "En cours" }, { "value": "Validée", "label": "Validée" } ], "etape": "visite-contexte", "ordre": 30, "obligatoire": true, "condition": null, "placeholder": "Sélectionnez un statut", "aide": "", "largeur": "pleine" },
+    { "colonneSP": "AIContact", "champPayload": "contactAI", "listeCible": "Visite", "label": "Coordonnées de la conseillère AI", "type": "text", "options": [], "etape": "visite-contexte", "ordre": 40, "obligatoire": true, "condition": "demandeAI=Validée", "placeholder": "Nom, téléphone ou email", "aide": "", "largeur": "pleine" }
   ]
 }

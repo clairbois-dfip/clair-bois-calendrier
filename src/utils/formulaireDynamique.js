@@ -67,6 +67,20 @@ export const VALIDATEURS = {
   referent_fonction: validateRequired,
   // Signalement (nom/prenom/tel/email partagés ci-dessus)
   motif: validateRequired,
+  // Visite (clés camelCase historiques du composant)
+  fonction: validateRequired,
+  etablissement: validateRequired,
+  nbEleves: validerNombrePositif,
+  nbEnseignants: validerNombrePositif,
+  avancement: validateRequired,
+  demandeAI: validateRequired,
+}
+
+/** Nombre entier strictement positif (nb d'élèves, d'accompagnants…). */
+function validerNombrePositif(v) {
+  return v && parseInt(v, 10) > 0
+    ? { valid: true, message: '' }
+    : { valid: false, message: 'Nombre requis' }
 }
 
 /**
@@ -207,7 +221,8 @@ export function validerEtape(schema, etapeCle, formData, contexte) {
 export function donneesInitiales(schema) {
   const data = {}
   for (const champ of schema?.champs || []) {
-    data[champ.champPayload] = ''
+    // Les multi-sélections stockent un tableau, tout le reste des strings
+    data[champ.champPayload] = champ.type === 'multiselect' ? [] : ''
   }
   return data
 }
@@ -229,7 +244,10 @@ export function collecterPayload(schema, sections, formData, contexte) {
   for (const section of sections) {
     for (const champ of champsVisibles(schema, section, valeurs)) {
       const valeur = formData[champ.champPayload]
-      if (valeur) fragment[champ.champPayload] = valeur
+      // Tableau vide (multiselect sans sélection) = pas envoyé, comme une string vide
+      if (Array.isArray(valeur) ? valeur.length > 0 : valeur) {
+        fragment[champ.champPayload] = valeur
+      }
     }
   }
   return fragment

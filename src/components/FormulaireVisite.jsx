@@ -4,71 +4,42 @@
  * Formulaire autonome, hors du flux multi-etapes d'inscription.
  * Destine aux enseignants ou educateurs qui souhaitent faire visiter
  * la fondation a leur classe avant d'envisager un stage.
+ *
+ * Depuis juillet 2026, les champs ET les sections sont rendus dynamiquement
+ * depuis public/formulaire-schema.json (formulaire 'visite', 4 étapes-cartes)
+ * — éditables par la coordination via le mode édition (#edition).
+ * Le champ contactAI porte la condition `demandeAI=Validée` dans le schéma.
+ *
  * Contrairement au signalement, il n'y a pas de mode demo : VITE_PA_HTTP_URL
  * doit etre configure pour que l'envoi fonctionne.
  *
- * Logique conditionnelle notable :
- *   contactAI s'affiche uniquement si demandeAI = "validee", car les
- *   coordonnees du conseiller ne sont pertinentes qu'a ce stade avance.
- *   La validation cote client reflete cette meme regle (voir validateAll).
- *
- * Sections : coordonnees, groupe, secteurs d'interet (multi-select), contexte projet
- *
  * Props :
+ *   schema   — schéma des formulaires (chargé par App.jsx)
  *   onGoHome — retour a la page d'accueil apres envoi ou annulation
  */
 import { useState } from 'react'
-import ChampFormulaire from './formulaire/ChampFormulaire'
+import ChampsEtape from './formulaire/ChampsEtape'
 import Confirmation from './formulaire/Confirmation'
-import { validateRequired, validatePhone, validateEmail } from '../utils/validation'
+import {
+  champsDeLEtape, champsVisibles, validerChamp, validerEtape, collecterPayload,
+} from '../utils/formulaireDynamique'
 
-const SECTEURS_OPTIONS = [
-  'ASA', 'ASE', 'ASSC', 'Cuisine', 'Restauration', 'Pâtisserie-boulangerie',
-  'Nettoyage', 'Exploitation', 'Peinture', 'Graphisme', 'Audio-visuel',
-  'Médiamatique', 'Intendance', 'Lingerie', 'Informatique', 'Confection', 'Autre',
-]
+export default function FormulaireVisite({ schema, onGoHome }) {
+  // Étapes du formulaire visite = les cartes-sections affichées
+  const etapes = (schema?.etapes || [])
+    .filter((e) => e.formulaire === 'visite')
+    .sort((a, b) => a.ordre - b.ordre)
 
-const AVANCEMENT_OPTIONS = [
-  { value: 'debut',    label: 'Début — exploration des possibilités' },
-  { value: 'en-cours', label: 'En cours — quelques pistes identifiées' },
-  { value: 'plusieurs-cibles', label: 'Plusieurs cibles — comparaison en cours' },
-  { value: 'avance',   label: 'Avancé — piste solide, orientation proche' },
-]
-
-const AI_OPTIONS = [
-  { value: 'non-faite', label: 'Non faite' },
-  { value: 'en-cours',  label: 'En cours' },
-  { value: 'validee',   label: 'Validée' },
-]
-
-const VALIDATORS = {
-  nom:          validateRequired,
-  prenom:       validateRequired,
-  fonction:     validateRequired,
-  etablissement: validateRequired,
-  email:        validateEmail,
-  tel:          validatePhone,
-  nbEleves:     (v) => v && parseInt(v) > 0 ? { valid: true } : { valid: false, message: 'Nombre requis' },
-  nbEnseignants:(v) => v && parseInt(v) > 0 ? { valid: true } : { valid: false, message: 'Nombre requis' },
-  avancement:   validateRequired,
-  demandeAI:    validateRequired,
-}
-
-const INITIAL_DATA = {
-  nom: '', prenom: '', fonction: '', etablissement: '',
-  email: '', tel: '',
-  nbEleves: '', nbEnseignants: '',
-  profilEleves: '',
-  secteursInteret: [],
-  stagesAnterieurs: '',
-  avancement: '',
-  demandeAI: '',
-  contactAI: '',
-}
-
-export default function FormulaireVisite({ onGoHome }) {
-  const [formData, setFormData] = useState({ ...INITIAL_DATA })
-  const [errors, setErrors]     = useState({})
+  const [formData, setFormData] = useState(() => {
+    const data = {}
+    for (const etape of etapes) {
+      for (const champ of champsDeLEtape(schema, etape.cle)) {
+        data[champ.champPayload] = champ.type === 'multiselect' ? [] : ''
+      }
+    }
+    return data
+  })
+  const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitResult, setSubmitResult] = useState(null)
 
@@ -78,37 +49,26 @@ export default function FormulaireVisite({ onGoHome }) {
   }
 
   const handleBlur = (name) => {
-    const validator = VALIDATORS[name]
-    if (validator) {
-      const result = validator(formData[name])
-      if (!result.valid) setErrors(prev => ({ ...prev, [name]: result.message }))
-    }
-  }
-
-  // Bascule l'inclusion d'un secteur dans la selection multiple
-  const toggleSecteur = (secteur) => {
-    setFormData(prev => {
-      const list = prev.secteursInteret
-      return {
-        ...prev,
-        secteursInteret: list.includes(secteur)
-          ? list.filter(s => s !== secteur)
-          : [...list, secteur],
+    for (const etape of etapes) {
+      const champ = champsDeLEtape(schema, etape.cle).find(c => c.champPayload === name)
+      if (champ) {
+        const result = validerChamp(champ, formData[name])
+        if (!result.valid) setErrors(prev => ({ ...prev, [name]: result.message }))
+        return
       }
-    })
+    }
   }
 
+  /** Valide toutes les sections (les conditions du schéma s'appliquent). */
   const validateAll = () => {
-    const newErrors = {}
     let valid = true
-    for (const [field, validator] of Object.entries(VALIDATORS)) {
-      const result = validator(formData[field])
-      if (!result.valid) { newErrors[field] = result.message; valid = false }
-    }
-    // contactAI n'est obligatoire que si la demande AI est deja validee
-    if (formData.demandeAI === 'validee' && !formData.contactAI.trim()) {
-      newErrors.contactAI = 'Coordonnées requises si demande validée'
-      valid = false
+    const newErrors = {}
+    for (const etape of etapes) {
+      const res = validerEtape(schema, etape.cle, formData, {})
+      if (!res.valid) {
+        valid = false
+        Object.assign(newErrors, res.errors)
+      }
     }
     setErrors(newErrors)
     return valid
@@ -120,10 +80,15 @@ export default function FormulaireVisite({ onGoHome }) {
     try {
       const httpUrl = import.meta.env.VITE_PA_HTTP_URL
       if (!httpUrl) throw new Error('URL non configurée')
+      const payload = {
+        type: 'visite',
+        dateEnvoi: new Date().toISOString(),
+        ...collecterPayload(schema, etapes.map((e) => e.cle), formData, {}),
+      }
       const response = await fetch(httpUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'visite', ...formData }),
+        body: JSON.stringify(payload),
       })
       if (!response.ok) throw new Error(`Erreur ${response.status}`)
       setSubmitResult('success')
@@ -174,126 +139,20 @@ export default function FormulaireVisite({ onGoHome }) {
         </p>
       </div>
 
-      {/* Section 1 — Coordonnées */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5 md:p-6 mb-4 shadow-sm max-w-lg mx-auto">
-        <h3 className="text-sm font-bold text-cb-blue uppercase tracking-wide mb-4">Vos coordonnées</h3>
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <ChampFormulaire label="Nom" name="nom" value={formData.nom}
-              onChange={handleChange} onBlur={handleBlur} error={errors.nom} required placeholder="Dupont" />
-            <ChampFormulaire label="Prénom" name="prenom" value={formData.prenom}
-              onChange={handleChange} onBlur={handleBlur} error={errors.prenom} required placeholder="Marie" />
-          </div>
-          <ChampFormulaire label="Fonction" name="fonction" value={formData.fonction}
-            onChange={handleChange} onBlur={handleBlur} error={errors.fonction} required
-            placeholder="Enseignant·e spécialisé·e, éducateur·trice…" />
-          <ChampFormulaire label="Établissement / École" name="etablissement" value={formData.etablissement}
-            onChange={handleChange} onBlur={handleBlur} error={errors.etablissement} required
-            placeholder="École de la Jonction, Centre ORIF…" />
-          <div className="grid grid-cols-2 gap-4">
-            <ChampFormulaire label="Email" name="email" type="email" value={formData.email}
-              onChange={handleChange} onBlur={handleBlur} error={errors.email} required
-              placeholder="marie.dupont@edu.ge.ch" />
-            <ChampFormulaire label="Téléphone" name="tel" type="tel" value={formData.tel}
-              onChange={handleChange} onBlur={handleBlur} error={errors.tel} required
-              placeholder="+41 79 123 45 67" helpText="Format suisse" />
-          </div>
-        </div>
-      </div>
-
-      {/* Section 2 — Le groupe */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5 md:p-6 mb-4 shadow-sm max-w-lg mx-auto">
-        <h3 className="text-sm font-bold text-cb-blue uppercase tracking-wide mb-4">Le groupe</h3>
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <ChampFormulaire label="Nombre d'élèves" name="nbEleves" type="number" value={formData.nbEleves}
-              onChange={handleChange} onBlur={handleBlur} error={errors.nbEleves} required placeholder="12" />
-            <ChampFormulaire label="Enseignants accompagnants" name="nbEnseignants" type="number"
-              value={formData.nbEnseignants} onChange={handleChange} onBlur={handleBlur}
-              error={errors.nbEnseignants} required placeholder="2" />
-          </div>
-          <ChampFormulaire label="Profil des élèves" name="profilEleves" type="textarea"
-            value={formData.profilEleves} onChange={handleChange}
-            placeholder="Âge, besoins particuliers, contexte de formation… (facultatif)" />
-        </div>
-      </div>
-
-      {/* Section 3 — Secteurs d'intérêt */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5 md:p-6 mb-4 shadow-sm max-w-lg mx-auto">
-        <h3 className="text-sm font-bold text-cb-blue uppercase tracking-wide mb-1">Secteurs d'intérêt</h3>
-        <p className="text-xs text-gray-400 mb-4">Sélectionnez un ou plusieurs secteurs (facultatif)</p>
-        <div className="flex flex-wrap gap-2">
-          {SECTEURS_OPTIONS.map((s) => {
-            const selected = formData.secteursInteret.includes(s)
-            return (
-              <button
-                key={s}
-                type="button"
-                onClick={() => toggleSecteur(s)}
-                className={`px-3 py-1.5 rounded-full text-xs font-medium border-2 transition-all cursor-pointer
-                  ${selected
-                    ? 'bg-cb-blue border-cb-blue text-white'
-                    : 'bg-white border-gray-200 text-gray-600 hover:border-cb-blue/40'}`}
-              >
-                {s}
-              </button>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Section 4 — Contexte du projet */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5 md:p-6 mb-4 shadow-sm max-w-lg mx-auto">
-        <h3 className="text-sm font-bold text-cb-blue uppercase tracking-wide mb-4">Contexte du projet de formation</h3>
-        <div className="space-y-4">
-          <ChampFormulaire
-            label="Stages antérieurs à Clair Bois ou ailleurs ?"
-            name="stagesAnterieurs"
-            type="radio-group"
-            value={formData.stagesAnterieurs}
-            onChange={handleChange}
-            options={[{ value: 'oui', label: 'Oui' }, { value: 'non', label: 'Non' }]}
-          />
-          <ChampFormulaire
-            label="Où en est le projet de formation ?"
-            name="avancement"
-            type="select"
-            value={formData.avancement}
+      {/* Sections dérivées du schéma : une carte par étape */}
+      {etapes.map((etape) => (
+        <div key={etape.cle} className="bg-white rounded-xl border border-gray-200 p-5 md:p-6 mb-4 shadow-sm max-w-lg mx-auto">
+          <h3 className="text-sm font-bold text-cb-blue uppercase tracking-wide mb-4">{etape.titre}</h3>
+          <ChampsEtape
+            champs={champsVisibles(schema, etape.cle, formData)}
+            data={formData}
+            errors={errors}
             onChange={handleChange}
             onBlur={handleBlur}
-            error={errors.avancement}
-            required
-            options={AVANCEMENT_OPTIONS}
-            placeholder="Sélectionnez une étape"
+            valeurs={formData}
           />
-          <ChampFormulaire
-            label="Demande AI (Assurance Invalidité)"
-            name="demandeAI"
-            type="select"
-            value={formData.demandeAI}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            error={errors.demandeAI}
-            required
-            options={AI_OPTIONS}
-            placeholder="Sélectionnez un statut"
-          />
-          {/* Champ conditionnel : visible seulement si demandeAI = "validee"
-              pour ne pas demander une info inexistante a ce stade */}
-          {formData.demandeAI === 'validee' && (
-            <ChampFormulaire
-              label="Coordonnées de la conseillère AI"
-              name="contactAI"
-              value={formData.contactAI}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={errors.contactAI}
-              required
-              placeholder="Nom, téléphone ou email"
-            />
-          )}
         </div>
-      </div>
+      ))}
 
       {/* Bouton envoi */}
       <div className="flex justify-center max-w-lg mx-auto">

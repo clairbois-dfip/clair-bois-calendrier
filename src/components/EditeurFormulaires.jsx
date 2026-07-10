@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import ChampFormulaire from './formulaire/ChampFormulaire'
+import ChampsEtape from './formulaire/ChampsEtape'
 import {
   TYPES_CHAMP,
   LISTES_CIBLES,
@@ -464,34 +464,21 @@ function CadreChamp({
 
 /**
  * ApercuChamp — Rendu du champ tel qu'il apparaîtra dans le formulaire.
- * Réutilise ChampFormulaire (la brique du vrai formulaire) : l'aperçu est
- * donc toujours fidèle. Type 'radio' du schéma → 'radio-group' du composant ;
- * 'checkbox' a son propre rendu (comme EtapeDeclaration).
+ * Réutilise ChampsEtape, LE moteur des vrais formulaires : l'aperçu est
+ * fidèle par construction, quel que soit le type (checkbox, multiselect,
+ * nombre…). Les conditions d'options sont neutralisées pour montrer TOUTES
+ * les options à l'éditrice (contexte pourQui=autre simulé).
  */
 function ApercuChamp({ champ }) {
-  if (champ.type === 'checkbox') {
-    return (
-      <label className="flex items-start gap-3 text-sm text-gray-700">
-        <input type="checkbox" readOnly checked={false} className="mt-1 w-4 h-4 accent-cb-blue pointer-events-none" />
-        <span>
-          {champ.label}
-          {champ.obligatoire && <span className="text-cb-red ml-0.5">*</span>}
-        </span>
-      </label>
-    )
-  }
+  const apercu = { ...champ, condition: null }
   return (
     <div className="pointer-events-none">
-      <ChampFormulaire
-        label={champ.label}
-        name={`apercu-${champ.etape}-${champ.champPayload}`}
-        type={champ.type === 'radio' ? 'radio-group' : champ.type}
-        value=""
+      <ChampsEtape
+        champs={[apercu]}
+        data={{}}
+        errors={{}}
         onChange={() => {}}
-        required={champ.obligatoire}
-        placeholder={champ.placeholder || ''}
-        helpText={champ.aide || ''}
-        options={champ.options || []}
+        valeurs={{ pourQui: 'autre', parcours: 'stages' }}
       />
     </div>
   )

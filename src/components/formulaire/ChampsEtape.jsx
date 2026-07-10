@@ -28,7 +28,47 @@ import { optionsVisibles } from '../../utils/formulaireDynamique'
 function estPleineLargeur(champ) {
   if (champ.largeur === 'pleine') return true
   if (champ.largeur === 'demi') return false
-  return champ.type === 'textarea' || champ.type === 'radio' || champ.type === 'checkbox'
+  return champ.type === 'textarea' || champ.type === 'radio' || champ.type === 'checkbox' || champ.type === 'multiselect'
+}
+
+/** Multi-sélection en pastilles cliquables (reprend le rendu des secteurs de Visite). */
+function MultiSelection({ champ, data, errors, onChange, valeurs }) {
+  const name = champ.champPayload
+  const selection = Array.isArray(data[name]) ? data[name] : []
+  const basculer = (valeur) => {
+    onChange(name, selection.includes(valeur) ? selection.filter((v) => v !== valeur) : [...selection, valeur])
+  }
+  return (
+    <div>
+      <div className="flex items-baseline justify-between gap-2 mb-1">
+        <span className="block text-sm font-medium text-gray-700">
+          {champ.label}
+          {champ.obligatoire && <span className="text-cb-red ml-0.5">*</span>}
+        </span>
+        {champ.aide && <span className="text-xs text-gray-400 shrink-0">{champ.aide}</span>}
+      </div>
+      <div className="flex flex-wrap gap-2 pt-1">
+        {optionsVisibles(champ, valeurs).map((opt) => {
+          const actif = selection.includes(opt.value)
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => basculer(opt.value)}
+              aria-pressed={actif}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium border-2 transition-all cursor-pointer
+                ${actif
+                  ? 'bg-cb-blue border-cb-blue text-white'
+                  : 'bg-white border-gray-200 text-gray-600 hover:border-cb-blue/40'}`}
+            >
+              {opt.label}
+            </button>
+          )
+        })}
+      </div>
+      {errors[name] && <p className="text-xs text-cb-red mt-1">{errors[name]}</p>}
+    </div>
+  )
 }
 
 /** Case à cocher (reprend le rendu historique d'EtapeDeclaration). */
@@ -65,6 +105,9 @@ function CaseACocher({ champ, data, errors, onChange }) {
 function Champ({ champ, data, errors, onChange, onBlur, valeurs }) {
   if (champ.type === 'checkbox') {
     return <CaseACocher champ={champ} data={data} errors={errors} onChange={onChange} />
+  }
+  if (champ.type === 'multiselect') {
+    return <MultiSelection champ={champ} data={data} errors={errors} onChange={onChange} valeurs={valeurs} />
   }
   const name = champ.champPayload
   return (
