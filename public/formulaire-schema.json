@@ -263,7 +263,7 @@
       "type": "text",
       "options": [],
       "etape": "stagiaire",
-      "ordre": 20,
+      "ordre": 5,
       "obligatoire": true,
       "condition": null,
       "placeholder": "",
@@ -1349,6 +1349,21 @@
       "placeholder": "Nom, téléphone ou email",
       "aide": "",
       "largeur": "pleine"
+    },
+    {
+      "colonneSP": "SurnomTest",
+      "champPayload": "surnom_test",
+      "listeCible": "Stagiaire",
+      "label": "Surnom (test de publication)",
+      "type": "text",
+      "options": [],
+      "etape": "stagiaire",
+      "ordre": 105,
+      "obligatoire": false,
+      "condition": null,
+      "placeholder": "Ex: Mimi",
+      "aide": "",
+      "nouveau": true
     }
   ]
 }
