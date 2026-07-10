@@ -29,6 +29,20 @@ import { normaliserTheme, appliquerTheme } from '../utils/themes'
 import EditeurTheme from './EditeurTheme'
 
 /**
+ * Conditions d'affichage d'une étape, formulées simplement. Elles s'appuient
+ * sur les réponses posées AVANT le formulaire d'inscription (aiguillage :
+ * « pour moi / pour quelqu'un d'autre », « stage / modules »). Les formulaires
+ * autonomes (signalement, visite) n'ont pas d'aiguillage → « Toujours ».
+ */
+const CONDITIONS_ETAPE = [
+  { valeur: '', label: 'Toujours afficher cette étape' },
+  { valeur: 'pourQui=autre', label: "Seulement si un·e référent·e remplit (pas le ou la stagiaire)" },
+  { valeur: 'pourQui=moi', label: 'Seulement si le ou la stagiaire remplit lui-même' },
+  { valeur: 'parcours=stages', label: 'Seulement pour une demande de stage' },
+  { valeur: 'parcours=modules', label: 'Seulement pour les modules métiers' },
+]
+
+/**
  * EditeurFormulaires — Mode édition des formulaires (CMS interne).
  *
  * Expérience type Jotform pour la coordination DFIP : chaque champ du
@@ -115,6 +129,9 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
   /* Champs marqués « nouveau » = colonnes SharePoint encore à créer. */
   const colonnesACreer = schema.champs.filter((c) => c.nouveau)
 
+  /* Listes hors référentiel officiel = nouvelles listes SP à créer. */
+  const listesACreer = [...new Set(schema.champs.map((c) => c.listeCible))].filter((l) => l && !LISTES_CIBLES.includes(l))
+
   /* Erreurs bloquantes pour la publication (identifiants SP invalides ou dupliqués). */
   const erreursColonnes = schema.champs
     .map((c) => {
@@ -162,23 +179,27 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
   }
 
   function handleAjouter(etapeCle) {
-    let nouvelleCle = null
-    appliquer((s) => {
-      const { schema: s2, champ } = ajouterChamp(s, etapeCle)
-      nouvelleCle = cleChamp(champ)
-      return s2
-    })
-    if (nouvelleCle) setCleSelection(nouvelleCle)
+    // Calcul déterministe depuis le schéma courant : la nouvelle clé est
+    // connue AVANT le setState, donc la sélection suit à coup sûr.
+    const { schema: s2, champ } = ajouterChamp(schema, etapeCle)
+    appliquer(() => s2)
+    setCleSelection(cleChamp(champ))
   }
 
   function handleAjouterEtape() {
-    let nouvelleCle = null
+    const { schema: s2, etape } = ajouterEtape(schema, formulaireActif)
+    appliquer(() => s2)
+    setEtapeOuverte(etape.cle) // ouvre le panneau pour renommer tout de suite
+  }
+
+  /** Déplace une étape vers un autre formulaire existant (place en fin) + suit la vue. */
+  function handleChangerFormulaireEtape(etape, nouveauFormulaire) {
     appliquer((s) => {
-      const { schema: s2, etape } = ajouterEtape(s, formulaireActif)
-      nouvelleCle = etape.cle
-      return s2
+      const duForm = (s.etapes || []).filter((e) => e.formulaire === nouveauFormulaire)
+      const ordre = duForm.length ? Math.max(...duForm.map((e) => e.ordre ?? 0)) + 1 : 1
+      return mettreAJourEtape(s, etape.cle, { formulaire: nouveauFormulaire, ordre })
     })
-    if (nouvelleCle) setEtapeOuverte(nouvelleCle)
+    setFormulaireActif(nouveauFormulaire)
   }
 
   function handleSupprimerEtape(etape, nbQuestions) {
@@ -330,6 +351,20 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
           </p>
         </div>
 
+        {/* Rappel des NOUVELLES LISTES SharePoint à créer */}
+        {listesACreer.length > 0 && (
+          <div className="bg-amber-50 border border-amber-300 rounded-xl p-4 text-sm text-amber-900">
+            <p className="font-semibold mb-1">🗂️ Nouvelle(s) liste(s) SharePoint à créer</p>
+            <ul className="list-disc ml-5 space-y-0.5">
+              {listesACreer.map((l) => (
+                <li key={l}>
+                  Créez une liste SharePoint nommée <strong>{l}</strong>, puis ajoutez-y les colonnes des questions qui la visent.
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {/* Rappel des colonnes SharePoint à créer */}
         {colonnesACreer.length > 0 && (
           <div className="bg-yellow-50 border border-yellow-300 rounded-xl p-4 text-sm text-yellow-800">
@@ -390,6 +425,46 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
                       className={CLASSES_INPUT_PROP + ' resize-y'}
                     />
                   </Propriete>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <Propriete label="Formulaire auquel cette étape appartient">
+                      <select
+                        value={etape.formulaire}
+                        onChange={(e) => handleChangerFormulaireEtape(etape, e.target.value)}
+                        className={CLASSES_INPUT_PROP + ' cursor-pointer'}
+                      >
+                        {(schema.formulaires || []).map((f) => (
+                          <option key={f.cle} value={f.cle}>{f.titre}</option>
+                        ))}
+                      </select>
+                    </Propriete>
+                    <Propriete label="Quand afficher cette étape ?">
+                      <select
+                        value={CONDITIONS_ETAPE.some((c) => c.valeur === (etape.conditionAffichage || '')) ? (etape.conditionAffichage || '') : '__perso'}
+                        onChange={(e) => {
+                          const v = e.target.value
+                          appliquer((s) => mettreAJourEtape(s, etape.cle, { conditionAffichage: v === '__perso' ? (etape.conditionAffichage || 'champ=valeur') : (v || null) }))
+                        }}
+                        className={CLASSES_INPUT_PROP + ' cursor-pointer'}
+                      >
+                        {CONDITIONS_ETAPE.map((c) => (
+                          <option key={c.valeur || 'toujours'} value={c.valeur}>{c.label}</option>
+                        ))}
+                        <option value="__perso">Personnalisé (avancé)…</option>
+                      </select>
+                    </Propriete>
+                  </div>
+                  {/* Champ libre visible uniquement si la condition n'est pas un preset */}
+                  {etape.conditionAffichage && !CONDITIONS_ETAPE.some((c) => c.valeur === etape.conditionAffichage) && (
+                    <Propriete label="Condition personnalisée (avancé)">
+                      <input
+                        type="text"
+                        value={etape.conditionAffichage}
+                        onChange={(e) => appliquer((s) => mettreAJourEtape(s, etape.cle, { conditionAffichage: e.target.value || null }))}
+                        placeholder="Ex : parcours=stages"
+                        className={CLASSES_INPUT_PROP + ' font-mono text-xs'}
+                      />
+                    </Propriete>
+                  )}
                   <div className="flex items-center gap-2 flex-wrap">
                     <Propriete label="Style du bandeau">
                       <select
@@ -833,15 +908,21 @@ function PanneauProprietes({ champ, schema, onModifier }) {
         </div>
 
         <Propriete label="Liste SharePoint alimentée">
-          <select
+          <input
+            list="listes-sp-connues"
             value={champ.listeCible}
-            onChange={(e) => onModifier({ listeCible: e.target.value })}
-            className={CLASSES_INPUT_PROP + ' cursor-pointer'}
-          >
-            {LISTES_CIBLES.map((l) => (
-              <option key={l} value={l}>{l}</option>
+            onChange={(e) => onModifier({ listeCible: e.target.value.replace(/[^A-Za-z0-9]/g, '') })}
+            className={CLASSES_INPUT_PROP}
+            placeholder="Stagiaire, Demande… ou une nouvelle liste"
+          />
+          <datalist id="listes-sp-connues">
+            {[...new Set([...LISTES_CIBLES, ...(schema.champs || []).map((c) => c.listeCible).filter(Boolean)])].map((l) => (
+              <option key={l} value={l} />
             ))}
-          </select>
+          </datalist>
+          {champ.listeCible && !LISTES_CIBLES.includes(champ.listeCible) && (
+            <p className="text-[11px] text-amber-700 mt-1">Nouvelle liste — pensez à la créer dans SharePoint.</p>
+          )}
         </Propriete>
 
         <div className="sm:col-span-2">
