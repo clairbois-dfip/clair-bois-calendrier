@@ -126,14 +126,21 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
     .filter((e) => e.formulaire === formulaireActif)
     .sort((a, b) => a.ordre - b.ordre)
 
-  /* Champs marqués « nouveau » = colonnes SharePoint encore à créer. */
-  const colonnesACreer = schema.champs.filter((c) => c.nouveau)
+  /* Un champ est stocké en SP ssi il vise une liste. Les champs sans liste
+   * (consentements, textes informatifs, docs renvoyés séparément) n'ont ni
+   * colonne à créer ni identifiant à valider. */
+  const estStockeSP = (c) => !!(c.listeCible && c.listeCible.trim())
+
+  /* Champs marqués « nouveau » ET stockés = colonnes SharePoint à créer. */
+  const colonnesACreer = schema.champs.filter((c) => c.nouveau && estStockeSP(c))
 
   /* Listes hors référentiel officiel = nouvelles listes SP à créer. */
   const listesACreer = [...new Set(schema.champs.map((c) => c.listeCible))].filter((l) => l && !LISTES_CIBLES.includes(l))
 
-  /* Erreurs bloquantes pour la publication (identifiants SP invalides ou dupliqués). */
+  /* Erreurs bloquantes pour la publication (identifiants SP invalides/dupliqués),
+   * uniquement pour les champs réellement stockés en SharePoint. */
   const erreursColonnes = schema.champs
+    .filter(estStockeSP)
     .map((c) => {
       const autres = colonnesDeLaListe(schema, c.listeCible, cleChamp(c))
       const res = validerColonneSP(c.colonneSP, autres)
@@ -343,10 +350,12 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
         <div className="bg-cb-blue-light/60 border border-cb-blue/20 rounded-xl p-4 text-sm text-cb-blue">
           <p className="font-semibold mb-1">Comment ça marche</p>
           <p>
-            Cliquez sur une question pour la modifier, la déplacer (flèches ↑ ↓) ou la supprimer.
-            Chaque question possède un <strong>identifiant SharePoint</strong> (ex. <code className="bg-white/70 rounded px-1">TaillePantalon</code>) :
-            c'est lui qui relie la réponse à la bonne colonne de la liste SharePoint.
-            <strong> Si vous ajoutez une question, créez aussi la colonne du même nom dans SharePoint.</strong>{' '}
+            Cliquez sur une question pour la modifier, glissez la poignée ⠿ pour la déplacer, ou supprimez-la.
+            La plupart des questions ont un <strong>identifiant SharePoint</strong> (ex. <code className="bg-white/70 rounded px-1">TaillePantalon</code>) :
+            c'est lui qui relie la réponse à la bonne colonne de la liste SharePoint —
+            <strong> si vous ajoutez une question stockée, créez aussi la colonne du même nom.</strong>{' '}
+            Certaines questions n'ont <em>pas</em> de colonne (case de consentement, texte informatif) :
+            réglez cela avec l'interrupteur « Réponse enregistrée dans SharePoint ? ».
             Quand tout est prêt, cliquez « Publier » — le site se met à jour tout seul.
           </p>
         </div>
@@ -709,10 +718,18 @@ function CadreChamp({
           >
             <ApercuChamp champ={champ} />
             <div className="flex flex-wrap items-center gap-2 mt-2">
-              <span className="text-[11px] font-mono text-gray-400 bg-gray-50 border border-gray-200 rounded px-1.5 py-0.5">
-                {champ.colonneSP}
-              </span>
-              <span className="text-[11px] text-gray-400">liste {champ.listeCible}</span>
+              {champ.listeCible && champ.listeCible.trim() ? (
+                <>
+                  <span className="text-[11px] font-mono text-gray-400 bg-gray-50 border border-gray-200 rounded px-1.5 py-0.5">
+                    {champ.colonneSP}
+                  </span>
+                  <span className="text-[11px] text-gray-400">liste {champ.listeCible}</span>
+                </>
+              ) : (
+                <span className="text-[11px] text-gray-400 bg-gray-50 border border-gray-200 rounded px-1.5 py-0.5">
+                  non enregistrée dans SharePoint
+                </span>
+              )}
               {champ.condition && (
                 <span className="text-[11px] text-purple-500 bg-purple-50 border border-purple-100 rounded px-1.5 py-0.5">
                   si {champ.condition}
@@ -793,8 +810,12 @@ const CLASSES_INPUT_PROP =
  */
 function PanneauProprietes({ champ, schema, onModifier }) {
   const aOptions = champ.type === 'select' || champ.type === 'radio'
-  const autresColonnes = colonnesDeLaListe(schema, champ.listeCible, cleChamp(champ))
-  const validation = validerColonneSP(champ.colonneSP, autresColonnes)
+  // Une réponse est enregistrée en SharePoint ssi une liste cible est renseignée.
+  // Sinon (case de consentement, texte informatif, doc renvoyé plus tard…) :
+  // pas de colonne, pas d'identifiant à valider, pas de rappel de création.
+  const stockeSP = !!(champ.listeCible && champ.listeCible.trim())
+  const autresColonnes = stockeSP ? colonnesDeLaListe(schema, champ.listeCible, cleChamp(champ)) : []
+  const validation = stockeSP ? validerColonneSP(champ.colonneSP, autresColonnes) : { valide: true, message: '' }
 
   return (
     <div className="px-4 py-4 grid gap-4 sm:grid-cols-2 bg-white rounded-b-xl">
@@ -881,49 +902,79 @@ function PanneauProprietes({ champ, schema, onModifier }) {
         />
       </Propriete>
 
-      {/* Bloc technique : identifiant SP + liste + condition */}
+      {/* Bloc technique : enregistrement SP (optionnel) + condition */}
       <div className="sm:col-span-2 border-t border-gray-100 pt-3 grid gap-4 sm:grid-cols-2">
-        <div>
-          <Propriete label="Identifiant SharePoint (colonne)">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={champ.colonneSP}
-                onChange={(e) => onModifier({ colonneSP: e.target.value })}
-                className={`${CLASSES_INPUT_PROP} font-mono ${validation.valide ? '' : 'border-cb-red bg-red-50'}`}
-              />
-              <button
-                type="button"
-                onClick={() => onModifier({ colonneSP: suggererColonneSP(champ.label) })}
-                className="shrink-0 text-xs px-2 rounded-lg border border-gray-300 text-gray-500 hover:border-cb-accent hover:text-cb-accent cursor-pointer"
-                title="Proposer un identifiant à partir de la question"
-              >
-                Suggérer
-              </button>
-            </div>
+        {/* Interrupteur : cette réponse va-t-elle dans SharePoint ? */}
+        <div className="sm:col-span-2">
+          <Propriete label="Réponse enregistrée dans SharePoint ?">
+            <button
+              type="button"
+              onClick={() =>
+                onModifier(stockeSP ? { listeCible: '', nouveau: undefined } : { listeCible: 'Stagiaire' })
+              }
+              className={`w-full px-3 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer text-left ${
+                stockeSP ? 'border-cb-blue bg-cb-blue-light text-cb-blue' : 'border-gray-300 bg-white text-gray-500'
+              }`}
+            >
+              {stockeSP
+                ? 'Oui — la réponse est écrite dans une colonne SharePoint'
+                : 'Non — pas de colonne (ex. case de consentement, texte informatif)'}
+            </button>
           </Propriete>
-          {!validation.valide && (
-            <p className="text-[11px] text-cb-red mt-1" role="alert">{validation.message}</p>
+          {!stockeSP && (
+            <p className="text-[11px] text-gray-400 mt-1">
+              La question s'affiche et peut rester obligatoire, mais sa réponse n'est pas stockée en base
+              (utile pour une charte lue/renvoyée séparément, une consigne, une case « je m'engage à… »).
+            </p>
           )}
         </div>
 
-        <Propriete label="Liste SharePoint alimentée">
-          <input
-            list="listes-sp-connues"
-            value={champ.listeCible}
-            onChange={(e) => onModifier({ listeCible: e.target.value.replace(/[^A-Za-z0-9]/g, '') })}
-            className={CLASSES_INPUT_PROP}
-            placeholder="Stagiaire, Demande… ou une nouvelle liste"
-          />
-          <datalist id="listes-sp-connues">
-            {[...new Set([...LISTES_CIBLES, ...(schema.champs || []).map((c) => c.listeCible).filter(Boolean)])].map((l) => (
-              <option key={l} value={l} />
-            ))}
-          </datalist>
-          {champ.listeCible && !LISTES_CIBLES.includes(champ.listeCible) && (
-            <p className="text-[11px] text-amber-700 mt-1">Nouvelle liste — pensez à la créer dans SharePoint.</p>
-          )}
-        </Propriete>
+        {/* Identifiant + liste : seulement si la réponse est stockée */}
+        {stockeSP && (
+          <>
+            <div>
+              <Propriete label="Identifiant SharePoint (colonne)">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={champ.colonneSP}
+                    onChange={(e) => onModifier({ colonneSP: e.target.value })}
+                    className={`${CLASSES_INPUT_PROP} font-mono ${validation.valide ? '' : 'border-cb-red bg-red-50'}`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => onModifier({ colonneSP: suggererColonneSP(champ.label) })}
+                    className="shrink-0 text-xs px-2 rounded-lg border border-gray-300 text-gray-500 hover:border-cb-accent hover:text-cb-accent cursor-pointer"
+                    title="Proposer un identifiant à partir de la question"
+                  >
+                    Suggérer
+                  </button>
+                </div>
+              </Propriete>
+              {!validation.valide && (
+                <p className="text-[11px] text-cb-red mt-1" role="alert">{validation.message}</p>
+              )}
+            </div>
+
+            <Propriete label="Liste SharePoint alimentée">
+              <input
+                list="listes-sp-connues"
+                value={champ.listeCible}
+                onChange={(e) => onModifier({ listeCible: e.target.value.replace(/[^A-Za-z0-9]/g, '') })}
+                className={CLASSES_INPUT_PROP}
+                placeholder="Stagiaire, Demande… ou une nouvelle liste"
+              />
+              <datalist id="listes-sp-connues">
+                {[...new Set([...LISTES_CIBLES, ...(schema.champs || []).map((c) => c.listeCible).filter(Boolean)])].map((l) => (
+                  <option key={l} value={l} />
+                ))}
+              </datalist>
+              {champ.listeCible && !LISTES_CIBLES.includes(champ.listeCible) && (
+                <p className="text-[11px] text-amber-700 mt-1">Nouvelle liste — pensez à la créer dans SharePoint.</p>
+              )}
+            </Propriete>
+          </>
+        )}
 
         <div className="sm:col-span-2">
           <Propriete label="Condition d'affichage (avancé — laisser vide si toujours visible)">

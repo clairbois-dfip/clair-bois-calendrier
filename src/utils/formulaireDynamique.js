@@ -255,8 +255,11 @@ export function donneesInitiales(schema) {
 
 /**
  * Collecte les valeurs à envoyer pour une liste de sections visibles :
- * seuls les champs visibles (conditions) ET remplis sont inclus — aucune
- * clé vide dans le payload (comportement historique).
+ * seuls les champs visibles (conditions), remplis ET destinés à SharePoint
+ * (une `listeCible` renseignée) sont inclus — aucune clé vide, et aucun
+ * champ « sans SP » (case de consentement, texte informatif, donnée reçue
+ * par un autre canal) : sa réponse gate la soumission côté React mais n'a
+ * aucune colonne de destination, donc on ne l'envoie pas à Power Automate.
  *
  * @param {object} schema Schéma des formulaires.
  * @param {string[]} sections Sections affichées (ordre du wizard).
@@ -269,6 +272,8 @@ export function collecterPayload(schema, sections, formData, contexte) {
   const fragment = {}
   for (const section of sections) {
     for (const champ of champsVisibles(schema, section, valeurs)) {
+      // Champ « sans SP » (pas de liste cible) : jamais envoyé
+      if (!champ.listeCible || !champ.listeCible.trim()) continue
       const valeur = formData[champ.champPayload]
       // Tableau vide (multiselect sans sélection) = pas envoyé, comme une string vide
       if (Array.isArray(valeur) ? valeur.length > 0 : valeur) {
