@@ -533,37 +533,64 @@ function CadreChamp({
           : 'border-transparent bg-white hover:border-gray-200 shadow-sm'
       }`}
     >
-      {/* Zone cliquable : aperçu du champ tel qu'il apparaît dans le formulaire */}
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={onSelect}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault()
-            onSelect()
-          }
-        }}
-        className="p-4 cursor-pointer"
-        aria-label={`Modifier la question ${champ.label}`}
-        aria-expanded={selectionne}
-      >
-        <ApercuChamp champ={champ} />
-        <div className="flex flex-wrap items-center gap-2 mt-2">
-          <span className="text-[11px] font-mono text-gray-400 bg-gray-50 border border-gray-200 rounded px-1.5 py-0.5">
-            {champ.colonneSP}
-          </span>
-          <span className="text-[11px] text-gray-400">liste {champ.listeCible}</span>
-          {champ.condition && (
-            <span className="text-[11px] text-purple-500 bg-purple-50 border border-purple-100 rounded px-1.5 py-0.5">
-              si {champ.condition}
+      {/* Ligne : flèches d'ordre TOUJOURS visibles (gauche) + aperçu cliquable (droite) */}
+      <div className="flex items-stretch">
+        {/* Poignée de réordonnancement — visible en permanence, indépendante de la sélection */}
+        <div className="flex flex-col justify-center gap-1 pl-2 pr-1 py-2 shrink-0">
+          <button
+            type="button"
+            onClick={onMonter}
+            disabled={premier}
+            className="w-7 h-7 flex items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:border-cb-accent hover:text-cb-accent disabled:opacity-25 disabled:hover:border-gray-200 cursor-pointer disabled:cursor-not-allowed"
+            title="Monter cette question"
+            aria-label={`Monter la question ${champ.label}`}
+          >
+            ↑
+          </button>
+          <button
+            type="button"
+            onClick={onDescendre}
+            disabled={dernier}
+            className="w-7 h-7 flex items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:border-cb-accent hover:text-cb-accent disabled:opacity-25 disabled:hover:border-gray-200 cursor-pointer disabled:cursor-not-allowed"
+            title="Descendre cette question"
+            aria-label={`Descendre la question ${champ.label}`}
+          >
+            ↓
+          </button>
+        </div>
+
+        {/* Zone cliquable : aperçu du champ tel qu'il apparaît dans le formulaire */}
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={onSelect}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              onSelect()
+            }
+          }}
+          className="flex-1 min-w-0 p-4 pl-2 cursor-pointer"
+          aria-label={`Modifier la question ${champ.label}`}
+          aria-expanded={selectionne}
+        >
+          <ApercuChamp champ={champ} />
+          <div className="flex flex-wrap items-center gap-2 mt-2">
+            <span className="text-[11px] font-mono text-gray-400 bg-gray-50 border border-gray-200 rounded px-1.5 py-0.5">
+              {champ.colonneSP}
             </span>
-          )}
-          {champ.nouveau && (
-            <span className="text-[11px] text-yellow-700 bg-yellow-50 border border-yellow-200 rounded px-1.5 py-0.5">
-              colonne SP à créer
-            </span>
-          )}
+            <span className="text-[11px] text-gray-400">liste {champ.listeCible}</span>
+            {champ.condition && (
+              <span className="text-[11px] text-purple-500 bg-purple-50 border border-purple-100 rounded px-1.5 py-0.5">
+                si {champ.condition}
+              </span>
+            )}
+            {champ.nouveau && (
+              <span className="text-[11px] text-yellow-700 bg-yellow-50 border border-yellow-200 rounded px-1.5 py-0.5">
+                colonne SP à créer
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
@@ -571,24 +598,7 @@ function CadreChamp({
       {selectionne && (
         <div className="border-t border-gray-100">
           <div className="flex items-center gap-1 px-3 py-2 bg-gray-50/60">
-            <button
-              type="button"
-              onClick={onMonter}
-              disabled={premier}
-              className="text-sm px-2.5 py-1 rounded-lg border border-gray-200 bg-white hover:border-cb-accent disabled:opacity-30 cursor-pointer"
-              title="Monter la question"
-            >
-              ↑ Monter
-            </button>
-            <button
-              type="button"
-              onClick={onDescendre}
-              disabled={dernier}
-              className="text-sm px-2.5 py-1 rounded-lg border border-gray-200 bg-white hover:border-cb-accent disabled:opacity-30 cursor-pointer"
-              title="Descendre la question"
-            >
-              ↓ Descendre
-            </button>
+            <span className="text-xs text-gray-400">Utilisez les flèches ↑ ↓ à gauche pour changer l'ordre.</span>
             <button
               type="button"
               onClick={onSupprimer}
