@@ -52,8 +52,11 @@ function valeurAffichee(champ, brute) {
   return brute
 }
 
-export default function Recapitulatif({ schema, data, contextData, parcours, pourQui, sections, onEdit }) {
-  const valeurs = { ...data, parcours, pourQui }
+export default function Recapitulatif({ schema, data, contextData, parcours, pourQui, sections, onEdit, contexte = {} }) {
+  // Le contexte complet (aiguillage + réponses aux questions préalables) doit
+  // entrer dans l'évaluation des conditions : un champ conditionné par une
+  // question préalable serait sinon envoyé mais invisible au récapitulatif.
+  const valeurs = { ...data, parcours, pourQui, ...contexte }
 
   // Bloc contexte (lecture seule, pas de bouton Modifier)
   const contextFields = []

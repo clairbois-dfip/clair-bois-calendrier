@@ -30,31 +30,22 @@ import {
   setGithubPat,
 } from '../utils/schemaFormulaires'
 import { normaliserTheme, appliquerTheme, themePourFormulaire } from '../utils/themes'
+import { conditionPiloteePar, questionsPrealablesUtilisees } from '../utils/formulaireDynamique'
 import EditeurTheme from './EditeurTheme'
 
 /**
- * Conditions d'affichage d'une étape, formulées simplement. Elles s'appuient
- * sur les réponses posées AVANT le formulaire d'inscription (aiguillage :
- * « pour moi / pour quelqu'un d'autre », « stage / modules »). Les formulaires
- * autonomes (signalement, visite) n'ont pas d'aiguillage → « Toujours ».
+ * Conditions d'affichage d'une étape issues de l'AIGUILLAGE (questions
+ * posées avant le formulaire d'inscription : « pour moi / pour quelqu'un
+ * d'autre », « stage / modules »). Réservées à l'inscription — les
+ * formulaires autonomes (signalement, visite) n'ont pas d'aiguillage ;
+ * pour eux, on conditionne une étape en CRÉANT une question préalable.
  */
-const CONDITIONS_ETAPE = [
-  { valeur: '', label: 'Toujours afficher cette étape' },
+const CONDITIONS_AIGUILLAGE = [
   { valeur: 'pourQui=autre', label: "Seulement si un·e référent·e remplit (pas le ou la stagiaire)" },
   { valeur: 'pourQui=moi', label: 'Seulement si le ou la stagiaire remplit lui-même' },
   { valeur: 'parcours=stages', label: 'Seulement pour une demande de stage' },
   { valeur: 'parcours=modules', label: 'Seulement pour les modules métiers' },
 ]
-
-/**
- * Le champ pilote-t-il une condition donnée ? (la condition commence par
- * `champPayload=` ou `champPayload!=`). Sert à détecter les dépendances.
- */
-function conditionPiloteePar(condition, champPayload) {
-  if (!condition) return false
-  const gauche = condition.split(/!?=/)[0].trim()
-  return gauche === champPayload
-}
 
 /**
  * Éléments (questions et étapes) dont l'affichage dépend d'un champ pilote.
@@ -156,10 +147,16 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
 
   // Questions préalables du formulaire actif (posées avant le formulaire).
   const prealablesActives = questionsPrealablesDe(schema, formulaireActif)
+  // Celles réellement posées au visiteur (référencées par une étape/un champ).
+  const prealablesUtilisees = new Set(questionsPrealablesUtilisees(schema, formulaireActif).map((q) => q.cle))
+  const prealablesOrphelines = prealablesActives.filter((q) => !prealablesUtilisees.has(q.cle))
 
-  // Conditions d'étape proposées = presets + réponses aux questions préalables.
+  // Conditions d'étape proposées : « toujours », l'aiguillage (inscription
+  // uniquement — signalement/visite n'en ont pas), puis chaque réponse
+  // possible des questions préalables du formulaire.
   const conditionsEtapeDisponibles = [
-    ...CONDITIONS_ETAPE,
+    { valeur: '', label: 'Toujours afficher cette étape' },
+    ...(formulaireActif === 'inscription' ? CONDITIONS_AIGUILLAGE : []),
     ...prealablesActives.flatMap((q) =>
       (q.options || []).map((o) => ({
         valeur: `${q.cle}=${o.value}`,
@@ -251,7 +248,22 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
     appliquer((s) => {
       const duForm = (s.etapes || []).filter((e) => e.formulaire === nouveauFormulaire)
       const ordre = duForm.length ? Math.max(...duForm.map((e) => e.ordre ?? 0)) + 1 : 1
-      return mettreAJourEtape(s, etape.cle, { formulaire: nouveauFormulaire, ordre })
+      // Une condition qui ne peut plus être satisfaite dans le formulaire
+      // d'arrivée masquerait l'étape en silence : on la retire. Deux cas —
+      // question préalable de l'ANCIEN formulaire (jamais posée ailleurs),
+      // ou condition d'aiguillage (pourQui/parcours) hors de l'inscription.
+      const referencePrealableEtranger = (s.questionsPrealables || []).some(
+        (q) => q.formulaire !== nouveauFormulaire && conditionPiloteePar(etape.conditionAffichage, q.cle)
+      )
+      const referenceAiguillageSansAiguillage =
+        nouveauFormulaire !== 'inscription' &&
+        (conditionPiloteePar(etape.conditionAffichage, 'pourQui') ||
+          conditionPiloteePar(etape.conditionAffichage, 'parcours'))
+      return mettreAJourEtape(s, etape.cle, {
+        formulaire: nouveauFormulaire,
+        ordre,
+        ...(referencePrealableEtranger || referenceAiguillageSansAiguillage ? { conditionAffichage: null } : {}),
+      })
     })
     setFormulaireActif(nouveauFormulaire)
   }
@@ -266,14 +278,23 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
     appliquer((s) => supprimerEtape(s, etape.cle))
   }
 
-  /* ── Questions préalables ── */
-  function handleAjouterPrealable() {
-    appliquer((s) => ajouterQuestionPrealable(s, formulaireActif).schema)
+  /* ── Questions préalables (créées DEPUIS le réglage d'une étape) ── */
+
+  /**
+   * Crée une question préalable et conditionne immédiatement l'étape à sa
+   * première réponse (« Oui » par défaut) : la question naît RATTACHÉE à
+   * l'étape qui en a besoin, jamais orpheline.
+   */
+  function handleCreerPrealablePourEtape(etape) {
+    const { schema: s2, question } = ajouterQuestionPrealable(schema, formulaireActif)
+    const premiere = question.options[0]?.value || 'Oui'
+    appliquer(() => mettreAJourEtape(s2, etape.cle, { conditionAffichage: `${question.cle}=${premiere}` }))
   }
+
   function handleSupprimerPrealable(question) {
-    const dependants = (schema.etapes || [])
-      .filter((e) => conditionPiloteePar(e.conditionAffichage, question.cle))
-      .map((e) => `l'étape « ${e.titre} »`)
+    // Étapes ET questions dont l'affichage dépend de cette question — la
+    // suppression purge leurs conditions (ils redeviennent toujours visibles).
+    const dependants = elementsDependantDe(schema, question.cle)
     const msg = dependants.length
       ? `Supprimer la question préalable « ${question.label} » ?\n\nCes éléments en dépendent et redeviendront « toujours affichés » :\n${dependants.map((d) => '  • ' + d).join('\n')}\n\nSupprimer quand même ?`
       : `Supprimer la question préalable « ${question.label} » ?`
@@ -464,55 +485,47 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
           </div>
         )}
 
-        {/* Questions préalables : posées AVANT le formulaire, pour conditionner les étapes */}
-        <section className="bg-purple-50/50 border border-purple-200 rounded-xl p-4">
-          <h2 className="text-base font-bold text-purple-800 mb-1">Questions préalables</h2>
-          <p className="text-xs text-purple-700/80 mb-3">
-            Posées sur un écran <strong>avant</strong> le formulaire. Leur réponse permet ensuite de décider,
-            dans les réglages d'une étape (« Quand afficher cette étape ? »), si celle-ci est nécessaire.
-          </p>
-          <div className="space-y-3">
-            {prealablesActives.map((q) => (
-              <div key={q.cle} className="bg-white border border-purple-100 rounded-lg p-3 grid gap-2">
-                <label className="block">
-                  <span className="block text-xs font-semibold text-gray-500 mb-1">Question</span>
-                  <input
-                    type="text"
-                    value={q.label}
-                    onChange={(e) => appliquer((s) => mettreAJourQuestionPrealable(s, q.cle, { label: e.target.value }))}
-                    className={CLASSES_INPUT_PROP}
-                  />
-                </label>
-                <div className="flex items-end gap-2">
-                  <label className="block flex-1">
-                    <span className="block text-xs font-semibold text-gray-500 mb-1">Réponses possibles (une par ligne)</span>
-                    <textarea
-                      rows={2}
-                      value={optionsVersTexte(q.options)}
-                      onChange={(e) => appliquer((s) => mettreAJourQuestionPrealable(s, q.cle, { options: parserOptions(e.target.value) }))}
-                      className={CLASSES_INPUT_PROP + ' font-mono text-xs resize-y'}
-                    />
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => handleSupprimerPrealable(q)}
-                    className="shrink-0 text-sm px-2.5 py-2 rounded-lg border border-red-200 text-cb-red bg-white hover:bg-red-50 cursor-pointer"
-                    title="Supprimer cette question préalable"
-                  >
-                    🗑
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-          <button
-            type="button"
-            onClick={handleAjouterPrealable}
-            className="mt-3 w-full border-2 border-dashed border-purple-300 hover:border-purple-500 text-purple-600 rounded-xl py-2.5 text-sm font-medium transition-colors cursor-pointer"
-          >
-            + Ajouter une question préalable
-          </button>
-        </section>
+        {/* Questions préalables ORPHELINES : créées depuis une étape mais plus
+            référencées par aucune — elles ne sont donc plus posées au visiteur.
+            (La création/édition se fait dans les réglages de chaque étape,
+            « Quand afficher cette étape ? ».) */}
+        {prealablesOrphelines.length > 0 && (
+          <section className="bg-purple-50/50 border border-purple-200 rounded-xl p-4">
+            <h2 className="text-sm font-bold text-purple-800 mb-1">Questions préalables non posées</h2>
+            <p className="text-xs text-purple-700/80 mb-3">
+              Ces questions ne sont <strong>plus posées</strong> au visiteur — soit plus aucune étape n'en
+              dépend, soit elles n'ont plus de réponse possible. Reliez-les à une étape (réglages de
+              l'étape → « Quand afficher cette étape ? »), redonnez-leur des réponses, ou supprimez-les.
+            </p>
+            <ul className="space-y-1.5">
+              {prealablesOrphelines.map((q) => {
+                const sansReponses = (q.options || []).length === 0
+                const encoreReferencee = elementsDependantDe(schema, q.cle).length > 0
+                return (
+                  <li key={q.cle} className="bg-white border border-purple-100 rounded-lg px-3 py-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-700 flex-1 truncate">« {q.label} »</span>
+                      <button
+                        type="button"
+                        onClick={() => handleSupprimerPrealable(q)}
+                        className="shrink-0 text-xs px-2 py-1 rounded-lg border border-red-200 text-cb-red bg-white hover:bg-red-50 cursor-pointer"
+                        title="Supprimer cette question préalable"
+                      >
+                        🗑 Supprimer
+                      </button>
+                    </div>
+                    {sansReponses && encoreReferencee && (
+                      <p className="text-[11px] text-cb-red mt-1" role="alert">
+                        ⚠️ Sans réponse possible alors que des éléments en dépendent — ils ne
+                        s'afficheront plus tant que vous n'aurez pas redonné des réponses à cette question.
+                      </p>
+                    )}
+                  </li>
+                )
+              })}
+            </ul>
+          </section>
+        )}
 
         {/* Les étapes du formulaire actif */}
         {etapesActives.map((etape, indexEtape) => {
@@ -571,22 +584,44 @@ function EditeurFormulaires({ onGoHome, onLogout }) {
                         ))}
                       </select>
                     </Propriete>
-                    <Propriete label="Quand afficher cette étape ?">
-                      <select
-                        value={conditionsEtapeDisponibles.some((c) => c.valeur === (etape.conditionAffichage || '')) ? (etape.conditionAffichage || '') : '__perso'}
-                        onChange={(e) => {
-                          const v = e.target.value
-                          appliquer((s) => mettreAJourEtape(s, etape.cle, { conditionAffichage: v === '__perso' ? (etape.conditionAffichage || 'champ=valeur') : (v || null) }))
-                        }}
-                        className={CLASSES_INPUT_PROP + ' cursor-pointer'}
-                      >
-                        {conditionsEtapeDisponibles.map((c) => (
-                          <option key={c.valeur || 'toujours'} value={c.valeur}>{c.label}</option>
-                        ))}
-                        <option value="__perso">Personnalisé (avancé)…</option>
-                      </select>
-                    </Propriete>
+                    <div>
+                      <Propriete label="Quand afficher cette étape ?">
+                        <select
+                          value={conditionsEtapeDisponibles.some((c) => c.valeur === (etape.conditionAffichage || '')) ? (etape.conditionAffichage || '') : '__perso'}
+                          onChange={(e) => {
+                            const v = e.target.value
+                            appliquer((s) => mettreAJourEtape(s, etape.cle, { conditionAffichage: v === '__perso' ? (etape.conditionAffichage || 'champ=valeur') : (v || null) }))
+                          }}
+                          className={CLASSES_INPUT_PROP + ' cursor-pointer'}
+                        >
+                          {conditionsEtapeDisponibles.map((c) => (
+                            <option key={c.valeur || 'toujours'} value={c.valeur}>{c.label}</option>
+                          ))}
+                          <option value="__perso">Personnalisé (avancé)…</option>
+                        </select>
+                      </Propriete>
+                      {/* Bouton dédié (pas une option du select : la traversée au
+                          clavier déclencherait des créations involontaires). */}
+                      {!prealablesActives.some((q) => conditionPiloteePar(etape.conditionAffichage, q.cle)) && (
+                        <button
+                          type="button"
+                          onClick={() => handleCreerPrealablePourEtape(etape)}
+                          className="mt-1.5 w-full text-left text-xs text-purple-700 border border-purple-200 bg-purple-50 hover:bg-purple-100 rounded-lg px-2.5 py-1.5 transition-colors cursor-pointer"
+                        >
+                          ✚ Poser une question avant le formulaire pour décider de cette étape…
+                        </button>
+                      )}
+                    </div>
                   </div>
+                  {/* Éditeur de la question préalable qui pilote cette étape :
+                      la question se crée, se modifie et se supprime ICI, dans
+                      l'étape qu'elle conditionne — plus de section séparée. */}
+                  <EditeurQuestionPrealable
+                    etape={etape}
+                    questions={prealablesActives}
+                    onModifierQuestion={(cle, maj) => appliquer((s) => mettreAJourQuestionPrealable(s, cle, maj))}
+                    onSupprimerQuestion={handleSupprimerPrealable}
+                  />
                   {/* Champ libre visible uniquement si la condition n'est pas un preset */}
                   {etape.conditionAffichage && !conditionsEtapeDisponibles.some((c) => c.valeur === etape.conditionAffichage) && (
                     <Propriete label="Condition personnalisée (avancé)">
@@ -916,6 +951,69 @@ function ApercuChamp({ champ }) {
   )
 }
 
+/**
+ * EditeurQuestionPrealable — Édition, DANS le réglage d'une étape, de la
+ * question préalable qui conditionne son affichage. La question est posée
+ * au visiteur sur un écran avant le formulaire ; sa réponse décide si
+ * l'étape apparaît. Ne rend rien si la condition de l'étape ne pointe pas
+ * une question préalable.
+ */
+function EditeurQuestionPrealable({ etape, questions, onModifierQuestion, onSupprimerQuestion }) {
+  const question = questions.find((q) => conditionPiloteePar(etape.conditionAffichage, q.cle))
+  if (!question) return null
+  // Réponse qui déclenche l'affichage (partie droite de la condition).
+  // Une condition personnalisée « != » inverse la lecture.
+  const estNegation = (etape.conditionAffichage || '').includes('!=')
+  const valeurDeclenchante = (etape.conditionAffichage || '').split(/!?=/)[1]?.trim() || ''
+  const declenchanteExiste = (question.options || []).some((o) => o.value === valeurDeclenchante)
+
+  return (
+    <div className="bg-purple-50/60 border border-purple-200 rounded-lg p-3 grid gap-2.5">
+      <p className="text-xs font-semibold text-purple-800">
+        Question posée avant le formulaire — l'étape « {etape.titre} » ne s'affiche que si la réponse
+        {estNegation ? ' n\'est pas ' : ' est '}« {valeurDeclenchante} »
+      </p>
+      <Propriete label="Question affichée au visiteur">
+        <input
+          type="text"
+          value={question.label}
+          onChange={(e) => onModifierQuestion(question.cle, { label: e.target.value })}
+          className={CLASSES_INPUT_PROP}
+        />
+      </Propriete>
+      <div className="flex items-end gap-2">
+        <label className="block flex-1">
+          <span className="block text-xs font-semibold text-gray-500 mb-1">Réponses possibles (une par ligne)</span>
+          <TextareaOptions
+            key={question.cle}
+            options={question.options}
+            onChange={(options) => onModifierQuestion(question.cle, { options })}
+            rows={2}
+          />
+        </label>
+        <button
+          type="button"
+          onClick={() => onSupprimerQuestion(question)}
+          className="shrink-0 text-sm px-2.5 py-2 rounded-lg border border-red-200 text-cb-red bg-white hover:bg-red-50 cursor-pointer"
+          title="Supprimer cette question préalable (l'étape redeviendra toujours affichée)"
+        >
+          🗑
+        </button>
+      </div>
+      {!declenchanteExiste && !estNegation && (
+        <p className="text-[11px] text-cb-red" role="alert">
+          ⚠️ La réponse déclenchante « {valeurDeclenchante} » ne fait plus partie des réponses possibles —
+          l'étape ne s'affichera jamais. Choisissez une réponse valide dans « Quand afficher cette étape ? ».
+        </p>
+      )}
+      <p className="text-[11px] text-purple-700/70">
+        Pour changer la réponse qui déclenche l'affichage, utilisez le menu « Quand afficher cette étape ? »
+        ci-dessus. La même question peut conditionner plusieurs étapes.
+      </p>
+    </div>
+  )
+}
+
 /** Ligne label + contrôle du panneau de propriétés. */
 function Propriete({ label, children }) {
   return (
@@ -923,6 +1021,28 @@ function Propriete({ label, children }) {
       <span className="block text-xs font-semibold text-gray-500 mb-1">{label}</span>
       {children}
     </label>
+  )
+}
+
+/**
+ * TextareaOptions — Éditeur « une option par ligne » à ÉTAT LOCAL : le texte
+ * n'est pas re-normalisé à chaque frappe, sinon la touche Entrée serait
+ * avalée (la ligne vide créée disparaîtrait aussitôt, rendant impossible
+ * l'ajout d'une option au clavier). Le parent fournit une `key` qui change
+ * quand la cible change (autre champ, autre type) pour resynchroniser.
+ */
+function TextareaOptions({ options, onChange, rows = 3 }) {
+  const [texte, setTexte] = useState(() => optionsVersTexte(options))
+  return (
+    <textarea
+      rows={rows}
+      value={texte}
+      onChange={(e) => {
+        setTexte(e.target.value)
+        onChange(parserOptions(e.target.value))
+      }}
+      className={CLASSES_INPUT_PROP + ' font-mono text-xs resize-y'}
+    />
   )
 }
 
@@ -934,11 +1054,31 @@ const CLASSES_INPUT_PROP =
  * Les modifications s'appliquent immédiatement (l'aperçu au-dessus suit).
  */
 function PanneauProprietes({ champ, schema, onModifier }) {
-  const aOptions = champ.type === 'select' || champ.type === 'radio'
+  // Types à liste de choix : l'éditeur d'options s'affiche pour les trois.
+  const aOptions = champ.type === 'select' || champ.type === 'radio' || champ.type === 'multiselect'
+  // Le placeholder n'a d'effet que sur les champs à saisie libre et les
+  // listes déroulantes (texte de l'option vide) — inutile pour les boutons,
+  // pastilles, cases à cocher et dates (le navigateur affiche jj.mm.aaaa).
+  const aPlaceholder = !['radio', 'multiselect', 'checkbox', 'date'].includes(champ.type)
   // Une réponse est enregistrée en SharePoint ssi une liste cible est renseignée.
   // Sinon (case de consentement, texte informatif, doc renvoyé plus tard…) :
   // pas de colonne, pas d'identifiant à valider, pas de rappel de création.
   const stockeSP = !!(champ.listeCible && champ.listeCible.trim())
+
+  /** Met à jour une règle de validation (vide = règle retirée). */
+  const modifierRegle = (regle, brut) => {
+    const valeur = brut === '' || brut == null ? undefined : Number(brut)
+    const regles = { ...(champ.validation || {}) }
+    if (valeur === undefined || Number.isNaN(valeur)) delete regles[regle]
+    else regles[regle] = valeur
+    onModifier({ validation: Object.keys(regles).length ? regles : undefined })
+  }
+  const basculerRegle = (regle) => {
+    const regles = { ...(champ.validation || {}) }
+    if (regles[regle]) delete regles[regle]
+    else regles[regle] = true
+    onModifier({ validation: Object.keys(regles).length ? regles : undefined })
+  }
   const autresColonnes = stockeSP ? colonnesDeLaListe(schema, champ.listeCible, cleChamp(champ)) : []
   const validation = stockeSP ? validerColonneSP(champ.colonneSP, autresColonnes) : { valide: true, message: '' }
 
@@ -960,9 +1100,11 @@ function PanneauProprietes({ champ, schema, onModifier }) {
           value={champ.type}
           onChange={(e) => {
             const type = e.target.value
-            const maj = { type }
+            // Les règles (âge d'une date, min/max d'un nombre) sont propres
+            // au type : on repart à zéro quand le type change.
+            const maj = { type, validation: undefined }
             // Nouveau type à options sans options existantes : en proposer deux.
-            if ((type === 'select' || type === 'radio') && (!champ.options || champ.options.length === 0)) {
+            if ((type === 'select' || type === 'radio' || type === 'multiselect') && (!champ.options || champ.options.length === 0)) {
               maj.options = [
                 { value: 'Oui', label: 'Oui' },
                 { value: 'Non', label: 'Non' },
@@ -995,11 +1137,11 @@ function PanneauProprietes({ champ, schema, onModifier }) {
       {aOptions && (
         <div className="sm:col-span-2">
           <Propriete label="Choix proposés (un par ligne — « valeur | libellé affiché » si différents)">
-            <textarea
+            <TextareaOptions
+              key={cleChamp(champ) + ':' + champ.type}
+              options={champ.options}
+              onChange={(options) => onModifier({ options })}
               rows={Math.min(8, Math.max(3, (champ.options || []).length + 1))}
-              value={optionsVersTexte(champ.options)}
-              onChange={(e) => onModifier({ options: parserOptions(e.target.value) })}
-              className={CLASSES_INPUT_PROP + ' font-mono text-xs resize-y'}
             />
           </Propriete>
           <p className="text-[11px] text-gray-400 mt-1">
@@ -1009,16 +1151,18 @@ function PanneauProprietes({ champ, schema, onModifier }) {
         </div>
       )}
 
-      <Propriete label="Placeholder (texte gris d'exemple)">
-        <input
-          type="text"
-          value={champ.placeholder || ''}
-          onChange={(e) => onModifier({ placeholder: e.target.value })}
-          className={CLASSES_INPUT_PROP}
-        />
-      </Propriete>
+      {aPlaceholder && (
+        <Propriete label={champ.type === 'select' ? 'Texte du choix vide (ex. « Sélectionnez… »)' : 'Placeholder (texte gris d\'exemple)'}>
+          <input
+            type="text"
+            value={champ.placeholder || ''}
+            onChange={(e) => onModifier({ placeholder: e.target.value })}
+            className={CLASSES_INPUT_PROP}
+          />
+        </Propriete>
+      )}
 
-      <Propriete label="Aide (petit texte à droite du label)">
+      <Propriete label="Aide (petit texte gris d'accompagnement)">
         <input
           type="text"
           value={champ.aide || ''}
@@ -1026,6 +1170,108 @@ function PanneauProprietes({ champ, schema, onModifier }) {
           className={CLASSES_INPUT_PROP}
         />
       </Propriete>
+
+      <Propriete label="Largeur de la question">
+        <select
+          value={champ.largeur || ''}
+          onChange={(e) => onModifier({ largeur: e.target.value || undefined })}
+          className={CLASSES_INPUT_PROP + ' cursor-pointer'}
+        >
+          <option value="">Automatique (selon le type)</option>
+          <option value="demi">Demi-largeur (deux par ligne)</option>
+          <option value="pleine">Pleine largeur</option>
+        </select>
+      </Propriete>
+
+      {champ.type === 'checkbox' && (
+        <p className="sm:col-span-2 text-[11px] text-gray-400 -mt-2">
+          La case affiche le texte de la question ci-dessus ; cochée, la réponse vaut « Oui »
+          (décochée : rien n'est envoyé).
+        </p>
+      )}
+
+      {/* Règles de vérification de la réponse — selon le type. C'est ici que
+          vivent les règles jadis figées dans le code (ex. âge minimum 15 ans
+          de la date de naissance) : visibles et modifiables. */}
+      {champ.type === 'date' && (
+        <div className="sm:col-span-2 border border-cb-blue/20 bg-cb-blue-light/40 rounded-lg p-3">
+          <p className="text-xs font-semibold text-cb-blue mb-2">Règles sur la date</p>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <Propriete label="Âge minimum (années)">
+              <input
+                type="number"
+                min="0"
+                value={champ.validation?.ageMin ?? ''}
+                onChange={(e) => modifierRegle('ageMin', e.target.value)}
+                placeholder="Aucun"
+                className={CLASSES_INPUT_PROP}
+              />
+            </Propriete>
+            <Propriete label="Âge maximum (années)">
+              <input
+                type="number"
+                min="0"
+                value={champ.validation?.ageMax ?? ''}
+                onChange={(e) => modifierRegle('ageMax', e.target.value)}
+                placeholder="Aucun"
+                className={CLASSES_INPUT_PROP}
+              />
+            </Propriete>
+            <Propriete label="Date dans le futur">
+              <button
+                type="button"
+                onClick={() => basculerRegle('interditFutur')}
+                className={`w-full px-3 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${
+                  champ.validation?.interditFutur
+                    ? 'border-cb-blue bg-white text-cb-blue'
+                    : 'border-gray-300 bg-white text-gray-500'
+                }`}
+              >
+                {champ.validation?.interditFutur ? 'Refusée' : 'Autorisée'}
+              </button>
+            </Propriete>
+          </div>
+          <p className="text-[11px] text-cb-blue/70 mt-2">
+            Laisser vide = pas de limite. Ex. date de naissance d'un·e stagiaire : âge minimum 15,
+            maximum 99, futur refusé.
+          </p>
+        </div>
+      )}
+
+      {champ.type === 'number' && (
+        <div className="sm:col-span-2 border border-cb-blue/20 bg-cb-blue-light/40 rounded-lg p-3">
+          <p className="text-xs font-semibold text-cb-blue mb-2">Règles sur le nombre</p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <Propriete label="Minimum">
+              <input
+                type="number"
+                value={champ.validation?.min ?? ''}
+                onChange={(e) => modifierRegle('min', e.target.value)}
+                placeholder="Aucun"
+                className={CLASSES_INPUT_PROP}
+              />
+            </Propriete>
+            <Propriete label="Maximum">
+              <input
+                type="number"
+                value={champ.validation?.max ?? ''}
+                onChange={(e) => modifierRegle('max', e.target.value)}
+                placeholder="Aucun"
+                className={CLASSES_INPUT_PROP}
+              />
+            </Propriete>
+          </div>
+        </div>
+      )}
+
+      {['tel', 'email', 'avs'].includes(champ.type) && (
+        <p className="sm:col-span-2 text-[11px] text-gray-400 -mt-2">
+          ✓ Le format est vérifié automatiquement :{' '}
+          {champ.type === 'tel' && 'téléphone suisse (+41 XX XXX XX XX ou 0XX XXX XX XX).'}
+          {champ.type === 'email' && 'adresse email valide.'}
+          {champ.type === 'avs' && 'numéro AVS suisse (756 + 13 chiffres, points facultatifs).'}
+        </p>
+      )}
 
       {/* Bloc technique : enregistrement SP (optionnel) + condition */}
       <div className="sm:col-span-2 border-t border-gray-100 pt-3 grid gap-4 sm:grid-cols-2">

@@ -11,6 +11,8 @@ import {
   validerChamp,
   champsVisibles,
   etapesDuFormulaire,
+  conditionPiloteePar,
+  questionsPrealablesUtilisees,
 } from '../utils/formulaireDynamique'
 import schemaReel from '../../public/formulaire-schema.json'
 
@@ -159,5 +161,120 @@ describe('non-régression : conditions d\'affichage du schéma livré', () => {
     const avecAI = champsVisibles(schemaReel, etape, { inscrit_ai: 'Oui' }).map((c) => c.champPayload)
     expect(sansAI).not.toContain('ai_email')
     expect(avecAI).toContain('ai_email')
+  })
+})
+
+/*
+ * VALIDATION PAR TYPE — un champ AJOUTÉ par la coordination (payload inconnu
+ * des formulaires historiques) est vérifié selon son TYPE : téléphone suisse,
+ * email, AVS, nombre, date. Plus besoin de câblage par nom.
+ */
+describe('validerChamp — format par TYPE pour les champs ajoutés', () => {
+  const neuf = (type, extra = {}) => ({
+    champPayload: 'champ_invente_xyz', type, obligatoire: true, ...extra,
+  })
+  it('type tel : format téléphone suisse vérifié', () => {
+    expect(validerChamp(neuf('tel'), 'pas un numéro').valid).toBe(false)
+    expect(validerChamp(neuf('tel'), '+41 79 123 45 67').valid).toBe(true)
+  })
+  it('type email : format vérifié', () => {
+    expect(validerChamp(neuf('email'), 'sans-arobase').valid).toBe(false)
+    expect(validerChamp(neuf('email'), 'a@b.ch').valid).toBe(true)
+  })
+  it('type avs : 756 + 13 chiffres vérifié', () => {
+    expect(validerChamp(neuf('avs'), '123.4567.8901.23').valid).toBe(false)
+    expect(validerChamp(neuf('avs'), '756.1234.5678.97').valid).toBe(true)
+  })
+  it('type number : bornes du schéma appliquées', () => {
+    const champ = neuf('number', { validation: { min: 1, max: 30 } })
+    expect(validerChamp(champ, '0').valid).toBe(false)
+    expect(validerChamp(champ, '31').valid).toBe(false)
+    expect(validerChamp(champ, '12').valid).toBe(true)
+  })
+  it('type date : règles d\'âge du schéma appliquées', () => {
+    const ilYaAns = (n) => {
+      const d = new Date(); d.setFullYear(d.getFullYear() - n)
+      return d.toISOString().slice(0, 10)
+    }
+    const champ = neuf('date', { validation: { ageMin: 18 } })
+    expect(validerChamp(champ, ilYaAns(16)).valid).toBe(false)
+    expect(validerChamp(champ, ilYaAns(25)).valid).toBe(true)
+  })
+  it('facultatif et vide : toujours valide, même avec des règles', () => {
+    const champ = { champPayload: 'x', type: 'tel', obligatoire: false }
+    expect(validerChamp(champ, '').valid).toBe(true)
+  })
+})
+
+describe('validerChamp — les règles du schéma PRIMENT sur l\'historique', () => {
+  it('date_naissance avec ageMin modifié dans le CMS : la nouvelle règle s\'applique', () => {
+    const ilYaAns = (n) => {
+      const d = new Date(); d.setFullYear(d.getFullYear() - n)
+      return d.toISOString().slice(0, 10)
+    }
+    // La coordination passe l'âge minimum de 15 à 18 ans → 16 ans refusé.
+    const champ = { champPayload: 'date_naissance', type: 'date', obligatoire: true, validation: { ageMin: 18 } }
+    const r = validerChamp(champ, ilYaAns(16))
+    expect(r.valid).toBe(false)
+    expect(r.message).toContain('18 ans')
+    // Et l'inverse : abaissé à 12 ans → 13 ans accepté (le 15 en dur ne bloque plus).
+    const champ12 = { ...champ, validation: { ageMin: 12 } }
+    expect(validerChamp(champ12, ilYaAns(13)).valid).toBe(true)
+  })
+  it('le schéma livré porte les règles historiques EXPLICITES sur date_naissance', () => {
+    const c = schemaReel.champs.find((x) => x.champPayload === 'date_naissance')
+    expect(c.validation).toEqual({ ageMin: 15, ageMax: 99, interditFutur: true })
+  })
+  it('le schéma livré type les champs AVS en « avs » (validation par type)', () => {
+    const avs = schemaReel.champs.filter((x) => x.champPayload === 'avs')
+    expect(avs.length).toBeGreaterThan(0)
+    for (const c of avs) expect(c.type).toBe('avs')
+  })
+})
+
+/*
+ * QUESTIONS PRÉALABLES — seules les questions RÉFÉRENCÉES par une étape ou
+ * un champ du formulaire sont posées ; les orphelines et les questions sans
+ * réponse possible ne bloquent jamais le visiteur.
+ */
+describe('questionsPrealablesUtilisees', () => {
+  const base = {
+    etapes: [
+      { cle: 'sig-1', titre: 'Coordonnées', ordre: 1, formulaire: 'signalement' },
+      { cle: 'sig-2', titre: 'Détails', ordre: 2, formulaire: 'signalement', conditionAffichage: 'prealable_1=Oui' },
+    ],
+    champs: [
+      { champPayload: 'nom', etape: 'sig-1', type: 'text', ordre: 10 },
+      { champPayload: 'detail', etape: 'sig-2', type: 'text', ordre: 10, condition: 'prealable_3=Non' },
+    ],
+    questionsPrealables: [
+      { cle: 'prealable_1', formulaire: 'signalement', label: 'Q1', options: [{ value: 'Oui', label: 'Oui' }, { value: 'Non', label: 'Non' }] },
+      { cle: 'prealable_2', formulaire: 'signalement', label: 'Q2 orpheline', options: [{ value: 'Oui', label: 'Oui' }] },
+      { cle: 'prealable_3', formulaire: 'signalement', label: 'Q3 (champ)', options: [{ value: 'Oui', label: 'Oui' }, { value: 'Non', label: 'Non' }] },
+      { cle: 'prealable_4', formulaire: 'visite', label: 'Q4 autre formulaire', options: [{ value: 'Oui', label: 'Oui' }] },
+    ],
+  }
+  it('retient les questions référencées par une étape OU un champ', () => {
+    const cles = questionsPrealablesUtilisees(base, 'signalement').map((q) => q.cle)
+    expect(cles).toContain('prealable_1')
+    expect(cles).toContain('prealable_3')
+  })
+  it('écarte les orphelines et celles d\'un autre formulaire', () => {
+    const cles = questionsPrealablesUtilisees(base, 'signalement').map((q) => q.cle)
+    expect(cles).not.toContain('prealable_2')
+    expect(cles).not.toContain('prealable_4')
+  })
+  it('écarte une question sans réponse possible (elle bloquerait l\'écran)', () => {
+    const s = {
+      ...base,
+      questionsPrealables: [{ cle: 'prealable_1', formulaire: 'signalement', label: 'Q1', options: [] }],
+    }
+    expect(questionsPrealablesUtilisees(s, 'signalement')).toEqual([])
+  })
+  it('conditionPiloteePar reconnaît =, != et préfixe*', () => {
+    expect(conditionPiloteePar('prealable_1=Oui', 'prealable_1')).toBe(true)
+    expect(conditionPiloteePar('prealable_1!=Non', 'prealable_1')).toBe(true)
+    expect(conditionPiloteePar('prealable_10=Oui', 'prealable_1')).toBe(false)
+    expect(conditionPiloteePar(null, 'prealable_1')).toBe(false)
   })
 })

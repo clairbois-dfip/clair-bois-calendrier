@@ -104,6 +104,7 @@ function CaseACocher({ champ, data, errors, onChange }) {
           {champ.obligatoire && <span className="text-cb-red ml-0.5">*</span>}
         </span>
       </label>
+      {champ.aide && <p className="text-xs text-gray-400 ml-7 mt-0.5">{champ.aide}</p>}
       {errors[name] && (
         <p className="text-xs text-cb-red flex items-center gap-1 ml-7 mt-1">
           <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -129,7 +130,9 @@ function Champ({ champ, data, errors, onChange, onBlur, valeurs }) {
     <ChampFormulaire
       label={champ.label}
       name={name}
-      type={champ.type === 'radio' ? 'radio-group' : champ.type}
+      /* 'radio' du schéma → 'radio-group' ; 'avs' → input texte (le format
+         756.XXXX est vérifié par le moteur de validation, pas par le HTML) */
+      type={champ.type === 'radio' ? 'radio-group' : champ.type === 'avs' ? 'text' : champ.type}
       value={data[name] ?? ''}
       onChange={onChange}
       onBlur={onBlur}

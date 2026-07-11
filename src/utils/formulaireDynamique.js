@@ -12,6 +12,7 @@
 import {
   validateRequired, validateAVS, validatePhone, validatePhoneOptional,
   validateNPA, validateEmail, validateEmailOptional, validateDateNaissance,
+  validateDate, validateNumber,
 } from './validation'
 
 /**
@@ -81,6 +82,21 @@ function validerNombrePositif(v) {
   return v && parseInt(v, 10) > 0
     ? { valid: true, message: '' }
     : { valid: false, message: 'Nombre requis' }
+}
+
+/**
+ * Validateurs de FORMAT par TYPE de champ. C'est ce qui garantit qu'un champ
+ * AJOUTÉ par la coordination (mode édition) est vérifié comme ses homologues
+ * historiques : un nouveau « Téléphone » est contrôlé au format suisse sans
+ * câblage par nom. Les règles configurables (champ.validation du schéma :
+ * bornes d'âge d'une date, min/max d'un nombre) passent par ici aussi.
+ */
+const VALIDATEURS_PAR_TYPE = {
+  tel: (v) => validatePhone(v),
+  email: (v) => validateEmail(v),
+  avs: (v) => validateAVS(v),
+  number: (v, champ) => validateNumber(v, champ.validation || {}),
+  date: (v, champ) => validateDate(v, champ.validation || {}),
 }
 
 /**
@@ -194,10 +210,14 @@ export function optionsVisibles(champ, valeurs) {
 }
 
 /**
- * Validateur effectif d'un champ (comportement historique préservé) :
- *   1. entrée VALIDATEURS si elle existe ;
- *   2. sinon validateRequired si obligatoire (sauf exceptions historiques) ;
- *   3. sinon aucun.
+ * Validateur effectif d'un champ, dans l'ordre de priorité :
+ *   1. règles EXPLICITES du schéma (champ.validation, réglées dans le mode
+ *      édition — ex. âge min/max d'une date) appliquées via le type ;
+ *   2. validateur HISTORIQUE par nom de champ (VALIDATEURS — comportement
+ *      des formulaires d'origine, conservé à l'identique) ;
+ *   3. format par TYPE (tel, email, avs, date, nombre) pour les champs
+ *      ajoutés par la coordination ;
+ *   4. validateRequired si obligatoire (sauf exceptions historiques).
  * Un champ NON obligatoire et vide est toujours valide (les validateurs de
  * format ne s'appliquent qu'à une valeur saisie).
  *
@@ -206,15 +226,55 @@ export function optionsVisibles(champ, valeurs) {
  * @returns {{ valid: boolean, message: string }}
  */
 export function validerChamp(champ, valeur) {
-  const validateur = VALIDATEURS[champ.champPayload]
   if (!champ.obligatoire && (!valeur || !valeur.toString().trim())) {
     return { valid: true, message: '' }
   }
+  const parType = VALIDATEURS_PAR_TYPE[champ.type]
+  if (champ.validation && parType) return parType(valeur, champ)
+  const validateur = VALIDATEURS[champ.champPayload]
   if (validateur) return validateur(valeur)
+  if (parType) return parType(valeur, champ)
   if (champ.obligatoire && !SANS_VALIDATION_HISTORIQUE.has(champ.champPayload)) {
     return validateRequired(valeur)
   }
   return { valid: true, message: '' }
+}
+
+/**
+ * La condition (`champ=valeur`, `champ!=valeur`, `champ=Prefixe*`) est-elle
+ * pilotée par ce champ/cette question ? Sert à détecter les dépendances
+ * (éditeur) et les questions préalables réellement utilisées (rendu).
+ */
+export function conditionPiloteePar(condition, champPayload) {
+  if (!condition) return false
+  const gauche = condition.split(/!?=/)[0].trim()
+  return gauche === champPayload
+}
+
+/**
+ * Questions préalables RÉELLEMENT UTILISÉES par un formulaire : celles dont
+ * la réponse pilote la condition d'au moins une étape, un champ ou une
+ * option du formulaire. Les questions « orphelines » (créées mais plus
+ * référencées) ne sont PAS posées au visiteur ; une question sans réponse
+ * possible non plus (elle bloquerait l'écran).
+ *
+ * @param {object} schema Schéma des formulaires.
+ * @param {string} formulaire Clé du formulaire ('inscription'…).
+ * @returns {object[]} Questions à poser avant le formulaire.
+ */
+export function questionsPrealablesUtilisees(schema, formulaire) {
+  const questions = (schema?.questionsPrealables || []).filter((q) => q.formulaire === formulaire)
+  if (!questions.length) return []
+  const etapes = (schema?.etapes || []).filter((e) => e.formulaire === formulaire)
+  const clesEtapes = new Set(etapes.map((e) => e.cle))
+  const champs = (schema?.champs || []).filter((c) => clesEtapes.has(c.etape))
+  return questions.filter(
+    (q) =>
+      (q.options || []).length > 0 &&
+      (etapes.some((e) => conditionPiloteePar(e.conditionAffichage, q.cle)) ||
+        champs.some((c) => conditionPiloteePar(c.condition, q.cle)) ||
+        champs.some((c) => (c.options || []).some((o) => conditionPiloteePar(o.condition, q.cle))))
+  )
 }
 
 /**

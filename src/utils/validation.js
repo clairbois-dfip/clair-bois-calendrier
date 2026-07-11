@@ -129,6 +129,64 @@ export function validateDateNaissance(value) {
 }
 
 /**
+ * Valide une date selon des REGLES CONFIGURABLES (mode edition des
+ * formulaires). Generalisation de validateDateNaissance : les bornes d'age
+ * et l'interdiction du futur ne sont plus codees en dur mais reglees champ
+ * par champ dans le CMS (champ.validation du schema).
+ *
+ * @param {string} value - Date au format ISO "YYYY-MM-DD"
+ * @param {{ageMin?: number, ageMax?: number, interditFutur?: boolean}} regles
+ *   Regles optionnelles : sans regle, seule la bonne forme est verifiee.
+ * @returns {{ valid: boolean, message: string }}
+ */
+export function validateDate(value, regles = {}) {
+  if (!value || !value.trim()) {
+    return { valid: false, message: 'La date est obligatoire.' }
+  }
+  const date = new Date(value + 'T00:00:00')
+  if (isNaN(date.getTime())) {
+    return { valid: false, message: 'Date invalide.' }
+  }
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  if (regles.interditFutur && date > today) {
+    return { valid: false, message: 'La date ne peut pas être dans le futur.' }
+  }
+  // Meme calcul d'age que validateDateNaissance (annees bissextiles incluses)
+  const age = Math.floor((today - date) / (365.25 * 24 * 60 * 60 * 1000))
+  if (regles.ageMin != null && age < regles.ageMin) {
+    return { valid: false, message: `L'âge minimum est de ${regles.ageMin} ans.` }
+  }
+  if (regles.ageMax != null && age > regles.ageMax) {
+    return { valid: false, message: `Veuillez vérifier la date (âge maximum ${regles.ageMax} ans).` }
+  }
+  return { valid: true, message: '' }
+}
+
+/**
+ * Valide un nombre entier selon des regles configurables (CMS).
+ * Reprend le comportement historique des nombres du formulaire Visite
+ * (« Nombre requis ») en y ajoutant des bornes optionnelles.
+ *
+ * @param {string} value - Saisie brute.
+ * @param {{min?: number, max?: number}} regles
+ * @returns {{ valid: boolean, message: string }}
+ */
+export function validateNumber(value, regles = {}) {
+  const n = parseInt(value, 10)
+  if (value == null || value.toString().trim() === '' || isNaN(n)) {
+    return { valid: false, message: 'Nombre requis' }
+  }
+  if (regles.min != null && n < regles.min) {
+    return { valid: false, message: `Minimum : ${regles.min}.` }
+  }
+  if (regles.max != null && n > regles.max) {
+    return { valid: false, message: `Maximum : ${regles.max}.` }
+  }
+  return { valid: true, message: '' }
+}
+
+/**
  * Formate un numéro AVS en ajoutant les points automatiquement.
  * 7561234567890 → 756.1234.5678.90
  */

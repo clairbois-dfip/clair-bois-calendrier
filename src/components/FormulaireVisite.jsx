@@ -20,24 +20,26 @@
 import { useState } from 'react'
 import ChampsEtape, { IntroEtape } from './formulaire/ChampsEtape'
 import Confirmation from './formulaire/Confirmation'
+import QuestionsPrealables, { RienARemplir } from './QuestionsPrealables'
 import {
   champsDeLEtape, champsVisibles, validerChamp, validerEtape, collecterPayload,
-  etapesDuFormulaire,
+  etapesDuFormulaire, donneesInitiales, questionsPrealablesUtilisees,
 } from '../utils/formulaireDynamique'
 
 export default function FormulaireVisite({ schema, onGoHome }) {
-  // Étapes du formulaire visite = les cartes-sections affichées
-  const etapes = etapesDuFormulaire(schema, 'visite')
+  // Questions préalables (mode édition) : posées AVANT le formulaire quand
+  // une étape de la visite en dépend (« Quand afficher cette étape ? »).
+  const questionsPrealables = questionsPrealablesUtilisees(schema, 'visite')
+  const [prealables, setPrealables] = useState(questionsPrealables.length ? null : {})
+  const contexte = prealables || {}
 
-  const [formData, setFormData] = useState(() => {
-    const data = {}
-    for (const etape of etapes) {
-      for (const champ of champsDeLEtape(schema, etape.cle)) {
-        data[champ.champPayload] = champ.type === 'multiselect' ? [] : ''
-      }
-    }
-    return data
-  })
+  // Étapes du formulaire visite = les cartes-sections affichées, filtrées
+  // par les réponses aux questions préalables.
+  const etapes = etapesDuFormulaire(schema, 'visite', contexte)
+
+  // Tous les champs du schéma initialisés à '' (ou [] en multi), y compris
+  // ceux d'étapes conditionnelles encore cachées (inputs contrôlés stables).
+  const [formData, setFormData] = useState(() => donneesInitiales(schema))
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitResult, setSubmitResult] = useState(null)
@@ -58,12 +60,12 @@ export default function FormulaireVisite({ schema, onGoHome }) {
     }
   }
 
-  /** Valide toutes les sections (les conditions du schéma s'appliquent). */
+  /** Valide toutes les sections visibles (les conditions du schéma s'appliquent). */
   const validateAll = () => {
     let valid = true
     const newErrors = {}
     for (const etape of etapes) {
-      const res = validerEtape(schema, etape.cle, formData, {})
+      const res = validerEtape(schema, etape.cle, formData, contexte)
       if (!res.valid) {
         valid = false
         Object.assign(newErrors, res.errors)
@@ -82,7 +84,7 @@ export default function FormulaireVisite({ schema, onGoHome }) {
       const payload = {
         type: 'visite',
         dateEnvoi: new Date().toISOString(),
-        ...collecterPayload(schema, etapes.map((e) => e.cle), formData, {}),
+        ...collecterPayload(schema, etapes.map((e) => e.cle), formData, contexte),
       }
       const response = await fetch(httpUrl, {
         method: 'POST',
@@ -104,6 +106,23 @@ export default function FormulaireVisite({ schema, onGoHome }) {
         <Confirmation result={submitResult} onGoHome={onGoHome} onRetry={() => setSubmitResult(null)} />
       </div>
     )
+  }
+
+  // Écran des questions préalables (avant le formulaire) — tant que non répondues
+  if (questionsPrealables.length > 0 && prealables === null) {
+    return (
+      <QuestionsPrealables
+        questions={questionsPrealables}
+        titre="Demande de visite"
+        onValider={(reponses) => setPrealables(reponses)}
+        onRetour={onGoHome}
+      />
+    )
+  }
+
+  // Toutes les étapes masquées par les réponses préalables → rien à envoyer.
+  if (etapes.length === 0) {
+    return <RienARemplir onGoHome={onGoHome} />
   }
 
   return (
@@ -144,12 +163,12 @@ export default function FormulaireVisite({ schema, onGoHome }) {
           <h3 className="text-sm font-bold text-cb-blue uppercase tracking-wide mb-4">{etape.titre}</h3>
           {etape.intro && <div className="mb-4"><IntroEtape etape={etape} /></div>}
           <ChampsEtape
-            champs={champsVisibles(schema, etape.cle, formData)}
+            champs={champsVisibles(schema, etape.cle, { ...formData, ...contexte })}
             data={formData}
             errors={errors}
             onChange={handleChange}
             onBlur={handleBlur}
-            valeurs={formData}
+            valeurs={{ ...formData, ...contexte }}
           />
         </div>
       ))}

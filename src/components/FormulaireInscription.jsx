@@ -30,12 +30,11 @@ import { useState } from 'react'
 import { getFormConfig, getCheminKey, SECTION_LABELS } from '../utils/formConfig'
 import {
   donneesInitiales, validerChamp, validerEtape, collecterPayload, champsVisibles,
-  etapesDuFormulaire,
+  etapesDuFormulaire, questionsPrealablesUtilisees,
 } from '../utils/formulaireDynamique'
 import { formatDate } from '../utils/helpers'
-import { questionsPrealablesDe } from '../utils/schemaFormulaires'
 import EtapeGenerique from './formulaire/EtapeGenerique'
-import QuestionsPrealables from './QuestionsPrealables'
+import QuestionsPrealables, { RienARemplir } from './QuestionsPrealables'
 import EtapeStagiaire from './formulaire/EtapeStagiaire'
 import EtapeCuratelle from './formulaire/EtapeCuratelle'
 import EtapeUrgence from './formulaire/EtapeUrgence'
@@ -57,9 +56,10 @@ export default function FormulaireInscription({ schema, parcours, chemin, contex
   const cheminKey = getCheminKey(parcours, chemin)
 
   // Questions préalables (mode édition) : posées AVANT le formulaire, leurs
-  // réponses conditionnent l'affichage des étapes. Le chemin court « retour »
-  // n'a qu'une étape → on saute les préalables.
-  const questionsPrealables = cheminKey === 'stages-moi-oui' ? [] : questionsPrealablesDe(schema, 'inscription')
+  // réponses conditionnent l'affichage des étapes. Seules les questions
+  // RÉELLEMENT utilisées (référencées par une étape ou un champ) sont posées.
+  // Le chemin court « retour » n'a qu'une étape → on saute les préalables.
+  const questionsPrealables = cheminKey === 'stages-moi-oui' ? [] : questionsPrealablesUtilisees(schema, 'inscription')
   const [prealables, setPrealables] = useState(questionsPrealables.length ? null : {})
 
   // Contexte injecté dans l'évaluation des conditions du schéma
@@ -243,8 +243,15 @@ export default function FormulaireInscription({ schema, parcours, chemin, contex
         titre={config.label}
         onValider={(reponses) => setPrealables(reponses)}
         onRetour={onBack}
+        contexte={{ parcours, pourQui: chemin.pourQui }}
       />
     )
+  }
+
+  // Toutes les étapes masquées par les réponses préalables → rien à envoyer
+  // (sinon le wizard atterrirait directement sur un récapitulatif vide).
+  if (sections.length === 0) {
+    return <RienARemplir onGoHome={onGoHome} />
   }
 
   // Contexte affiché en haut
@@ -383,6 +390,7 @@ export default function FormulaireInscription({ schema, parcours, chemin, contex
               pourQui={chemin.pourQui}
               sections={sections}
               onEdit={goToStep}
+              contexte={contexte}
             />
           )}
         </div>

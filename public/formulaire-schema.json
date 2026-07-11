@@ -298,6 +298,11 @@
       "listeCible": "Stagiaire",
       "label": "Date de naissance",
       "type": "date",
+      "validation": {
+        "ageMin": 15,
+        "ageMax": 99,
+        "interditFutur": true
+      },
       "options": [],
       "etape": "stagiaire",
       "ordre": 40,
@@ -311,7 +316,7 @@
       "champPayload": "avs",
       "listeCible": "Stagiaire",
       "label": "Numéro AVS",
-      "type": "text",
+      "type": "avs",
       "options": [],
       "etape": "stagiaire",
       "ordre": 50,
@@ -979,7 +984,7 @@
       "champPayload": "avs",
       "listeCible": "Signalement",
       "label": "Numéro AVS du ou de la stagiaire (facultatif)",
-      "type": "text",
+      "type": "avs",
       "options": [],
       "etape": "signalement",
       "ordre": 45,
@@ -1133,6 +1138,9 @@
       "listeCible": "Visite",
       "label": "Nombre d'élèves",
       "type": "number",
+      "validation": {
+        "min": 1
+      },
       "options": [],
       "etape": "visite-groupe",
       "ordre": 10,
@@ -1147,6 +1155,9 @@
       "listeCible": "Visite",
       "label": "Enseignants accompagnants",
       "type": "number",
+      "validation": {
+        "min": 1
+      },
       "options": [],
       "etape": "visite-groupe",
       "ordre": 20,

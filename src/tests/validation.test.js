@@ -8,6 +8,7 @@ import { describe, it, expect } from 'vitest'
 import {
   validateRequired, validateAVS, validatePhone, validatePhoneOptional,
   validateNPA, validateEmail, validateEmailOptional, validateDateNaissance,
+  validateDate, validateNumber,
   formatAVS, formatPhone,
 } from '../utils/validation'
 
@@ -240,5 +241,73 @@ describe('formatPhone', () => {
   })
   it('formate +41791234567 en +41 79 123 45 67', () => {
     expect(formatPhone('+41791234567')).toBe('+41 79 123 45 67')
+  })
+})
+
+// ──────────────────────────────────────────────
+// validateDate — règles configurables (mode édition)
+// ──────────────────────────────────────────────
+describe('validateDate (règles configurables du CMS)', () => {
+  const ilYaAns = (n) => {
+    const d = new Date()
+    d.setFullYear(d.getFullYear() - n)
+    return d.toISOString().slice(0, 10)
+  }
+  it('sans règle : accepte toute date bien formée (passé comme futur)', () => {
+    expect(validateDate('2030-01-01', {}).valid).toBe(true)
+    expect(validateDate('1950-01-01', {}).valid).toBe(true)
+  })
+  it('refuse une date vide ou mal formée', () => {
+    expect(validateDate('', {}).valid).toBe(false)
+    expect(validateDate('pas-une-date', {}).valid).toBe(false)
+  })
+  it('ageMin : refuse en dessous, accepte au-dessus, message paramétré', () => {
+    const r = validateDate(ilYaAns(12), { ageMin: 16 })
+    expect(r.valid).toBe(false)
+    expect(r.message).toContain('16 ans')
+    expect(validateDate(ilYaAns(20), { ageMin: 16 }).valid).toBe(true)
+  })
+  it('ageMax : refuse au-dessus', () => {
+    const r = validateDate(ilYaAns(70), { ageMax: 65 })
+    expect(r.valid).toBe(false)
+    expect(r.message).toContain('65')
+    expect(validateDate(ilYaAns(40), { ageMax: 65 }).valid).toBe(true)
+  })
+  it('interditFutur : refuse une date future, accepte le passé', () => {
+    expect(validateDate('2099-01-01', { interditFutur: true }).valid).toBe(false)
+    expect(validateDate('2099-01-01', { interditFutur: true }).message).toMatch(/futur/i)
+    expect(validateDate(ilYaAns(1), { interditFutur: true }).valid).toBe(true)
+  })
+  it('les règles historiques de la date de naissance sont reproductibles (15/99/futur)', () => {
+    const regles = { ageMin: 15, ageMax: 99, interditFutur: true }
+    expect(validateDate(ilYaAns(10), regles).valid).toBe(false)
+    expect(validateDate(ilYaAns(10), regles).message).toContain('15 ans')
+    expect(validateDate('2099-01-01', regles).valid).toBe(false)
+    expect(validateDate(ilYaAns(120), regles).valid).toBe(false)
+    expect(validateDate(ilYaAns(20), regles).valid).toBe(true)
+  })
+})
+
+// ──────────────────────────────────────────────
+// validateNumber — bornes configurables (mode édition)
+// ──────────────────────────────────────────────
+describe('validateNumber (règles configurables du CMS)', () => {
+  it('refuse vide ou non numérique (message historique « Nombre requis »)', () => {
+    expect(validateNumber('', {}).valid).toBe(false)
+    expect(validateNumber('', {}).message).toBe('Nombre requis')
+    expect(validateNumber('abc', {}).valid).toBe(false)
+  })
+  it('sans règle : accepte tout nombre, y compris 0 et négatif', () => {
+    expect(validateNumber('0', {}).valid).toBe(true)
+    expect(validateNumber('-3', {}).valid).toBe(true)
+  })
+  it('min : refuse en dessous (ex. historique nombre d\'élèves ≥ 1)', () => {
+    expect(validateNumber('0', { min: 1 }).valid).toBe(false)
+    expect(validateNumber('0', { min: 1 }).message).toContain('1')
+    expect(validateNumber('12', { min: 1 }).valid).toBe(true)
+  })
+  it('max : refuse au-dessus', () => {
+    expect(validateNumber('40', { max: 30 }).valid).toBe(false)
+    expect(validateNumber('25', { max: 30 }).valid).toBe(true)
   })
 })

@@ -17,26 +17,27 @@
 import { useState } from 'react'
 import ChampsEtape, { IntroEtape } from './formulaire/ChampsEtape'
 import Confirmation from './formulaire/Confirmation'
+import QuestionsPrealables, { RienARemplir } from './QuestionsPrealables'
 import {
   champsDeLEtape, champsVisibles, validerChamp, validerEtape, collecterPayload,
-  etapesDuFormulaire,
+  etapesDuFormulaire, donneesInitiales, questionsPrealablesUtilisees,
 } from '../utils/formulaireDynamique'
 
 export default function FormulaireSignalement({ schema, onGoHome }) {
-  // Étapes du formulaire signalement (une seule aujourd'hui — la
-  // coordination peut en ajouter via le mode édition)
-  const etapes = etapesDuFormulaire(schema, 'signalement')
+  // Questions préalables (mode édition) : posées AVANT le formulaire quand
+  // une étape du signalement en dépend (« Quand afficher cette étape ? »).
+  const questionsPrealables = questionsPrealablesUtilisees(schema, 'signalement')
+  const [prealables, setPrealables] = useState(questionsPrealables.length ? null : {})
+  const contexte = prealables || {}
 
-  const [formData, setFormData] = useState(() => {
-    // Un input contrôlé par champ du schéma, initialisé à '' (ou [] en multi)
-    const data = {}
-    for (const etape of etapes) {
-      for (const champ of champsDeLEtape(schema, etape.cle)) {
-        data[champ.champPayload] = champ.type === 'multiselect' ? [] : ''
-      }
-    }
-    return data
-  })
+  // Étapes du formulaire signalement (une seule aujourd'hui — la
+  // coordination peut en ajouter via le mode édition), filtrées par les
+  // réponses aux questions préalables.
+  const etapes = etapesDuFormulaire(schema, 'signalement', contexte)
+
+  // Un input contrôlé par champ du schéma, initialisé à '' (ou [] en multi) —
+  // TOUS les champs, y compris ceux d'étapes conditionnelles encore cachées.
+  const [formData, setFormData] = useState(() => donneesInitiales(schema))
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitResult, setSubmitResult] = useState(null)
@@ -61,12 +62,12 @@ export default function FormulaireSignalement({ schema, onGoHome }) {
     }
   }
 
-  /** Valide toutes les étapes du schéma avant envoi */
+  /** Valide toutes les étapes visibles du schéma avant envoi */
   const validateAll = () => {
     let valid = true
     const newErrors = {}
     for (const etape of etapes) {
-      const res = validerEtape(schema, etape.cle, formData, {})
+      const res = validerEtape(schema, etape.cle, formData, contexte)
       if (!res.valid) {
         valid = false
         Object.assign(newErrors, res.errors)
@@ -85,7 +86,7 @@ export default function FormulaireSignalement({ schema, onGoHome }) {
         type: 'signalement',
         dateEnvoi: new Date().toISOString(),
         // Seuls les champs remplis sont envoyés (pas de clés vides)
-        ...collecterPayload(schema, etapes.map((e) => e.cle), formData, {}),
+        ...collecterPayload(schema, etapes.map((e) => e.cle), formData, contexte),
       }
 
       const httpUrl = import.meta.env.VITE_PA_HTTP_URL
@@ -124,6 +125,25 @@ export default function FormulaireSignalement({ schema, onGoHome }) {
         />
       </div>
     )
+  }
+
+  // Écran des questions préalables (avant le formulaire) — tant que non répondues
+  if (questionsPrealables.length > 0 && prealables === null) {
+    return (
+      <QuestionsPrealables
+        questions={questionsPrealables}
+        titre="Signalement"
+        onValider={(reponses) => setPrealables(reponses)}
+        onRetour={onGoHome}
+      />
+    )
+  }
+
+  // Les réponses préalables peuvent masquer TOUTES les étapes : dans ce cas
+  // il n'y a rien à remplir — surtout ne pas afficher un formulaire vide
+  // avec un bouton d'envoi actif (payload sans aucune donnée).
+  if (etapes.length === 0) {
+    return <RienARemplir onGoHome={onGoHome} />
   }
 
   return (
@@ -168,12 +188,12 @@ export default function FormulaireSignalement({ schema, onGoHome }) {
               )}
               <IntroEtape etape={etape} />
               <ChampsEtape
-                champs={champsVisibles(schema, etape.cle, formData)}
+                champs={champsVisibles(schema, etape.cle, { ...formData, ...contexte })}
                 data={formData}
                 errors={errors}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                valeurs={formData}
+                valeurs={{ ...formData, ...contexte }}
               />
             </div>
           ))}

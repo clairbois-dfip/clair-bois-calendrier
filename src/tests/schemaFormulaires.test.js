@@ -255,6 +255,40 @@ describe('questions préalables', () => {
     expect(questionsPrealablesDe(s3, 'inscription')).toHaveLength(0)
     expect(questionsPrealablesDe(s3, 'signalement')).toHaveLength(1)
   })
+
+  it('supprimer une question purge les conditions dépendantes (étapes, champs, options)', () => {
+    let s2 = ajouterQuestionPrealable(S, 'inscription').schema
+    s2 = {
+      ...s2,
+      etapes: [
+        { cle: 'e1', titre: 'Dépendante', ordre: 1, formulaire: 'inscription', conditionAffichage: 'prealable_1=Oui' },
+        { cle: 'e2', titre: 'Autre', ordre: 2, formulaire: 'inscription', conditionAffichage: 'pourQui=autre' },
+      ],
+      champs: [
+        { champPayload: 'c1', etape: 'e1', ordre: 10, type: 'text', condition: 'prealable_1=Non' },
+        {
+          champPayload: 'c2', etape: 'e1', ordre: 20, type: 'radio', condition: 'pourQui=autre',
+          options: [
+            { value: 'A', label: 'A', condition: 'prealable_1=Oui' },
+            { value: 'B', label: 'B' },
+          ],
+        },
+      ],
+    }
+    const s3 = supprimerQuestionPrealable(s2, 'prealable_1')
+    // L'étape qui dépendait de la question redevient toujours visible…
+    expect(s3.etapes.find((e) => e.cle === 'e1').conditionAffichage).toBeNull()
+    // …les autres conditions d'étape ne sont pas touchées.
+    expect(s3.etapes.find((e) => e.cle === 'e2').conditionAffichage).toBe('pourQui=autre')
+    // Les conditions de CHAMP pilotées par la question sont purgées…
+    expect(s3.champs.find((c) => c.champPayload === 'c1').condition).toBeNull()
+    // …pas celles pilotées par autre chose.
+    expect(s3.champs.find((c) => c.champPayload === 'c2').condition).toBe('pourQui=autre')
+    // Les conditions d'OPTION pilotées par la question sont retirées (l'option reste).
+    const options = s3.champs.find((c) => c.champPayload === 'c2').options
+    expect(options.map((o) => o.value)).toEqual(['A', 'B'])
+    expect(options[0].condition).toBeUndefined()
+  })
 })
 
 // ──────────────────────────────────────────────

@@ -12,6 +12,7 @@
  * l'utilisatrice au moment de publier et conservé en sessionStorage
  * uniquement : il n'apparaît jamais dans le code, le bundle ou le repo.
  */
+import { conditionPiloteePar } from './formulaireDynamique';
 
 /** Dépôt et fichier cibles de la publication. */
 export const GITHUB_REPO = 'clairbois-dfip/clair-bois-calendrier';
@@ -32,8 +33,9 @@ export const TYPES_CHAMP = [
   { value: 'checkbox', label: 'Case à cocher' },
   { value: 'number', label: 'Nombre' },
   { value: 'date', label: 'Date' },
-  { value: 'tel', label: 'Téléphone' },
-  { value: 'email', label: 'Email' },
+  { value: 'tel', label: 'Téléphone (format suisse vérifié)' },
+  { value: 'email', label: 'Email (format vérifié)' },
+  { value: 'avs', label: 'Numéro AVS suisse (756…, vérifié)' },
 ];
 
 /** Listes SharePoint qu'un champ peut alimenter. */
@@ -418,9 +420,37 @@ export function mettreAJourQuestionPrealable(schema, cle, maj) {
   }
 }
 
-/** Supprime une question préalable. */
+/**
+ * Supprime une question préalable ET remet « toujours affiché » tout ce qui
+ * en dépendait : conditions d'ÉTAPES, de CHAMPS et d'OPTIONS. Sans cette
+ * purge, `prealable_X=…` resterait dans une condition et — la question
+ * n'étant plus jamais posée — l'élément disparaîtrait définitivement,
+ * en silence.
+ */
 export function supprimerQuestionPrealable(schema, cle) {
-  return { ...schema, questionsPrealables: (schema.questionsPrealables || []).filter((q) => q.cle !== cle) }
+  const purgerOptions = (options) =>
+    (options || []).map((o) => {
+      if (!conditionPiloteePar(o.condition, cle)) return o;
+      const { condition: _retiree, ...reste } = o;
+      return reste;
+    });
+  return {
+    ...schema,
+    questionsPrealables: (schema.questionsPrealables || []).filter((q) => q.cle !== cle),
+    etapes: (schema.etapes || []).map((e) =>
+      conditionPiloteePar(e.conditionAffichage, cle) ? { ...e, conditionAffichage: null } : e
+    ),
+    champs: (schema.champs || []).map((c) => {
+      const conditionPurgee = conditionPiloteePar(c.condition, cle);
+      const optionsPurgees = (c.options || []).some((o) => conditionPiloteePar(o.condition, cle));
+      if (!conditionPurgee && !optionsPurgees) return c;
+      return {
+        ...c,
+        ...(conditionPurgee ? { condition: null } : {}),
+        ...(optionsPurgees ? { options: purgerOptions(c.options) } : {}),
+      };
+    }),
+  };
 }
 
 /* ────────────────────────────────────────────
