@@ -147,7 +147,6 @@ export const INITIAL_DATA = {
   parcours_scolaire: '',
   limitations: '',
   deja_tests: '',
-  deja_stages_secteur: '',
   reseau_medical: '',
   pointure: '',
   taille_tshirt: '',

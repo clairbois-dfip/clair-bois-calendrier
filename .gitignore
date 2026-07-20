@@ -38,3 +38,8 @@ docs/Karavia19mai.m4a
 
 # Sécurité — les zips de flux PA contiennent des tokens dans definition.json
 *.zip
+
+# Dossiers de travail des flux Power Automate : les definition.json peuvent
+# contenir des tokens/en-têtes d'authentification en clair — jamais suivis.
+# (Les builders les lisent sur disque ; régénérables depuis les zips.)
+**/flux*-work/

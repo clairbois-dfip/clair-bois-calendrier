@@ -114,7 +114,7 @@ describe('INITIAL_DATA', () => {
     // Référent
     'referent_partenaire', 'referent_nom', 'referent_prenom', 'referent_tel', 'referent_email', 'referent_fonction',
     // Complémentaire
-    'objectif_stage', 'parcours_scolaire', 'limitations', 'deja_tests', 'deja_stages_secteur', 'reseau_medical',
+    'objectif_stage', 'parcours_scolaire', 'limitations', 'deja_tests', 'reseau_medical',
     'pointure', 'taille_tshirt', 'taille_pantalon',
     // Déclaration
     'declaration_charte', 'declaration_engagement',
