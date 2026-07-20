@@ -6,7 +6,7 @@
  *
  * @param {Array} props.items - Tableau d'objets { label: string, onClick?: function }
  */
-export default function Breadcrumb({ items, onNavigate }) {
+export default function Breadcrumb({ items }) {
   return (
     <nav aria-label="Fil d'Ariane" className="mb-4">
       <ol className="flex flex-wrap items-center gap-1 text-sm text-gray-500">

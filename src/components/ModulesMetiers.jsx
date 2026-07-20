@@ -60,17 +60,8 @@ function isSemaineTooSoon(semaine) {
   return debut < minDate
 }
 
-// URLs des formulaires selon le chemin d'aiguillage.
-// Pour les modules, seul pourQui distingue les formulaires (pas de notion dejaInscrit).
-const MODULES_FORMS_URLS = {
-  // Modules + moi-meme → Form 6 (modules-participant)
-  'moi': 'https://forms.office.com/e/2TwtdawF7s',
-  // Modules + referent → Form 2 (modules-partenaire)
-  'autre': 'https://forms.office.com/e/rTA3ZiwUVb',
-}
-
-export default function ModulesMetiers({ modulesMetiers, formsUrl, chemin, onBack, onGoToFormulaire }) {
-  const { modules, semaines, maxSelection, formsUrlModules } = modulesMetiers
+export default function ModulesMetiers({ modulesMetiers, onBack, onGoToFormulaire }) {
+  const { modules, semaines, maxSelection } = modulesMetiers
   // Chaque entree lie un module a la semaine choisie pour ce module
   const [selected, setSelected] = useState([])
   // Filtrer la grille sur une semaine specifique permet de voir les places disponibles pour cette periode

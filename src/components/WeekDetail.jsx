@@ -209,7 +209,7 @@ export default function WeekDetail({
               <h3 className="text-sm font-semibold text-gray-700 border-b border-gray-200 pb-2">
                 Détail des créneaux
               </h3>
-              {creneaux.map((c, i) => {
+              {creneaux.map((c) => {
                 const cAvailable = c.totalSlots - c.usedSlots
                 const cStatus = computeStatus(c.totalSlots, c.usedSlots)
 

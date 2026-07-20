@@ -594,15 +594,9 @@ function Table({ table }) {
 
   const ratio = actives.length > 0 ? libres / actives.length : 0
 
-  // bordureTable : contour de la carte (opacite faible, discret)
-  const bordureTable =
-    libres === 0 ? 'border-cb-red/30' :
-    ratio > 0.5  ? 'border-cb-green/30' :
-                   'border-cb-orange/30'
-
   // bordureOvale : contour du couloir central qui symbolise la table physique.
-  // Plus opaque que bordureTable pour que la forme ovale reste lisible
-  // au premier coup d'oeil meme quand les cercles de places l'entourent.
+  // Assez opaque pour que la forme ovale reste lisible au premier coup
+  // d'oeil meme quand les cercles de places l'entourent.
   const bordureOvale =
     libres === 0 ? 'border-cb-red/60' :
     ratio > 0.5  ? 'border-cb-green/60' :

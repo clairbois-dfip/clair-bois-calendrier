@@ -45,22 +45,7 @@ function isBetween(date, start, end) {
   return date >= start && date <= end
 }
 
-// Matrice des formulaires selon les 2 reponses de l'aiguillage.
-// La cle composite "stages-{pourQui}-{oui|non}" evite des if/else en cascade.
-// "stages-autre-oui" pointe vers le meme form que "stages-autre-non" : Power Automate
-// gere la detection du doublon cote back-office, pas besoin d'un form separe.
-const FORMS_URLS = {
-  // Stage + moi-meme + NON → Form 1 (stage-stagiaire)
-  'stages-moi-non': 'https://forms.office.com/e/pcHEHRRk6x',
-  // Stage + referent + NON → Form 7 (stage-partenaire)
-  'stages-autre-non': 'https://forms.office.com/e/3SZvXC6kb5',
-  // Stage + moi-meme + OUI → Form 3 (Retour a CB)
-  'stages-moi-oui': 'https://forms.office.com/e/WMBW4GWVdW',
-  // Stage + referent + OUI → Form 7 (stage-partenaire), meme form, PA gere le doublon
-  'stages-autre-oui': 'https://forms.office.com/e/3SZvXC6kb5',
-}
-
-export default function StagesPage({ formsUrl, chemin, onBack, onGoToFormulaire }) {
+export default function StagesPage({ onBack, onGoToFormulaire }) {
   const [selectedSecteur, setSelectedSecteur] = useState(null)
   const [rangeStart, setRangeStart] = useState(null)
   const [rangeEnd, setRangeEnd] = useState(null)
@@ -130,20 +115,6 @@ export default function StagesPage({ formsUrl, chemin, onBack, onGoToFormulaire 
     if (isStart || isEnd) return 'bg-cb-blue text-white font-bold rounded-lg'
     if (inRange) return 'bg-cb-blue/15 text-cb-blue font-medium'
     return 'hover:bg-gray-100 cursor-pointer text-gray-700'
-  }
-
-  const buildStageUrl = () => {
-    if (!selectedSecteur || !rangeStart) return '#'
-    // La cle composite reconstruit le meme identifiant que la map FORMS_URLS
-    const cheminKey = `stages-${chemin.pourQui}-${chemin.dejaInscrit ? 'oui' : 'non'}`
-    const base = FORMS_URLS[cheminKey] || formsUrl
-    const e = encodeURIComponent
-    const secteurStr = selectedSecteur.nom
-    const dateDebut = toDateStr(rangeStart)
-    // Si l'utilisateur n'a clique qu'une seule date, dateDebut = dateFin (stage d'un jour)
-    const dateFin = rangeEnd ? toDateStr(rangeEnd) : dateDebut
-    // Les IDs de parametre (r1faa...) sont les identifiants internes des champs du formulaire Forms
-    return `${base}?r1faa50a65150406b95d3a62e45550e40=${e(secteurStr)}&r50efe78018854247bf6e734db7188d70=${e(dateDebut)}&r77ae6366339446f39c90be5aa93b3a71=${e(dateFin)}`
   }
 
   const resetAll = () => {
