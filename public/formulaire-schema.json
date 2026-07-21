@@ -170,7 +170,7 @@
       "aide": ""
     },
     {
-      "colonneSP": "Tel",
+      "colonneSP": "NumTel",
       "champPayload": "referent_tel",
       "listeCible": "Referent",
       "label": "Votre téléphone",
@@ -326,7 +326,7 @@
       "aide": "13 chiffres, commence par 756"
     },
     {
-      "colonneSP": "Tel",
+      "colonneSP": "NumTel",
       "champPayload": "tel",
       "listeCible": "Stagiaire",
       "label": "Téléphone",
@@ -952,7 +952,7 @@
       "aide": ""
     },
     {
-      "colonneSP": "Tel",
+      "colonneSP": "NumTel",
       "champPayload": "tel",
       "listeCible": "Signalement",
       "label": "Téléphone",
@@ -1119,7 +1119,7 @@
       "aide": ""
     },
     {
-      "colonneSP": "Tel",
+      "colonneSP": "NumTel",
       "champPayload": "tel",
       "listeCible": "Visite",
       "label": "Téléphone",
